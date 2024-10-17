@@ -1,7 +1,7 @@
 package patient
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	pb "gen/services/task_svc/v1"
 	"hwdb"
@@ -36,7 +36,7 @@ func (ServiceServer) CreatePatient(
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +147,7 @@ func (ServiceServer) GetPatientsByWard(
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -245,7 +245,7 @@ func (ServiceServer) GetRecentPatients(
 	patientRepo := patient_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -350,7 +350,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -460,7 +460,7 @@ func (ServiceServer) GetPatientDetails(
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -562,7 +562,7 @@ func (ServiceServer) GetPatientList(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}

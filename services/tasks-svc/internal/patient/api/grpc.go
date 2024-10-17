@@ -2,6 +2,7 @@ package api
 
 import (
 	"common"
+	"common/hwerr"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwdb"
@@ -334,7 +335,7 @@ func (s *PatientGrpcService) GetRecentPatients(
 	var recentPatientIdsStrs []string
 	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
 	if err != nil {
-		return nil, common.NewStatusError(ctx,
+		return nil, hwerr.NewStatusError(ctx,
 			codes.Internal,
 			"decaying_lru error: "+err.Error(),
 			locale.GenericError(ctx),

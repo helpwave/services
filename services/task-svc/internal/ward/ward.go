@@ -1,7 +1,7 @@
 package ward
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	pb "gen/services/task_svc/v1"
 	"hwdb"
@@ -28,7 +28,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	log := zlog.Ctx(ctx)
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ func (ServiceServer) GetRecentWards(
 	wardRepo := ward_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -191,7 +191,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -230,7 +230,7 @@ func (s ServiceServer) GetWardOverviews(
 ) (*pb.GetWardOverviewsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -272,7 +272,7 @@ func (ServiceServer) GetWardDetails(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}

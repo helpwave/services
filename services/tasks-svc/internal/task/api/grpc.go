@@ -1,7 +1,7 @@
 package api
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwes"
@@ -310,7 +310,7 @@ func (s *TaskGrpcService) GetAssignedTasks(
 	ctx context.Context,
 	_ *pb.GetAssignedTasksRequest,
 ) (*pb.GetAssignedTasksResponse, error) {
-	asigneeID, err := common.GetUserID(ctx)
+	asigneeID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

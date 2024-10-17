@@ -2,6 +2,7 @@ package task_template
 
 import (
 	"common"
+	"common/auth"
 	"context"
 	"hwdb"
 	"hwutil"
@@ -37,7 +38,7 @@ func (ServiceServer) CreateTaskTemplate(
 	defer rollback()
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

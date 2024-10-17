@@ -1,7 +1,7 @@
 package tracking
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	"decaying_lru"
 	"errors"
@@ -41,7 +41,7 @@ func SetupTracking(ctx context.Context, serviceName string, lruSize int64, decay
 func getUserID(ctx context.Context) string {
 	log := zlog.Ctx(ctx)
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("could not get userID from context, can't add item to LRU")
 

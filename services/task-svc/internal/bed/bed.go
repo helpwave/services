@@ -1,7 +1,8 @@
 package bed
 
 import (
-	"common"
+	"common/auth"
+	"common/hwerr"
 	"context"
 	"hwdb"
 	"hwlocale"
@@ -33,7 +34,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +51,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	})
 	err = hwdb.Error(ctx, err,
 		hwdb.WithOnFKViolation("beds_room_id_fkey", func(pgErr *pgconn.PgError) error {
-			return common.NewStatusError(ctx,
+			return hwerr.NewStatusError(ctx,
 				codes.InvalidArgument,
 				pgErr.Error(),
 				locale.InvalidRoomIdError(ctx),
@@ -81,7 +82,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.GetBedResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +149,7 @@ func (ServiceServer) GetBedByPatient(
 func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -180,7 +181,7 @@ func (ServiceServer) GetBedsByRoom(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +244,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}

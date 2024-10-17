@@ -1,7 +1,7 @@
 package task_template
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	"hwdb"
 	"hwutil"
@@ -38,12 +38,12 @@ func (ServiceServer) CreateTaskTemplate(
 	defer rollback()
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (ServiceServer) GetAllTaskTemplates(
 ) (*pb.GetAllTaskTemplatesResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -300,7 +300,7 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
