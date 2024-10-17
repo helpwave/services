@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/coreos/go-oidc"
 	"github.com/google/uuid"
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/metadata"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc/codes"
@@ -16,16 +15,57 @@ import (
 )
 
 var (
-	OnlyFakeAuthEnabled      bool
-	InsecureFakeTokenEnable  = false
 	DEFAULT_OAUTH_ISSUER_URL = "https://accounts.helpwave.de/realms/helpwave"
 
 	DEFAULT_OAUTH_CLIENT_ID = "helpwave-services"
+	OnlyFakeAuthEnabled     bool
+	InsecureFakeTokenEnable = false
+	OauthConfig             *oauth2.Config
+	Verifier                *oidc.IDTokenVerifier
 )
 
 type ClaimsKey struct{}
 type UserIDKey struct{}
 type OrganizationIDKey struct{}
+
+func GetOAuthIssuerUrl() string {
+	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)
+	if issuerUrl != DEFAULT_OAUTH_ISSUER_URL {
+		zlog.Warn().Str("OAUTH_ISSUER_URL", issuerUrl).Msg("using custom OAuth issuer url")
+	}
+	return issuerUrl
+}
+
+func GetOAuthClientId() string {
+	clientId := hwutil.GetEnvOr("OAUTH_CLIENT_ID", DEFAULT_OAUTH_CLIENT_ID)
+	if clientId != DEFAULT_OAUTH_CLIENT_ID {
+		zlog.Warn().Str("OAUTH_CLIENT_ID", clientId).Msg("using custom OAuth client id")
+	}
+	return clientId
+}
+
+// IsAuthSetUp is true, GetOAuthConfig and GetIDTokenVerifier can be accessed safely
+func IsAuthSetUp() bool {
+	return OauthConfig != nil && Verifier != nil
+}
+
+func GetOAuthConfig(ctx context.Context) *oauth2.Config {
+	log := zlog.Ctx(ctx)
+
+	if OauthConfig == nil {
+		log.Fatal().Msg("GetOAuthConfig called but auth is not set up, please enable auth for this service")
+	}
+	return OauthConfig
+}
+
+func GetIDTokenVerifier(ctx context.Context) *oidc.IDTokenVerifier {
+	log := zlog.Ctx(ctx)
+
+	if Verifier == nil {
+		log.Fatal().Msg("GetIDTokenVerifier called but auth is not set up, please enable auth for this service")
+	}
+	return Verifier
+}
 
 // IDTokenClaims as we expect them from our auth provider
 // Make sure to keep in sync with claims when adding values
@@ -44,6 +84,11 @@ type IDTokenClaims struct {
 
 	// Subject: organization
 	Organization *OrganizationTokenClaim `json:"organization"`
+}
+
+type OrganizationTokenClaim struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func (t IDTokenClaims) AsExpected() error {
@@ -78,27 +123,6 @@ func (t IDTokenClaims) AsExpected() error {
 	return nil
 }
 
-func GetOAuthIssuerUrl() string {
-	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)
-	if issuerUrl != DEFAULT_OAUTH_ISSUER_URL {
-		zlog.Warn().Str("OAUTH_ISSUER_URL", issuerUrl).Msg("using custom OAuth issuer url")
-	}
-	return issuerUrl
-}
-
-func GetOAuthClientId() string {
-	clientId := hwutil.GetEnvOr("OAUTH_CLIENT_ID", DEFAULT_OAUTH_CLIENT_ID)
-	if clientId != DEFAULT_OAUTH_CLIENT_ID {
-		zlog.Warn().Str("OAUTH_CLIENT_ID", clientId).Msg("using custom OAuth client id")
-	}
-	return clientId
-}
-
-type OrganizationTokenClaim struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
-}
-
 // VerifyIDToken verifies the correctness of the accessToken and returns its claim.
 // The claim is checked to be as expected.
 // Service must be set up with auth!
@@ -124,46 +148,6 @@ func VerifyIDToken(ctx context.Context, token string) (*IDTokenClaims, error) {
 	return &claims, nil
 }
 
-var (
-	OauthConfig *oauth2.Config
-	Verifier    *oidc.IDTokenVerifier
-)
-
-func GetOAuthConfig(ctx context.Context) *oauth2.Config {
-	log := zlog.Ctx(ctx)
-
-	if OauthConfig == nil {
-		log.Fatal().Msg("GetOAuthConfig called but auth is not set up, please enable auth for this service")
-	}
-	return OauthConfig
-}
-
-func GetIDTokenVerifier(ctx context.Context) *oidc.IDTokenVerifier {
-	log := zlog.Ctx(ctx)
-
-	if Verifier == nil {
-		log.Fatal().Msg("GetIDTokenVerifier called but auth is not set up, please enable auth for this service")
-	}
-	return Verifier
-}
-
-// IsAuthSetUp is true, GetOAuthConfig and GetIDTokenVerifier can be accessed safely
-func IsAuthSetUp() bool {
-	return OauthConfig != nil && Verifier != nil
-}
-
-func GetAuthCodeURL(ctx context.Context) string {
-	return GetOAuthConfig(ctx).AuthCodeURL("")
-}
-
-func ContextWithUserID(ctx context.Context, userID uuid.UUID) context.Context {
-	return context.WithValue(ctx, UserIDKey{}, userID)
-}
-
-func ContextWithOrganizationID(ctx context.Context, organizationID uuid.UUID) context.Context {
-	return context.WithValue(ctx, OrganizationIDKey{}, organizationID)
-}
-
 // VerifyFakeToken accepts a Base64 encoded json structure with the schema of IDTokenClaims
 func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, error) {
 	log := zlog.Ctx(ctx)
@@ -187,6 +171,14 @@ func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, error) 
 	return &claims, err
 }
 
+func ContextWithUserID(ctx context.Context, userID uuid.UUID) context.Context {
+	return context.WithValue(ctx, UserIDKey{}, userID)
+}
+
+func ContextWithOrganizationID(ctx context.Context, organizationID uuid.UUID) context.Context {
+	return context.WithValue(ctx, OrganizationIDKey{}, organizationID)
+}
+
 // GetAuthClaims extracts AccessTokenClaims from the request context, if they exist
 // They are checked to be as expected and the token it was extracted from was valid.
 // If an error is returned, no access token was extracted for this request.
@@ -203,7 +195,7 @@ func GetAuthClaims(ctx context.Context) (*IDTokenClaims, error) {
 func GetUserID(ctx context.Context) (uuid.UUID, error) {
 	res, ok := ctx.Value(UserIDKey{}).(uuid.UUID)
 	if !ok {
-		return uuid.UUID{}, status.Error(codes.Unauthenticated, "userID not in context, set up auth")
+		return uuid.UUID{}, status.Error(codes.Internal, "userID not in context, set up auth")
 	} else {
 		return res, nil
 	}
@@ -216,14 +208,4 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 	} else {
 		return res, nil
 	}
-}
-
-// OrganizationIDFromMD retrieves the user defined organizationID
-// from the metadata of the request
-func OrganizationIDFromMD(ctx context.Context) (string, error) {
-	val := metadata.ExtractIncoming(ctx).Get("X-Organization")
-	if val == "" {
-		return "", status.Errorf(codes.Unauthenticated, "organization header missing")
-	}
-	return val, nil
 }

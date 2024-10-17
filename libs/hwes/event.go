@@ -260,9 +260,6 @@ func (e *Event) GetJsonData(data interface{}) error {
 
 // SetCommitterFromCtx injects the UserID from the passed context via common.GetUserID().
 func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
-	ctx, span, _ := telemetry.StartSpan(ctx, "hwes.Event.SetCommitterFromCtx")
-	defer span.End()
-
 	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil // don't set a user, if no user is available
@@ -281,12 +278,9 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 
 // SetOrganizationFromCtx injects the OrganizationID from the passed context via common.GetOrganizationID().
 func (e *Event) SetOrganizationFromCtx(ctx context.Context) error {
-	ctx, span, _ := telemetry.StartSpan(ctx, "hwes.Event.SetOrganizationFromCtx")
-	defer span.End()
-
 	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
-		return nil // don't set a user, if no user is available
+		return nil // don't set an org, if no org is available
 	}
 
 	e.OrganizationID = &organizationID

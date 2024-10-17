@@ -6,7 +6,6 @@ import (
 	"context"
 	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
-	//nolint:staticcheck
 	prometheusGrpcProvider "github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus"
 	zlog "github.com/rs/zerolog/log"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
