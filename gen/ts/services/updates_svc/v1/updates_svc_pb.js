@@ -492,7 +492,7 @@ proto.services.updates_svc.v1.ReceiveUpdatesRequest.prototype.toObject = functio
  */
 proto.services.updates_svc.v1.ReceiveUpdatesRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    revision: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -529,6 +529,10 @@ proto.services.updates_svc.v1.ReceiveUpdatesRequest.deserializeBinaryFromReader 
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setRevision(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -558,6 +562,49 @@ proto.services.updates_svc.v1.ReceiveUpdatesRequest.prototype.serializeBinary = 
  */
 proto.services.updates_svc.v1.ReceiveUpdatesRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeUint64(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional uint64 revision = 1;
+ * @return {number}
+ */
+proto.services.updates_svc.v1.ReceiveUpdatesRequest.prototype.getRevision = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.services.updates_svc.v1.ReceiveUpdatesRequest} returns this
+ */
+proto.services.updates_svc.v1.ReceiveUpdatesRequest.prototype.setRevision = function(value) {
+  return jspb.Message.setField(this, 1, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.updates_svc.v1.ReceiveUpdatesRequest} returns this
+ */
+proto.services.updates_svc.v1.ReceiveUpdatesRequest.prototype.clearRevision = function() {
+  return jspb.Message.setField(this, 1, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.updates_svc.v1.ReceiveUpdatesRequest.prototype.hasRevision = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
@@ -570,15 +617,15 @@ proto.services.updates_svc.v1.ReceiveUpdatesRequest.serializeBinaryToWriter = fu
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.services.updates_svc.v1.ReceiveUpdatesResponse.oneofGroups_ = [[1,2]];
+proto.services.updates_svc.v1.ReceiveUpdatesResponse.oneofGroups_ = [[2,3]];
 
 /**
  * @enum {number}
  */
 proto.services.updates_svc.v1.ReceiveUpdatesResponse.EventCase = {
   EVENT_NOT_SET: 0,
-  ENTITY_EVENT: 1,
-  DOMAIN_EVENT: 2
+  ENTITY_EVENT: 2,
+  DOMAIN_EVENT: 3
 };
 
 /**
@@ -619,6 +666,7 @@ proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.toObject = functi
  */
 proto.services.updates_svc.v1.ReceiveUpdatesResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
+    revision: jspb.Message.getFieldWithDefault(msg, 1, 0),
     entityEvent: (f = msg.getEntityEvent()) && proto.services.updates_svc.v1.EntityEvent.toObject(includeInstance, f),
     domainEvent: (f = msg.getDomainEvent()) && proto.services.updates_svc.v1.DomainEvent.toObject(includeInstance, f)
   };
@@ -658,11 +706,15 @@ proto.services.updates_svc.v1.ReceiveUpdatesResponse.deserializeBinaryFromReader
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setRevision(value);
+      break;
+    case 2:
       var value = new proto.services.updates_svc.v1.EntityEvent;
       reader.readMessage(value,proto.services.updates_svc.v1.EntityEvent.deserializeBinaryFromReader);
       msg.setEntityEvent(value);
       break;
-    case 2:
+    case 3:
       var value = new proto.services.updates_svc.v1.DomainEvent;
       reader.readMessage(value,proto.services.updates_svc.v1.DomainEvent.deserializeBinaryFromReader);
       msg.setDomainEvent(value);
@@ -696,10 +748,17 @@ proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.serializeBinary =
  */
 proto.services.updates_svc.v1.ReceiveUpdatesResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getRevision();
+  if (f !== 0) {
+    writer.writeUint64(
+      1,
+      f
+    );
+  }
   f = message.getEntityEvent();
   if (f != null) {
     writer.writeMessage(
-      1,
+      2,
       f,
       proto.services.updates_svc.v1.EntityEvent.serializeBinaryToWriter
     );
@@ -707,7 +766,7 @@ proto.services.updates_svc.v1.ReceiveUpdatesResponse.serializeBinaryToWriter = f
   f = message.getDomainEvent();
   if (f != null) {
     writer.writeMessage(
-      2,
+      3,
       f,
       proto.services.updates_svc.v1.DomainEvent.serializeBinaryToWriter
     );
@@ -716,12 +775,30 @@ proto.services.updates_svc.v1.ReceiveUpdatesResponse.serializeBinaryToWriter = f
 
 
 /**
- * optional EntityEvent entity_event = 1;
+ * optional uint64 revision = 1;
+ * @return {number}
+ */
+proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.getRevision = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.services.updates_svc.v1.ReceiveUpdatesResponse} returns this
+ */
+proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.setRevision = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional EntityEvent entity_event = 2;
  * @return {?proto.services.updates_svc.v1.EntityEvent}
  */
 proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.getEntityEvent = function() {
   return /** @type{?proto.services.updates_svc.v1.EntityEvent} */ (
-    jspb.Message.getWrapperField(this, proto.services.updates_svc.v1.EntityEvent, 1));
+    jspb.Message.getWrapperField(this, proto.services.updates_svc.v1.EntityEvent, 2));
 };
 
 
@@ -730,7 +807,7 @@ proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.getEntityEvent = 
  * @return {!proto.services.updates_svc.v1.ReceiveUpdatesResponse} returns this
 */
 proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.setEntityEvent = function(value) {
-  return jspb.Message.setOneofWrapperField(this, 1, proto.services.updates_svc.v1.ReceiveUpdatesResponse.oneofGroups_[0], value);
+  return jspb.Message.setOneofWrapperField(this, 2, proto.services.updates_svc.v1.ReceiveUpdatesResponse.oneofGroups_[0], value);
 };
 
 
@@ -748,17 +825,17 @@ proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.clearEntityEvent 
  * @return {boolean}
  */
 proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.hasEntityEvent = function() {
-  return jspb.Message.getField(this, 1) != null;
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional DomainEvent domain_event = 2;
+ * optional DomainEvent domain_event = 3;
  * @return {?proto.services.updates_svc.v1.DomainEvent}
  */
 proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.getDomainEvent = function() {
   return /** @type{?proto.services.updates_svc.v1.DomainEvent} */ (
-    jspb.Message.getWrapperField(this, proto.services.updates_svc.v1.DomainEvent, 2));
+    jspb.Message.getWrapperField(this, proto.services.updates_svc.v1.DomainEvent, 3));
 };
 
 
@@ -767,7 +844,7 @@ proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.getDomainEvent = 
  * @return {!proto.services.updates_svc.v1.ReceiveUpdatesResponse} returns this
 */
 proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.setDomainEvent = function(value) {
-  return jspb.Message.setOneofWrapperField(this, 2, proto.services.updates_svc.v1.ReceiveUpdatesResponse.oneofGroups_[0], value);
+  return jspb.Message.setOneofWrapperField(this, 3, proto.services.updates_svc.v1.ReceiveUpdatesResponse.oneofGroups_[0], value);
 };
 
 
@@ -785,7 +862,7 @@ proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.clearDomainEvent 
  * @return {boolean}
  */
 proto.services.updates_svc.v1.ReceiveUpdatesResponse.prototype.hasDomainEvent = function() {
-  return jspb.Message.getField(this, 2) != null;
+  return jspb.Message.getField(this, 3) != null;
 };
 
 

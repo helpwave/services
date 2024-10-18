@@ -19,19 +19,16 @@ func TestMain(m *testing.M) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	zlog.Info().Msg("starting containers")
-	endpoints, teardownContainers := hwtesting.StartContainers(ctx, hwtesting.Eventstore, hwtesting.Spice)
+	endpoints, teardownContainers := hwtesting.StartContainers(ctx, hwtesting.Eventstore)
 	eventstoreEndpoint := endpoints.Get(hwtesting.Eventstore)
-	spiceEndpoint := endpoints.Get(hwtesting.Spice)
 
 	zlog.Info().
 		Str("eventstoreEndpoint", eventstoreEndpoint).
-		Str("spiceEndpoint", spiceEndpoint).
 		Msg("containers are up")
 
 	// prepare env
 	hwtesting.SetCommonEnv()
 	hwtesting.SetEventstoreEnv(eventstoreEndpoint)
-	hwtesting.SetSpiceEnv(spiceEndpoint)
 
 	// TODO: spice migrations (PR #812)
 

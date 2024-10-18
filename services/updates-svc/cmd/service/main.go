@@ -13,7 +13,6 @@ const ServiceName = "updates-svc"
 func Main(version string, ready func()) {
 	ctx := common.Setup(ServiceName, version, common.WithAuth())
 
-	// authz := hwspicedb.NewSpiceDBAuthZ()
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {

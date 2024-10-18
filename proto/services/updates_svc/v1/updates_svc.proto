@@ -20,7 +20,7 @@ message DomainEvent {
 //
 
 message ReceiveUpdatesRequest {
-
+  optional uint64 revision = 1;
 }
 
 //
@@ -28,9 +28,10 @@ message ReceiveUpdatesRequest {
 //
 
 message ReceiveUpdatesResponse {
+  uint64 revision = 1;
   oneof event {
-    EntityEvent entity_event = 1;
-    DomainEvent domain_event = 2;
+    EntityEvent entity_event = 2;
+    DomainEvent domain_event = 3;
   }
 }
 

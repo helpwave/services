@@ -45,18 +45,26 @@ final $typed_data.Uint8List domainEventDescriptor = $convert.base64Decode(
 @$core.Deprecated('Use receiveUpdatesRequestDescriptor instead')
 const ReceiveUpdatesRequest$json = {
   '1': 'ReceiveUpdatesRequest',
+  '2': [
+    {'1': 'revision', '3': 1, '4': 1, '5': 4, '9': 0, '10': 'revision', '17': true},
+  ],
+  '8': [
+    {'1': '_revision'},
+  ],
 };
 
 /// Descriptor for `ReceiveUpdatesRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List receiveUpdatesRequestDescriptor = $convert.base64Decode(
-    'ChVSZWNlaXZlVXBkYXRlc1JlcXVlc3Q=');
+    'ChVSZWNlaXZlVXBkYXRlc1JlcXVlc3QSHwoIcmV2aXNpb24YASABKARIAFIIcmV2aXNpb26IAQ'
+    'FCCwoJX3JldmlzaW9u');
 
 @$core.Deprecated('Use receiveUpdatesResponseDescriptor instead')
 const ReceiveUpdatesResponse$json = {
   '1': 'ReceiveUpdatesResponse',
   '2': [
-    {'1': 'entity_event', '3': 1, '4': 1, '5': 11, '6': '.services.updates_svc.v1.EntityEvent', '9': 0, '10': 'entityEvent'},
-    {'1': 'domain_event', '3': 2, '4': 1, '5': 11, '6': '.services.updates_svc.v1.DomainEvent', '9': 0, '10': 'domainEvent'},
+    {'1': 'revision', '3': 1, '4': 1, '5': 4, '10': 'revision'},
+    {'1': 'entity_event', '3': 2, '4': 1, '5': 11, '6': '.services.updates_svc.v1.EntityEvent', '9': 0, '10': 'entityEvent'},
+    {'1': 'domain_event', '3': 3, '4': 1, '5': 11, '6': '.services.updates_svc.v1.DomainEvent', '9': 0, '10': 'domainEvent'},
   ],
   '8': [
     {'1': 'event'},
@@ -65,8 +73,8 @@ const ReceiveUpdatesResponse$json = {
 
 /// Descriptor for `ReceiveUpdatesResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List receiveUpdatesResponseDescriptor = $convert.base64Decode(
-    'ChZSZWNlaXZlVXBkYXRlc1Jlc3BvbnNlEkkKDGVudGl0eV9ldmVudBgBIAEoCzIkLnNlcnZpY2'
-    'VzLnVwZGF0ZXNfc3ZjLnYxLkVudGl0eUV2ZW50SABSC2VudGl0eUV2ZW50EkkKDGRvbWFpbl9l'
-    'dmVudBgCIAEoCzIkLnNlcnZpY2VzLnVwZGF0ZXNfc3ZjLnYxLkRvbWFpbkV2ZW50SABSC2RvbW'
-    'FpbkV2ZW50QgcKBWV2ZW50');
+    'ChZSZWNlaXZlVXBkYXRlc1Jlc3BvbnNlEhoKCHJldmlzaW9uGAEgASgEUghyZXZpc2lvbhJJCg'
+    'xlbnRpdHlfZXZlbnQYAiABKAsyJC5zZXJ2aWNlcy51cGRhdGVzX3N2Yy52MS5FbnRpdHlFdmVu'
+    'dEgAUgtlbnRpdHlFdmVudBJJCgxkb21haW5fZXZlbnQYAyABKAsyJC5zZXJ2aWNlcy51cGRhdG'
+    'VzX3N2Yy52MS5Eb21haW5FdmVudEgAUgtkb21haW5FdmVudEIHCgVldmVudA==');
 

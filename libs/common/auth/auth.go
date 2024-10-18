@@ -13,6 +13,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hwutil"
 	"telemetry"
+	"time"
 )
 
 // to avoid ambiguity please read: https://wiki.helpwave.de/doc/keycloak-jedzCcERwF
@@ -26,9 +27,11 @@ var (
 	oauthConfig             *oauth2.Config
 	Verifier                *oidc.IDTokenVerifier
 	authSetupDone           bool
+	FakeTokenValidFor       = time.Second * 30
 )
 
 type ClaimsKey struct{}
+type TokenExpires struct{}
 type UserIDKey struct{}
 type OrganizationIDKey struct{}
 
@@ -140,49 +143,50 @@ func (t IDTokenClaims) AsExpected() error {
 // VerifyIDToken verifies the correctness of the accessToken and returns its claim.
 // The claim is checked to be as expected.
 // Service must be set up with auth!
-func VerifyIDToken(ctx context.Context, token string) (*IDTokenClaims, error) {
+func VerifyIDToken(ctx context.Context, token string) (*IDTokenClaims, *time.Time, error) {
 	// Verify() verifies formal validity, proper signing, usage of the correct keys, ...
 	// and still exposes .Claims() for us to access non-standard ID token claims
 	idToken, err := GetIDTokenVerifier(ctx).Verify(context.Background(), token)
 	if err != nil {
-		return nil, fmt.Errorf("getIDTokenVerifier: verify failed: %w", err)
+		return nil, nil, fmt.Errorf("getIDTokenVerifier: verify failed: %w", err)
 	}
 
 	// now get the claims
 	claims := IDTokenClaims{}
 	if err = idToken.Claims(&claims); err != nil {
-		return nil, fmt.Errorf("getIDTokenVerifier: could not get claims: %w", err)
+		return nil, nil, fmt.Errorf("getIDTokenVerifier: could not get claims: %w", err)
 	}
 
 	// and check that they are in the expected format
 	if err = claims.AsExpected(); err != nil {
-		return nil, fmt.Errorf("getIDTokenVerifier: claims are not as expected: %w", err)
+		return nil, nil, fmt.Errorf("getIDTokenVerifier: claims are not as expected: %w", err)
 	}
 
-	return &claims, nil
+	return &claims, &idToken.Expiry, nil
 }
 
 // VerifyFakeToken accepts a Base64 encoded json structure with the schema of IDTokenClaims
-func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, error) {
+func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, *time.Time, error) {
 	log := zlog.Ctx(ctx)
 
 	plainToken, err := base64.StdEncoding.DecodeString(token)
 	if err != nil {
-		return nil, fmt.Errorf("VerifyFakeToken: cant decode fake token: %w", err)
+		return nil, nil, fmt.Errorf("VerifyFakeToken: cant decode fake token: %w", err)
 	}
 
 	claims := IDTokenClaims{}
 	if err := hwutil.ParseValidJson(plainToken, &claims); err != nil {
-		return nil, fmt.Errorf("VerifyFakeToken: cant parse json: %w", err)
+		return nil, nil, fmt.Errorf("VerifyFakeToken: cant parse json: %w", err)
 	}
 
 	if err = claims.AsExpected(); err != nil {
-		return nil, fmt.Errorf("VerifyFakeToken: claims not as expected: %w", err)
+		return nil, nil, fmt.Errorf("VerifyFakeToken: claims not as expected: %w", err)
 	}
 
 	log.Warn().Interface("claims", claims).Msg("fake token was verified")
 
-	return &claims, err
+	expiry := time.Now().Add(FakeTokenValidFor)
+	return &claims, &expiry, err
 }
 
 func ContextWithUserID(ctx context.Context, userID uuid.UUID) context.Context {
@@ -203,6 +207,16 @@ func GetAuthClaims(ctx context.Context) (*IDTokenClaims, error) {
 		return nil, status.Error(codes.Unauthenticated, "authentication required")
 	} else {
 		return res, nil
+	}
+}
+
+// SessionValidUntil returns time.Time when the session gets marked as expired
+func SessionValidUntil(ctx context.Context) (time.Time, error) {
+	res, ok := ctx.Value(TokenExpires{}).(*time.Time)
+	if !ok {
+		return time.Now(), status.Error(codes.Internal, "tokenExpires not in context, set up auth")
+	} else {
+		return *res, nil
 	}
 }
 
