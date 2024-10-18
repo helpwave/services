@@ -11,6 +11,7 @@
 
 import 'dart:core' as $core;
 
+import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class EntityEvent extends $pb.GeneratedMessage {
@@ -156,12 +157,21 @@ class DomainEvent extends $pb.GeneratedMessage {
 }
 
 class ReceiveUpdatesRequest extends $pb.GeneratedMessage {
-  factory ReceiveUpdatesRequest() => create();
+  factory ReceiveUpdatesRequest({
+    $fixnum.Int64? revision,
+  }) {
+    final $result = create();
+    if (revision != null) {
+      $result.revision = revision;
+    }
+    return $result;
+  }
   ReceiveUpdatesRequest._() : super();
   factory ReceiveUpdatesRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReceiveUpdatesRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReceiveUpdatesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.updates_svc.v1'), createEmptyInstance: create)
+    ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'revision', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..hasRequiredFields = false
   ;
 
@@ -185,6 +195,15 @@ class ReceiveUpdatesRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static ReceiveUpdatesRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReceiveUpdatesRequest>(create);
   static ReceiveUpdatesRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get revision => $_getI64(0);
+  @$pb.TagNumber(1)
+  set revision($fixnum.Int64 v) { $_setInt64(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasRevision() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRevision() => clearField(1);
 }
 
 enum ReceiveUpdatesResponse_Event {
@@ -195,10 +214,14 @@ enum ReceiveUpdatesResponse_Event {
 
 class ReceiveUpdatesResponse extends $pb.GeneratedMessage {
   factory ReceiveUpdatesResponse({
+    $fixnum.Int64? revision,
     EntityEvent? entityEvent,
     DomainEvent? domainEvent,
   }) {
     final $result = create();
+    if (revision != null) {
+      $result.revision = revision;
+    }
     if (entityEvent != null) {
       $result.entityEvent = entityEvent;
     }
@@ -212,14 +235,15 @@ class ReceiveUpdatesResponse extends $pb.GeneratedMessage {
   factory ReceiveUpdatesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static const $core.Map<$core.int, ReceiveUpdatesResponse_Event> _ReceiveUpdatesResponse_EventByTag = {
-    1 : ReceiveUpdatesResponse_Event.entityEvent,
-    2 : ReceiveUpdatesResponse_Event.domainEvent,
+    2 : ReceiveUpdatesResponse_Event.entityEvent,
+    3 : ReceiveUpdatesResponse_Event.domainEvent,
     0 : ReceiveUpdatesResponse_Event.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReceiveUpdatesResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.updates_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [1, 2])
-    ..aOM<EntityEvent>(1, _omitFieldNames ? '' : 'entityEvent', subBuilder: EntityEvent.create)
-    ..aOM<DomainEvent>(2, _omitFieldNames ? '' : 'domainEvent', subBuilder: DomainEvent.create)
+    ..oo(0, [2, 3])
+    ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'revision', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aOM<EntityEvent>(2, _omitFieldNames ? '' : 'entityEvent', subBuilder: EntityEvent.create)
+    ..aOM<DomainEvent>(3, _omitFieldNames ? '' : 'domainEvent', subBuilder: DomainEvent.create)
     ..hasRequiredFields = false
   ;
 
@@ -248,26 +272,35 @@ class ReceiveUpdatesResponse extends $pb.GeneratedMessage {
   void clearEvent() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  EntityEvent get entityEvent => $_getN(0);
+  $fixnum.Int64 get revision => $_getI64(0);
   @$pb.TagNumber(1)
-  set entityEvent(EntityEvent v) { setField(1, v); }
+  set revision($fixnum.Int64 v) { $_setInt64(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasEntityEvent() => $_has(0);
+  $core.bool hasRevision() => $_has(0);
   @$pb.TagNumber(1)
-  void clearEntityEvent() => clearField(1);
-  @$pb.TagNumber(1)
-  EntityEvent ensureEntityEvent() => $_ensure(0);
+  void clearRevision() => clearField(1);
 
   @$pb.TagNumber(2)
-  DomainEvent get domainEvent => $_getN(1);
+  EntityEvent get entityEvent => $_getN(1);
   @$pb.TagNumber(2)
-  set domainEvent(DomainEvent v) { setField(2, v); }
+  set entityEvent(EntityEvent v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasDomainEvent() => $_has(1);
+  $core.bool hasEntityEvent() => $_has(1);
   @$pb.TagNumber(2)
-  void clearDomainEvent() => clearField(2);
+  void clearEntityEvent() => clearField(2);
   @$pb.TagNumber(2)
-  DomainEvent ensureDomainEvent() => $_ensure(1);
+  EntityEvent ensureEntityEvent() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  DomainEvent get domainEvent => $_getN(2);
+  @$pb.TagNumber(3)
+  set domainEvent(DomainEvent v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDomainEvent() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDomainEvent() => clearField(3);
+  @$pb.TagNumber(3)
+  DomainEvent ensureDomainEvent() => $_ensure(2);
 }
 
 

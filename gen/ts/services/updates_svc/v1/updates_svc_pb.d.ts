@@ -51,6 +51,11 @@ export namespace DomainEvent {
 }
 
 export class ReceiveUpdatesRequest extends jspb.Message {
+  getRevision(): number;
+  setRevision(value: number): ReceiveUpdatesRequest;
+  hasRevision(): boolean;
+  clearRevision(): ReceiveUpdatesRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ReceiveUpdatesRequest.AsObject;
   static toObject(includeInstance: boolean, msg: ReceiveUpdatesRequest): ReceiveUpdatesRequest.AsObject;
@@ -61,10 +66,19 @@ export class ReceiveUpdatesRequest extends jspb.Message {
 
 export namespace ReceiveUpdatesRequest {
   export type AsObject = {
+    revision?: number,
+  }
+
+  export enum RevisionCase { 
+    _REVISION_NOT_SET = 0,
+    REVISION = 1,
   }
 }
 
 export class ReceiveUpdatesResponse extends jspb.Message {
+  getRevision(): number;
+  setRevision(value: number): ReceiveUpdatesResponse;
+
   getEntityEvent(): EntityEvent | undefined;
   setEntityEvent(value?: EntityEvent): ReceiveUpdatesResponse;
   hasEntityEvent(): boolean;
@@ -87,14 +101,15 @@ export class ReceiveUpdatesResponse extends jspb.Message {
 
 export namespace ReceiveUpdatesResponse {
   export type AsObject = {
+    revision: number,
     entityEvent?: EntityEvent.AsObject,
     domainEvent?: DomainEvent.AsObject,
   }
 
   export enum EventCase { 
     EVENT_NOT_SET = 0,
-    ENTITY_EVENT = 1,
-    DOMAIN_EVENT = 2,
+    ENTITY_EVENT = 2,
+    DOMAIN_EVENT = 3,
   }
 }
 
