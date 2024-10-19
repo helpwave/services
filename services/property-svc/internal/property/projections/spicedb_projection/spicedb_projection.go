@@ -49,10 +49,10 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	if evt.CommitterOrganizationID == nil {
+	if evt.OrganizationID == nil {
 		return fmt.Errorf("organization is missing from event"), hwutil.PtrTo(esdb.NackActionPark)
 	}
-	organizationID := *evt.CommitterOrganizationID
+	organizationID := *evt.OrganizationID
 
 	// add to permission graph
 	_, err = p.authz.
