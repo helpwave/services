@@ -119,6 +119,14 @@ func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.Permis
 		},
 		Permission: string(permissionCheck.Relation),
 		Resource:   fromObject(permissionCheck.Resource),
+
+		// for now requests are fully_consistent, replace this if possible with "At Least As Fresh"-strategy
+		// read: https://authzed.com/docs/spicedb/concepts/consistency
+		Consistency: &v1.Consistency{
+			Requirement: &v1.Consistency_FullyConsistent{
+				FullyConsistent: true,
+			},
+		},
 	}
 
 	// make request

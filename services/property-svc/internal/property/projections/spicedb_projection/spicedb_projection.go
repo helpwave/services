@@ -54,17 +54,24 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	}
 	organizationID := *evt.OrganizationID
 
+	relationship := hwauthz.NewRelationship(
+		perm.Organization(organizationID),
+		perm.PropertyOrganization,
+		perm.Property(propertyID))
+
 	// add to permission graph
 	_, err = p.authz.
-		Create(hwauthz.NewRelationship(
-			perm.Organization(organizationID),
-			perm.PropertyOrganization,
-			perm.Property(propertyID))).
+		Create(relationship).
 		Commit(ctx)
 
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err),
+			hwutil.PtrTo(esdb.NackActionRetry)
 	}
+
+	log.Debug().
+		Str("relationship", relationship.DebugString()).
+		Msg("spice relationship created")
 
 	return nil, nil
 }

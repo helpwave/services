@@ -67,6 +67,27 @@ type Relationship struct {
 	Resource Object
 }
 
+func (r *Relationship) DebugString() string {
+	return fmt.Sprintf(
+		"(sub: '%s:%s', rel: '%s', res: '%s:%s')",
+		r.Subject.Type(),
+		r.Subject.ID(),
+		r.Relation,
+		r.Resource.Type(),
+		r.Resource.ID(),
+	)
+}
+
+func (r *Relationship) SpanAttributeKeyValue() []attribute.KeyValue {
+	return []attribute.KeyValue{
+		attribute.String("spice.resource.type", r.Resource.Type()),
+		attribute.String("spice.resource.id", r.Resource.ID()),
+		attribute.String("spice.relation", string(r.Relation)),
+		attribute.String("spice.subject.type", r.Subject.Type()),
+		attribute.String("spice.subject.id", r.Subject.ID()),
+	}
+}
+
 // NewRelationship constructs a new Relationship object
 // To store a new Relationship Tuple in SpiceDB, see AuthZ.Write
 func NewRelationship(subject Object, relation Relation, resource Object) Relationship {
@@ -85,16 +106,6 @@ type PermissionCheck = Relationship
 // Used to check if a Relationship exists, see AuthZ.Check
 func NewPermissionCheck(subject Object, permission Permission, resource Object) PermissionCheck {
 	return NewRelationship(subject, Relation(permission), resource)
-}
-
-func (r *Relationship) SpanAttributeKeyValue() []attribute.KeyValue {
-	return []attribute.KeyValue{
-		attribute.String("spice.resource.type", r.Resource.Type()),
-		attribute.String("spice.resource.id", r.Resource.ID()),
-		attribute.String("spice.relation", string(r.Relation)),
-		attribute.String("spice.subject.type", r.Subject.Type()),
-		attribute.String("spice.subject.id", r.Subject.ID()),
-	}
 }
 
 // A Writer can write to the permission graph
