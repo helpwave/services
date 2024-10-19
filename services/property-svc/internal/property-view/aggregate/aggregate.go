@@ -69,7 +69,7 @@ func (a *PropertyViewRuleAggregate) onPropertyRuleListsUpdated(event hwes.Event)
 	removeFromAlwaysInclude := hwutil.SliceToSet(payload.RemoveFromAlwaysInclude)
 	removeFromDontAlwaysInclude := hwutil.SliceToSet(payload.RemoveFromDontAlwaysInclude)
 
-	a.PropertyViewRule.AlwaysInclude = hwutil.Filter(mergedInclude, func(id uuid.UUID) bool {
+	a.PropertyViewRule.AlwaysInclude = hwutil.Filter(mergedInclude, func(_ int, id uuid.UUID) bool {
 		// the intent of being in the "don't list" is stronger
 		// if an id is in both lists, it gets removed from the "always list"
 		_, inDontInclude := dontIncludeSet[id]
@@ -78,7 +78,7 @@ func (a *PropertyViewRuleAggregate) onPropertyRuleListsUpdated(event hwes.Event)
 
 		return !inRemove && (!inDontInclude || inRemoveFromDont)
 	})
-	a.PropertyViewRule.DontAlwaysInclude = hwutil.Filter(mergedDontInclude, func(id uuid.UUID) bool {
+	a.PropertyViewRule.DontAlwaysInclude = hwutil.Filter(mergedDontInclude, func(_ int, id uuid.UUID) bool {
 		_, inRemove := removeFromDontAlwaysInclude[id]
 		return inRemove
 	})

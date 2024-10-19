@@ -546,7 +546,7 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 
 	if wardID.Valid {
 		// scope active patients to wardID
-		withBedRows = hwutil.Filter(withBedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
+		withBedRows = hwutil.Filter(withBedRows, func(_ int, row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
 			return row.WardID.UUID == wardID.UUID // equality implies validity
 		})
 	}

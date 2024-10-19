@@ -5,16 +5,23 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
+	"hwauthz"
 	"hwdb"
 	"hwutil"
 	"property-svc/internal/property/models"
+	"property-svc/internal/property/perm"
 	"property-svc/repos/property_repo"
 )
 
 type GetPropertiesQueryHandler func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error)
 
-func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
+func NewGetPropertiesQueryHandler(authz hwauthz.AuthZ) GetPropertiesQueryHandler {
 	return func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
+		user, err := perm.UserFromCtx(ctx)
+		if err != nil {
+			return nil, err
+		}
+
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
 		var subjectTypeID *int32
@@ -73,6 +80,19 @@ func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
 				})
 			}
 		}
+
+		checks := hwutil.Map(properties, func(p *models.PropertyWithConsistency) hwauthz.PermissionCheck {
+			return hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(p.ID))
+		})
+
+		canGet, err := authz.BulkCheck(ctx, checks)
+		if err != nil {
+			return nil, err
+		}
+
+		properties = hwutil.Filter(properties, func(i int, _ *models.PropertyWithConsistency) bool {
+			return canGet[i]
+		})
 
 		return properties, nil
 	}

@@ -31,7 +31,7 @@ func NewPropertyHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers 
 		Queries: &Queries{
 			V1: &queriesV1.PropertyQueries{
 				GetPropertyByID:                       queriesV1.NewGetPropertyByIDQueryHandler(authz),
-				GetProperties:                         queriesV1.NewGetPropertiesQueryHandler(),
+				GetProperties:                         queriesV1.NewGetPropertiesQueryHandler(authz),
 				IsPropertyAlwaysIncludedForViewSource: queriesV1.NewIsPropertyAlwaysIncludedForViewSourceHandler(authz),
 			},
 		},

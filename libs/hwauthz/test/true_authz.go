@@ -31,3 +31,11 @@ func (a *TrueAuthZ) Check(ctx context.Context, check hwauthz.PermissionCheck) (p
 func (a *TrueAuthZ) Must(ctx context.Context, check hwauthz.PermissionCheck) error {
 	return nil
 }
+
+func BulkCheck(_ context.Context, checks []hwauthz.PermissionCheck) ([]bool, error) {
+	bs := make([]bool, len(checks))
+	for i, _ := range bs {
+		bs[i] = true
+	}
+	return bs, nil
+}

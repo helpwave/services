@@ -229,7 +229,7 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) 
 	}
 
 	if a.Property.FieldTypeData.SelectData != nil {
-		a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(a.Property.FieldTypeData.SelectData.SelectOptions, func(selectOption models.SelectOption) bool {
+		a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(a.Property.FieldTypeData.SelectData.SelectOptions, func(_ int, selectOption models.SelectOption) bool {
 			for _, id := range payload.RemovedSelectOptions {
 				if selectOption.ID.String() == id {
 					return false

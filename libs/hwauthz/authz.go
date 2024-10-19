@@ -158,6 +158,9 @@ type AuthZ interface {
 	// Must performs a Check, and yields StatusErrorPermissionDenied, if it fails
 	// Note: it is NOT guaranteed, that the resulting error is StatusErrorPermissionDenied
 	Must(ctx context.Context, check PermissionCheck) error
+	// BulkCheck queries permission relations for many checks.
+	// The evaluated truthfulness of a check at index i in the checks slice is returned at index i in the yielded slice.
+	BulkCheck(ctx context.Context, checks []PermissionCheck) ([]bool, error)
 }
 
 // Error returns err, if not nil or StatusErrorPermissionDenied, if permissionGranted is false
