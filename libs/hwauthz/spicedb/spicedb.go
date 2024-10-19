@@ -185,8 +185,9 @@ func (s *SpiceDBAuthZ) BulkCheck(ctx context.Context, checks []hwauthz.Permissio
 		// if there is a slice already, append to it (there is a duplicate check)
 		if inxs[key] != nil {
 			inxs[key] = append(inxs[key], i)
+		} else {
+			inxs[key] = []int{i}
 		}
-		inxs[key] = []int{i}
 	}
 
 	// make request
@@ -221,6 +222,7 @@ func (s *SpiceDBAuthZ) BulkCheck(ctx context.Context, checks []hwauthz.Permissio
 		hasPermission := permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
 
 		for _, ix := range inxs[key] {
+			log.Info().Int("ix", ix).Bool("hasPermission", hasPermission).Str("key", key).Send()
 			result[ix] = hasPermission
 		}
 	}

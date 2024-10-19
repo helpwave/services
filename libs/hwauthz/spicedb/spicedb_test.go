@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
+	"telemetry"
 	"testing"
 	"time"
 )
@@ -26,6 +27,13 @@ func TestMain(m *testing.M) {
 	hwtesting.SetSpiceEnv(spiceDBEndpoint)
 
 	hwtesting.MigrateSpiceDB(ctx, spiceDBEndpoint)
+
+	telemetry.SetupLogging(
+		"development",
+		"trace",
+		"spicedb_test.go",
+		"testing",
+	)
 
 	// Run tests
 	exitCode := m.Run()
@@ -83,13 +91,21 @@ func TestBulkCheck(t *testing.T) {
 	_, err := tx.Commit(ctx)
 	require.NoError(t, err)
 
+	// create a duplicate
+	checks = append(checks, checks[len(checks)-1])
+
 	// do bulk check
 
 	results, err := client.BulkCheck(ctx, checks)
 	require.NoError(t, err)
+	require.Len(t, results, len(checks))
 
 	for i, b := range results {
-		assert.Equal(t, i%2 == 0, b)
+		if i == len(results)-1 {
+			assert.Equal(t, results[len(results)-2], b)
+		} else {
+			assert.Equal(t, i%2 == 0, b, checks[i].DebugString())
+		}
 	}
 
 }
