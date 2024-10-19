@@ -6,8 +6,10 @@ import (
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"hwauthz"
 	"hwutil"
 	viewModels "property-svc/internal/property-view/models"
+	"property-svc/internal/property/perm"
 )
 
 type ViewSource interface {
@@ -16,8 +18,19 @@ type ViewSource interface {
 
 type IsPropertyAlwaysIncludedForViewSource func(ctx context.Context, viewSource ViewSource, subjectType pb.SubjectType, propertyId uuid.UUID) (bool, error)
 
-func NewIsPropertyAlwaysIncludedForViewSourceHandler() IsPropertyAlwaysIncludedForViewSource {
-	return func(ctx context.Context, viewSource ViewSource, subjectType pb.SubjectType, propertyId uuid.UUID) (bool, error) {
+func NewIsPropertyAlwaysIncludedForViewSourceHandler(authz hwauthz.AuthZ) IsPropertyAlwaysIncludedForViewSource {
+	return func(ctx context.Context, viewSource ViewSource, subjectType pb.SubjectType, propertyID uuid.UUID) (bool, error) {
+		user, err := perm.UserFromCtx(ctx)
+		if err != nil {
+			return false, err
+		}
+
+		// Is user allowed to see this property?
+		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))
+		if err = authz.Must(ctx, check); err != nil {
+			return false, err
+		}
+
 		wardId := uuid.NullUUID{}
 		wardIdP := viewSource.GetWardId()
 		if wardIdP != "" {
@@ -43,6 +56,6 @@ func NewIsPropertyAlwaysIncludedForViewSourceHandler() IsPropertyAlwaysIncludedF
 			return false, status.Errorf(codes.Internal, "no matcher for subject type %s", subjectType.String())
 		}
 
-		return matcher.IsPropertyAlwaysIncluded(ctx, propertyId)
+		return matcher.IsPropertyAlwaysIncluded(ctx, propertyID)
 	}
 }
