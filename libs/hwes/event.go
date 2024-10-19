@@ -1,7 +1,7 @@
 package hwes
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -32,8 +32,8 @@ type Event struct {
 	Version uint64
 	// user responsible for this event
 	CommitterUserID *uuid.UUID
-	// organization of user responsible for this event
-	CommitterOrganizationID *uuid.UUID
+	// organization responsible for this event
+	OrganizationID *uuid.UUID
 	// w3c trace context
 	TraceParent string
 }
@@ -41,8 +41,8 @@ type Event struct {
 type metadata struct {
 	// CommitterUserID represents an optional UUID that identifies the user that is directly responsible for this event
 	CommitterUserID string `json:"committer_user_id"`
-	// CommitterOrganizationID is required, if CommitterUserID is set, represents user's organization at the time of creation
-	CommitterOrganizationID string `json:"committer_organization_id"`
+	// OrganizationID represents an optional UUID that identifies the organization that was responsible for this event during raising
+	OrganizationID string `json:"organization_id"`
 	// w3c trace context
 	TraceParent string `json:"trace_parent"`
 	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
@@ -52,11 +52,20 @@ type metadata struct {
 // EventOption used to apply configurations in hwes.NewEvent()
 type EventOption func(*Event) error
 
-// WithContext applies SetCommitterFromCtx after construction
+// WithContext applies SetCommitterFromCtx and SetOrganizationFromCtx after construction
 func WithContext(ctx context.Context) EventOption {
 	return func(event *Event) error {
 		event.SetTracingContextFromCtx(ctx)
-		return event.SetCommitterFromCtx(ctx)
+
+		if err := event.SetCommitterFromCtx(ctx); err != nil {
+			return err
+		}
+
+		if err := event.SetOrganizationFromCtx(ctx); err != nil {
+			return err
+		}
+
+		return nil
 	}
 }
 
@@ -75,6 +84,7 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 		AggregateType:   aggregate.GetType(),
 		Timestamp:       time.Now().UTC(),
 		CommitterUserID: nil,
+		OrganizationID:  nil,
 	}
 
 	// TODO: We have to default to empty eventData as the eventstoredb-ui does not allow querying events without data
@@ -152,17 +162,18 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		Timestamp:       md.Timestamp,
 		Version:         esdbEvent.EventNumber,
 		CommitterUserID: nil,
+		OrganizationID:  nil,
 		TraceParent:     md.TraceParent,
 	}
 
 	eventCommitterUserID, err := uuid.Parse(md.CommitterUserID)
 	if err == nil {
 		event.CommitterUserID = &eventCommitterUserID
-		eventCommitterOrgID, err := uuid.Parse(md.CommitterOrganizationID)
-		if err != nil {
-			return Event{}, fmt.Errorf("event's committer org could not be parsed: %w", err)
-		}
-		event.CommitterOrganizationID = &eventCommitterOrgID
+	}
+
+	eventOrganizationID, err := uuid.Parse(md.OrganizationID)
+	if err == nil {
+		event.OrganizationID = &eventOrganizationID
 	}
 
 	return event, nil
@@ -195,9 +206,13 @@ func (e *Event) ToEventData() (esdb.EventData, error) {
 		TraceParent: e.TraceParent,
 		Timestamp:   e.Timestamp,
 	}
+
 	if e.CommitterUserID != nil {
 		md.CommitterUserID = e.CommitterUserID.String()
-		md.CommitterOrganizationID = e.CommitterOrganizationID.String()
+	}
+
+	if e.OrganizationID != nil {
+		md.OrganizationID = e.OrganizationID.String()
 	}
 
 	mdBytes, err := json.Marshal(md)
@@ -244,32 +259,32 @@ func (e *Event) GetJsonData(data interface{}) error {
 }
 
 // SetCommitterFromCtx injects the UserID from the passed context via common.GetUserID().
-// If no UserID was injected, prior to this function call, an error will be returned.
-// Make sure to inject the UserID via a Middleware in the API layer.
 func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
-	ctx, span, _ := telemetry.StartSpan(ctx, "hwes.Event.SetCommitterFromCtx")
-	defer span.End()
-
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil // don't set a user, if no user is available
 	}
 
 	e.CommitterUserID = &userID
 
-	orgID, err := common.GetOrganizationID(ctx)
-	if err != nil {
-		return fmt.Errorf("could not set comitter org from ctx: %w", err)
-	}
-
-	e.CommitterOrganizationID = &orgID
-
-	// Just to make sure we are actually dealing with a valid UUID
-	if _, err := uuid.Parse(e.CommitterUserID.String()); err != nil {
-		return fmt.Errorf("SetCommitterFromCtx: cant parse comitter uid: %w", err)
-	}
-
 	telemetry.SetSpanStr(ctx, "committerUserID", e.CommitterUserID.String())
+	return nil
+}
+
+// SetOrganizationFromCtx injects the OrganizationID from the passed context via common.GetOrganizationID().
+func (e *Event) SetOrganizationFromCtx(ctx context.Context) error {
+	organizationID, err := auth.GetOrganizationID(ctx)
+	if err != nil {
+		return nil // don't set an org, if no org is available
+	}
+
+	e.OrganizationID = &organizationID
+
+	if _, err := uuid.Parse(e.OrganizationID.String()); err != nil {
+		return fmt.Errorf("SetOrganizationFromCtx: cant parse organization uid: %w", err)
+	}
+
+	telemetry.SetSpanStr(ctx, "organizationID", e.OrganizationID.String())
 	return nil
 }
 
@@ -286,7 +301,6 @@ func (e *Event) SetTracingContextFromCtx(ctx context.Context) {
 //
 // zerolog.Ctx(ctx).Debug().Dict("event", event.GetZerologDict()).Msg("process event")
 func (e *Event) GetZerologDict() *zerolog.Event {
-
 	dict := zerolog.Dict().
 		Str("eventId", e.EventID.String()).
 		Str("eventType", e.EventType).

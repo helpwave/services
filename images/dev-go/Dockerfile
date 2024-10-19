@@ -74,7 +74,7 @@ ENV HOME="/home/${UNAME}"
 # install air
 #  https://github.com/air-verse/air
 # renovate: datasource=github-releases depName=air-verse/air
-ENV AIR_VERSION=1.60.0
+ENV AIR_VERSION=1.61.1
 RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
 
 # install dapr-cli

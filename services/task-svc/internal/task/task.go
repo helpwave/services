@@ -1,7 +1,7 @@
 package task
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	pb "gen/services/task_svc/v1"
 	"github.com/google/uuid"
@@ -30,12 +30,12 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +164,7 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -231,7 +231,7 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -318,7 +318,7 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 
 func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
-	assigneeID, err := common.GetUserID(ctx)
+	assigneeID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -423,12 +423,12 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) (*pb.AddSubTaskResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

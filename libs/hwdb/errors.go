@@ -1,7 +1,7 @@
 package hwdb
 
 import (
-	"common"
+	"common/hwerr"
 	"context"
 	"errors"
 	"github.com/jackc/pgerrcode"
@@ -23,7 +23,7 @@ func genericStatusError(ctx context.Context, reasons ...string) error {
 		message = hwlocale.English(ctx, locale.GenericError(ctx))
 	}
 
-	return common.NewStatusError(ctx,
+	return hwerr.NewStatusError(ctx,
 		codes.Internal,
 		message,
 		locale.GenericError(ctx),
@@ -56,7 +56,7 @@ func WithOnNotNullViolation(fn errorFn) ErrorOptionsMutator {
 
 func defaultNotNullFn(ctx context.Context) errorFn {
 	return func(pgError *pgconn.PgError) error {
-		return common.NewStatusError(ctx, codes.InvalidArgument, pgError.Error(), locale.MissingFieldsError(ctx))
+		return hwerr.NewStatusError(ctx, codes.InvalidArgument, pgError.Error(), locale.MissingFieldsError(ctx))
 	}
 }
 
@@ -188,7 +188,7 @@ func pgErr(ctx context.Context, pgError *pgconn.PgError, opts errorOptions) erro
 			}
 		}
 
-		return common.NewStatusError(ctx,
+		return hwerr.NewStatusError(ctx,
 			codes.InvalidArgument,
 			"database error: "+pgError.Message,
 			locale.InvalidArgsError(ctx),
