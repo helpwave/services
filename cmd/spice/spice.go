@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"hwauthz/spicedb/migrate"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -13,7 +14,6 @@ import (
 	"github.com/authzed/grpcutil"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"hwauthz/spicedb/migrate"
 )
 
 // CLI is filled by kong.Parse in main

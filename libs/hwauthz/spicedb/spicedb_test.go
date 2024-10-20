@@ -2,10 +2,6 @@ package spicedb
 
 import (
 	"context"
-	zlog "github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"hwauthz"
 	"hwtesting"
 	"os"
 	"os/signal"
@@ -13,6 +9,11 @@ import (
 	"telemetry"
 	"testing"
 	"time"
+
+	zlog "github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"hwauthz"
 )
 
 func TestMain(m *testing.M) {
@@ -66,11 +67,11 @@ func TestBulkCheck(t *testing.T) {
 	// Create a few PermissionChecks
 
 	amount := 5
-	checks := make([]hwauthz.PermissionCheck, amount)
+	checks := make([]hwauthz.PermissionCheck, amount, amount+1)
 
 	tx := hwauthz.NewTx(client, nil, nil)
 
-	for i, _ := range checks {
+	for i := range checks {
 		sub := testObject{
 			typ: "user",
 			id:  strconv.Itoa(i),
@@ -107,5 +108,4 @@ func TestBulkCheck(t *testing.T) {
 			assert.Equal(t, i%2 == 0, b, checks[i].DebugString())
 		}
 	}
-
 }

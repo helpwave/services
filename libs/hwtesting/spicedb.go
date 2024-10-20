@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
 
 	spicedb "github.com/Mariscal6/testcontainers-spicedb-go"
 	spicev1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
@@ -13,9 +16,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	spiceMigrate "hwauthz/spicedb/migrate"
-	"os/exec"
-	"path/filepath"
-	"strings"
 )
 
 const (

@@ -22,7 +22,11 @@ func TestMain(m *testing.M) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	zlog.Info().Msg("starting containers")
-	endpoints, teardownContainers := hwtesting.StartContainers(ctx, hwtesting.Postgres, hwtesting.Eventstore, hwtesting.Spice)
+	endpoints, teardownContainers := hwtesting.StartContainers(ctx,
+		hwtesting.Postgres,
+		hwtesting.Eventstore,
+		hwtesting.Spice,
+	)
 	postgresEndpoint := endpoints.Get(hwtesting.Postgres)
 	eventstoreEndpoint := endpoints.Get(hwtesting.Eventstore)
 	spiceDBEndpoint := endpoints.Get(hwtesting.Spice)

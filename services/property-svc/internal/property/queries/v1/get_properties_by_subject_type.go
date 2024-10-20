@@ -4,10 +4,11 @@ import (
 	"common"
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
 	"hwauthz"
 	"hwdb"
 	"hwutil"
+
+	"github.com/google/uuid"
 
 	"property-svc/internal/property/models"
 	"property-svc/internal/property/perm"

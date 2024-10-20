@@ -1,27 +1,32 @@
+//nolint:forbidigo
 package migrate
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
-	"github.com/authzed/authzed-go/v1"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"io"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
+	"github.com/authzed/authzed-go/v1"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 //
 // This module is intended for CLIs, and thus panics, instead of returning errors
 //
 
-const migrationResourceType = "spice_schema_migrations/migration"
-const migrationResourceId = "current"
-const migrationRelation = "version"
-const migrationSubjectType = "spice_schema_migrations/version"
+const (
+	migrationResourceType = "spice_schema_migrations/migration"
+	migrationResourceId   = "current"
+	migrationRelation     = "version"
+	migrationSubjectType  = "spice_schema_migrations/version"
+)
 
 // GetCurrentVersion queries existing relations to parse the currently deployed version of the schema
 func GetCurrentVersion(ctx context.Context, client *authzed.Client) int {
@@ -42,11 +47,12 @@ func GetCurrentVersion(ctx context.Context, client *authzed.Client) int {
 	// now collect the first element
 	response, err := stream.Recv()
 	if err != nil {
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			return 0
 		}
 		if statusErr, ok := status.FromError(err); ok {
-			if statusErr.Code() == codes.FailedPrecondition && statusErr.Message() == "object definition `spice_schema_migrations/migration` not found" {
+			if statusErr.Code() == codes.FailedPrecondition &&
+				statusErr.Message() == "object definition `spice_schema_migrations/migration` not found" {
 				return 0
 			}
 		}
@@ -63,7 +69,7 @@ func GetCurrentVersion(ctx context.Context, client *authzed.Client) int {
 
 	// if more relations exist, the version is not clear, user must fix it
 	_, err = stream.Recv()
-	if err != io.EOF {
+	if errors.Is(err, io.EOF) {
 		panic("more than one version relation exist")
 	}
 	return i

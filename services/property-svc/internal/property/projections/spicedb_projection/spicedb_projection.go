@@ -2,15 +2,19 @@ package spicedb_projection
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"hwauthz"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+
 	"property-svc/internal/property/aggregate"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/perm"
 )
@@ -21,10 +25,14 @@ type Projection struct {
 }
 
 func NewProjection(es *esdb.Client, serviceName string, authz hwauthz.AuthZ) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-spicedb-projection", serviceName)
+	subscriptionGroupName := serviceName + "-spicedb-projection"
 	p := &Projection{
-		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)}),
-		authz:            authz,
+		CustomProjection: custom.NewCustomProjection(
+			es,
+			subscriptionGroupName,
+			&[]string{aggregate.PropertyAggregateType + "-"},
+		),
+		authz: authz,
 	}
 	p.initEventListeners()
 	return p
@@ -50,7 +58,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	}
 
 	if evt.OrganizationID == nil {
-		return fmt.Errorf("organization is missing from event"), hwutil.PtrTo(esdb.NackActionPark)
+		return errors.New("organization is missing from event"), hwutil.PtrTo(esdb.NackActionPark)
 	}
 	organizationID := *evt.OrganizationID
 
@@ -63,7 +71,6 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	_, err = p.authz.
 		Create(relationship).
 		Commit(ctx)
-
 	if err != nil {
 		return fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err),
 			hwutil.PtrTo(esdb.NackActionRetry)

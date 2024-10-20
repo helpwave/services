@@ -169,7 +169,7 @@ func (s *SpiceDBAuthZ) BulkCheck(ctx context.Context, checks []hwauthz.Permissio
 
 	keyPattern := "%s:%s-%s-%s:%s"
 
-	var items = make([]*v1.CheckBulkPermissionsRequestItem, 0, len(checks))
+	items := make([]*v1.CheckBulkPermissionsRequestItem, 0, len(checks))
 	for i, check := range checks {
 		sub := check.Subject
 		resc := check.Resource

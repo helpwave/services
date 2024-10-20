@@ -3,8 +3,9 @@ package perm
 import (
 	"common/auth"
 	"context"
-	"github.com/google/uuid"
 	"hwauthz"
+
+	"github.com/google/uuid"
 )
 
 // Types
@@ -48,5 +49,7 @@ const PropertyOrganization hwauthz.Relation = "organization"
 
 const OrganizationCanUserCreateProperty hwauthz.Permission = "create_property"
 
-const PropertyCanUserGet hwauthz.Permission = "get"
-const PropertyCanUserUpdate hwauthz.Permission = "update"
+const (
+	PropertyCanUserGet    hwauthz.Permission = "get"
+	PropertyCanUserUpdate hwauthz.Permission = "update"
+)
