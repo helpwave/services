@@ -1,8 +1,9 @@
 package hwtesting
 
 import (
-	zlog "github.com/rs/zerolog/log"
 	"os"
+
+	zlog "github.com/rs/zerolog/log"
 )
 
 func SetCommonEnv() {

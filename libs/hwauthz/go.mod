@@ -17,6 +17,7 @@ require (
 	github.com/authzed/authzed-go v0.15.0
 	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b
 	github.com/rs/zerolog v1.33.0
+	github.com/stretchr/testify v1.9.0
 	go.opentelemetry.io/otel v1.30.0
 	google.golang.org/grpc v1.66.1
 	hwtesting v0.0.0
@@ -98,7 +99,6 @@ require (
 	github.com/shirou/gopsutil/v3 v3.23.12 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/stretchr/testify v1.9.0 // indirect
 	github.com/testcontainers/testcontainers-go v0.33.0 // indirect
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0 // indirect
 	github.com/testcontainers/testcontainers-go/modules/redis v0.33.0 // indirect

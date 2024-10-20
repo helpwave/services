@@ -3,6 +3,8 @@ package hwtesting
 import (
 	"context"
 	"fmt"
+	"os"
+
 	spicedb "github.com/Mariscal6/testcontainers-spicedb-go"
 	spicev1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
 	"github.com/authzed/authzed-go/v1"
@@ -11,14 +13,15 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	spiceMigrate "hwauthz/spicedb/migrate"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 )
 
-const ImageSpiceDB = "authzed/spicedb:spicev1.31.0"
-const SpiceDBToken = "helpwave"
+const (
+	ImageSpiceDB = "authzed/spicedb:spicev1.31.0"
+	SpiceDBToken = "helpwave"
+)
 
 func startSpiceDB(ctx context.Context) (endpoint string, teardown func()) {
 	container, err := spicedb.Run(ctx, ImageSpiceDB, spicedb.SecretKeyCustomizer{SecretKey: SpiceDBToken})

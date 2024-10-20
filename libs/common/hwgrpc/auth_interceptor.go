@@ -1,17 +1,19 @@
 package hwgrpc
 
 import (
-	"common/auth"
 	"context"
+	"telemetry"
+
+	"common/auth"
+
 	"github.com/google/uuid"
 	grpcAuth "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"telemetry"
 )
 
-func UnaryAuthInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+func UnaryAuthInterceptor(ctx context.Context, req any, _ *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryAuthInterceptor")
 	defer span.End()
 
@@ -23,7 +25,7 @@ func UnaryAuthInterceptor(ctx context.Context, req any, info *grpc.UnaryServerIn
 	return next(ctx, req)
 }
 
-func StreamAuthInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+func StreamAuthInterceptor(req any, stream grpc.ServerStream, _ *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamAuthInterceptor")
 	defer span.End()
 	stream = WrapServerStream(stream, ctx)
@@ -45,7 +47,6 @@ func authInterceptor(ctx context.Context) (context.Context, error) {
 
 	// get token from gRPC metadata
 	token, err := grpcAuth.AuthFromMD(ctx, "bearer")
-
 	if err != nil {
 		log.Trace().Err(err).Msg("no valid auth header found")
 		return nil, status.Errorf(codes.Unauthenticated, "no auth token: %v", err)

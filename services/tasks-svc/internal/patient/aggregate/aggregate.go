@@ -2,8 +2,10 @@ package aggregate
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"tasks-svc/internal/patient/models"
 )

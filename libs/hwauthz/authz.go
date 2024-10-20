@@ -5,6 +5,7 @@ import (
 	"common/locale"
 	"context"
 	"fmt"
+
 	"go.opentelemetry.io/otel/attribute"
 	"google.golang.org/grpc/codes"
 )
@@ -43,7 +44,8 @@ type Relation string
 // See https://authzed.com/docs/spicedb/concepts/schema#permissions
 type Permission Relation
 
-// An Object must relate to an [Object Definition](https://authzed.com/docs/spicedb/concepts/schema#object-type-definitions) in the spicedb schema.
+// An Object must relate to an
+// [Object Definition](https://authzed.com/docs/spicedb/concepts/schema#object-type-definitions) in the spicedb schema.
 // We use this to build a v1.ObjectReference used for a Relationship
 type Object interface {
 	// Type of the Object definition, (e.g., "user")

@@ -3,18 +3,19 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwtesting"
+	"hwutil"
+	"os"
+	"os/signal"
+	"testing"
+	"time"
+
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/assert"
-	"hwtesting"
-	"hwutil"
-	"os/signal"
-	"tasks-svc/cmd/service"
+	"github.com/stretchr/testify/require"
 
-	"os"
-	"testing"
-	"time"
+	"tasks-svc/cmd/service"
 )
 
 func TestMain(m *testing.M) {
@@ -88,42 +89,51 @@ func taskServiceClient() pb.TaskServiceClient {
 func taskTemplateServiceClient() pb.TaskTemplateServiceClient {
 	return pb.NewTaskTemplateServiceClient(hwtesting.GetGrpcConn(""))
 }
+
 func wardServiceClient() pb.WardServiceClient {
 	return pb.NewWardServiceClient(hwtesting.GetGrpcConn(""))
 }
 
 func prepareWard(t *testing.T, ctx context.Context, suffix string) (wardID, wardConsistency string) {
+	t.Helper()
+
 	wardRes, err := wardServiceClient().CreateWard(ctx, &pb.CreateWardRequest{
 		Name: t.Name() + " ward " + suffix,
 	})
-	assert.NoError(t, err, "prepareWard failed: could not create ward", suffix)
+	require.NoError(t, err, "prepareWard failed: could not create ward", suffix)
 	return wardRes.Id, wardRes.Consistency
 }
 
-func prepareRoom(t *testing.T, ctx context.Context, wardId, suffix string) (roomID, roomConsistency string) {
+func prepareRoom(t *testing.T, ctx context.Context, wardID, suffix string) (roomID, roomConsistency string) {
+	t.Helper()
+
 	roomRes, err := roomServiceClient().CreateRoom(ctx, &pb.CreateRoomRequest{
 		Name:   t.Name() + " room " + suffix,
-		WardId: wardId,
+		WardId: wardID,
 	})
-	assert.NoError(t, err, "prepareRoom failed: could not create room", suffix)
+	require.NoError(t, err, "prepareRoom failed: could not create room", suffix)
 	return roomRes.Id, roomRes.Consistency
 }
 
 func prepareBed(t *testing.T, ctx context.Context, roomId, suffix string) (bedID, consistency string) {
+	t.Helper()
+
 	createRes, err := bedServiceClient().CreateBed(ctx, &pb.CreateBedRequest{
 		RoomId: roomId,
 		Name:   t.Name() + " bed " + suffix,
 	})
-	assert.NoError(t, err, "prepareBed: could not create bed", suffix)
+	require.NoError(t, err, "prepareBed: could not create bed", suffix)
 	return createRes.Id, createRes.Consistency
 }
 
 func preparePatient(t *testing.T, ctx context.Context, suffix string) (patientID string) {
+	t.Helper()
+
 	res, err := patientServiceClient().CreatePatient(ctx, &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " Patient " + suffix,
 		Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),
 	})
-	assert.NoError(t, err, "preparePatient: could not create patient")
+	require.NoError(t, err, "preparePatient: could not create patient")
 	hwtesting.WaitForProjectionsToSettle()
 	return res.Id
 }

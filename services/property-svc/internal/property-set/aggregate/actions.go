@@ -2,6 +2,7 @@ package aggregate
 
 import (
 	"context"
+
 	propertyEventsV1 "property-svc/internal/property-set/events/v1"
 )
 
@@ -12,5 +13,6 @@ func (a *PropertySetAggregate) CreatePropertySet(ctx context.Context, name strin
 	if err != nil {
 		return err
 	}
+
 	return a.Apply(event)
 }

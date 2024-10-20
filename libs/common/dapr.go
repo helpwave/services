@@ -3,6 +3,8 @@ package common
 import (
 	"context"
 	"fmt"
+	"time"
+
 	daprc "github.com/dapr/go-sdk/client"
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/rs/zerolog/log"
@@ -10,12 +12,10 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
-	"reflect"
-	"time"
 )
 
-func MustAddTopicEventHandler(service daprcmn.Service, sub *daprcmn.Subscription, eventHandler daprcmn.TopicEventHandler) {
-	if err := service.AddTopicEventHandler(sub, eventHandler); err != nil {
+func MustAddTopicEventHandler(svc daprcmn.Service, sub *daprcmn.Subscription, handler daprcmn.TopicEventHandler) {
+	if err := svc.AddTopicEventHandler(sub, handler); err != nil {
 		log.Fatal().
 			Err(err).
 			Interface("sub", sub).
@@ -25,7 +25,7 @@ func MustAddTopicEventHandler(service daprcmn.Service, sub *daprcmn.Subscription
 
 // PublishMessage encodes a proto message and publishes it to the topic
 // It already takes care of logging, so you may ignore the returned error
-func PublishMessage(ctx context.Context, client daprc.Client, pubsub string, topic string, message proto.Message) error {
+func PublishMessage(ctx context.Context, c daprc.Client, pubsub string, topic string, message proto.Message) error {
 	bytes, err := proto.Marshal(message)
 	if err != nil {
 		log.Ctx(ctx).
@@ -35,7 +35,7 @@ func PublishMessage(ctx context.Context, client daprc.Client, pubsub string, top
 		return fmt.Errorf("PublishMessage: could not marshal message: %w", err)
 	}
 
-	err = client.PublishEvent(ctx, pubsub, topic, bytes)
+	err = c.PublishEvent(ctx, pubsub, topic, bytes)
 	if err != nil {
 		log.Ctx(ctx).
 			Error().
@@ -54,20 +54,21 @@ func MustNewDaprGRPCClient() *daprc.GRPCClient {
 		log.Fatal().Err(err).Msg("could not create Dapr client")
 	}
 
-	if reflect.TypeOf(client) != reflect.TypeOf(&daprc.GRPCClient{}) {
+	daprClient, ok := client.(*daprc.GRPCClient)
+	if !ok {
 		log.Fatal().Msg("Dapr client does not implement GRPCClient")
 	}
 
-	return client.(*daprc.GRPCClient)
+	return daprClient
 }
 
 // PrepCtxForSvcToSvcCall returns a context that can be used with Dapr specific service to service gRPC calls
-func PrepCtxForSvcToSvcCall(parentCtx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc, error) {
-	md, ok := metadata.FromIncomingContext(parentCtx)
+func PrepCtxForSvcToSvcCall(ctx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, nil, status.Errorf(codes.Internal, "No incoming metadata in context")
 	}
-	outgoingCtx := metadata.NewOutgoingContext(parentCtx, md)
+	outgoingCtx := metadata.NewOutgoingContext(ctx, md)
 
 	timeout := time.Second * 3
 	ctx, cancel := context.WithTimeout(outgoingCtx, timeout)

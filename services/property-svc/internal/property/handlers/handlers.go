@@ -3,6 +3,7 @@ package handlers
 import (
 	"hwauthz"
 	"hwes"
+
 	commandsV1 "property-svc/internal/property/commands/v1"
 	queriesV1 "property-svc/internal/property/queries/v1"
 )

@@ -4,14 +4,18 @@ import (
 	"common/auth"
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
+	"testing"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/task/aggregate"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
-	"testing"
 )
 
 func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwes.Event, error)) {
+	t.Helper()
+
 	event, err := newEvent()
 	if err != nil {
 		t.Error(err)
@@ -36,7 +40,14 @@ func TestTaskAggregate_UpdateName(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskCreatedEvent(ctx, taskAggregate, taskID, initialTaskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(
+			ctx,
+			taskAggregate,
+			taskID,
+			initialTaskName,
+			patientID,
+			pb.TaskStatus_TASK_STATUS_TODO,
+		)
 	})
 
 	if taskAggregate.Task.Name != initialTaskName {
@@ -66,11 +77,19 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskCreatedEvent(ctx, taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(
+			ctx,
+			taskAggregate,
+			taskID,
+			"Test task",
+			patientID,
+			pb.TaskStatus_TASK_STATUS_TODO,
+		)
 	})
 
 	if taskAggregate.Task.Description != initialTaskDescription {
-		t.Errorf("Task description: expected '%s' got '%s'", initialTaskDescription, taskAggregate.Task.Description)
+		t.Errorf("Task description: expected '%s' got '%s'",
+			initialTaskDescription, taskAggregate.Task.Description)
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
@@ -78,7 +97,8 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 	})
 
 	if taskAggregate.Task.Description != updatedTaskDescription {
-		t.Errorf("Task description: expected '%s' got '%s'", updatedTaskDescription, taskAggregate.Task.Description)
+		t.Errorf("Task description: expected '%s' got '%s'",
+			updatedTaskDescription, taskAggregate.Task.Description)
 	}
 }
 
@@ -97,7 +117,14 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskCreatedEvent(ctx, taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(
+			ctx,
+			taskAggregate,
+			taskID,
+			"Test task",
+			patientID,
+			pb.TaskStatus_TASK_STATUS_TODO,
+		)
 	})
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
@@ -105,7 +132,8 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 	})
 
 	if taskAggregate.Task.Subtasks[subtaskID].Name != subtaskName {
-		t.Errorf("Subtask name: expected '%s' got '%s'", subtaskName, taskAggregate.Task.Subtasks[subtaskID].Name)
+		t.Errorf("Subtask name: expected '%s' got '%s'",
+			subtaskName, taskAggregate.Task.Subtasks[subtaskID].Name)
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
@@ -113,7 +141,8 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 	})
 
 	if taskAggregate.Task.Subtasks[subtaskID].Name != subtaskName {
-		t.Errorf("Subtask name: expected '%s' got '%s'", updatedSubtaskName, taskAggregate.Task.Subtasks[subtaskID].Name)
+		t.Errorf("Subtask name: expected '%s' got '%s'",
+			updatedSubtaskName, taskAggregate.Task.Subtasks[subtaskID].Name)
 	}
 }
 
@@ -132,7 +161,14 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskCreatedEvent(ctx, taskAggregate, taskID, taskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(
+			ctx,
+			taskAggregate,
+			taskID,
+			taskName,
+			patientID,
+			pb.TaskStatus_TASK_STATUS_TODO,
+		)
 	})
 
 	if taskAggregate.Task.Name != taskName {
@@ -144,7 +180,8 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	})
 
 	if taskAggregate.Task.Name != taskName {
-		t.Errorf("Subtask name: expected '%s' got '%s'", subtaskName, taskAggregate.Task.Subtasks[subtaskID].Name)
+		t.Errorf("Subtask name: expected '%s' got '%s'",
+			subtaskName, taskAggregate.Task.Subtasks[subtaskID].Name)
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
@@ -187,7 +224,11 @@ func TestTaskAggregate_AssignTask(t *testing.T) {
 
 	if taskAggregate.Task.AssignedUser.Valid {
 		if taskAggregate.Task.AssignedUser.UUID != patientID {
-			t.Errorf("Invalid AssignedUserId, expected %s got %s", patientID.String(), taskAggregate.Task.AssignedUser.UUID.String())
+			t.Errorf(
+				"Invalid AssignedUserId, expected %s got %s",
+				patientID.String(),
+				taskAggregate.Task.AssignedUser.UUID.String(),
+			)
 		}
 	}
 }

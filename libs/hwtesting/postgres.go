@@ -3,18 +3,21 @@ package hwtesting
 import (
 	"context"
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/golang-migrate/migrate/v4"
 	zlog "github.com/rs/zerolog/log"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
-	"os"
-	"strings"
 )
 
 const ImagePostgres = "postgres:15.6"
 
-const PostgresUser = "postgres"
-const PostgresPassword = "postgres"
-const PostgresDb = "postgres"
+const (
+	PostgresUser     = "postgres"
+	PostgresPassword = "postgres"
+	PostgresDb       = "postgres"
+)
 
 func startPostgres(ctx context.Context) (endpoint string, teardown func()) {
 	container, err := postgres.Run(ctx,

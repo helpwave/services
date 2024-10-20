@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -28,12 +29,13 @@ func (t InsecureBearerToken) GetRequestMetadata(_ context.Context, _ ...string) 
 		"authorization": "Bearer " + string(t),
 	}, nil
 }
+
 func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
 }
 
-const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984"
-const FakeTokenOrganization = "3b25c6f5-4705-4074-9fc6-a50c28eba405"
+const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984"         //nolint:gosec
+const FakeTokenOrganization = "3b25c6f5-4705-4074-9fc6-a50c28eba405" //nolint:gosec
 
 func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
 	// README's fake token

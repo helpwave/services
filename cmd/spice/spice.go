@@ -1,16 +1,15 @@
+//nolint:forbidigo
 package main
 
 import (
 	"context"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"github.com/authzed/authzed-go/v1"
 	"github.com/authzed/grpcutil"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -22,8 +21,7 @@ var CLI struct {
 	Migrate struct {
 		Force bool `help:"Skip schema version check."`
 	} `cmd:"" help:"Migrate SpiceDB schema"`
-	Schema struct {
-	} `cmd:"" help:"Print SpiceDB schema"`
+	Schema    struct{} `cmd:"" help:"Print SpiceDB schema"`
 	Test      struct{} `cmd:"" help:"Runs SpiceDB tests using zed"`
 	Directory string   `flag:"" short:"d" type:"path" default:"./spicedb" help:"SpiceDB directory"`
 	Endpoint  string   `flag:"" short:"e" env:"ZED_ENDPOINT" help:"e.g., 'spicedb:50051'"`
@@ -35,11 +33,11 @@ func main() {
 	ctx := kong.Parse(&CLI)
 	switch ctx.Command() {
 	case "migrate":
-		migrateCmd(ctx)
+		migrateCmd()
 	case "schema":
-		schemaCmd(ctx)
+		schemaCmd()
 	case "test":
-		testCmd(ctx)
+		testCmd()
 	default:
 		panic(ctx.Command())
 	}
@@ -84,12 +82,12 @@ func getClient() *authzed.Client {
 }
 
 // migrateCmd is the <migrate> command handler
-func migrateCmd(kctx *kong.Context) {
+func migrateCmd() {
 	migrate.Migrate(context.Background(), CLI.Directory, getClient())
 }
 
 // schemaCmd is the <schema> command handler
-func schemaCmd(kctx *kong.Context) {
+func schemaCmd() {
 	schema := collectSchema()
 	fmt.Print(schema)
 }
@@ -191,7 +189,7 @@ func writeSpiceDBYaml(file SpiceDBValidationFile, path string) {
 		fmt.Println("could not marshal spicedb yaml for " + path)
 		panic(err)
 	}
-	err = os.WriteFile(path, marshalled, 0644)
+	err = os.WriteFile(path, marshalled, 0o600)
 	if err != nil {
 		fmt.Println("could not write spicedb yaml for " + path)
 		panic(err)
@@ -199,7 +197,7 @@ func writeSpiceDBYaml(file SpiceDBValidationFile, path string) {
 }
 
 // testCmd is the <test> command handler
-func testCmd(kctx *kong.Context) {
+func testCmd() {
 	schema := collectSchema()
 
 	// collect test yamls

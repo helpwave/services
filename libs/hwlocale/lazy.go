@@ -3,8 +3,9 @@ package hwlocale
 import (
 	"context"
 	"embed"
-	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"sync"
+
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
 // A LazyLocaleBundle is a factory for an i18n.Bundle

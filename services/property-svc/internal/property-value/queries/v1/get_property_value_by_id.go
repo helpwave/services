@@ -2,8 +2,10 @@ package v1
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property-value/aggregate"
 	"property-svc/internal/property-value/models"
 )

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"hwes"
+
 	commandsV1 "property-svc/internal/property-value/commands/v1"
 	queriesV1 "property-svc/internal/property-value/queries/v1"
 )

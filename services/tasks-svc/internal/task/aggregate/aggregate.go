@@ -4,11 +4,13 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
+	"time"
+
+	"github.com/google/uuid"
+
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
-	"time"
 )
 
 const TaskAggregateType = "task"
