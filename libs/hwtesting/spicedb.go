@@ -2,13 +2,16 @@ package hwtesting
 
 import (
 	"context"
+	"os"
+
 	spicedb "github.com/Mariscal6/testcontainers-spicedb-go"
 	zlog "github.com/rs/zerolog/log"
-	"os"
 )
 
-const ImageSpiceDB = "authzed/spicedb:spicev1.31.0"
-const SpiceDBToken = "helpwave"
+const (
+	ImageSpiceDB = "authzed/spicedb:spicev1.31.0"
+	SpiceDBToken = "helpwave"
+)
 
 func startSpiceDB(ctx context.Context) (endpoint string, teardown func()) {
 	container, err := spicedb.Run(ctx, ImageSpiceDB, spicedb.SecretKeyCustomizer{SecretKey: SpiceDBToken})

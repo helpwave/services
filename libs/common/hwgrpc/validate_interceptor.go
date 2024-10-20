@@ -1,10 +1,16 @@
 package hwgrpc
 
 import (
-	"common/hwerr"
-	"common/locale"
 	"context"
 	"errors"
+	"hwlocale"
+	"hwutil"
+	"reflect"
+	"telemetry"
+
+	"common/hwerr"
+	"common/locale"
+
 	"github.com/go-playground/validator/v10"
 	zlog "github.com/rs/zerolog/log"
 	otelCodes "go.opentelemetry.io/otel/codes"
@@ -12,13 +18,14 @@ import (
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"hwlocale"
-	"hwutil"
-	"reflect"
-	"telemetry"
 )
 
-func UnaryValidateInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (res any, err error) {
+func UnaryValidateInterceptor(
+	ctx context.Context,
+	req any,
+	_ *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (res any, err error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryValidateInterceptor")
 	defer span.End()
 
@@ -29,7 +36,12 @@ func UnaryValidateInterceptor(ctx context.Context, req any, info *grpc.UnaryServ
 	return next(ctx, req)
 }
 
-func StreamValidateInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+func StreamValidateInterceptor(
+	req any,
+	stream grpc.ServerStream,
+	_ *grpc.StreamServerInfo,
+	next grpc.StreamHandler,
+) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamValidateInterceptor")
 	defer span.End()
 	stream = WrapServerStream(stream, ctx)
@@ -108,7 +120,9 @@ func validateFieldErrDescription(ctx context.Context, fieldErr validator.FieldEr
 		l = locale.RequiredError(ctx)
 	// TODO: add more tags
 	default:
-		log.Warn().Str("tag", fieldErr.Tag()).Msg("tag unhandled, falling back to InvalidFieldError description")
+		log.Warn().
+			Str("tag", fieldErr.Tag()).
+			Msg("tag unhandled, falling back to InvalidFieldError description")
 		l = locale.InvalidFieldError(ctx)
 	}
 

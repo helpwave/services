@@ -5,14 +5,15 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"hwutil"
+	"telemetry"
+
 	"github.com/coreos/go-oidc"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwutil"
-	"telemetry"
 )
 
 // to avoid ambiguity please read: https://wiki.helpwave.de/doc/keycloak-jedzCcERwF
@@ -28,9 +29,11 @@ var (
 	authSetupDone           bool
 )
 
-type ClaimsKey struct{}
-type UserIDKey struct{}
-type OrganizationIDKey struct{}
+type (
+	ClaimsKey         struct{}
+	UserIDKey         struct{}
+	OrganizationIDKey struct{}
+)
 
 func GetOAuthIssuerUrl() string {
 	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)

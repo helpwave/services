@@ -3,6 +3,9 @@ package spicedb
 import (
 	"context"
 	"fmt"
+	"hwutil"
+	"telemetry"
+
 	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
 	"github.com/authzed/authzed-go/v1"
 	"github.com/authzed/grpcutil"
@@ -10,8 +13,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"hwauthz"
-	"hwutil"
-	"telemetry"
 )
 
 func SetupSpiceDbByEnv() *authzed.Client {
@@ -66,7 +67,11 @@ func NewSpiceDBAuthZ() *SpiceDBAuthZ {
 }
 
 // Write writes relationships, use Create and Delete instead!
-func (s *SpiceDBAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship, deletes []hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
+func (s *SpiceDBAuthZ) Write(
+	ctx context.Context,
+	writes []hwauthz.Relationship,
+	deletes []hwauthz.Relationship,
+) (hwauthz.ConsistencyToken, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Write")
 	defer span.End()
 
@@ -95,7 +100,7 @@ func (s *SpiceDBAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship,
 		return "", fmt.Errorf("SpiceDBAuthZ.Write: write relationship failed: %w", err)
 	}
 
-	return res.WrittenAt.Token, nil
+	return res.GetWrittenAt().GetToken(), nil
 }
 
 func (s *SpiceDBAuthZ) Create(relations ...hwauthz.Relationship) *hwauthz.Tx {
@@ -129,7 +134,7 @@ func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.Permis
 	}
 
 	// parse result
-	hasPermission := res.Permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
+	hasPermission := res.GetPermissionship() == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
 	telemetry.SetSpanBool(ctx, "hasPermission", hasPermission)
 	return hasPermission, nil
 }

@@ -3,8 +3,10 @@ package api
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property-set/handlers"
 )
 
@@ -18,9 +20,12 @@ func NewPropertySetService(aggregateStore hwes.AggregateStore, handlers *handler
 	return &PropertySetGrpcService{as: aggregateStore, handlers: handlers}
 }
 
-func (s *PropertySetGrpcService) CreatePropertySet(ctx context.Context, req *pb.CreatePropertySetRequest) (*pb.CreatePropertySetResponse, error) {
+func (s *PropertySetGrpcService) CreatePropertySet(
+	ctx context.Context,
+	req *pb.CreatePropertySetRequest,
+) (*pb.CreatePropertySetResponse, error) {
 	propertySetID := uuid.New()
-	consistency, err := s.handlers.Commands.V1.CreatePropertySet(ctx, propertySetID, req.Name)
+	consistency, err := s.handlers.Commands.V1.CreatePropertySet(ctx, propertySetID, req.GetName())
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +36,10 @@ func (s *PropertySetGrpcService) CreatePropertySet(ctx context.Context, req *pb.
 	}, nil
 }
 
-func (s *PropertySetGrpcService) GetPropertySet(ctx context.Context, req *pb.GetPropertySetRequest) (*pb.GetPropertySetResponse, error) {
+func (s *PropertySetGrpcService) GetPropertySet(
+	ctx context.Context,
+	req *pb.GetPropertySetRequest,
+) (*pb.GetPropertySetResponse, error) {
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err

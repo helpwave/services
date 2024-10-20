@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"hwutil"
 	"strings"
@@ -24,9 +25,11 @@ import (
 //
 // [DICE]: https://github.com/open-telemetry/opentelemetry-go/blob/main/example/dice/otel.go
 
+type ShutdownFn = func(context.Context) error
+
 // setupOTelSDK bootstraps the OpenTelemetry pipeline.
 // If it does not return an error, make sure to call shutdown for proper cleanup.
-func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shutdown func(context.Context) error, err error) {
+func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shutdown ShutdownFn, err error) {
 	log := zlog.Ctx(ctx)
 
 	log.Debug().Msg("setting up otel")
@@ -40,7 +43,7 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 		var err error
 		for _, fn := range shutdownFuncs {
 			if fnerr := fn(ctx); fnerr != nil {
-				err = fmt.Errorf("%v\n%v", err, fnerr)
+				err = fmt.Errorf("%w\n%w", err, fnerr)
 			}
 		}
 		shutdownFuncs = nil
@@ -53,14 +56,14 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 	// in dev environments we might not need a tracing setup, so we allow to skip its setup
 	if strings.ToLower(hwutil.GetEnvOr("OTEL_DISABLE", "false")) == "true" {
 		log.Info().Msg("skipping otel setup")
-		return
+		return shutdown, err
 	}
 
 	// handleErr calls shutdown for cleanup and makes sure that all errors are returned.
 	handleErr := func(inErr error) {
 		err = inErr
 		if sderr := shutdown(ctx); sderr != nil {
-			err = fmt.Errorf("%v\n%v", err, sderr)
+			err = fmt.Errorf("%w\n%w", err, sderr)
 		}
 	}
 
@@ -69,7 +72,7 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 	res, err := serviceResource(serviceName, serviceVersion)
 	if err != nil {
 		handleErr(err)
-		return
+		return shutdown, err
 	}
 
 	// Set up propagator.
@@ -82,13 +85,13 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 	tracerProvider, err := newTraceProvider(ctx, res)
 	if err != nil {
 		handleErr(fmt.Errorf("could not get new trace provider: %w", err))
-		return
+		return shutdown, err
 	}
 	shutdownFuncs = append(shutdownFuncs, tracerProvider.Shutdown)
 	otel.SetTracerProvider(tracerProvider)
 
 	log.Info().Msg("otel is set up")
-	return
+	return shutdown, err
 }
 
 // serviceResource returns the otel version of "name-version" identification of the service,
@@ -142,6 +145,6 @@ func newTraceExporter(ctx context.Context) (trace.SpanExporter, error) {
 		// more info: https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.21.0
 		return otlptracehttp.New(ctx)
 	default:
-		return nil, fmt.Errorf("OTEL_TRACE_EXPORTER invalid")
+		return nil, errors.New("OTEL_TRACE_EXPORTER invalid")
 	}
 }

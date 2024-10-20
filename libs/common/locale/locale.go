@@ -3,8 +3,9 @@ package locale
 import (
 	"context"
 	"embed"
-	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"hwlocale"
+
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
 // be demure with new locales here, and favor an individual service's locale .go,

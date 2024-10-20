@@ -3,9 +3,11 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwdb"
 	"hwutil"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/repos/patient_repo"
 )
@@ -32,7 +34,7 @@ func NewGetPatientsByWardQueryHandler() GetPatientsByWardQueryHandler {
 					CreatedAt:               patient.CreatedAt.Time,
 					UpdatedAt:               patient.UpdatedAt.Time,
 				},
-				Consistency: common.ConsistencyToken(patient.Consistency).String(),
+				Consistency: common.ConsistencyToken(patient.Consistency).String(), //nolint:gosec
 			}
 		}), nil
 	}

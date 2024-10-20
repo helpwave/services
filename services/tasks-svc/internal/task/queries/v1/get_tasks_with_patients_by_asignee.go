@@ -4,13 +4,18 @@ import (
 	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	"hwdb"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
 
-type GetTasksWithPatientsByAssigneeQueryHandler func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error)
+type GetTasksWithPatientsByAssigneeQueryHandler func(
+	ctx context.Context,
+	assigneeID uuid.UUID,
+) ([]*models.TaskWithPatient, error)
 
 func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssigneeQueryHandler {
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {
@@ -48,7 +53,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 							CreatedAt:    row.Task.CreatedAt.Time,
 							Subtasks:     make(map[uuid.UUID]models.Subtask),
 						},
-						Consistency: common.ConsistencyToken(row.Task.Consistency).String(),
+						Consistency: common.ConsistencyToken(row.Task.Consistency).String(), //nolint:gosec
 					},
 					Patient: models.Patient{
 						ID:                      row.Patient.ID,
@@ -56,7 +61,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
 						IsDischarged:            row.Patient.IsDischarged,
-						Consistency:             common.ConsistencyToken(row.Patient.Consistency).String(),
+						Consistency:             common.ConsistencyToken(row.Patient.Consistency).String(), //nolint:gosec
 					},
 				}
 

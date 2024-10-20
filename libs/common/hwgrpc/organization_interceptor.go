@@ -1,17 +1,24 @@
 package hwgrpc
 
 import (
-	"common/auth"
 	"context"
 	"errors"
+	"telemetry"
+
+	"common/auth"
+
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"telemetry"
 )
 
-func UnaryOrganizationInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+func UnaryOrganizationInterceptor(
+	ctx context.Context,
+	req any,
+	_ *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (any, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryOrganizationInterceptor")
 	defer span.End()
 
@@ -23,7 +30,12 @@ func UnaryOrganizationInterceptor(ctx context.Context, req any, info *grpc.Unary
 	return next(ctx, req)
 }
 
-func StreamOrganizationInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+func StreamOrganizationInterceptor(
+	req any,
+	stream grpc.ServerStream,
+	_ *grpc.StreamServerInfo,
+	next grpc.StreamHandler,
+) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamOrganizationInterceptor")
 	defer span.End()
 	stream = WrapServerStream(stream, ctx)

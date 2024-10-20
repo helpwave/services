@@ -1,19 +1,26 @@
 package hwgrpc
 
 import (
+	"context"
+	"reflect"
+	"telemetry"
+
 	"common/hwerr"
 	"common/locale"
-	"context"
+
 	"github.com/rs/zerolog/log"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"reflect"
-	"telemetry"
 )
 
-func UnaryErrorQualityControlInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+func UnaryErrorQualityControlInterceptor(
+	ctx context.Context,
+	req any,
+	_ *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (any, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryErrorQualityControlInterceptor")
 	defer span.End()
 
@@ -21,7 +28,12 @@ func UnaryErrorQualityControlInterceptor(ctx context.Context, req any, info *grp
 	return res, checkErrorQualityInterceptor(ctx, err)
 }
 
-func StreamErrorQualityControlInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+func StreamErrorQualityControlInterceptor(
+	req any,
+	stream grpc.ServerStream,
+	_ *grpc.StreamServerInfo,
+	next grpc.StreamHandler,
+) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamErrorQualityControlInterceptor")
 	defer span.End()
 	stream = WrapServerStream(stream, ctx)
@@ -92,7 +104,7 @@ func checkErrorQualityInterceptor(ctx context.Context, err error) error {
 		}
 	}
 
-	switch statusError.Code() {
+	switch statusError.Code() { //nolint:exhaustive
 	case codes.InvalidArgument:
 		fallthrough
 	case codes.OutOfRange:

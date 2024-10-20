@@ -1,9 +1,14 @@
 package common
 
 import (
+	"context"
+	"hwutil"
+	"net"
+	"telemetry"
+
 	auth "common/auth"
 	"common/hwgrpc"
-	"context"
+
 	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	prometheusGrpcProvider "github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus"
@@ -11,9 +16,6 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"hwutil"
-	"net"
-	"telemetry"
 )
 
 // StartNewGRPCServer creates and starts a new GRPC server on addr or panics.
@@ -39,7 +41,10 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 	}
 
 	// dapr/grpc service
-	service := daprd.NewServiceWithListener(listener, DefaultServerOptions()...).(*daprd.Server)
+	service, ok := daprd.NewServiceWithListener(listener, DefaultServerOptions()...).(*daprd.Server)
+	if !ok {
+		log.Fatal().Msg("dapr service listener is not a *daprd.Server")
+	}
 	server := service.GrpcServer()
 
 	if err := service.AddHealthCheckHandler("", func(ctx context.Context) error {
@@ -123,14 +128,20 @@ func DefaultServerOptions() []grpc.ServerOption {
 	return []grpc.ServerOption{unaryInterceptorChain, streamInterceptorChain, statsHandler}
 }
 
-// isUnaryRPCForDaprInternal will resolve to true when the incoming RPC is targeted to some Dapr internal "sidecar -> app" gRPC service
+// isUnaryRPCForDaprInternal will resolve to true when the incoming RPC is targeted to
+// some Dapr internal "sidecar -> app" gRPC service
 func isUnaryRPCForDaprInternal(info *grpc.UnaryServerInfo) bool {
 	_, isAppCallbackServer := info.Server.(runtime.AppCallbackServer)
 	_, isAppCallbackHealthCheckServer := info.Server.(runtime.AppCallbackHealthCheckServer)
 	return isAppCallbackServer || isAppCallbackHealthCheckServer
 }
 
-func defaultUnaryAuthInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+func defaultUnaryAuthInterceptor(
+	ctx context.Context,
+	req any,
+	info *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (any, error) {
 	ctx, span, log := telemetry.StartSpan(ctx, "common.defaultUnaryAuthInterceptor")
 	defer span.End()
 
@@ -151,7 +162,12 @@ func defaultUnaryAuthInterceptor(ctx context.Context, req any, info *grpc.UnaryS
 	return hwgrpc.UnaryAuthInterceptor(ctx, req, info, next)
 }
 
-func defaultStreamAuthInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+func defaultStreamAuthInterceptor(
+	req any,
+	stream grpc.ServerStream,
+	info *grpc.StreamServerInfo,
+	next grpc.StreamHandler,
+) error {
 	_, span, log := telemetry.StartSpan(stream.Context(), "common.defaultStreamAuthInterceptor")
 	defer span.End()
 
@@ -165,7 +181,12 @@ func defaultStreamAuthInterceptor(req any, stream grpc.ServerStream, info *grpc.
 	return hwgrpc.StreamAuthInterceptor(req, stream, info, next)
 }
 
-func defaultUnaryOrganizationInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+func defaultUnaryOrganizationInterceptor(
+	ctx context.Context,
+	req any,
+	info *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (any, error) {
 	ctx, span, log := telemetry.StartSpan(ctx, "common.defaultUnaryOrganizationInterceptor")
 	defer span.End()
 
@@ -183,7 +204,12 @@ func defaultUnaryOrganizationInterceptor(ctx context.Context, req any, info *grp
 	return hwgrpc.UnaryOrganizationInterceptor(ctx, req, info, next)
 }
 
-func defaultStreamOrganizationInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+func defaultStreamOrganizationInterceptor(
+	req any,
+	stream grpc.ServerStream,
+	info *grpc.StreamServerInfo,
+	next grpc.StreamHandler,
+) error {
 	_, span, log := telemetry.StartSpan(stream.Context(), "common.defaultStreamOrganizationInterceptor")
 	defer span.End()
 

@@ -1,0 +1,45 @@
+linters:
+  # Enable specific linter
+  # https://golangci-lint.run/usage/linters/#enabled-by-default
+  enable-all: true
+
+  disable:
+    - contextcheck # too many false-positives
+    - depguard # no need
+    - ireturn # no need
+    - funlen # we tend to have long funlens, who cares?
+    - execinquery # deprecated
+    - goimports # unused
+    - gochecknoglobals # we currently make use of globals
+    - godot # petty linter
+    - gomnd # deprecated
+    - gomoddirectives # not needed
+    - gofumpt # false positives
+    - mnd # too many false-positives
+    - nonamedreturns # we like named returns
+    - nilnil # we like (nil, nil) sometimes
+    - nosprintfhostport # little benefits
+    - varnamelen # we accept this
+    - wrapcheck # does not matter to us
+    - wsl # too aggressive
+    - exportloopref # deprecated
+    - tagalign # too many false-positives
+
+    # TODOs: #865
+    - cyclop # TODO
+    - dupl # TODO
+    - err113 # TODO
+    - exhaustruct # TODO
+    - gci # TODO
+    - gocognit # TODO
+    - goconst # TODO
+    - gocyclo # TODO
+    - godox # TODO
+    - nestif # TODO
+    - nlreturn # TODO
+    - paralleltest # TODO
+    - protogetter # TODO
+    - revive # TODO
+    - stylecheck # TODO
+    - tagliatelle # TODO
+    - testpackage # TODO

@@ -4,8 +4,9 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwes"
-	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"time"
+
+	taskEventsV1 "tasks-svc/internal/task/events/v1"
 
 	"github.com/google/uuid"
 )

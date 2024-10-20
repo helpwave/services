@@ -3,13 +3,13 @@ package service
 import (
 	"common"
 	"flag"
+	"hwdb"
+	"hwes/eventstoredb"
+	"hwes/eventstoredb/projections"
 
 	pb "gen/services/property_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
-	"hwdb"
-	"hwes/eventstoredb"
-	"hwes/eventstoredb/projections"
 
 	propertySet "property-svc/internal/property-set/api"
 	psh "property-svc/internal/property-set/handlers"
@@ -64,10 +64,22 @@ func Main(version string, ready func()) {
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
-		pb.RegisterPropertyServiceServer(grpcServer, property.NewPropertyService(aggregateStore, propertyHandlers))
-		pb.RegisterPropertySetServiceServer(grpcServer, propertySet.NewPropertySetService(aggregateStore, propertySetHandlers))
-		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValue.NewPropertyValueService(aggregateStore, propertyValueHandlers))
-		pb.RegisterPropertyViewsServiceServer(grpcServer, propertyViews.NewPropertyViewService(aggregateStore, propertyViewHandlers))
+		pb.RegisterPropertyServiceServer(
+			grpcServer,
+			property.NewPropertyService(aggregateStore, propertyHandlers),
+		)
+		pb.RegisterPropertySetServiceServer(
+			grpcServer,
+			propertySet.NewPropertySetService(aggregateStore, propertySetHandlers),
+		)
+		pb.RegisterPropertyValueServiceServer(
+			grpcServer,
+			propertyValue.NewPropertyValueService(aggregateStore, propertyValueHandlers),
+		)
+		pb.RegisterPropertyViewsServiceServer(
+			grpcServer,
+			propertyViews.NewPropertyViewService(aggregateStore, propertyViewHandlers),
+		)
 
 		if ready != nil {
 			ready()

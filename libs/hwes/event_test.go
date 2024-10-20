@@ -3,10 +3,11 @@ package hwes_test
 import (
 	"common/auth"
 	"context"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"hwes"
-	"testing"
 )
 
 func TestEventWithUserID(t *testing.T) {

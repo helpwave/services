@@ -3,11 +3,13 @@ package stories
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"hwtesting"
 	"hwutil"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // TestCreateAttachUpdateTextProperty:
@@ -32,13 +34,9 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -47,9 +45,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	response := map[string]interface{}{
 		"Id":                         propertyResponse.Id,
@@ -77,28 +73,24 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		"PropertyConsistency":        createResponse.Consistency,
 	}
 
-	if !assert.Equal(t, expectedResponse, response) {
-		return
-	}
+	require.Equal(t, expectedResponse, response)
 
 	//
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
 			TextValue: "Initial Text Value",
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -110,15 +102,14 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
-	if !assert.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values))
+	assert.Len(t, attachedValuesResponse.Values, 1)
 
 	assert.Equal(t, "Initial Text Value", attachedValuesResponse.Values[0].GetTextValue())
 
@@ -129,16 +120,14 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
 			TextValue: "Updated Text Value",
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
@@ -152,19 +141,23 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
-	if !assert.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values))
+	assert.Len(t, attachedValuesResponse.Values, 1)
 
 	assert.Equal(t, "Updated Text Value", attachedValuesResponse.Values[0].GetTextValue())
 
-	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
+	assert.Equal(
+		t,
+		&updateResponse.Consistency,
+		attachedValuesResponse.Values[0].ValueConsistency,
+		"ValueConsistency was not updated",
+	)
 }
 
 // TestCreateAttachUpdateSelectProperty:
@@ -203,13 +196,9 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -218,9 +207,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	response := map[string]interface{}{
 		"Id":          propertyResponse.Id,
@@ -260,20 +247,18 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
 			SelectValue: option1,
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -285,15 +270,14 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
-	if !assert.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
 	assert.Equal(t, "Option 1", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
@@ -304,16 +288,14 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
 			SelectValue: option2,
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
@@ -327,19 +309,23 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
-	if !assert.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
 	assert.Equal(t, "Option 2", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
-	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
+	assert.Equal(
+		t,
+		&updateResponse.Consistency,
+		attachedValuesResponse.Values[0].ValueConsistency,
+		"ValueConsistency was not updated",
+	)
 }
 
 // TestCreateAttachUpdateMultiSelectProperty:
@@ -382,13 +368,9 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -397,9 +379,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	response := map[string]interface{}{
 		"Id":          propertyResponse.Id,
@@ -440,11 +420,11 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
 			MultiSelectValue: &pb.AttachPropertyValueRequest_MultiSelectValue{
@@ -454,9 +434,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -468,17 +446,20 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
-	if !assert.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
-	assert.Equal(t, []string{"Option 1", "Option 2"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
+	assert.Equal(
+		t,
+		[]string{"Option 1", "Option 2"},
+		NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()),
+	)
 
 	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
 
@@ -487,7 +468,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
 			MultiSelectValue: &pb.AttachPropertyValueRequest_MultiSelectValue{
@@ -497,9 +478,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
@@ -513,19 +492,27 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
-	if !assert.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
-	assert.Equal(t, []string{"Option 2", "Option 3"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
+	assert.Equal(
+		t,
+		[]string{"Option 2", "Option 3"},
+		NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()),
+	)
 
-	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
+	assert.Equal(
+		t,
+		&updateResponse.Consistency,
+		attachedValuesResponse.Values[0].ValueConsistency,
+		"ValueConsistency was not updated",
+	)
 }
 
 // TestCreateAttachAddOptionAttachSelectProperty:
@@ -561,14 +548,9 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
-
+	require.NoError(t, err, "propertyID is not a uuid")
 	hwtesting.WaitForProjectionsToSettle()
 
 	//
@@ -576,9 +558,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	option1 := propertyResponse.GetSelectData().Options[0].GetId()
 
@@ -586,20 +566,18 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
 			SelectValue: option1,
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -611,15 +589,14 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
-	if !assert.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
 	assert.Equal(t, "Option 1", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
@@ -645,9 +622,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not add new option") {
-		return
-	}
+	require.NoError(t, err, "could not add new option")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -656,11 +631,9 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was updated") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was updated")
 
-	assert.Equal(t, 2, len(propertyResponse.GetSelectData().Options))
+	assert.Len(t, propertyResponse.GetSelectData().Options, 2)
 
 	option2 := propertyResponse.GetSelectData().Options[1].GetId() // not guaranteed tbf
 
@@ -669,16 +642,14 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	//
 
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
 			SelectValue: option2,
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -690,15 +661,14 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
-	if !assert.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
 	assert.Equal(t, "Option 2", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 }
@@ -736,13 +706,9 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -751,9 +717,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	option1 := propertyResponse.GetSelectData().Options[0].GetId()
 
@@ -761,11 +725,11 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
 			MultiSelectValue: &pb.AttachPropertyValueRequest_MultiSelectValue{
@@ -775,9 +739,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -789,18 +751,20 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		},
 	})
 
-	if !assert.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
-	assert.Equal(t, []string{"Option 1"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
+	assert.Equal(
+		t,
+		[]string{"Option 1"},
+		NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()),
+	)
 
 	//
 	// Add new Option
@@ -824,9 +788,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not add new option") {
-		return
-	}
+	require.NoError(t, err, "could not add new option")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -835,11 +797,9 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was updated") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was updated")
 
-	assert.Equal(t, 2, len(propertyResponse.GetSelectData().Options))
+	assert.Len(t, propertyResponse.GetSelectData().Options, 2)
 
 	option2 := propertyResponse.GetSelectData().Options[1].GetId() // order not guaranteed
 
@@ -848,7 +808,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	//
 
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
 			MultiSelectValue: &pb.AttachPropertyValueRequest_MultiSelectValue{
@@ -858,9 +818,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -872,15 +830,18 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
-	if !assert.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
-	assert.Equal(t, []string{"Option 1", "Option 2"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
+	assert.Equal(
+		t,
+		[]string{"Option 1", "Option 2"},
+		NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()),
+	)
 }

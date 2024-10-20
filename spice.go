@@ -1,7 +1,9 @@
+//nolint:forbidigo
 package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -21,18 +23,19 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const MigrationResourceType = "spice_schema_migrations/migration"
-const MigrationResourceId = "current"
-const MigrationRelation = "version"
-const MigrationSubjectType = "spice_schema_migrations/version"
+const (
+	MigrationResourceType = "spice_schema_migrations/migration"
+	MigrationResourceId   = "current"
+	MigrationRelation     = "version"
+	MigrationSubjectType  = "spice_schema_migrations/version"
+)
 
 // CLI is filled by kong.Parse in main
 var CLI struct {
 	Migrate struct {
 		Force bool `help:"Skip schema version check."`
 	} `cmd:"" help:"Migrate SpiceDB schema"`
-	Schema struct {
-	} `cmd:"" help:"Print SpiceDB schema"`
+	Schema    struct{} `cmd:"" help:"Print SpiceDB schema"`
 	Test      struct{} `cmd:"" help:"Runs SpiceDB tests using zed"`
 	Directory string   `flag:"" short:"d" type:"path" default:"./spicedb" help:"SpiceDB directory"`
 	Endpoint  string   `flag:"" short:"e" env:"ZED_ENDPOINT" help:"e.g., 'spicedb:50051'"`
@@ -44,11 +47,11 @@ func main() {
 	ctx := kong.Parse(&CLI)
 	switch ctx.Command() {
 	case "migrate":
-		migrateCmd(ctx)
+		migrateCmd()
 	case "schema":
-		schemaCmd(ctx)
+		schemaCmd()
 	case "test":
-		testCmd(ctx)
+		testCmd()
 	default:
 		panic(ctx.Command())
 	}
@@ -145,11 +148,12 @@ func getCurrentVersion(ctx context.Context, client *authzed.Client) int {
 	// now collect the first element
 	response, err := stream.Recv()
 	if err != nil {
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			return 0
 		}
 		if statusErr, ok := status.FromError(err); ok {
-			if statusErr.Code() == codes.FailedPrecondition && statusErr.Message() == "object definition `spice_schema_migrations/migration` not found" {
+			if statusErr.Code() == codes.FailedPrecondition &&
+				statusErr.Message() == "object definition `spice_schema_migrations/migration` not found" {
 				return 0
 			}
 		}
@@ -166,7 +170,7 @@ func getCurrentVersion(ctx context.Context, client *authzed.Client) int {
 
 	// if more relations exist, the version is not clear, user must fix it
 	_, err = stream.Recv()
-	if err != io.EOF {
+	if errors.Is(err, io.EOF) {
 		panic("more than one version relation exist")
 	}
 	return i
@@ -219,7 +223,7 @@ func updateCurrentVersion(ctx context.Context, client *authzed.Client, oldVersio
 }
 
 // migrateCmd is the <migrate> command handler
-func migrateCmd(kctx *kong.Context) {
+func migrateCmd() {
 	ctx := context.Background()
 
 	client := getClient()
@@ -245,7 +249,7 @@ func migrateCmd(kctx *kong.Context) {
 }
 
 // schemaCmd is the <schema> command handler
-func schemaCmd(kctx *kong.Context) {
+func schemaCmd() {
 	schema := collectSchema()
 	fmt.Print(schema)
 }
@@ -347,7 +351,7 @@ func writeSpiceDBYaml(file SpiceDBValidationFile, path string) {
 		fmt.Println("could not marshal spicedb yaml for " + path)
 		panic(err)
 	}
-	err = os.WriteFile(path, marshalled, 0644)
+	err = os.WriteFile(path, marshalled, 0o600)
 	if err != nil {
 		fmt.Println("could not write spicedb yaml for " + path)
 		panic(err)
@@ -355,7 +359,7 @@ func writeSpiceDBYaml(file SpiceDBValidationFile, path string) {
 }
 
 // testCmd is the <test> command handler
-func testCmd(kctx *kong.Context) {
+func testCmd() {
 	schema := collectSchema()
 
 	// collect test yamls
