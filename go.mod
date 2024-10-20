@@ -6,6 +6,7 @@ replace (
 	common => ./libs/common
 	hwauthz => ./libs/hwauthz
 	hwlocale => ./libs/hwlocale
+	hwtesting => ./libs/hwtesting
 	hwutil => ./libs/hwutil
 	telemetry => ./libs/telemetry
 )

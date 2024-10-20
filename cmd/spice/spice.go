@@ -10,6 +10,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/authzed/authzed-go/v1"
+	"gopkg.in/yaml.v3"
+
 	"github.com/alecthomas/kong"
 	"github.com/authzed/grpcutil"
 	"google.golang.org/grpc"
