@@ -79,7 +79,8 @@ func (s *UpdatesGrpcService) ReceiveUpdates(req *pb.ReceiveUpdatesRequest, strea
 		esdbEvent := esStream.Recv()
 
 		select {
-		case <-stream.Context().Done():
+		case <-ctx.Done():
+			log.Debug().Msg("context got canceled, close stream")
 			return nil
 		default:
 		}
@@ -87,7 +88,7 @@ func (s *UpdatesGrpcService) ReceiveUpdates(req *pb.ReceiveUpdatesRequest, strea
 		if esdbEvent.SubscriptionDropped != nil {
 			esStream.Close()
 			log.Debug().Msg("subscription dropped, close stream")
-			break
+			return nil
 		}
 
 		if esdbEvent.CaughtUp != nil {
@@ -130,6 +131,4 @@ func (s *UpdatesGrpcService) ReceiveUpdates(req *pb.ReceiveUpdatesRequest, strea
 			return err
 		}
 	}
-
-	return nil
 }
