@@ -46,7 +46,7 @@ func TestMain(m *testing.M) {
 	// `go test` sets the wd to the directory of this file
 	hwtesting.MigratePostgres("file://../migrations", postgresDSN)
 
-	// TODO: spice migrations (PR #812)
+	hwtesting.MigrateSpiceDB(ctx, spiceEndpoint)
 
 	// start service
 	ready := make(chan bool)

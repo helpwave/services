@@ -4,12 +4,14 @@ import (
 	"common"
 	"context"
 	pb "gen/services/property_svc/v1"
+	"hwauthz"
 	"hwes"
 
 	"github.com/google/uuid"
 
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
+	"property-svc/internal/property/perm"
 )
 
 type UpdatePropertyCommandHandler func(
@@ -25,7 +27,7 @@ type UpdatePropertyCommandHandler func(
 	isArchived *bool,
 ) (common.ConsistencyToken, error)
 
-func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
+func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) UpdatePropertyCommandHandler {
 	return func(
 		ctx context.Context,
 		propertyID uuid.UUID,
@@ -38,6 +40,16 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 		removeOptions []string,
 		isArchived *bool,
 	) (common.ConsistencyToken, error) {
+		user, err := perm.UserFromCtx(ctx)
+		if err != nil {
+			return 0, err
+		}
+
+		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserUpdate, perm.Property(propertyID))
+		if err = authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
+
 		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
 		if err != nil {
 			return 0, err

@@ -5,11 +5,13 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
+	"hwauthz"
 	"hwdb"
 
 	"github.com/google/uuid"
 
 	"property-svc/internal/property/models"
+	"property-svc/internal/property/perm"
 	"property-svc/repos/property_repo"
 )
 
@@ -18,8 +20,13 @@ type GetPropertyByIDQueryHandler func(
 	propertyID uuid.UUID,
 ) (*models.Property, common.ConsistencyToken, error)
 
-func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
+func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHandler {
 	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error) {
+		user, err := perm.UserFromCtx(ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
@@ -64,6 +71,12 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 						IsCustom:    *row.SelectOptionIsCustom, // NOT NULL
 					})
 			}
+		}
+
+		// Verify user is allowed to see this property
+		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))
+		if err = authz.Must(ctx, check); err != nil {
+			return nil, 0, err
 		}
 
 		return property, common.ConsistencyToken(rows[0].Property.Consistency), nil //nolint:gosec

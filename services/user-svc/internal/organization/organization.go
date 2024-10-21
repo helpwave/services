@@ -886,7 +886,7 @@ func (s ServiceServer) CreatePersonalOrganization(
 		return nil, err
 	}
 
-	personalOrganizations := hwutil.Filter(organisations, func(organization *hwkc.Organization) bool {
+	personalOrganizations := hwutil.Filter(organisations, func(_ int, organization *hwkc.Organization) bool {
 		return organization.IsPersonal()
 	})
 
