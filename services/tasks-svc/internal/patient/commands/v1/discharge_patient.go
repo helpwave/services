@@ -23,7 +23,7 @@ func NewDischargePatientCommandHandler(as hwes.AggregateStore) DischargePatientC
 			return 0, err
 		}
 
-		// If a patient is beeing discharged, the patient is also being unassigned from the bed
+		// If a patient is being discharged, the patient is also being unassigned from the bed
 		if err := a.UnassignBed(ctx); err != nil {
 			return 0, err
 		}
