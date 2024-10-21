@@ -3,10 +3,13 @@ package stories
 import (
 	"common/auth"
 	"context"
+	"errors"
 	pb "gen/services/updates_svc/v1"
 	"io"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -33,17 +36,20 @@ func TestAutoClosingWhenTokenExpiresReceiveUpdateStream(t *testing.T) {
 
 	timeBeforeOpeningStream := time.Now()
 	stream, err := updatesClient.ReceiveUpdates(ctx, req)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	_, cancel := context.WithTimeout(ctx, auth.FakeTokenValidFor+(time.Second*3))
 	defer cancel()
 
 	for {
 		_, err := stream.Recv()
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			elapsedTime := time.Since(timeBeforeOpeningStream)
 			if elapsedTime > upperBound || elapsedTime < lowerBound {
-				t.Errorf("Connection timeout is out of bounds (upper bound %s, lower bound %s) with %s", upperBound, lowerBound, elapsedTime)
+				t.Errorf(
+					"Connection timeout is out of bounds (upper bound %s, lower bound %s) with %s",
+					upperBound, lowerBound, elapsedTime,
+				)
 				return
 			}
 			return

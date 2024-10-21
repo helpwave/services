@@ -22,7 +22,10 @@ func NewUpdatesGrpcService(es *esdb.Client) *UpdatesGrpcService {
 	}
 }
 
-func (s *UpdatesGrpcService) ReceiveUpdates(req *pb.ReceiveUpdatesRequest, stream pb.UpdatesService_ReceiveUpdatesServer) error {
+func (s *UpdatesGrpcService) ReceiveUpdates(
+	req *pb.ReceiveUpdatesRequest,
+	stream pb.UpdatesService_ReceiveUpdatesServer,
+) error {
 	ctx, span, log := telemetry.StartSpan(stream.Context(), "updates.ReceiveUpdates")
 	defer span.End()
 
