@@ -28,7 +28,10 @@ var (
 	oauthConfig             *oauth2.Config
 	Verifier                *oidc.IDTokenVerifier
 	authSetupDone           bool
-	FakeTokenValidFor       = time.Second * 30
+	// FakeTokenValidFor fakes the validity of a fake token.
+	// A fake token cannot expire by itself because a
+	// fake token just contains the payload.
+	FakeTokenValidFor = time.Second * 30
 )
 
 type (
