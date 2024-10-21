@@ -81,10 +81,10 @@ func authInterceptor(ctx context.Context) (context.Context, error) {
 	}
 
 	// attach claims to the context, so we can get it in a handler using GetAuthClaims()
-	ctx = context.WithValue(ctx, auth.ClaimsKey{}, claims)
+	ctx = auth.ContextWithAuthClaims(ctx, claims)
 
 	// attach token expires time to the context
-	ctx = context.WithValue(ctx, auth.TokenExpiresKey{}, tokenExpires)
+	ctx = auth.ContextWithTokenExpires(ctx, tokenExpires)
 
 	// parse userID
 	userID, err := uuid.Parse(claims.Sub)

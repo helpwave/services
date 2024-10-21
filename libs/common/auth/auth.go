@@ -35,10 +35,10 @@ var (
 )
 
 type (
-	ClaimsKey         struct{}
-	TokenExpiresKey   struct{}
-	UserIDKey         struct{}
-	OrganizationIDKey struct{}
+	claimsKey         struct{}
+	tokenExpiresKey   struct{}
+	userIDKey         struct{}
+	organizationIDKey struct{}
 )
 
 func GetOAuthIssuerUrl() string {
@@ -195,12 +195,20 @@ func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, *time.T
 	return &claims, &expiry, err
 }
 
+func ContextWithAuthClaims(ctx context.Context, claims *IDTokenClaims) context.Context {
+	return context.WithValue(ctx, claimsKey{}, claims)
+}
+
+func ContextWithTokenExpires(ctx context.Context, tokenExpires *time.Time) context.Context {
+	return context.WithValue(ctx, tokenExpiresKey{}, tokenExpires)
+}
+
 func ContextWithUserID(ctx context.Context, userID uuid.UUID) context.Context {
-	return context.WithValue(ctx, UserIDKey{}, userID)
+	return context.WithValue(ctx, userIDKey{}, userID)
 }
 
 func ContextWithOrganizationID(ctx context.Context, organizationID uuid.UUID) context.Context {
-	return context.WithValue(ctx, OrganizationIDKey{}, organizationID)
+	return context.WithValue(ctx, organizationIDKey{}, organizationID)
 }
 
 // GetAuthClaims extracts AccessTokenClaims from the request context, if they exist
@@ -208,7 +216,7 @@ func ContextWithOrganizationID(ctx context.Context, organizationID uuid.UUID) co
 // If an error is returned, no access token was extracted for this request.
 // This either means no token was supplied by the client, or Auth was not set up in Setup.
 func GetAuthClaims(ctx context.Context) (*IDTokenClaims, error) {
-	res, ok := ctx.Value(ClaimsKey{}).(*IDTokenClaims)
+	res, ok := ctx.Value(claimsKey{}).(*IDTokenClaims)
 	if !ok || res == nil {
 		return nil, status.Error(codes.Unauthenticated, "authentication required")
 	} else {
@@ -218,7 +226,7 @@ func GetAuthClaims(ctx context.Context) (*IDTokenClaims, error) {
 
 // SessionValidUntil returns time.Time when the session gets marked as expired
 func SessionValidUntil(ctx context.Context) (time.Time, error) {
-	res, ok := ctx.Value(TokenExpiresKey{}).(*time.Time)
+	res, ok := ctx.Value(tokenExpiresKey{}).(*time.Time)
 	if !ok {
 		return time.Now(), status.Error(codes.Internal, "tokenExpires not in context, set up auth")
 	} else {
@@ -227,7 +235,7 @@ func SessionValidUntil(ctx context.Context) (time.Time, error) {
 }
 
 func GetUserID(ctx context.Context) (uuid.UUID, error) {
-	res, ok := ctx.Value(UserIDKey{}).(uuid.UUID)
+	res, ok := ctx.Value(userIDKey{}).(uuid.UUID)
 	if !ok {
 		return uuid.UUID{}, status.Error(codes.Internal, "userID not in context, set up auth")
 	} else {
@@ -236,7 +244,7 @@ func GetUserID(ctx context.Context) (uuid.UUID, error) {
 }
 
 func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
-	res, ok := ctx.Value(OrganizationIDKey{}).(uuid.UUID)
+	res, ok := ctx.Value(organizationIDKey{}).(uuid.UUID)
 	if !ok {
 		return uuid.UUID{}, status.Error(codes.Internal, "organizationID not in context, set up auth")
 	} else {
