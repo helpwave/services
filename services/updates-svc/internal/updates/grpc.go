@@ -26,19 +26,20 @@ func (s *UpdatesGrpcService) ReceiveUpdates(req *pb.ReceiveUpdatesRequest, strea
 	ctx, span, log := telemetry.StartSpan(stream.Context(), "updates.ReceiveUpdates")
 	defer span.End()
 
-	tokenExpires, err := auth.SessionValidUntil(ctx)
+	tokenExpiresAt, err := auth.SessionValidUntil(ctx)
 	if err != nil {
 		return err
 	}
 
-	tokenExpiresIn := time.Until(tokenExpires)
+	tokenExpiresIn := time.Until(tokenExpiresAt)
 
 	ctx, cancel := context.WithCancel(ctx)
 	// Close stream after session is invalid
-	time.AfterFunc(tokenExpiresIn, func() {
+	closeStreamTimer := time.AfterFunc(tokenExpiresIn, func() {
 		log.Debug().Msg("closing stream, token expired")
 		cancel()
 	})
+	defer closeStreamTimer.Stop()
 
 	log.Debug().
 		// We are using .Str() instead of .Dur() to enhance human readability in the logs
