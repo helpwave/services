@@ -4,10 +4,12 @@ package services.updates_svc.v1;
 
 option go_package = "gen/services/updates-svc/v1";
 
+// An event that gets raised on non-event sourced entities
 message EntityEvent {
   string entity_id = 1;
 }
 
+// An event that gets raised for event sourced entities
 message DomainEvent {
   string event_id = 1;
   string event_type = 2;
@@ -20,6 +22,8 @@ message DomainEvent {
 //
 
 message ReceiveUpdatesRequest {
+  // If your stream gets interrupted, you can pass your last
+  // received revision to start receiving events at this revision.
   optional uint64 revision = 1;
 }
 
@@ -40,5 +44,6 @@ message ReceiveUpdatesResponse {
 //
 
 service UpdatesService {
+  // This endpoint directly exposes all enables our clients to hook into our event stream
   rpc ReceiveUpdates(ReceiveUpdatesRequest) returns (stream ReceiveUpdatesResponse) {}
 }
