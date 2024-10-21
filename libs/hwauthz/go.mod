@@ -13,11 +13,11 @@ replace (
 
 require (
 	common v0.0.0
-	github.com/authzed/authzed-go v0.15.0
+	github.com/authzed/authzed-go v1.0.0
 	github.com/authzed/grpcutil v0.0.0-20230908193239-4286bb1d6403
 	github.com/rs/zerolog v1.33.0
 	go.opentelemetry.io/otel v1.30.0
-	google.golang.org/grpc v1.66.1
+	google.golang.org/grpc v1.66.2
 	hwutil v0.0.0
 	telemetry v0.0.0
 )
