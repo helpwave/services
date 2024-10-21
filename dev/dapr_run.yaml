@@ -65,3 +65,10 @@ apps:
       SERVICE: property-svc
       POSTGRES_DB: property-svc
     command: ["air"]
+
+  - appID: updates-svc
+    appDirPath: ../services/updates-svc
+    appPort: 3006
+    env:
+      SERVICE: updates-svc
+    command: ["air"]

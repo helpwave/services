@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"hwutil"
 	"telemetry"
+	"time"
 
 	"github.com/coreos/go-oidc"
 	"github.com/google/uuid"
@@ -27,12 +28,17 @@ var (
 	oauthConfig             *oauth2.Config
 	Verifier                *oidc.IDTokenVerifier
 	authSetupDone           bool
+	// FakeTokenValidFor fakes the validity of a fake token.
+	// A fake token cannot expire by itself because a
+	// fake token just contains the payload.
+	FakeTokenValidFor = time.Second * 30
 )
 
 type (
-	ClaimsKey         struct{}
-	UserIDKey         struct{}
-	OrganizationIDKey struct{}
+	claimsKey         struct{}
+	tokenExpiresKey   struct{}
+	userIDKey         struct{}
+	organizationIDKey struct{}
 )
 
 func GetOAuthIssuerUrl() string {
@@ -143,57 +149,70 @@ func (t IDTokenClaims) AsExpected() error {
 // VerifyIDToken verifies the correctness of the accessToken and returns its claim.
 // The claim is checked to be as expected.
 // Service must be set up with auth!
-func VerifyIDToken(ctx context.Context, token string) (*IDTokenClaims, error) {
+// When the token gets successfully verified, the function returns the token claims as the first return param
+// and the time when the token expires as the second return param.
+func VerifyIDToken(ctx context.Context, token string) (*IDTokenClaims, *time.Time, error) {
 	// Verify() verifies formal validity, proper signing, usage of the correct keys, ...
 	// and still exposes .Claims() for us to access non-standard ID token claims
 	idToken, err := GetIDTokenVerifier(ctx).Verify(context.Background(), token)
 	if err != nil {
-		return nil, fmt.Errorf("getIDTokenVerifier: verify failed: %w", err)
+		return nil, nil, fmt.Errorf("getIDTokenVerifier: verify failed: %w", err)
 	}
 
 	// now get the claims
 	claims := IDTokenClaims{}
 	if err = idToken.Claims(&claims); err != nil {
-		return nil, fmt.Errorf("getIDTokenVerifier: could not get claims: %w", err)
+		return nil, nil, fmt.Errorf("getIDTokenVerifier: could not get claims: %w", err)
 	}
 
 	// and check that they are in the expected format
 	if err = claims.AsExpected(); err != nil {
-		return nil, fmt.Errorf("getIDTokenVerifier: claims are not as expected: %w", err)
+		return nil, nil, fmt.Errorf("getIDTokenVerifier: claims are not as expected: %w", err)
 	}
 
-	return &claims, nil
+	return &claims, &idToken.Expiry, nil
 }
 
 // VerifyFakeToken accepts a Base64 encoded json structure with the schema of IDTokenClaims
-func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, error) {
+// When the token gets successfully verified, the function returns the token claims as the first return param
+// and the time when the token expires as the second return param.
+func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, *time.Time, error) {
 	log := zlog.Ctx(ctx)
 
 	plainToken, err := base64.StdEncoding.DecodeString(token)
 	if err != nil {
-		return nil, fmt.Errorf("VerifyFakeToken: cant decode fake token: %w", err)
+		return nil, nil, fmt.Errorf("VerifyFakeToken: cant decode fake token: %w", err)
 	}
 
 	claims := IDTokenClaims{}
 	if err := hwutil.ParseValidJson(plainToken, &claims); err != nil {
-		return nil, fmt.Errorf("VerifyFakeToken: cant parse json: %w", err)
+		return nil, nil, fmt.Errorf("VerifyFakeToken: cant parse json: %w", err)
 	}
 
 	if err = claims.AsExpected(); err != nil {
-		return nil, fmt.Errorf("VerifyFakeToken: claims not as expected: %w", err)
+		return nil, nil, fmt.Errorf("VerifyFakeToken: claims not as expected: %w", err)
 	}
 
 	log.Warn().Interface("claims", claims).Msg("fake token was verified")
 
-	return &claims, err
+	expiry := time.Now().Add(FakeTokenValidFor)
+	return &claims, &expiry, err
+}
+
+func ContextWithAuthClaims(ctx context.Context, claims *IDTokenClaims) context.Context {
+	return context.WithValue(ctx, claimsKey{}, claims)
+}
+
+func ContextWithTokenExpires(ctx context.Context, tokenExpires *time.Time) context.Context {
+	return context.WithValue(ctx, tokenExpiresKey{}, tokenExpires)
 }
 
 func ContextWithUserID(ctx context.Context, userID uuid.UUID) context.Context {
-	return context.WithValue(ctx, UserIDKey{}, userID)
+	return context.WithValue(ctx, userIDKey{}, userID)
 }
 
 func ContextWithOrganizationID(ctx context.Context, organizationID uuid.UUID) context.Context {
-	return context.WithValue(ctx, OrganizationIDKey{}, organizationID)
+	return context.WithValue(ctx, organizationIDKey{}, organizationID)
 }
 
 // GetAuthClaims extracts AccessTokenClaims from the request context, if they exist
@@ -201,7 +220,7 @@ func ContextWithOrganizationID(ctx context.Context, organizationID uuid.UUID) co
 // If an error is returned, no access token was extracted for this request.
 // This either means no token was supplied by the client, or Auth was not set up in Setup.
 func GetAuthClaims(ctx context.Context) (*IDTokenClaims, error) {
-	res, ok := ctx.Value(ClaimsKey{}).(*IDTokenClaims)
+	res, ok := ctx.Value(claimsKey{}).(*IDTokenClaims)
 	if !ok || res == nil {
 		return nil, status.Error(codes.Unauthenticated, "authentication required")
 	} else {
@@ -209,8 +228,18 @@ func GetAuthClaims(ctx context.Context) (*IDTokenClaims, error) {
 	}
 }
 
+// SessionValidUntil returns time.Time when the session gets marked as expired
+func SessionValidUntil(ctx context.Context) (time.Time, error) {
+	res, ok := ctx.Value(tokenExpiresKey{}).(*time.Time)
+	if !ok {
+		return time.Now(), status.Error(codes.Internal, "tokenExpires not in context, set up auth")
+	} else {
+		return *res, nil
+	}
+}
+
 func GetUserID(ctx context.Context) (uuid.UUID, error) {
-	res, ok := ctx.Value(UserIDKey{}).(uuid.UUID)
+	res, ok := ctx.Value(userIDKey{}).(uuid.UUID)
 	if !ok {
 		return uuid.UUID{}, status.Error(codes.Internal, "userID not in context, set up auth")
 	} else {
@@ -219,7 +248,7 @@ func GetUserID(ctx context.Context) (uuid.UUID, error) {
 }
 
 func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
-	res, ok := ctx.Value(OrganizationIDKey{}).(uuid.UUID)
+	res, ok := ctx.Value(organizationIDKey{}).(uuid.UUID)
 	if !ok {
 		return uuid.UUID{}, status.Error(codes.Internal, "organizationID not in context, set up auth")
 	} else {

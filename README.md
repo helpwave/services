@@ -133,6 +133,7 @@ grpcurl --plaintext \
 | user-svc      | 3002  | gRPC                    |
 | tasks-svc     | 3004  | gRPC                    |
 | property-svc  | 3005  | gRPC                    |
+| updates-svc   | 3006  | gRPC                    |
 | APISIX (dapr) | 3500  | http                    |
 | APISIX (dapr) | 35001 | grpc                    |
 | APISIX        | 9080  | http  (mostly grcp-web) |

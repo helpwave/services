@@ -3,6 +3,7 @@ package hwgrpc
 import (
 	"context"
 	"telemetry"
+	"time"
 
 	"common/auth"
 
@@ -52,15 +53,18 @@ func authInterceptor(ctx context.Context) (context.Context, error) {
 		return nil, status.Errorf(codes.Unauthenticated, "no auth token: %v", err)
 	}
 
-	var claims *auth.IDTokenClaims
+	var (
+		claims       *auth.IDTokenClaims
+		tokenExpires *time.Time
+	)
 
 	if auth.IsOnlyFakeAuthEnabled() {
 		log.Warn().
 			Msg("only fake auth is enabled! no attempt verifying token. falling back to fake token instead")
-		claims, err = auth.VerifyFakeToken(ctx, token)
+		claims, tokenExpires, err = auth.VerifyFakeToken(ctx, token)
 	} else {
 		// verify token -> if fakeToken is used claims will be nil and we will get an error
-		claims, err = auth.VerifyIDToken(ctx, token)
+		claims, tokenExpires, err = auth.VerifyIDToken(ctx, token)
 	}
 
 	// If auth.IsInsecureFakeTokenEnabled() is true and Mode is development,
@@ -69,15 +73,18 @@ func authInterceptor(ctx context.Context) (context.Context, error) {
 	// ONLY FOR NON-PUBLIC DEVELOPMENT AND STAGING ENVIRONMENTS
 	if claims == nil && err != nil && auth.IsInsecureFakeTokenEnabled() {
 		log.Warn().Msg("could not verify token, falling back to fake token instead")
-		claims, err = auth.VerifyFakeToken(ctx, token)
+		claims, tokenExpires, err = auth.VerifyFakeToken(ctx, token)
 	}
 
-	if err != nil || claims == nil {
+	if err != nil || claims == nil || tokenExpires == nil {
 		return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
 	}
 
 	// attach claims to the context, so we can get it in a handler using GetAuthClaims()
-	ctx = context.WithValue(ctx, auth.ClaimsKey{}, claims)
+	ctx = auth.ContextWithAuthClaims(ctx, claims)
+
+	// attach token expires time to the context
+	ctx = auth.ContextWithTokenExpires(ctx, tokenExpires)
 
 	// parse userID
 	userID, err := uuid.Parse(claims.Sub)
