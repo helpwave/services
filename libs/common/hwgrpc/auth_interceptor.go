@@ -84,7 +84,7 @@ func authInterceptor(ctx context.Context) (context.Context, error) {
 	ctx = context.WithValue(ctx, auth.ClaimsKey{}, claims)
 
 	// attach token expires time to the context
-	ctx = context.WithValue(ctx, auth.TokenExpires{}, tokenExpires)
+	ctx = context.WithValue(ctx, auth.TokenExpiresKey{}, tokenExpires)
 
 	// parse userID
 	userID, err := uuid.Parse(claims.Sub)

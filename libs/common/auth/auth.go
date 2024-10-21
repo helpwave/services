@@ -36,7 +36,7 @@ var (
 
 type (
 	ClaimsKey         struct{}
-	TokenExpires      struct{}
+	TokenExpiresKey   struct{}
 	UserIDKey         struct{}
 	OrganizationIDKey struct{}
 )
@@ -218,7 +218,7 @@ func GetAuthClaims(ctx context.Context) (*IDTokenClaims, error) {
 
 // SessionValidUntil returns time.Time when the session gets marked as expired
 func SessionValidUntil(ctx context.Context) (time.Time, error) {
-	res, ok := ctx.Value(TokenExpires{}).(*time.Time)
+	res, ok := ctx.Value(TokenExpiresKey{}).(*time.Time)
 	if !ok {
 		return time.Now(), status.Error(codes.Internal, "tokenExpires not in context, set up auth")
 	} else {
