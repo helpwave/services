@@ -1,3 +1,3 @@
 # updates-svc
 
-This service gives our clients the ability to get notified in realtime about new updates, like events.
+This service notifies clients in realtime about updates, like events.

@@ -26,6 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UpdatesServiceClient interface {
+	// This endpoint directly exposes all enables our clients to hook into our event stream
 	ReceiveUpdates(ctx context.Context, in *ReceiveUpdatesRequest, opts ...grpc.CallOption) (UpdatesService_ReceiveUpdatesClient, error)
 }
 
@@ -74,6 +75,7 @@ func (x *updatesServiceReceiveUpdatesClient) Recv() (*ReceiveUpdatesResponse, er
 // All implementations must embed UnimplementedUpdatesServiceServer
 // for forward compatibility
 type UpdatesServiceServer interface {
+	// This endpoint directly exposes all enables our clients to hook into our event stream
 	ReceiveUpdates(*ReceiveUpdatesRequest, UpdatesService_ReceiveUpdatesServer) error
 	mustEmbedUnimplementedUpdatesServiceServer()
 }

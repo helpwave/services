@@ -14,6 +14,7 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+/// An event that gets raised on non-event sourced entities
 class EntityEvent extends $pb.GeneratedMessage {
   factory EntityEvent({
     $core.String? entityId,
@@ -64,6 +65,7 @@ class EntityEvent extends $pb.GeneratedMessage {
   void clearEntityId() => clearField(1);
 }
 
+/// An event that gets raised for event sourced entities
 class DomainEvent extends $pb.GeneratedMessage {
   factory DomainEvent({
     $core.String? eventId,
@@ -196,6 +198,8 @@ class ReceiveUpdatesRequest extends $pb.GeneratedMessage {
   static ReceiveUpdatesRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReceiveUpdatesRequest>(create);
   static ReceiveUpdatesRequest? _defaultInstance;
 
+  /// If your stream gets interrupted, you can pass your last
+  /// received revision to start receiving events at this revision.
   @$pb.TagNumber(1)
   $fixnum.Int64 get revision => $_getI64(0);
   @$pb.TagNumber(1)

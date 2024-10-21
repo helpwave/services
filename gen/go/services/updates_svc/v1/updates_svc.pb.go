@@ -20,6 +20,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// An event that gets raised on non-event sourced entities
 type EntityEvent struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -67,6 +68,7 @@ func (x *EntityEvent) GetEntityId() string {
 	return ""
 }
 
+// An event that gets raised for event sourced entities
 type DomainEvent struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -143,6 +145,8 @@ type ReceiveUpdatesRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// If your stream gets interrupted, you can pass your last
+	// received revision to start receiving events at this revision.
 	Revision *uint64 `protobuf:"varint,1,opt,name=revision,proto3,oneof" json:"revision,omitempty"`
 }
 
