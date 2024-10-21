@@ -149,6 +149,8 @@ func (t IDTokenClaims) AsExpected() error {
 // VerifyIDToken verifies the correctness of the accessToken and returns its claim.
 // The claim is checked to be as expected.
 // Service must be set up with auth!
+// When the token gets successfully verified, the function returns the token claims as the first return param
+// and the time when the token expires as the second return param.
 func VerifyIDToken(ctx context.Context, token string) (*IDTokenClaims, *time.Time, error) {
 	// Verify() verifies formal validity, proper signing, usage of the correct keys, ...
 	// and still exposes .Claims() for us to access non-standard ID token claims
@@ -172,6 +174,8 @@ func VerifyIDToken(ctx context.Context, token string) (*IDTokenClaims, *time.Tim
 }
 
 // VerifyFakeToken accepts a Base64 encoded json structure with the schema of IDTokenClaims
+// When the token gets successfully verified, the function returns the token claims as the first return param
+// and the time when the token expires as the second return param.
 func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, *time.Time, error) {
 	log := zlog.Ctx(ctx)
 
