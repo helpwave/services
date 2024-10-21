@@ -31,8 +31,6 @@ func TestMain(m *testing.M) {
 	hwtesting.SetCommonEnv()
 	hwtesting.SetEventstoreEnv(eventstoreEndpoint)
 
-	// TODO: spice migrations (PR #812)
-
 	// start service
 	ready := make(chan bool)
 	go service.Main("story hwtesting", func() { ready <- true })

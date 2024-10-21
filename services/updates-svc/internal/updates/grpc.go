@@ -90,7 +90,14 @@ func (s *UpdatesGrpcService) ReceiveUpdates(
 
 		if esdbEvent.SubscriptionDropped != nil {
 			esStream.Close()
-			log.Debug().Msg("subscription dropped, close stream")
+
+			err := esdbEvent.SubscriptionDropped.Error
+			if err != nil {
+				log.Debug().Msg("subscription dropped, no error returned, close stream")
+			} else {
+				log.Error().Err(err).Msg("subscription dropped, no error returned, close stream")
+			}
+
 			return nil
 		}
 
@@ -130,7 +137,7 @@ func (s *UpdatesGrpcService) ReceiveUpdates(
 		}
 
 		if err := stream.Send(res); err != nil {
-			log.Error().Err(err).Msg("cannot send on stream")
+			log.Error().Err(err).Msg("cannot send update response on stream")
 			return err
 		}
 	}

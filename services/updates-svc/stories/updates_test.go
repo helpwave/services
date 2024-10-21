@@ -29,31 +29,44 @@ func TestAutoClosingWhenTokenExpiresReceiveUpdateStream(t *testing.T) {
 	updatesClient := updatesServiceClient()
 
 	auth.FakeTokenValidFor = time.Second * 3
-	upperBound := auth.FakeTokenValidFor + (time.Second * 1)
-	lowerBound := auth.FakeTokenValidFor - (time.Second * 1)
 
 	req := &pb.ReceiveUpdatesRequest{}
+
+	ctxTimeout := auth.FakeTokenValidFor + (time.Second * 3)
+	ctx, cancel := context.WithTimeout(ctx, ctxTimeout)
+	defer cancel()
 
 	timeBeforeOpeningStream := time.Now()
 	stream, err := updatesClient.ReceiveUpdates(ctx, req)
 	require.NoError(t, err)
 
-	_, cancel := context.WithTimeout(ctx, auth.FakeTokenValidFor+(time.Second*3))
-	defer cancel()
-
-	for {
-		_, err := stream.Recv()
-		if errors.Is(err, io.EOF) {
-			elapsedTime := time.Since(timeBeforeOpeningStream)
-			if elapsedTime > upperBound || elapsedTime < lowerBound {
-				t.Errorf(
-					"Connection timeout is out of bounds (upper bound %s, lower bound %s) with %s",
-					upperBound, lowerBound, elapsedTime,
-				)
+	done := make(chan bool)
+	go func() {
+		defer close(done)
+		for {
+			_, err := stream.Recv()
+			if errors.Is(err, io.EOF) {
+				elapsedTimeBounds := time.Second
+				elapsedTime := time.Since(timeBeforeOpeningStream).Round(elapsedTimeBounds)
+				if elapsedTime != auth.FakeTokenValidFor {
+					t.Errorf(
+						"Connection timeout is out of bounds (lower and upper bounds is %s) with %s",
+						elapsedTimeBounds, elapsedTime,
+					)
+					return
+				}
 				return
 			}
-			return
+			assert.NoError(t, err)
 		}
-		assert.NoError(t, err)
+	}()
+
+	select {
+	case <-done:
+	case <-ctx.Done():
+		t.Errorf(
+			"ReceiveUpdates did not closed the connection in time. Test reached the timeout of %s.",
+			ctxTimeout,
+		)
 	}
 }
