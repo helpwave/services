@@ -4,12 +4,14 @@ import (
 	"common/auth"
 	"context"
 	pb "gen/services/task_svc/v1"
+	"hwdb"
+	"hwutil"
+
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwdb"
-	"hwutil"
+
 	"task-svc/internal/tracking"
 	"task-svc/repos/ward_repo"
 )
@@ -32,7 +34,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	}
 
 	wardID, err := wardRepo.CreateWard(ctx, ward_repo.CreateWardParams{
-		Name:           req.Name,
+		Name:           req.GetName(),
 		OrganizationID: organizationID,
 	})
 	err = hwdb.Error(ctx, err)
@@ -54,7 +56,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -107,7 +109,10 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 	}, nil
 }
 
-func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsRequest) (*pb.GetRecentWardsResponse, error) {
+func (ServiceServer) GetRecentWards(
+	ctx context.Context,
+	_ *pb.GetRecentWardsRequest,
+) (*pb.GetRecentWardsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
@@ -119,7 +124,6 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 	// TODO: Auth
 
 	recentWardIDsStr, err := tracking.GetRecentWardsForUser(ctx)
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -150,10 +154,10 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 		return &pb.GetRecentWardsResponse_Ward{
 			Id:              row.Ward.ID.String(),
 			Name:            row.Ward.Name,
-			BedCount:        uint32(row.BedCount),
-			TasksTodo:       uint32(row.TodoCount),
-			TasksInProgress: uint32(row.InProgressCount),
-			TasksDone:       uint32(row.DoneCount),
+			BedCount:        uint32(row.BedCount),        //nolint:gosec
+			TasksTodo:       uint32(row.TodoCount),       //nolint:gosec
+			TasksInProgress: uint32(row.InProgressCount), //nolint:gosec
+			TasksDone:       uint32(row.DoneCount),       //nolint:gosec
 		}
 	})
 
@@ -165,7 +169,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -192,7 +196,7 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 		return nil, err
 	}
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -220,7 +224,10 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 	return &pb.DeleteWardResponse{}, nil
 }
 
-func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOverviewsRequest) (*pb.GetWardOverviewsResponse, error) {
+func (s ServiceServer) GetWardOverviews(
+	ctx context.Context,
+	_ *pb.GetWardOverviewsRequest,
+) (*pb.GetWardOverviewsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	organizationID, err := auth.GetOrganizationID(ctx)
@@ -244,20 +251,23 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 		return &pb.GetWardOverviewsResponse_Ward{
 			Id:              row.Ward.ID.String(),
 			Name:            row.Ward.Name,
-			BedCount:        uint32(row.BedCount),
-			TasksTodo:       uint32(row.TodoCount),
-			TasksInProgress: uint32(row.InProgressCount),
-			TasksDone:       uint32(row.DoneCount),
+			BedCount:        uint32(row.BedCount),        //nolint:gosec
+			TasksTodo:       uint32(row.TodoCount),       //nolint:gosec
+			TasksInProgress: uint32(row.InProgressCount), //nolint:gosec
+			TasksDone:       uint32(row.DoneCount),       //nolint:gosec
 		}
 	})
 
 	return &pb.GetWardOverviewsResponse{Wards: resWards}, err
 }
 
-func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsRequest) (*pb.GetWardDetailsResponse, error) {
+func (ServiceServer) GetWardDetails(
+	ctx context.Context,
+	req *pb.GetWardDetailsRequest,
+) (*pb.GetWardDetailsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	wardID, err := uuid.Parse(req.Id)
+	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -267,10 +277,11 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		return nil, err
 	}
 
-	rows, err := wardRepo.GetWardByIdWithRoomsBedsAndTaskTemplates(ctx, ward_repo.GetWardByIdWithRoomsBedsAndTaskTemplatesParams{
-		OrganizationID: organizationID,
-		WardID:         wardID,
-	})
+	rows, err := wardRepo.GetWardByIdWithRoomsBedsAndTaskTemplates(ctx,
+		ward_repo.GetWardByIdWithRoomsBedsAndTaskTemplatesParams{
+			OrganizationID: organizationID,
+			WardID:         wardID,
+		})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err

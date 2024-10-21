@@ -4,11 +4,17 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwutil"
+
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
 )
 
-func (a *PropertyAggregate) CreateProperty(ctx context.Context, subjectType pb.SubjectType, fieldType pb.FieldType, name string) error {
+func (a *PropertyAggregate) CreateProperty(
+	ctx context.Context,
+	subjectType pb.SubjectType,
+	fieldType pb.FieldType,
+	name string,
+) error {
 	id := a.GetID()
 
 	event, err := propertyEventsV1.NewPropertyCreatedEvent(ctx, a, id, subjectType, fieldType, name)
@@ -45,6 +51,7 @@ func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID string) er
 	}
 	return a.Apply(event)
 }
+
 func (a *PropertyAggregate) UpdateSubjectType(ctx context.Context, subjectType pb.SubjectType) error {
 	event, err := propertyEventsV1.NewPropertySubjectTypeUpdatedEvent(ctx, a, subjectType)
 	if err != nil {
@@ -69,7 +76,10 @@ func (a *PropertyAggregate) UpdateAllowFreetext(ctx context.Context, allowFreete
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) FieldTypeDataUpsertOptions(ctx context.Context, upsertOptions []models.UpdateSelectOption) error {
+func (a *PropertyAggregate) FieldTypeDataUpsertOptions(
+	ctx context.Context,
+	upsertOptions []models.UpdateSelectOption,
+) error {
 	event, err := propertyEventsV1.NewFieldTypeDataSelectOptionsUpsertedEvent(ctx, a, upsertOptions)
 	if err != nil {
 		return err

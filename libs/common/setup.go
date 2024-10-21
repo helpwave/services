@@ -1,18 +1,19 @@
 package common
 
 import (
-	"common/auth"
 	"context"
 	"crypto/tls"
-	"fmt"
-	"github.com/joho/godotenv"
-	"github.com/rs/zerolog/log"
 	"hwutil"
 	"net/http"
 	"os"
 	"strings"
 	"telemetry"
 	"time"
+
+	"common/auth"
+
+	"github.com/joho/godotenv"
+	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -22,8 +23,10 @@ var (
 	contextCancel           func() // Setup() yields the "root" context, which can be canceled using this function
 )
 
-const DevelopmentMode = "development"
-const ProductionMode = "production"
+const (
+	DevelopmentMode = "development"
+	ProductionMode  = "production"
+)
 
 type SetupOptions struct {
 	auth                   bool
@@ -58,7 +61,8 @@ func WithUnauthenticatedMethod(unauthenticatedMethod string) SetupOption {
 	}
 }
 
-// WithNonOrganizationMethod accept the FullMethod of a gRPC method to disable our organization logic on this explicit method
+// WithNonOrganizationMethod accept the FullMethod of a gRPC method to
+// disable our organization logic on this explicit method
 // https://github.com/grpc/grpc-go/blob/f17ea7d68c0942d8160e77329cc3814b0dd2b64f/interceptor.go#L71
 func WithNonOrganizationMethod(nonOrganizationMethod string) SetupOption {
 	return func(options *SetupOptions) {
@@ -66,8 +70,10 @@ func WithNonOrganizationMethod(nonOrganizationMethod string) SetupOption {
 	}
 }
 
-var skipAuthForMethods []string
-var skipOrganizationAuthForMethods []string
+var (
+	skipAuthForMethods             []string
+	skipOrganizationAuthForMethods []string
+)
 
 // Setup loads the .env file and sets up logging,
 // also sets up tokens when the service requires auth.
@@ -120,7 +126,13 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 	}
 
 	if strings.ToLower(hwutil.GetEnvOr("INSECURE_DISABLE_TLS_VERIFY", "false")) == "true" {
-		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		transport, ok := http.DefaultTransport.(*http.Transport)
+		if !ok {
+			log.Fatal().
+				Type("http.DefaultTransport.(type)", http.DefaultTransport).
+				Msg("http.DefaultTransport is not a *http.Transport")
+		}
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true} //nolint:gosec
 		log.Warn().Msg("InsecureSkipVerify enabled, not verifying certificates!")
 	}
 
@@ -151,7 +163,7 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 // - ":8080" will be returned
 func ResolveAddrFromEnv() string {
 	port := hwutil.GetEnvOr("APP_PORT", hwutil.GetEnvOr("PORT", "8080"))
-	fallbackAddr := fmt.Sprintf(":%s", port)
+	fallbackAddr := ":" + port
 	return hwutil.GetEnvOr("ADDR", fallbackAddr)
 }
 

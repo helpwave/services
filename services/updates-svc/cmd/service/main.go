@@ -3,8 +3,10 @@ package service
 import (
 	"common"
 	pb "gen/services/updates_svc/v1"
-	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwes/eventstoredb"
+
+	daprd "github.com/dapr/go-sdk/service/grpc"
+
 	"updates-svc/internal/updates"
 )
 

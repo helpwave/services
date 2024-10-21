@@ -8,13 +8,14 @@ import (
 	"hwdb"
 	"hwes/eventstoredb"
 	"hwes/eventstoredb/projections"
+	"time"
+
 	ph "tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/projections/patient_postgres_projection"
 	th "tasks-svc/internal/task/handlers"
 	"tasks-svc/internal/task/projections/spicedb"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
 	"tasks-svc/internal/tracking"
-	"time"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"tasks-svc/internal/bed"
@@ -34,7 +35,7 @@ func Main(version string, ready func()) {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
 
-	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
+	tracking.SetupTracking(ctx, ServiceName, 10, 24*time.Hour, 20)
 
 	authz := hwspicedb.NewSpiceDBAuthZ()
 

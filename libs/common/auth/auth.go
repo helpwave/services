@@ -5,15 +5,16 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"hwutil"
+	"telemetry"
+	"time"
+
 	"github.com/coreos/go-oidc"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwutil"
-	"telemetry"
-	"time"
 )
 
 // to avoid ambiguity please read: https://wiki.helpwave.de/doc/keycloak-jedzCcERwF
@@ -30,10 +31,12 @@ var (
 	FakeTokenValidFor       = time.Second * 30
 )
 
-type ClaimsKey struct{}
-type TokenExpires struct{}
-type UserIDKey struct{}
-type OrganizationIDKey struct{}
+type (
+	ClaimsKey         struct{}
+	TokenExpires      struct{}
+	UserIDKey         struct{}
+	OrganizationIDKey struct{}
+)
 
 func GetOAuthIssuerUrl() string {
 	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)

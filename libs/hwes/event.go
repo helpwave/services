@@ -41,11 +41,13 @@ type Event struct {
 type metadata struct {
 	// CommitterUserID represents an optional UUID that identifies the user that is directly responsible for this event
 	CommitterUserID string `json:"committer_user_id"`
-	// OrganizationID represents an optional UUID that identifies the organization that was responsible for this event during raising
+	// OrganizationID represents an optional UUID that identifies the organization
+	// that was responsible for this event during raising
 	OrganizationID string `json:"organization_id"`
 	// w3c trace context
 	TraceParent string `json:"trace_parent"`
-	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
+	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is
+	// discouraged.
 	Timestamp time.Time `json:"timestamp"`
 }
 
@@ -110,7 +112,7 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 // StreamID:		task-d9027be3-d00f-4eec-b50e-5f489df20433
 // AggregateID: 	d9027be3-d00f-4eec-b50e-5f489df20433
 // AggregateType: 	task
-func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateID uuid.UUID, aggregateType AggregateType, err error) {
+func resolveAggregateIDAndTypeFromStreamID(streamID string) (aID uuid.UUID, aggregateType AggregateType, err error) {
 	streamIDParts := strings.SplitN(streamID, "-", 2)
 
 	var aggregateTypeStr, aggregateIDStr string
@@ -129,7 +131,7 @@ func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateID uuid.UU
 		return
 	}
 
-	aggregateID, err = uuid.Parse(aggregateIDStr)
+	aID, err = uuid.Parse(aggregateIDStr)
 
 	return
 }
@@ -262,7 +264,8 @@ func (e *Event) GetJsonData(data interface{}) error {
 func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 	userID, err := auth.GetUserID(ctx)
 	if err != nil {
-		return nil // don't set a user, if no user is available
+		// don't set a user, if no user is available
+		return nil //nolint:nilerr
 	}
 
 	e.CommitterUserID = &userID
@@ -280,7 +283,8 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 func (e *Event) SetOrganizationFromCtx(ctx context.Context) error {
 	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
-		return nil // don't set an org, if no org is available
+		// don't set an org, if no org is available
+		return nil //nolint:nilerr
 	}
 
 	e.OrganizationID = &organizationID
@@ -306,7 +310,6 @@ func (e *Event) SetTracingContextFromCtx(ctx context.Context) {
 //
 // zerolog.Ctx(ctx).Debug().Dict("event", event.GetZerologDict()).Msg("process event")
 func (e *Event) GetZerologDict() *zerolog.Event {
-
 	dict := zerolog.Dict().
 		Str("eventId", e.EventID.String()).
 		Str("eventType", e.EventType).

@@ -4,10 +4,11 @@ import (
 	"common/auth"
 	"context"
 	pb "gen/services/updates_svc/v1"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"hwes"
 	"telemetry"
 	"time"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 )
 
 type UpdatesGrpcService struct {

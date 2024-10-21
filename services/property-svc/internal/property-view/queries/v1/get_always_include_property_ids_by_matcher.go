@@ -3,12 +3,16 @@ package v1
 import (
 	"context"
 	"hwutil"
+
 	"property-svc/internal/property-view/models"
 
 	"github.com/google/uuid"
 )
 
-type GetAlwaysIncludePropertyIDsByMatcherQueryHandler func(ctx context.Context, matcher models.PropertyMatchers) ([]uuid.UUID, error)
+type GetAlwaysIncludePropertyIDsByMatcherQueryHandler func(
+	ctx context.Context,
+	matcher models.PropertyMatchers,
+) ([]uuid.UUID, error)
 
 func NewGetAlwaysIncludePropertiesByMatcherHandler() GetAlwaysIncludePropertyIDsByMatcherQueryHandler {
 	return func(ctx context.Context, matcher models.PropertyMatchers) ([]uuid.UUID, error) {

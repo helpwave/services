@@ -2,6 +2,7 @@ package aggregate
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	events "property-svc/internal/property-view/events/v1"
 	"property-svc/internal/property-view/models"
@@ -16,9 +17,22 @@ func (a *PropertyViewRuleAggregate) Create(ctx context.Context, rule models.Prop
 	return a.Apply(event)
 }
 
-func (a *PropertyViewRuleAggregate) UpdateLists(ctx context.Context, ruleId uuid.UUID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) error {
-
-	event, err := events.NewPropertyRuleListsUpdatedEvent(ctx, a, ruleId, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude)
+func (a *PropertyViewRuleAggregate) UpdateLists(
+	ctx context.Context,
+	ruleID uuid.UUID,
+	appendToAlwaysInclude,
+	removeFromAlwaysInclude,
+	appendToDontAlwaysInclude,
+	removeFromDontAlwaysInclude []uuid.UUID,
+) error {
+	event, err := events.NewPropertyRuleListsUpdatedEvent(ctx,
+		a,
+		ruleID,
+		appendToAlwaysInclude,
+		removeFromAlwaysInclude,
+		appendToDontAlwaysInclude,
+		removeFromDontAlwaysInclude,
+	)
 	if err != nil {
 		return err
 	}

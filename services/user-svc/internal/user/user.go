@@ -9,6 +9,7 @@ import (
 	events "gen/libs/events/v1"
 	pb "gen/services/user_svc/v1"
 	"hwdb"
+
 	"user-svc/repos/user_repo"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"
@@ -36,7 +37,7 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 	log := zlog.Ctx(ctx)
 	userRepo := user_repo.New(hwdb.GetDB())
 
-	userID, err := uuid.Parse(req.Id)
+	userID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -44,11 +45,12 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 	var createdUser user_repo.User
 	result, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
 	err = hwdb.Error(ctx, err)
-	if err != nil {
+	switch {
+	case err != nil:
 		return nil, err
-	} else if result != nil {
+	case result != nil:
 		return nil, status.Error(codes.InvalidArgument, "user already exists")
-	} else {
+	default:
 		hash := sha256.Sum256([]byte(userID.String()))
 		avatarUrl := fmt.Sprintf("%s%s", "https://source.boringavatars.com/marble/128/", hex.EncodeToString(hash[:]))
 
@@ -78,10 +80,13 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 	return &pb.CreateUserResponse{Id: createdUser.ID.String()}, nil
 }
 
-func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublicProfileRequest) (*pb.ReadPublicProfileResponse, error) {
+func (s ServiceServer) ReadPublicProfile(
+	ctx context.Context,
+	req *pb.ReadPublicProfileRequest,
+) (*pb.ReadPublicProfileResponse, error) {
 	userRepo := user_repo.New(hwdb.GetDB())
 
-	userID, err := uuid.Parse(req.Id)
+	userID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

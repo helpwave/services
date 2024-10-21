@@ -4,10 +4,11 @@ import (
 	"common/auth"
 	"context"
 	pb "gen/services/updates_svc/v1"
-	"github.com/stretchr/testify/assert"
 	"io"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestOpenAndClosingReceiveUpdatesStream(t *testing.T) {

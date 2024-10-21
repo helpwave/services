@@ -74,7 +74,7 @@ ENV HOME="/home/${UNAME}"
 # install air
 #  https://github.com/air-verse/air
 # renovate: datasource=github-releases depName=air-verse/air
-ENV AIR_VERSION=1.60.0
+ENV AIR_VERSION=1.61.1
 RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
 
 # install dapr-cli
@@ -122,6 +122,14 @@ RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}\
 # renovate: datasource=github-releases depName=favadi/protoc-go-inject-tag
 ENV GO_INJECT_TAG_VERSION=1.4.0
 RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} \
+	&& go clean -modcache
+
+
+# install gofumpt, a stricter gofmt
+#  https://github.com/mvdan/gofumpt
+# renovate: datasource=github-releases depName=mvdan/gofumpt
+ENV GOFUMPT_VERSION=0.7.0
+RUN go install mvdan.cc/gofumpt@v${GOFUMPT_VERSION} \
 	&& go clean -modcache
 
 # install golangci-lint, the linter we also use in the CI

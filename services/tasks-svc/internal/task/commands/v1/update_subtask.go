@@ -4,15 +4,29 @@ import (
 	"common"
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/task/aggregate"
 )
 
-type UpdateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool) (common.ConsistencyToken, error)
+type UpdateSubtaskCommandHandler func(
+	ctx context.Context,
+	taskID,
+	subtaskID uuid.UUID,
+	name *string,
+	done *bool,
+) (common.ConsistencyToken, error)
 
 func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore) UpdateSubtaskCommandHandler {
-	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool) (common.ConsistencyToken, error) {
+	return func(
+		ctx context.Context,
+		taskID,
+		subtaskID uuid.UUID,
+		name *string,
+		done *bool,
+	) (common.ConsistencyToken, error) {
 		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
 			return 0, err

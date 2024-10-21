@@ -3,16 +3,17 @@ package stories
 import (
 	"context"
 	pb "gen/services/updates_svc/v1"
+	"hwtesting"
+	"os"
+	"os/signal"
+	"testing"
+	"time"
+
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
-	"hwtesting"
-	"os/signal"
-	"updates-svc/cmd/service"
 
-	"os"
-	"testing"
-	"time"
+	"updates-svc/cmd/service"
 )
 
 func TestMain(m *testing.M) {

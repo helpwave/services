@@ -4,16 +4,17 @@ import (
 	"common/hwerr"
 	"context"
 	"errors"
+	"hwlocale"
+	"reflect"
+	"strings"
+	"telemetry"
+
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"hwdb/locale"
-	"hwlocale"
-	"reflect"
-	"strings"
-	"telemetry"
 )
 
 func genericStatusError(ctx context.Context, reasons ...string) error {
