@@ -93,9 +93,9 @@ func (s *UpdatesGrpcService) ReceiveUpdates(
 
 			err := esdbEvent.SubscriptionDropped.Error
 			if err != nil {
-				log.Debug().Msg("subscription dropped with error, close stream")
+				log.Error().Err(err).Msg("subscription dropped with error, close stream")
 			} else {
-				log.Error().Err(err).Msg("subscription dropped, no error returned, close stream")
+				log.Debug().Msg("subscription dropped, no error returned, close stream")
 			}
 
 			return nil
