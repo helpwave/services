@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestGetAttachedPropertyValuesAlwaysIncludeBasicValues(t *testing.T) {
+func TestGetAttachedPropertyValuesAlwaysInclude(t *testing.T) {
 	ctx := context.Background()
 	propertyClient := propertyServiceClient()
 	propertyValueClient := propertyValueServiceClient()
