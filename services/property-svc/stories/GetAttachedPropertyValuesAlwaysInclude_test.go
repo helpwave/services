@@ -3,10 +3,12 @@ package stories
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetAttachedPropertyValuesAlwaysInclude(t *testing.T) {
@@ -42,7 +44,7 @@ func TestGetAttachedPropertyValuesAlwaysInclude(t *testing.T) {
 					Name:        t.Name(),
 					Description: nil,
 				})
-				assert.NoError(t, err)
+				require.NoError(t, err)
 				hwtesting.WaitForProjectionsToSettle()
 
 				// Don't create a property value
@@ -59,7 +61,7 @@ func TestGetAttachedPropertyValuesAlwaysInclude(t *testing.T) {
 						},
 					},
 				})
-				assert.NoError(t, err)
+				require.NoError(t, err)
 				hwtesting.WaitForProjectionsToSettle()
 
 				// Call GetAttachedPropertyValues for this arbitrary patient or task
@@ -72,13 +74,12 @@ func TestGetAttachedPropertyValuesAlwaysInclude(t *testing.T) {
 						},
 					},
 				})
-				assert.NoError(t, err)
+				require.NoError(t, err)
 
 				// Property shows up
-				assert.Len(t, res.Values, 1)
+				require.Len(t, res.Values, 1)
 				assert.Equal(t, res.Values[0].PropertyId, property.PropertyId)
 			})
 		}
 	}
-
 }
