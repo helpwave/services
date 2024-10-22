@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package services.updates_svc.v1;
+
+option go_package = "gen/services/updates-svc/v1";
+
+// An event that gets raised on non-event sourced entities
+message EntityEvent {
+  string entity_id = 1;
+}
+
+// An event that gets raised for event sourced entities
+message DomainEvent {
+  string event_id = 1;
+  string event_type = 2;
+  string aggregate_id = 3;
+  string aggregate_type = 4;
+}
+
+//
+// ReceiveUpdatesRequest
+//
+
+message ReceiveUpdatesRequest {
+  // If your stream gets interrupted, you can pass your last
+  // received revision to start receiving events at this revision.
+  optional uint64 revision = 1;
+}
+
+//
+// ReceiveUpdatesResponse
+//
+
+message ReceiveUpdatesResponse {
+  uint64 revision = 1;
+  oneof event {
+    EntityEvent entity_event = 2;
+    DomainEvent domain_event = 3;
+  }
+}
+
+//
+// UpdateService
+//
+
+service UpdatesService {
+  // This endpoint directly exposes all enables our clients to hook into our event stream
+  rpc ReceiveUpdates(ReceiveUpdatesRequest) returns (stream ReceiveUpdatesResponse) {}
+}
