@@ -3,10 +3,10 @@ module dev
 go 1.23.2
 
 require (
-	github.com/alecthomas/kong v0.9.0
-	github.com/authzed/authzed-go v0.15.0
+	github.com/alecthomas/kong v1.2.1
+	github.com/authzed/authzed-go v1.0.0
 	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b
-	google.golang.org/grpc v1.66.0
+	google.golang.org/grpc v1.66.2
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -29,6 +29,6 @@ require (
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240814211410-ddb44dafa142 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240814211410-ddb44dafa142 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240903143218-8af14fe29dc1 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 )
