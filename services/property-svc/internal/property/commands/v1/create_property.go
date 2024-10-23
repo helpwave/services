@@ -39,6 +39,7 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		if err != nil {
 			return 0, err
 		}
+
 		organization, err := perm.OrganizationFromCtx(ctx)
 		if err != nil {
 			return 0, err
