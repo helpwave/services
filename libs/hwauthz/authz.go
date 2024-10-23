@@ -82,11 +82,11 @@ func (r *Relationship) DebugString() string {
 
 func (r *Relationship) SpanAttributeKeyValue() []attribute.KeyValue {
 	return []attribute.KeyValue{
-		attribute.String("spice.resource.type", r.Resource.Type()),
-		attribute.String("spice.resource.id", r.Resource.ID()),
-		attribute.String("spice.relation", string(r.Relation)),
-		attribute.String("spice.subject.type", r.Subject.Type()),
-		attribute.String("spice.subject.id", r.Subject.ID()),
+		attribute.String("hwauthz.resource.type", r.Resource.Type()),
+		attribute.String("hwauthz.resource.id", r.Resource.ID()),
+		attribute.String("hwauthz.relation", string(r.Relation)),
+		attribute.String("hwauthz.subject.type", r.Subject.Type()),
+		attribute.String("hwauthz.subject.id", r.Subject.ID()),
 	}
 }
 

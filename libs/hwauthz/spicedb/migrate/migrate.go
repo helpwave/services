@@ -108,7 +108,7 @@ func WriteSchema(ctx context.Context, client *authzed.Client, schema string) {
 	}
 }
 
-// relationshipOfVersion yields a Relationship object, helper for UpdateCurrentVersion
+// relationshipOfVersion returns a Relationship object, helper for UpdateCurrentVersion
 func relationshipOfVersion(version int) *v1.Relationship {
 	return &v1.Relationship{
 		Resource: &v1.ObjectReference{
