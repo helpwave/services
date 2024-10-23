@@ -10,7 +10,7 @@ import (
 	pb "gen/services/property_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
-
+	hwspicedb "hwauthz/spicedb"
 	propertySet "property-svc/internal/property-set/api"
 	psh "property-svc/internal/property-set/handlers"
 	propertyValue "property-svc/internal/property-value/api"
@@ -21,7 +21,8 @@ import (
 	"property-svc/internal/property-view/projections/property_rules_postgres"
 	property "property-svc/internal/property/api"
 	ph "property-svc/internal/property/handlers"
-	"property-svc/internal/property/projections/property_postgres_projection"
+	propertyPostgresProjection "property-svc/internal/property/projections/postgres_projection"
+	propertySpicedbProjection "property-svc/internal/property/projections/spicedb_projection"
 )
 
 const ServiceName = "property-svc"
@@ -36,6 +37,7 @@ func Main(version string, ready func()) {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
+	authz := hwspicedb.NewSpiceDBAuthZ()
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
@@ -51,12 +53,13 @@ func Main(version string, ready func()) {
 	go projections.StartProjections(
 		ctx,
 		common.Shutdown,
-		property_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
+		propertySpicedbProjection.NewProjection(eventStore, ServiceName, authz),
+		propertyPostgresProjection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
 		property_value_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
 		property_rules_postgres.NewProjection(eventStore, ServiceName),
 	)
 
-	propertyHandlers := ph.NewPropertyHandlers(aggregateStore)
+	propertyHandlers := ph.NewPropertyHandlers(aggregateStore, authz)
 	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore)
 	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore)
 	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore)

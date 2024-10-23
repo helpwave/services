@@ -22,9 +22,14 @@ func TestMain(m *testing.M) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	zlog.Info().Msg("starting containers")
-	endpoints, teardownContainers := hwtesting.StartContainers(ctx, hwtesting.Postgres, hwtesting.Eventstore)
+	endpoints, teardownContainers := hwtesting.StartContainers(ctx,
+		hwtesting.Postgres,
+		hwtesting.Eventstore,
+		hwtesting.Spice,
+	)
 	postgresEndpoint := endpoints.Get(hwtesting.Postgres)
 	eventstoreEndpoint := endpoints.Get(hwtesting.Eventstore)
+	spiceDBEndpoint := endpoints.Get(hwtesting.Spice)
 
 	zlog.Info().
 		Str("postgresEndpoint", postgresEndpoint).
@@ -35,9 +40,12 @@ func TestMain(m *testing.M) {
 	hwtesting.SetCommonEnv()
 	hwtesting.SetEventstoreEnv(eventstoreEndpoint)
 	postgresDSN := hwtesting.SetPostgresEnv(postgresEndpoint)
+	hwtesting.SetSpiceEnv(spiceDBEndpoint)
 
 	// `go test` sets the wd to the directory of this file
 	hwtesting.MigratePostgres("file://../migrations", postgresDSN)
+
+	hwtesting.MigrateSpiceDB(ctx, spiceDBEndpoint)
 
 	// start service
 	ready := make(chan bool)

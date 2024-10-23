@@ -1,8 +1,6 @@
 package main
 
-import (
-	"property-svc/cmd/service"
-)
+import "property-svc/cmd/service"
 
 // Version is set at compile time
 var Version string

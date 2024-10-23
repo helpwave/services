@@ -174,7 +174,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 	}
 
 	eventOrganizationID, err := uuid.Parse(md.OrganizationID)
-	if err != nil {
+	if err == nil {
 		event.OrganizationID = &eventOrganizationID
 	}
 
@@ -269,11 +269,6 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 	}
 
 	e.CommitterUserID = &userID
-
-	// Just to make sure we are actually dealing with a valid UUID
-	if _, err := uuid.Parse(e.CommitterUserID.String()); err != nil {
-		return fmt.Errorf("SetCommitterFromCtx: cant parse comitter uid: %w", err)
-	}
 
 	telemetry.SetSpanStr(ctx, "committerUserID", e.CommitterUserID.String())
 	return nil
