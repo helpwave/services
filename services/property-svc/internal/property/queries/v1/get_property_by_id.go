@@ -27,6 +27,12 @@ func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHan
 			return nil, 0, err
 		}
 
+		// Verify user is allowed to see this property
+		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))
+		if err = authz.Must(ctx, check); err != nil {
+			return nil, 0, err
+		}
+
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
@@ -71,12 +77,6 @@ func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHan
 						IsCustom:    *row.SelectOptionIsCustom, // NOT NULL
 					})
 			}
-		}
-
-		// Verify user is allowed to see this property
-		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))
-		if err = authz.Must(ctx, check); err != nil {
-			return nil, 0, err
 		}
 
 		return property, common.ConsistencyToken(rows[0].Property.Consistency), nil //nolint:gosec
