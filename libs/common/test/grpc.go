@@ -69,7 +69,7 @@ func AuthenticatedUserClaim(userID string) map[string]interface{} {
 		"name":               "Testine Test",
 		"preferred_username": "testine.test",
 		"organization": map[string]interface{}{
-			"id":   "3b25c6f5-4705-4074-9fc6-a50c28eba405",
+			"id":   "3b25c6f5-4705-4074-9fc6-a50c28eba406",
 			"name": "helpwave test",
 		},
 	}
