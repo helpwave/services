@@ -28,5 +28,3 @@ wait_for_postgres() {
 
 wait_for_postgres
 migrate -verbose -database $POSTGRES_DSN -path migrations up
-
-spice migrate

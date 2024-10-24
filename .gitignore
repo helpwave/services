@@ -502,6 +502,3 @@ devenv.local.nix
 tmp
 
 gen/dart/.dart_tool
-
-spicedb/build
-

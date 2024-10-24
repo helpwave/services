@@ -1,5 +1,0 @@
-package v1
-
-type PropertyViewQueries struct {
-	GetAlwaysIncludePropertyIDsByMatcher GetAlwaysIncludePropertyIDsByMatcherQueryHandler
-}

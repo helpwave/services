@@ -45,14 +45,6 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && apt update \
     && apt install gh -y
 
-# install zed, CLI for SpiceDB
-#  https://github.com/authzed/zed
-# renovate: datasource=github-releases depName=authzed/zed
-ENV ZED_VERSION=0.21.5
-RUN wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${ZED_VERSION}_linux_amd64.deb -O zed.deb \
-    && apt install -y ./zed.deb \
-    && rm zed.deb
-
 # clean up apt artifacts,
 # dont use apt after this line
 RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*

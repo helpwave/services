@@ -1,3 +1,0 @@
-DROP INDEX IF EXISTS idx_property_view_filter_always_include_items_rule_id;
-DROP TABLE IF EXISTS property_view_filter_always_include_items;
-DROP TABLE IF EXISTS property_view_rules;

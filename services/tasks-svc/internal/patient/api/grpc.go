@@ -2,11 +2,9 @@ package api
 
 import (
 	"common"
-	"common/hwerr"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwdb"
-	"hwdb/locale"
 	"hwes"
 	"hwutil"
 
@@ -17,7 +15,6 @@ import (
 
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/models"
-	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/bed_repo"
 )
 
@@ -45,8 +42,6 @@ func (s *PatientGrpcService) CreatePatient(
 	}
 
 	log.Info().Str("patientID", patientID.String()).Msg("patient created")
-
-	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.CreatePatientResponse{
 		Id:          patientID.String(),
@@ -325,81 +320,6 @@ func (s *PatientGrpcService) GetPatientList(
 	}, nil
 }
 
-func (s *PatientGrpcService) GetRecentPatients(
-	ctx context.Context,
-	_ *pb.GetRecentPatientsRequest,
-) (*pb.GetRecentPatientsResponse, error) {
-	log := zlog.Ctx(ctx)
-	bedRepo := bed_repo.New(hwdb.GetDB())
-
-	var recentPatientIdsStrs []string
-	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
-	if err != nil {
-		return nil, hwerr.NewStatusError(ctx,
-			codes.Internal,
-			"decaying_lru error: "+err.Error(),
-			locale.GenericError(ctx),
-		)
-	}
-
-	// WORKAROUND: Until https://github.com/helpwave/services/issues/458 is fixed
-	/* TODO: Projection for that workaround?
-	if len(recentPatientIdsStrs) == 0 {
-		log.Debug().Msg("recentPatientIdsStrs was empty")
-		if patientIds, err := patientRepo.GetLastUpdatedPatientIDsForOrganization(ctx, organizationID); err == nil {
-			recentPatientIdsStrs = hwutil.Map(patientIds, func(patientId uuid.UUID) string {
-				return patientId.String()
-			})
-		}
-	}
-	*/
-
-	// get all Patients for valid uuids
-	recentPatients := hwutil.Map(recentPatientIdsStrs, func(id string) *pb.GetRecentPatientsResponse_Patient {
-		parsedUUID, err := uuid.Parse(id)
-		if err != nil {
-			log.Warn().Str("uuid", id).Msg("GetRecentPatientsForUser returned invalid uuid")
-			return nil
-		}
-		patient, err := s.handlers.Queries.V1.GetPatientByID(ctx, parsedUUID)
-		if err != nil {
-			return nil
-		}
-
-		var bedRes *pb.GetRecentPatientsResponse_Bed
-		var roomRes *pb.GetRecentPatientsResponse_Room
-
-		if patient.BedID.Valid {
-			result, err := hwdb.Optional(bedRepo.GetBedAndRoomByBedId)(ctx, patient.BedID.UUID)
-			if err != nil {
-				log.Warn().Str("bedID", patient.BedID.UUID.String()).Msg("error querying getBedAndRoomByBed")
-			} else if result != nil {
-				bedRes = &pb.GetRecentPatientsResponse_Bed{
-					Id:          result.Bed.ID.String(),
-					Name:        result.Bed.Name,
-					Consistency: common.ConsistencyToken(result.Bed.Consistency).String(), //nolint:gosec
-				}
-				roomRes = &pb.GetRecentPatientsResponse_Room{
-					Id:          result.Room.ID.String(),
-					Name:        result.Room.Name,
-					WardId:      result.Room.WardID.String(),
-					Consistency: common.ConsistencyToken(result.Room.Consistency).String(), //nolint:gosec
-				}
-			}
-		}
-
-		return &pb.GetRecentPatientsResponse_Patient{
-			Id:                      patient.ID.String(),
-			HumanReadableIdentifier: patient.HumanReadableIdentifier,
-			Room:                    roomRes,
-			Bed:                     bedRes,
-			Consistency:             patient.Consistency,
-		}
-	})
-
-	return &pb.GetRecentPatientsResponse{RecentPatients: recentPatients}, nil
-}
-
 func (s *PatientGrpcService) UpdatePatient(
 	ctx context.Context,
 	req *pb.UpdatePatientRequest,
@@ -415,8 +335,6 @@ func (s *PatientGrpcService) UpdatePatient(
 	if err != nil {
 		return nil, err
 	}
-
-	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.UpdatePatientResponse{
 		Conflict:    nil, // TODO
@@ -446,8 +364,6 @@ func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedReq
 
 	log.Info().Str("patientID", patientID.String()).Str("bedID", bedID.String()).Msg("assigned bed to patient")
 
-	tracking.AddWardToRecentActivity(ctx, patientID.String())
-
 	return &pb.AssignBedResponse{
 		Conflict:    nil, // TODO
 		Consistency: consistency.String(),
@@ -474,8 +390,6 @@ func (s *PatientGrpcService) UnassignBed(
 
 	log.Info().Str("patientID", patientID.String()).Msg("unassigned bed from patient")
 
-	tracking.AddPatientToRecentActivity(ctx, patientID.String())
-
 	return &pb.UnassignBedResponse{
 		Conflict:    nil, // TODO
 		Consistency: consistency.String(),
@@ -500,8 +414,6 @@ func (s *PatientGrpcService) DischargePatient(
 
 	log.Info().Str("patientID", patientID.String()).Msg("patient discharged")
 
-	tracking.RemovePatientFromRecentActivity(ctx, patientID.String())
-
 	return &pb.DischargePatientResponse{
 		Consistency: consistency.String(),
 	}, nil
@@ -522,8 +434,6 @@ func (s *PatientGrpcService) ReadmitPatient(
 	if err != nil {
 		return nil, err
 	}
-
-	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.ReadmitPatientResponse{
 		Consistency: consistency.String(),

@@ -1,7 +1,0 @@
-definition spice_schema_migrations/version {}
-
-definition spice_schema_migrations/migration {
-	relation version: spice_schema_migrations/version
-}
-
-definition user {}

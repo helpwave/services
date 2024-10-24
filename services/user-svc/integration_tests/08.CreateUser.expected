@@ -1,8 +1,0 @@
-{
-  "id": "948618ea-6059-4e4d-a300-6f499f79f9e3"
-}
-already exists:
-ERROR:
-  Code: InvalidArgument
-  Message: user already exists
-

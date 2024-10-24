@@ -28,27 +28,9 @@ common:
     OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
 
-    ZED_ENDPOINT: spicedb:50051
     ZED_TOKEN: helpwave
 
 apps:
-  - appID: task-svc
-    appDirPath: ../services/task-svc
-    appPort: 3001
-    env:
-      SERVICE: task-svc
-      POSTGRES_DB: task-svc
-    command: ["air"]
-
-  - appID: user-svc
-    appDirPath: ../services/user-svc
-    appPort: 3002
-    env:
-      SERVICE: user-svc
-      POSTGRES_DB: user-svc
-      INSECURE_HWKC_USE_NOOP_CLIENT: true
-    command: ["air"]
-
   - appID: tasks-svc
     appDirPath: ../services/tasks-svc
     appPort: 3004
@@ -56,19 +38,4 @@ apps:
     env:
       SERVICE: tasks-svc
       POSTGRES_DB: tasks-svc
-    command: ["air"]
-
-  - appID: property-svc
-    appDirPath: ../services/property-svc
-    appPort: 3005
-    env:
-      SERVICE: property-svc
-      POSTGRES_DB: property-svc
-    command: ["air"]
-
-  - appID: updates-svc
-    appDirPath: ../services/updates-svc
-    appPort: 3006
-    env:
-      SERVICE: updates-svc
     command: ["air"]

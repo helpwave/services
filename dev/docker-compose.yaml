@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d task-svc -q"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tasks-svc -q"]
       interval: 10s
       timeout: 2s
       retries: 5
@@ -26,19 +26,6 @@ services:
       EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: "true"
     ports:
       - "2113:2113"
-
-  spicedb:
-    image: authzed/spicedb:v1.31.0
-    ports:
-      - "50051:50051"
-    command: [
-      "serve",
-      "--grpc-preshared-key", "helpwave",
-      "--otel-endpoint", "jaeger:4317",
-      "--otel-insecure",
-      "--otel-sample-ratio", "1",
-      "--otel-provider", "otlpgrpc"
-    ]
 
   redis:
     image: redis:6
@@ -125,11 +112,8 @@ services:
         condition: service_healthy
       consul:
         condition: service_started
-      spicedb:
-        condition: service_started
     environment:
       SECRETSTORE_REDIS_HOST: "redis:6379"
-      ZED_ENDPOINT: spicedb:50051
       ZED_TOKEN: helpwave
       ZED_INSECURE: true
     command:
@@ -137,7 +121,6 @@ services:
       - -c
       - |
         bash migrate.sh
-        go run spice.go migrate
         dapr run --run-file dev/dapr_run.yaml --config dev/dapr.yaml
     restart: unless-stopped
     network_mode: "service:devcontainer" # share ports with devcontainer
@@ -172,21 +155,12 @@ services:
       PGPASSWORD: postgres
       PGDATABASE: postgres
 
-      # zed variables
-      ZED_ENDPOINT: spicedb:50051
-      ZED_TOKEN: helpwave
-      ZED_INSECURE: true
-
       COMPOSE_FILE: "/helpwave/dev/docker-compose.yaml" # allows us to use `docker compose` in any directory
     restart: unless-stopped
     command: sleep infinity
     ports:
       # all of these ports are bound to in services
-      - "3001:3001" # task-svc
-      - "3002:3002" # user-svc
       - "3004:3004" # tasks-svc
-      - "3005:3005" # property-svc
-      - "3006:3006" # updates-svc
 
 volumes:
   gocache: {}
