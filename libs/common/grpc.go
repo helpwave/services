@@ -90,6 +90,7 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 func DefaultUnaryInterceptors(metrics *prometheusGrpcProvider.ServerMetrics) []grpc.UnaryServerInterceptor {
 	return []grpc.UnaryServerInterceptor{
 		metrics.UnaryServerInterceptor(),
+		hwgrpc.UnaryPanicRecoverInterceptor(),
 		hwgrpc.UnaryLoggingInterceptor,
 		hwgrpc.UnaryErrorQualityControlInterceptor,
 		hwgrpc.UnaryLocaleInterceptor,
@@ -106,6 +107,7 @@ func DefaultUnaryInterceptors(metrics *prometheusGrpcProvider.ServerMetrics) []g
 func DefaultStreamInterceptors(metrics *prometheusGrpcProvider.ServerMetrics) []grpc.StreamServerInterceptor {
 	return []grpc.StreamServerInterceptor{
 		metrics.StreamServerInterceptor(),
+		hwgrpc.StreamPanicRecoverInterceptor(),
 		hwgrpc.StreamLoggingInterceptor,
 		hwgrpc.StreamErrorQualityControlInterceptor,
 		hwgrpc.StreamLocaleInterceptor,
