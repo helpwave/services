@@ -38,15 +38,8 @@ func (ServiceServer) CreateTaskTemplate(
 	defer rollback()
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	organizationID := auth.GetOrganizationID(ctx)
+	userID := auth.GetUserID(ctx)
 
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
 	if err != nil {
@@ -103,10 +96,7 @@ func (ServiceServer) GetAllTaskTemplates(
 ) (*pb.GetAllTaskTemplatesResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	organizationID := auth.GetOrganizationID(ctx)
 
 	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx,
 		task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
@@ -300,10 +290,7 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(
 
 	// TODO: Auth
 
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	organizationID := auth.GetOrganizationID(ctx)
 
 	createdBy, err := uuid.Parse(req.GetCreatedBy())
 	err = hwdb.Error(ctx, err)

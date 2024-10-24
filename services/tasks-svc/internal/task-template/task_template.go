@@ -38,10 +38,7 @@ func (ServiceServer) CreateTaskTemplate(
 	defer rollback()
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	userID := auth.GetUserID(ctx)
 
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
 	if err != nil {

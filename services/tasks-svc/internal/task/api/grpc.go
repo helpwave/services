@@ -9,8 +9,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"tasks-svc/internal/task/handlers"
@@ -310,12 +308,9 @@ func (s *TaskGrpcService) GetAssignedTasks(
 	ctx context.Context,
 	_ *pb.GetAssignedTasksRequest,
 ) (*pb.GetAssignedTasksResponse, error) {
-	asigneeID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
+	assigneeID := auth.GetUserID(ctx)
 
-	tasksWithPatients, err := s.handlers.Queries.V1.GetTasksWithPatientsByAssignee(ctx, asigneeID)
+	tasksWithPatients, err := s.handlers.Queries.V1.GetTasksWithPatientsByAssignee(ctx, assigneeID)
 	if err != nil {
 		return nil, err
 	}
