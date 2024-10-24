@@ -28,7 +28,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	log := zlog.Ctx(ctx)
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	wardID, err := wardRepo.CreateWard(ctx, ward_repo.CreateWardParams{
 		Name:           req.GetName(),
@@ -58,7 +58,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	ward, err := hwdb.Optional(wardRepo.GetWardById)(ctx, ward_repo.GetWardByIdParams{
 		OrganizationID: organizationID,
@@ -82,7 +82,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	wards, err := wardRepo.GetWards(ctx, organizationID)
 	err = hwdb.Error(ctx, err)
@@ -107,7 +107,7 @@ func (ServiceServer) GetRecentWards(
 	wardRepo := ward_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	// TODO: Auth
 
@@ -179,7 +179,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -215,7 +215,7 @@ func (s ServiceServer) GetWardOverviews(
 ) (*pb.GetWardOverviewsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	rows, err := wardRepo.GetWardsWithCounts(ctx, ward_repo.GetWardsWithCountsParams{
 		StatusTodo:       int32(pb.TaskStatus_TASK_STATUS_TODO),
@@ -254,7 +254,7 @@ func (ServiceServer) GetWardDetails(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	rows, err := wardRepo.GetWardByIdWithRoomsBedsAndTaskTemplates(ctx,
 		ward_repo.GetWardByIdWithRoomsBedsAndTaskTemplatesParams{

@@ -31,7 +31,7 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 
 	// TODO: Auth
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
@@ -125,7 +125,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	// TODO: Auth
 
@@ -178,7 +178,7 @@ func (ServiceServer) GetRoomsByWard(
 ) (*pb.GetRoomsByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	// TODO: Auth
 
@@ -263,7 +263,7 @@ func (ServiceServer) GetRoomOverviewsByWard(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	rows, err := roomRepo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganization(ctx,
 		room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationParams{

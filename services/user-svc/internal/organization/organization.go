@@ -39,7 +39,7 @@ func (s ServiceServer) CreateOrganization(
 	ctx context.Context,
 	req *pb.CreateOrganizationRequest,
 ) (*pb.CreateOrganizationResponse, error) {
-	userID := auth.GetUserID(ctx)
+	userID := auth.MustGetUserID(ctx)
 
 	organization, err := CreateOrganizationAndAddUser(
 		ctx,
@@ -198,7 +198,7 @@ func (s ServiceServer) GetOrganizationsForUser(
 	ctx context.Context,
 	_ *pb.GetOrganizationsForUserRequest,
 ) (*pb.GetOrganizationsForUserResponse, error) {
-	userID := auth.GetUserID(ctx)
+	userID := auth.MustGetUserID(ctx)
 
 	organizations, err := GetOrganizationsByUserId(ctx, userID)
 	if err != nil {
@@ -425,7 +425,7 @@ func (s ServiceServer) GetInvitationsByOrganization(
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	userID := auth.GetUserID(ctx)
+	userID := auth.MustGetUserID(ctx)
 
 	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
 	err = hwdb.Error(ctx, err)
@@ -527,7 +527,7 @@ func (s ServiceServer) GetMembersByOrganization(
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	userID := auth.GetUserID(ctx)
+	userID := auth.MustGetUserID(ctx)
 
 	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
 	err = hwdb.Error(ctx, err)
@@ -616,7 +616,7 @@ func (s ServiceServer) AcceptInvitation(
 		return nil, err
 	}
 
-	userID := auth.GetUserID(ctx)
+	userID := auth.MustGetUserID(ctx)
 
 	// Add user to organization
 	if err := AddUserToOrganization(ctx, s.kc, userID, currentInvitation.OrganizationID); err != nil {
@@ -701,7 +701,7 @@ func (s ServiceServer) RevokeInvitation(
 	organizationID := currentInvitation.OrganizationID
 	inviteeEmail := currentInvitation.Email
 
-	userID := auth.GetUserID(ctx)
+	userID := auth.MustGetUserID(ctx)
 
 	isAdmin, err := organizationRepo.IsAdminInOrganization(ctx, organization_repo.IsAdminInOrganizationParams{
 		OrganizationID: organizationID,
@@ -853,7 +853,7 @@ func (s ServiceServer) CreatePersonalOrganization(
 		return nil, err
 	}
 
-	userID := auth.GetUserID(ctx)
+	userID := auth.MustGetUserID(ctx)
 
 	userClaims, err := auth.GetAuthClaims(ctx)
 	if err != nil {

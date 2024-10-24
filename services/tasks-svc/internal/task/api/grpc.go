@@ -308,7 +308,7 @@ func (s *TaskGrpcService) GetAssignedTasks(
 	ctx context.Context,
 	_ *pb.GetAssignedTasksRequest,
 ) (*pb.GetAssignedTasksResponse, error) {
-	assigneeID := auth.GetUserID(ctx)
+	assigneeID := auth.MustGetUserID(ctx)
 
 	tasksWithPatients, err := s.handlers.Queries.V1.GetTasksWithPatientsByAssignee(ctx, assigneeID)
 	if err != nil {

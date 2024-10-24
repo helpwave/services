@@ -32,8 +32,8 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 
 	// TODO: Auth
 
-	organizationID := auth.GetOrganizationID(ctx)
-	userID := auth.GetUserID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
+	userID := auth.MustGetUserID(ctx)
 
 	patientId, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
@@ -164,7 +164,7 @@ func (ServiceServer) GetTasksByPatient(
 
 	// TODO: Auth
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
@@ -232,7 +232,7 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(
 
 	// TODO: Auth
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
@@ -322,7 +322,7 @@ func (ServiceServer) GetAssignedTasks(
 	_ *pb.GetAssignedTasksRequest,
 ) (*pb.GetAssignedTasksResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
-	assigneeID := auth.GetUserID(ctx)
+	assigneeID := auth.MustGetUserID(ctx)
 
 	rows, err := taskRepo.GetTasksWithPatientsByAssignee(ctx, uuid.NullUUID{
 		UUID:  assigneeID,
@@ -424,8 +424,8 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) (*pb.AddSubTaskResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
-	organizationID := auth.GetOrganizationID(ctx)
-	userID := auth.GetUserID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
+	userID := auth.MustGetUserID(ctx)
 
 	taskId, err := uuid.Parse(req.GetTaskId())
 	if err != nil {

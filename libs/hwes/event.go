@@ -260,7 +260,7 @@ func (e *Event) GetJsonData(data interface{}) error {
 	return json.Unmarshal(e.Data, data)
 }
 
-// SetCommitterFromCtx injects the UserID from the passed context via auth.GetUserID().
+// SetCommitterFromCtx injects the UserID from the passed context via auth.MustGetUserID().
 func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 	userID := auth.MaybeGetUserID(ctx)
 	if userID == nil {
@@ -274,7 +274,7 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 	return nil
 }
 
-// SetOrganizationFromCtx injects the OrganizationID from the passed context via common.GetOrganizationID().
+// SetOrganizationFromCtx injects the OrganizationID from the passed context via common.MustGetOrganizationID().
 func (e *Event) SetOrganizationFromCtx(ctx context.Context) error {
 	organizationID := auth.MaybeGetOrganizationID(ctx)
 	if organizationID == nil {
