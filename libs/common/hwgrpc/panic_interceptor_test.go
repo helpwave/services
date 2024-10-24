@@ -2,14 +2,13 @@ package hwgrpc
 
 import (
 	"context"
+	"testing"
+
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"testing"
 )
 
 type recoveryAssertService struct {
@@ -49,31 +48,31 @@ func TestPanicRecoverInterceptor(t *testing.T) {
 
 func (s *RecoverySuite) TestUnary_SuccessfulRequest() {
 	_, err := s.Client.Ping(s.SimpleCtx(), testpb.GoodPing)
-	require.NoError(s.T(), err)
+	s.Require().NoError(err)
 }
 
 func (s *RecoverySuite) TestUnary_PanicRequest() {
 	_, err := s.Client.Ping(s.SimpleCtx(), &testpb.PingRequest{Value: "panic"})
-	require.Error(s.T(), err)
+	s.Require().Error(err)
 	st, ok := status.FromError(err)
-	require.True(s.T(), ok, "not a status error")
-	assert.Equal(s.T(), codes.Internal, st.Code())
+	s.Require().True(ok, "not a status error")
+	s.Require().Equal(codes.Internal, st.Code())
 }
 
 func (s *RecoverySuite) TestStream_SuccessfulReceive() {
 	stream, err := s.Client.PingList(s.SimpleCtx(), testpb.GoodPingList)
-	require.NoError(s.T(), err, "should not fail on establishing the stream")
+	s.Require().NoError(err, "should not fail on establishing the stream")
 	pong, err := stream.Recv()
-	require.NoError(s.T(), err, "no error must occur")
-	require.NotNil(s.T(), pong, "pong must not be nil")
+	s.Require().NoError(err, "no error must occur")
+	s.Require().NotNil(pong, "pong must not be nil")
 }
 
 func (s *RecoverySuite) TestStream_PanickingReceive() {
 	stream, err := s.Client.PingList(s.SimpleCtx(), &testpb.PingListRequest{Value: "panic"})
-	require.NoError(s.T(), err, "should not fail on establishing the stream")
+	s.Require().NoError(err, "should not fail on establishing the stream")
 	_, err = stream.Recv()
-	require.Error(s.T(), err)
+	s.Require().Error(err)
 	st, ok := status.FromError(err)
-	require.True(s.T(), ok, "not a status error")
-	assert.Equal(s.T(), codes.Internal, st.Code())
+	s.Require().True(ok, "not a status error")
+	s.Require().Equal(codes.Internal, st.Code())
 }

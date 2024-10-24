@@ -1,20 +1,22 @@
 package hwgrpc
 
 import (
+	"context"
+	"runtime/debug"
+
 	"common/hwerr"
 	"common/locale"
-	"context"
+
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"runtime/debug"
 )
 
 var panicsRecovered = promauto.NewCounter(prometheus.CounterOpts{
-	Name: "services_panics_recovered",
+	Name: "services_panics_recovered_total",
 	Help: "Total number of panics recovered by PanicRecoverInterceptor",
 })
 
