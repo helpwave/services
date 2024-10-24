@@ -70,7 +70,7 @@ func organizationInterceptor(ctx context.Context) (context.Context, error) {
 		return nil, status.Errorf(codes.Internal, "invalid organizationID")
 	}
 
-	// attach organizationID to the context, so we can get it in a handler using GetOrganizationID()
+	// attach organizationID to the context, so we can get it in a handler using MustGetOrganizationID()
 	ctx = auth.ContextWithOrganizationID(ctx, organizationID)
 
 	// attach organizationID to the current span

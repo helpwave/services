@@ -36,7 +36,7 @@ func (ServiceServer) CreatePatient(
 
 	// TODO: Auth
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	patient_id, err := patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
 		OrganizationID:          organizationID,
@@ -144,7 +144,7 @@ func (ServiceServer) GetPatientsByWard(
 
 	// TODO: Auth
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
@@ -239,7 +239,7 @@ func (ServiceServer) GetRecentPatients(
 	patientRepo := patient_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	// TODO: Auth
 
@@ -341,7 +341,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 
 	// TODO: Auth
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	bedID, err := uuid.Parse(req.GetBedId())
 	if err != nil {
@@ -448,7 +448,7 @@ func (ServiceServer) GetPatientDetails(
 
 	// TODO: Auth
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -547,7 +547,7 @@ func (ServiceServer) GetPatientList(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	rows, err := patientRepo.GetPatientsWithTasksBedAndRoomForOrganization(ctx, organizationID)
 	err = hwdb.Error(ctx, err)

@@ -51,7 +51,7 @@ func (s *UpdatesGrpcService) ReceiveUpdates(
 		Str("closeStreamIn", tokenExpiresIn.String()).
 		Msg("will close session when token expires")
 
-	organizationID := auth.GetOrganizationID(ctx)
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	esSubscribeToAllOptions := esdb.SubscribeToAllOptions{
 		From:   esdb.End{},
