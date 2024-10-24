@@ -92,7 +92,7 @@ func authInterceptor(ctx context.Context) (context.Context, error) {
 		return nil, status.Errorf(codes.Internal, "invalid userID")
 	}
 
-	// attach userID to the context, so we can get it in a handler using GetUserID()
+	// attach userID to the context, so we can get it in a handler using MustGetUserID()
 	ctx = auth.ContextWithUserID(ctx, userID)
 
 	// attach userID to the current span (should be the auth interceptor span)

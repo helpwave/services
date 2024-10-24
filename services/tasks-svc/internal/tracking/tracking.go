@@ -41,11 +41,8 @@ func SetupTracking(ctx context.Context, serviceName string, lruSize int64, decay
 func getUserID(ctx context.Context) string {
 	log := zlog.Ctx(ctx)
 
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		log.Error().Err(err).Msg("could not get userID from context, can't add item to LRU")
-		return ""
-	}
+	userID := auth.MustGetUserID(ctx)
+
 	log.Trace().Str("userID", userID.String()).Msg("getUserID: got userid")
 	return userID.String()
 }
