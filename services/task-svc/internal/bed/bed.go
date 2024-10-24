@@ -34,10 +34,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	organizationID := auth.GetOrganizationID(ctx)
 
 	roomId, err := uuid.Parse(req.GetRoomId())
 	if err != nil {
@@ -82,10 +79,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.GetBedResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	organizationID := auth.GetOrganizationID(ctx)
 
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -149,10 +143,7 @@ func (ServiceServer) GetBedByPatient(
 func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	organizationID := auth.GetOrganizationID(ctx)
 
 	beds, err := bedRepo.GetBedsForOrganization(ctx, bed_repo.GetBedsForOrganizationParams{
 		OrganizationID: organizationID,
@@ -181,10 +172,7 @@ func (ServiceServer) GetBedsByRoom(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	organizationID := auth.GetOrganizationID(ctx)
 
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
@@ -244,10 +232,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	organizationID := auth.GetOrganizationID(ctx)
 
 	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
