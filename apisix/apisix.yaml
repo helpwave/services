@@ -61,6 +61,14 @@ services:
         headers:
           add:
             dapr-app-id: property-svc
+  - id: updates-svc
+    upstream_id: dapr-grpc
+    plugins:
+      grpc-web: {}
+      proxy-rewrite:
+        headers:
+          add:
+            dapr-app-id: updates-svc
   - id: auth-svc
     upstream_id: dapr-grpc
     plugins:
@@ -121,6 +129,21 @@ routes:
   - id: property-svc
     uri: /property-svc/*
     service_id: property-svc
+    # TODO: maybe we can move this to the service?
+    plugins:
+      cors:
+        # TODO: Scope to grpc-web spec
+        allow_origins: "**"
+        allow_methods: "**"
+        allow_headers: "**"
+        expose_headers: "grpc-status,grpc-message"
+        max_age: 5
+        allow_credential: true
+        _meta:
+          priority: -1
+  - id: updates-svc
+    uri: /updates-svc/*
+    service_id: updates-svc
     # TODO: maybe we can move this to the service?
     plugins:
       cors:
