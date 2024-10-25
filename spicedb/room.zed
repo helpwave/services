@@ -1,0 +1,4 @@
+definition room {
+	// room belong to a ward
+	relation ward: ward;
+}

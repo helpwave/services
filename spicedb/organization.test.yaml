@@ -66,3 +66,13 @@ tests:
     check:
       - "organization:a#create_property@user:alice" # alice is a leader
       - "organization:a#create_property@user:charlie" # charlie is a member
+
+  - name: members can create new property_sets in their orgs
+    check:
+      - "organization:a#create_property_set@user:alice" # alice is a leader
+      - "organization:a#create_property_set@user:charlie" # charlie is a member
+
+  - name: members can create new wards in their orgs
+    check:
+      - "organization:a#create_ward@user:alice" # alice is a leader
+      - "organization:a#create_ward@user:charlie" # charlie is a member

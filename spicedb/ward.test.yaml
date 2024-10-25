@@ -1,0 +1,41 @@
+
+relationships:
+  # Alice leads the A organization
+  - "organization:a#leader@user:alice"
+  # Bob leads the B organization
+  - "organization:b#leader@user:bob"
+  # Bob is also, explicitly, a member of the B organization
+  - "organization:b#member@user:bob"
+  # Charlie is a common member
+  - "organization:a#member@user:charlie"
+  - "organization:b#member@user:charlie"
+  # Clara is a common member, and leader of the A organization
+  - "organization:a#leader@user:clara"
+  - "organization:a#member@user:clara"
+  - "organization:b#member@user:clara"
+  # Oscar is only a member of one organization (A organization)
+  - "organization:a#member@user:oscar"
+
+  # ward A belongs to org A, and B to B
+  - "ward:a#organization@organization:a"
+  - "ward:b#organization@organization:b"
+
+tests:
+  - name: all members can get any ward in their org
+    check:
+      - "ward:a#get@user:alice"
+      - "ward:a#get@user:charlie"
+      - "ward:b#get@user:charlie"
+      - not: "ward:b#get@user:alice"
+  - name: all members can update any ward in their org
+    check:
+      - "ward:a#update@user:alice"
+      - "ward:a#update@user:charlie"
+      - "ward:b#update@user:charlie"
+      - not: "ward:b#update@user:alice"
+  - name: all members can delete any ward in their org
+    check:
+      - "ward:a#delete@user:alice"
+      - "ward:a#delete@user:charlie"
+      - "ward:b#delete@user:charlie"
+      - not: "ward:b#delete@user:alice"

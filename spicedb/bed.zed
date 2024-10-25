@@ -1,0 +1,4 @@
+definition bed {
+	// beds belong to a room
+	relation room: room;
+}
