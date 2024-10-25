@@ -159,7 +159,7 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 	removeFromAlwaysInclude := hwutil.SliceToSet(payload.RemoveFromAlwaysInclude)
 	removeFromDontAlwaysInclude := hwutil.SliceToSet(payload.RemoveFromDontAlwaysInclude)
 
-	appendToAlwaysIncludeFiltered := hwutil.Filter(payload.AppendToAlwaysInclude, func(id uuid.UUID) bool {
+	appendToAlwaysIncludeFiltered := hwutil.Filter(payload.AppendToAlwaysInclude, func(_ int, id uuid.UUID) bool {
 		// the intent of being in the "don't list" is stronger
 		// if an id is in both lists, it gets removed from the "always list"
 		_, inRemove := removeFromAlwaysInclude[id]

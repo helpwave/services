@@ -585,7 +585,7 @@ func (ServiceServer) GetPatientList(
 
 	if wardID.Valid {
 		// scope active patients to wardID
-		withBedRows = hwutil.Filter(withBedRows, func(row rowType) bool {
+		withBedRows = hwutil.Filter(withBedRows, func(_ int, row rowType) bool {
 			return row.WardID.UUID == wardID.UUID // equality implies validity
 		})
 	}

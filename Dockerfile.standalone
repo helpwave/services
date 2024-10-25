@@ -13,9 +13,10 @@ FROM golang:1.23-bookworm AS builder
 WORKDIR /build/spice
 
 COPY go.* ./
+COPY libs libs
 RUN go mod download
-COPY spice.go spice.go
-RUN CGO_ENABLED=0 GOOS=linux go build -a -o spice spice.go
+COPY cmd/spice cmd/spice
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o spice cmd/spice/spice.go
 
 #
 # build service

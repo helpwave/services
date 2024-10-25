@@ -34,7 +34,10 @@ func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
 }
 
-const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984" //nolint:gosec
+const (
+	FakeTokenUser         = "18159713-5d4e-4ad5-94ad-fbb6bb147984" //nolint:gosec
+	FakeTokenOrganization = "3b25c6f5-4705-4074-9fc6-a50c28eba406" //nolint:gosec
+)
 
 func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
 	// README's fake token
@@ -44,7 +47,7 @@ func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
 		"name":               "Testine Test",
 		"preferred_username": "testine.test",
 		"organization": map[string]interface{}{
-			"id":   "3b25c6f5-4705-4074-9fc6-a50c28eba406",
+			"id":   FakeTokenOrganization,
 			"name": "helpwave test",
 		},
 	}
