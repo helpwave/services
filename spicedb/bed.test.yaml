@@ -1,0 +1,49 @@
+
+relationships:
+  # Alice leads the A organization
+  - "organization:a#leader@user:alice"
+  # Bob leads the B organization
+  - "organization:b#leader@user:bob"
+  # Bob is also, explicitly, a member of the B organization
+  - "organization:b#member@user:bob"
+  # Charlie is a common member
+  - "organization:a#member@user:charlie"
+  - "organization:b#member@user:charlie"
+  # Clara is a common member, and leader of the A organization
+  - "organization:a#leader@user:clara"
+  - "organization:a#member@user:clara"
+  - "organization:b#member@user:clara"
+  # Oscar is only a member of one organization (A organization)
+  - "organization:a#member@user:oscar"
+
+  # ward A belongs to org A, and B to B
+  - "ward:a#organization@organization:a"
+  - "ward:b#organization@organization:b"
+
+  # room A belongs to ward A, and B to B
+  - "room:a#ward@ward:a"
+  - "room:b#ward@ward:b"
+
+  # bed A belongs to room A, and B to B
+  - "bed:a#room@room:a"
+  - "bed:b#room@room:b"
+
+tests:
+  - name: all members can get any bed in their org (by transitivity)
+    check:
+      - "bed:a#get@user:alice"
+      - "bed:a#get@user:charlie"
+      - "bed:b#get@user:charlie"
+      - not: "bed:b#get@user:alice"
+  - name: all members can update any bed in their org  (by transitivity)
+    check:
+      - "bed:a#update@user:alice"
+      - "bed:a#update@user:charlie"
+      - "bed:b#update@user:charlie"
+      - not: "bed:b#update@user:alice"
+  - name: all members can delete any bed in their org  (by transitivity)
+    check:
+      - "bed:a#delete@user:alice"
+      - "bed:a#delete@user:charlie"
+      - "bed:b#delete@user:charlie"
+      - not: "bed:b#delete@user:alice"

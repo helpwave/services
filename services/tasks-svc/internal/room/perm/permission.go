@@ -20,7 +20,8 @@ const RoomWard hwauthz.Relation = "ward"
 // Permissions
 
 const (
-	RoomCanUserGet    hwauthz.Permission = "get"
-	RoomCanUserUpdate hwauthz.Permission = "update"
-	RoomCanUserDelete hwauthz.Permission = "delete"
+	RoomCanUserGet       hwauthz.Permission = "get"
+	RoomCanUserUpdate    hwauthz.Permission = "update"
+	RoomCanUserDelete    hwauthz.Permission = "delete"
+	RoomCanUserCreateBed hwauthz.Permission = "create_bed"
 )

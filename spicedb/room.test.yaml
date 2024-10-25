@@ -43,3 +43,9 @@ tests:
       - "room:a#delete@user:charlie"
       - "room:b#delete@user:charlie"
       - not: "room:b#delete@user:alice"
+  - name: all members can create new beds in their org  (by transitivity)
+    check:
+      - "room:a#create_bed@user:alice"
+      - "room:a#create_bed@user:charlie"
+      - "room:b#create_bed@user:charlie"
+      - not: "room:b#create_bed@user:alice"
