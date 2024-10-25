@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
@@ -63,9 +64,10 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	organizationID := *evt.OrganizationID
 
 	relationship := hwauthz.NewRelationship(
-		perm.Organization(organizationID),
+		commonPerm.Organization(organizationID),
 		perm.PropertyOrganization,
-		perm.Property(propertyID))
+		perm.Property(propertyID),
+	)
 
 	// add to permission graph
 	_, err = p.authz.

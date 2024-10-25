@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
@@ -63,7 +64,7 @@ func (p *Projection) onPropertySetCreated(ctx context.Context, evt hwes.Event) (
 	organizationID := *evt.OrganizationID
 
 	relationship := hwauthz.NewRelationship(
-		perm.Organization(organizationID),
+		commonPerm.Organization(organizationID),
 		perm.PropertySetOrganization,
 		perm.PropertySet(propertySetID),
 	)

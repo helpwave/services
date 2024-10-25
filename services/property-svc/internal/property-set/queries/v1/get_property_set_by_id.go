@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
 
 	"property-svc/internal/property-set/perm"
@@ -18,7 +19,7 @@ type GetPropertySetByIDQueryHandler func(ctx context.Context, propertySetID uuid
 
 func NewGetPropertySetByIDQueryHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) GetPropertySetByIDQueryHandler {
 	return func(ctx context.Context, propertySetID uuid.UUID) (*models.PropertySet, error) {
-		user, err := perm.UserFromCtx(ctx)
+		user, err := commonPerm.UserFromCtx(ctx)
 		if err != nil {
 			return nil, err
 		}

@@ -5,6 +5,7 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwutil"
 
@@ -22,7 +23,7 @@ type GetPropertiesQueryHandler func(
 
 func NewGetPropertiesQueryHandler(authz hwauthz.AuthZ) GetPropertiesQueryHandler {
 	return func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
-		user, err := perm.UserFromCtx(ctx)
+		user, err := commonPerm.UserFromCtx(ctx)
 		if err != nil {
 			return nil, err
 		}
