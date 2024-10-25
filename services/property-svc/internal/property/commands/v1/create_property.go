@@ -5,10 +5,14 @@ import (
 	"context"
 	"errors"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
+	"hwauthz"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
+	"property-svc/internal/property/perm"
 )
 
 type CreatePropertyCommandHandler func(ctx context.Context,
@@ -21,8 +25,31 @@ type CreatePropertyCommandHandler func(ctx context.Context,
 	fieldTypeData *models.FieldTypeData,
 ) (version common.ConsistencyToken, err error)
 
-func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) (version common.ConsistencyToken, err error) {
+func NewCreatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreatePropertyCommandHandler {
+	return func(ctx context.Context,
+		propertyID uuid.UUID,
+		subjectType pb.SubjectType,
+		fieldType pb.FieldType,
+		name string,
+		description *string,
+		setID *string,
+		fieldTypeData *models.FieldTypeData,
+	) (version common.ConsistencyToken, err error) {
+		user, err := perm.UserFromCtx(ctx)
+		if err != nil {
+			return 0, err
+		}
+
+		organization, err := perm.OrganizationFromCtx(ctx)
+		if err != nil {
+			return 0, err
+		}
+
+		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreateProperty, organization)
+		if err = authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
+
 		a := aggregate.NewPropertyAggregate(propertyID)
 
 		exists, err := as.Exists(ctx, a)
@@ -39,7 +66,8 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyComma
 		}
 
 		if fieldTypeData != nil {
-			if fieldTypeData.SelectData != nil && (fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
+			if fieldTypeData.SelectData != nil &&
+				(fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
 				if err := a.CreateFieldTypeData(ctx, *fieldTypeData); err != nil {
 					return 0, err
 				}

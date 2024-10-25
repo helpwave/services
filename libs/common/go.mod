@@ -13,7 +13,6 @@ require (
 	github.com/dapr/dapr v1.14.2
 	github.com/dapr/go-sdk v1.11.0
 	github.com/go-playground/validator/v10 v10.22.1
-	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus v1.0.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
@@ -27,6 +26,7 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.30.0
 	go.opentelemetry.io/otel/exporters/zipkin v1.30.0
 	go.opentelemetry.io/otel/sdk v1.30.0
+	go.opentelemetry.io/otel/trace v1.30.0
 	golang.org/x/oauth2 v0.23.0
 	golang.org/x/text v0.18.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240903143218-8af14fe29dc1
@@ -64,7 +64,6 @@ require (
 	github.com/prometheus/procfs v0.15.1 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.30.0 // indirect
 	go.opentelemetry.io/otel/metric v1.30.0 // indirect
-	go.opentelemetry.io/otel/trace v1.30.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.3.1 // indirect
 	golang.org/x/crypto v0.27.0 // indirect
 	golang.org/x/net v0.29.0 // indirect

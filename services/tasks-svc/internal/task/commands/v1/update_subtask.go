@@ -4,16 +4,32 @@ import (
 	"common"
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/task/aggregate"
 	"tasks-svc/internal/task/models"
 )
 
-type UpdateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Task], error)
+type UpdateSubtaskCommandHandler func(
+	ctx context.Context,
+	taskID,
+	subtaskID uuid.UUID,
+	name *string,
+	done *bool,
+	expConsistency *common.ConsistencyToken,
+) (common.ConsistencyToken, *common.Conflict[*models.Task], error)
 
 func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore) UpdateSubtaskCommandHandler {
-	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Task], error) {
+	return func(
+		ctx context.Context,
+		taskID,
+		subtaskID uuid.UUID,
+		name *string,
+		done *bool,
+		expConsistency *common.ConsistencyToken,
+	) (common.ConsistencyToken, *common.Conflict[*models.Task], error) {
 		a, oldState, err := aggregate.LoadTaskAggregateWithSnapshotAt(ctx, as, taskID, expConsistency)
 		if err != nil {
 			return 0, nil, err

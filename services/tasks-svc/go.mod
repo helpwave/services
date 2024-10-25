@@ -7,9 +7,9 @@ replace (
 	decaying_lru => ../../libs/decaying_lru
 	gen => ../../gen/go
 	hwauthz => ../../libs/hwauthz
-	hwgrpc => ../../libs/hwgrpc
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
+	hwgrpc => ../../libs/hwgrpc
 	hwlocale => ../../libs/hwlocale
 	hwtesting => ../../libs/hwtesting
 	hwutil => ../../libs/hwutil
@@ -26,6 +26,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.1
+	github.com/jinzhu/copier v0.4.0
 	github.com/nicksnyder/go-i18n/v2 v2.4.0
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
@@ -36,10 +37,10 @@ require (
 	hwauthz v0.0.0
 	hwdb v0.0.0
 	hwes v0.0.0
+	hwgrpc v0.0.0
 	hwlocale v0.0.0
 	hwtesting v0.0.0
 	hwutil v0.0.0
-	hwgrpc v0.0.0
 )
 
 require (
@@ -76,7 +77,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.22.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus v1.0.1 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0 // indirect
@@ -87,7 +87,6 @@ require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
-	github.com/jinzhu/copier v0.4.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/jzelinskie/stringz v0.0.3 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect

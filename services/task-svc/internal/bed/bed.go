@@ -1,13 +1,16 @@
 package bed
 
 import (
-	"common"
+	"common/auth"
+	"common/hwerr"
 	"context"
-	"github.com/jackc/pgx/v5/pgconn"
-	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"hwdb"
 	"hwlocale"
 	"hwutil"
+
+	"github.com/jackc/pgx/v5/pgconn"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
+
 	"task-svc/locale"
 	"task-svc/repos/bed_repo"
 
@@ -31,12 +34,12 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	roomId, err := uuid.Parse(req.RoomId)
+	roomId, err := uuid.Parse(req.GetRoomId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -44,11 +47,11 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	bed, err := bedRepo.CreateBed(ctx, bed_repo.CreateBedParams{
 		RoomID:         roomId,
 		OrganizationID: organizationID,
-		Name:           req.Name,
+		Name:           req.GetName(),
 	})
 	err = hwdb.Error(ctx, err,
 		hwdb.WithOnFKViolation("beds_room_id_fkey", func(pgErr *pgconn.PgError) error {
-			return common.NewStatusError(ctx,
+			return hwerr.NewStatusError(ctx,
 				codes.InvalidArgument,
 				pgErr.Error(),
 				locale.InvalidRoomIdError(ctx),
@@ -58,7 +61,8 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 							Field:       "room_id",
 							Description: hwlocale.Localize(ctx, locale.InvalidRoomIdError(ctx)),
 						},
-					}})
+					},
+				})
 		}))
 	if err != nil {
 		return nil, err
@@ -66,7 +70,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 
 	log.Info().
 		Str("bedID", bed.ID.String()).
-		Str("roomID", req.RoomId).
+		Str("roomID", req.GetRoomId()).
 		Str("name", bed.Name).
 		Msg("bed created")
 
@@ -78,12 +82,12 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.GetBedResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -107,12 +111,15 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 	}, nil
 }
 
-func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatientRequest) (*pb.GetBedByPatientResponse, error) {
+func (ServiceServer) GetBedByPatient(
+	ctx context.Context,
+	req *pb.GetBedByPatientRequest,
+) (*pb.GetBedByPatientResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	patientId, err := uuid.Parse(req.PatientId)
+	patientId, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -124,19 +131,25 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 	}
 
 	return &pb.GetBedByPatientResponse{
-		Room: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Room {
-			return pb.GetBedByPatientResponse_Room{Id: res.RoomID.String(), Name: res.RoomName, WardId: res.WardID.String()}
-		}),
-		Bed: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Bed {
-			return pb.GetBedByPatientResponse_Bed{Id: res.BedID.String(), Name: res.BedName}
-		}),
+		Room: hwutil.MapNillable(result,
+			func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Room {
+				return pb.GetBedByPatientResponse_Room{
+					Id:     res.RoomID.String(),
+					Name:   res.RoomName,
+					WardId: res.WardID.String(),
+				}
+			}),
+		Bed: hwutil.MapNillable(result,
+			func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Bed {
+				return pb.GetBedByPatientResponse_Bed{Id: res.BedID.String(), Name: res.BedName}
+			}),
 	}, nil
 }
 
 func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -159,13 +172,16 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 	}, nil
 }
 
-func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomRequest) (*pb.GetBedsByRoomResponse, error) {
-	roomID, err := uuid.Parse(req.RoomId)
+func (ServiceServer) GetBedsByRoom(
+	ctx context.Context,
+	req *pb.GetBedsByRoomRequest,
+) (*pb.GetBedsByRoomResponse, error) {
+	roomID, err := uuid.Parse(req.GetRoomId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -201,7 +217,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	bedID, err := uuid.Parse(req.Id)
+	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -228,12 +244,12 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	bedID, err := uuid.Parse(req.Id)
+	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

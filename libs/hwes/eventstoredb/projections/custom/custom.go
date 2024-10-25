@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"hwutil"
+	"telemetry"
+
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
-	"hwutil"
-	"telemetry"
 )
 
 // EventStoreClient is an interface that describes all methods of esdb.Client that are used by CustomProjection
@@ -79,11 +80,11 @@ type CustomProjection struct {
 	streamPrefixFilters   *[]string
 }
 
-func NewCustomProjection(esdbClient EventStoreClient, subscriptionGroupName string, streamPrefixFilters *[]string) *CustomProjection {
+func NewCustomProjection(es EventStoreClient, subGroupName string, streamPrefixFilters *[]string) *CustomProjection {
 	return &CustomProjection{
-		es:                    esdbClient,
+		es:                    es,
 		eventHandlers:         make(map[string]eventHandler),
-		subscriptionGroupName: subscriptionGroupName,
+		subscriptionGroupName: subGroupName,
 		streamPrefixFilters:   streamPrefixFilters,
 	}
 }
@@ -108,7 +109,10 @@ func (p *CustomProjection) RegisterEventListener(eventType string, eventHandler 
 }
 
 func (p *CustomProjection) HandleEvent(ctx context.Context, event hwes.Event) (error, *esdb.NackAction) {
-	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection."+p.subscriptionGroupName+".handleEvent."+event.EventType)
+	ctx, span, log := telemetry.StartSpan(
+		ctx,
+		"custom_projection."+p.subscriptionGroupName+".handleEvent."+event.EventType,
+	)
 	defer span.End()
 
 	eventHandler, found := p.eventHandlers[event.EventType]
@@ -153,8 +157,13 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 		}
 	}
 
-	// After a potential successful creation of a persistent subscription, we are trying to establish a connection to that subscription
-	stream, err := p.es.SubscribeToPersistentSubscriptionToAll(ctx, p.subscriptionGroupName, esdb.SubscribeToPersistentSubscriptionOptions{})
+	// After a potential successful creation of a persistent subscription, we are trying to establish a connection to
+	// that subscription
+	stream, err := p.es.SubscribeToPersistentSubscriptionToAll(
+		ctx,
+		p.subscriptionGroupName,
+		esdb.SubscribeToPersistentSubscriptionOptions{},
+	)
 	if err != nil {
 		return fmt.Errorf("CustomProjection.Subscribe: failed to subscribe: %w", err)
 	}
@@ -183,8 +192,15 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 // This functions tries to receive an event from the passed stream
 // and calls the according event handler based on the received event
 // This function blocks the thread until the passed context gets canceled
-func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, stream *esdb.PersistentSubscription, esdbEvent *esdb.PersistentSubscriptionEvent) error {
-	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection."+p.subscriptionGroupName+".processReceivedEventFromStream")
+func (p *CustomProjection) processReceivedEventFromStream(
+	ctx context.Context,
+	stream *esdb.PersistentSubscription,
+	esdbEvent *esdb.PersistentSubscriptionEvent,
+) error {
+	ctx, span, log := telemetry.StartSpan(
+		ctx,
+		"custom_projection."+p.subscriptionGroupName+".processReceivedEventFromStream",
+	)
 	defer span.End()
 
 	if esdbEvent.SubscriptionDropped != nil {
@@ -201,7 +217,6 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 	telemetry.SetSpanStr(ctx, "esdbEventID", esdbEvent.EventAppeared.Event.Event.EventID.String())
 
 	event, err := hwes.NewEventFromRecordedEvent(esdbEvent.EventAppeared.Event.Event)
-
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -218,7 +233,10 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 
 		// end old span, start new one
 		span.End()
-		ctx, span, log = telemetry.StartSpan(ctx, "custom_projection"+p.subscriptionGroupName+".processReceivedEventFromStream")
+		ctx, span, log = telemetry.StartSpan(
+			ctx,
+			"custom_projection"+p.subscriptionGroupName+".processReceivedEventFromStream",
+		)
 		defer span.End()
 
 		// set attributes

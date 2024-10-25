@@ -4,12 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"hwtesting"
 	"hwutil"
 	"regexp"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // TestGetPropertiesBySubjectType:
@@ -35,13 +37,9 @@ func TestGetProperties(t *testing.T) {
 	}
 
 	createResponseA, err := propertyClient.CreateProperty(ctx, createPropertyRequestA)
-	if !assert.NoError(t, err, "could not create new property A") {
-		return
-	}
+	require.NoError(t, err, "could not create new property A")
 	_, err = uuid.Parse(createResponseA.PropertyId)
-	if !assert.NoError(t, err, "propertyIDA is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyIDA is not a uuid")
 
 	createPropertyRequestB := &pb.CreatePropertyRequest{
 		SubjectType: pb.SubjectType_SUBJECT_TYPE_PATIENT,
@@ -67,13 +65,9 @@ func TestGetProperties(t *testing.T) {
 	}
 
 	createResponseB, err := propertyClient.CreateProperty(ctx, createPropertyRequestB)
-	if !assert.NoError(t, err, "could not create new property B") {
-		return
-	}
+	require.NoError(t, err, "could not create new property B")
 	_, err = uuid.Parse(createResponseB.PropertyId)
-	if !assert.NoError(t, err, "propertyIDB is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyIDB is not a uuid")
 
 	createPropertyRequestC := &pb.CreatePropertyRequest{
 		SubjectType:   pb.SubjectType_SUBJECT_TYPE_PATIENT,
@@ -85,13 +79,9 @@ func TestGetProperties(t *testing.T) {
 	}
 
 	createResponseC, err := propertyClient.CreateProperty(ctx, createPropertyRequestC)
-	if !assert.NoError(t, err, "could not create new property C") {
-		return
-	}
+	require.NoError(t, err, "could not create new property C")
 	_, err = uuid.Parse(createResponseC.PropertyId)
-	if !assert.NoError(t, err, "propertyIDC is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyIDC is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -102,9 +92,7 @@ func TestGetProperties(t *testing.T) {
 	propertiesResponse, err := propertyClient.GetProperties(ctx, &pb.GetPropertiesRequest{
 		SubjectType: hwutil.PtrTo(pb.SubjectType_SUBJECT_TYPE_PATIENT),
 	})
-	if !assert.NoError(t, err, "could not get properties after they were created") {
-		return
-	}
+	require.NoError(t, err, "could not get properties after they were created")
 
 	assert.Len(t, propertiesResponse.Properties, 2)
 
@@ -112,14 +100,14 @@ func TestGetProperties(t *testing.T) {
 
 	for _, property := range propertiesResponse.Properties {
 		s, err := json.Marshal(property)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		re := regexp.MustCompile(`[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}`)
 		res := re.ReplaceAllString(string(s), "<id>")
 
 		v := make(map[string]interface{})
 		err = json.Unmarshal([]byte(res), &v)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		propertyMap[property.Id] = v
 	}
@@ -134,11 +122,12 @@ func TestGetProperties(t *testing.T) {
 		"FieldTypeData": map[string]interface{}{
 			"SelectData": map[string]interface{}{
 				"allow_freetext": false,
-				"options": []interface{}{map[string]interface{}{
-					"id":          "<id>",
-					"name":        "Option 1",
-					"description": "",
-				},
+				"options": []interface{}{
+					map[string]interface{}{
+						"id":          "<id>",
+						"name":        "Option 1",
+						"description": "",
+					},
 					map[string]interface{}{
 						"id":          "<id>",
 						"name":        "Option 2",
@@ -167,8 +156,6 @@ func TestGetProperties(t *testing.T) {
 	//
 
 	propertiesResponse, err = propertyClient.GetProperties(ctx, &pb.GetPropertiesRequest{})
-	if !assert.NoError(t, err, "could not get properties after they were created") {
-		return
-	}
+	require.NoError(t, err, "could not get properties after they were created")
 	assert.Len(t, propertiesResponse.Properties, 3)
 }

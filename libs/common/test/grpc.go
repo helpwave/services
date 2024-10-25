@@ -4,6 +4,10 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"log"
+	"net"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -11,9 +15,6 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
-	"log"
-	"net"
-	"testing"
 )
 
 // StartGRPCServer starts an existing grpc server on an in-memory interface.
@@ -52,6 +53,7 @@ func StartGRPCServer(ctx context.Context, grpcServer *grpc.Server) (conn *grpc.C
 
 // AssertStatusError asserts, that the error, is a status error with the provided code.
 func AssertStatusError(t *testing.T, err error, code codes.Code, msg string) {
+	t.Helper()
 	if assert.Error(t, err, msg) {
 		sE, ok := status.FromError(err)
 		assert.True(t, ok, "not a status error")
@@ -98,7 +100,12 @@ func AuthenticatedUserContext(ctx context.Context, userId string) context.Contex
 // AuthenticatedUserInterceptor overwrites the incoming metadata, such that AuthenticatedUserMetadata is used.
 // It can be used to test authenticated endpoints
 func AuthenticatedUserInterceptor(userID string) grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	return func(
+		ctx context.Context,
+		req interface{},
+		info *grpc.UnaryServerInfo,
+		next grpc.UnaryHandler,
+	) (interface{}, error) {
 		md := AuthenticatedUserMetadata(userID)
 		if existing, existed := metadata.FromIncomingContext(ctx); existed {
 			md = metadata.Join(md, existing)

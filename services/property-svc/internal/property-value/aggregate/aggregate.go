@@ -4,9 +4,11 @@ import (
 	"common"
 	"context"
 	"fmt"
+	"hwes"
+
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
-	"hwes"
+
 	propertyEventsV1 "property-svc/internal/property-value/events/v1"
 	"property-svc/internal/property-value/models"
 )
@@ -32,7 +34,11 @@ func NewPropertyValueAggregate(id uuid.UUID) *PropertyValueAggregate {
 	return aggregate
 }
 
-func LoadPropertyValueAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*PropertyValueAggregate, error) {
+func LoadPropertyValueAggregate(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+) (*PropertyValueAggregate, error) {
 	property := NewPropertyValueAggregate(id)
 	if err := as.Load(ctx, property); err != nil {
 		return nil, fmt.Errorf("LoadPropertyValueAggregate: %w", err)
@@ -40,7 +46,12 @@ func LoadPropertyValueAggregate(ctx context.Context, as hwes.AggregateStore, id 
 	return property, nil
 }
 
-func LoadPropertyValueAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *common.ConsistencyToken) (*PropertyValueAggregate, *models.PropertyValue, error) {
+func LoadPropertyValueAggregateWithSnapshotAt(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+	pauseAt *common.ConsistencyToken,
+) (*PropertyValueAggregate, *models.PropertyValue, error) {
 	property := NewPropertyValueAggregate(id)
 
 	var snapshot *models.PropertyValue

@@ -3,6 +3,9 @@ package spicedb
 import (
 	"context"
 	"fmt"
+	"hwutil"
+	"telemetry"
+
 	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
 	"github.com/authzed/authzed-go/v1"
 	"github.com/authzed/grpcutil"
@@ -10,9 +13,18 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"hwauthz"
-	"hwutil"
-	"telemetry"
 )
+
+func fullyConsistent() *v1.Consistency {
+	// for now requests are fully_consistent, replace this if possible with "At Least As Fresh"-strategy
+	// read: https://authzed.com/docs/spicedb/concepts/consistency
+	// issue: #869
+	return &v1.Consistency{
+		Requirement: &v1.Consistency_FullyConsistent{
+			FullyConsistent: true,
+		},
+	}
+}
 
 func SetupSpiceDbByEnv() *authzed.Client {
 	endpoint := hwutil.MustGetEnv("ZED_ENDPOINT")
@@ -66,7 +78,11 @@ func NewSpiceDBAuthZ() *SpiceDBAuthZ {
 }
 
 // Write writes relationships, use Create and Delete instead!
-func (s *SpiceDBAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship, deletes []hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
+func (s *SpiceDBAuthZ) Write(
+	ctx context.Context,
+	writes []hwauthz.Relationship,
+	deletes []hwauthz.Relationship,
+) (hwauthz.ConsistencyToken, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Write")
 	defer span.End()
 
@@ -95,7 +111,7 @@ func (s *SpiceDBAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship,
 		return "", fmt.Errorf("SpiceDBAuthZ.Write: write relationship failed: %w", err)
 	}
 
-	return res.WrittenAt.Token, nil
+	return res.GetWrittenAt().GetToken(), nil
 }
 
 func (s *SpiceDBAuthZ) Create(relations ...hwauthz.Relationship) *hwauthz.Tx {
@@ -117,8 +133,9 @@ func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.Permis
 		Subject: &v1.SubjectReference{
 			Object: fromObject(permissionCheck.Subject),
 		},
-		Permission: string(permissionCheck.Relation),
-		Resource:   fromObject(permissionCheck.Resource),
+		Permission:  string(permissionCheck.Relation),
+		Resource:    fromObject(permissionCheck.Resource),
+		Consistency: fullyConsistent(),
 	}
 
 	// make request
@@ -129,9 +146,93 @@ func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.Permis
 	}
 
 	// parse result
-	hasPermission := res.Permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
+	hasPermission := res.GetPermissionship() == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
 	telemetry.SetSpanBool(ctx, "hasPermission", hasPermission)
 	return hasPermission, nil
+}
+
+// BulkCheck queries permission relations for many checks.
+// The evaluated truthfulness of a check at index i in the checks slice is returned at index i in the yielded slice.
+func (s *SpiceDBAuthZ) BulkCheck(ctx context.Context, checks []hwauthz.PermissionCheck) ([]bool, error) {
+	ctx, span, log := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.BulkCheck")
+	defer span.End()
+
+	if len(checks) == 0 {
+		return make([]bool, 0), nil
+	}
+
+	// CheckBulk does not guarantee order invariance,
+	// thus we need to prepare to put things back into their place
+	// we map the (sub, rel, res) tuple of a check to its index in the checks slice
+	// as we might encounter duplicates this needs to be a slice
+	inxs := make(map[string][]int, len(checks))
+
+	keyPattern := "%s:%s-%s-%s:%s"
+
+	items := make([]*v1.CheckBulkPermissionsRequestItem, 0, len(checks))
+	for i, check := range checks {
+		sub := check.Subject
+		resc := check.Resource
+
+		// convert internal Representation to gRPC body
+		items = append(items, &v1.CheckBulkPermissionsRequestItem{
+			Subject: &v1.SubjectReference{
+				Object: fromObject(sub),
+			},
+			Permission: string(check.Relation),
+			Resource:   fromObject(resc),
+			Context:    nil,
+		})
+
+		// store index in map
+		key := fmt.Sprintf(keyPattern, sub.Type(), sub.ID(), check.Relation, resc.Type(), resc.ID())
+
+		// if there is a slice already, append to it (there is a duplicate check)
+		if inxs[key] != nil {
+			inxs[key] = append(inxs[key], i)
+		} else {
+			inxs[key] = []int{i}
+		}
+	}
+
+	// make request
+	res, err := s.client.CheckBulkPermissions(ctx, &v1.CheckBulkPermissionsRequest{
+		Consistency: fullyConsistent(),
+		Items:       items,
+	})
+	if err != nil {
+		log.Error().Err(err).Msg("spicedb: error while checking permissions")
+		return nil, fmt.Errorf("spicedb: could not bulk-check permissions: %w", err)
+	}
+
+	result := make([]bool, len(checks))
+
+	// reduce responses to a simple bool, and get them in order again
+
+	for _, pair := range res.GetPairs() {
+		req := pair.GetRequest()
+		subj := req.GetSubject().GetObject()
+		resc := req.GetResource()
+
+		if pberr := pair.GetError(); pberr != nil {
+			err := fmt.Errorf("spicedb: error while checking permissions: %s", pberr.GetMessage())
+			log.Error().Err(err).Msg("spicedb: error while checking permissions")
+			return nil, err
+		}
+
+		key := fmt.Sprintf(keyPattern,
+			subj.GetObjectType(), subj.GetObjectId(), req.GetPermission(), resc.GetObjectType(), resc.GetObjectId())
+
+		permissionship := pair.GetItem().GetPermissionship()
+		hasPermission := permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
+
+		for _, ix := range inxs[key] {
+			log.Info().Int("ix", ix).Bool("hasPermission", hasPermission).Str("key", key).Send()
+			result[ix] = hasPermission
+		}
+	}
+
+	return result, nil
 }
 
 // Must implements hwauthz.AuthZ's Must

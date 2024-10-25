@@ -2,25 +2,38 @@ package v1
 
 import (
 	"common"
+	"common/auth"
 	"context"
-	"fmt"
+	"errors"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
+	"hwauthz"
 	"hwdb"
 	"hwutil"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property/models"
+	"property-svc/internal/property/perm"
 	"property-svc/repos/property_repo"
 )
 
-type GetPropertiesQueryHandler func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error)
+type GetPropertiesQueryHandler func(
+	ctx context.Context,
+	subjectType *pb.SubjectType,
+) ([]*models.PropertyWithConsistency, error)
 
-func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
+func NewGetPropertiesQueryHandler(authz hwauthz.AuthZ) GetPropertiesQueryHandler {
 	return func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
+		user, err := perm.UserFromCtx(ctx)
+		if err != nil {
+			return nil, err
+		}
+
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
-		organizationID, err := common.GetOrganizationID(ctx)
+		organizationID, err := auth.GetOrganizationID(ctx)
 		if err != nil {
-			return nil, fmt.Errorf("GetPropertiesQueryHandler called without organization in context")
+			return nil, errors.New("GetPropertiesQueryHandler called without organization in context")
 		}
 
 		var subjectTypeID *int32
@@ -28,10 +41,12 @@ func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
 			subjectTypeID = hwutil.PtrTo(int32(*subjectType))
 		}
 
-		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
-			SubjectType:    subjectTypeID,
-			OrganizationID: organizationID,
-		})
+		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
+			ctx,
+			property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
+				SubjectType:    subjectTypeID,
+				OrganizationID: organizationID,
+			})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err
 		}
@@ -56,7 +71,7 @@ func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
 						FieldType:     pb.FieldType(row.Property.FieldType),
 						SubjectType:   pb.SubjectType(row.Property.SubjectType),
 					},
-					Consistency: common.ConsistencyToken(row.Property.Consistency).String(),
+					Consistency: common.ConsistencyToken(row.Property.Consistency).String(), //nolint:gosec
 				}
 				propertyMap[row.Property.ID] = property
 				properties = append(properties, property)
@@ -72,14 +87,30 @@ func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
 			}
 
 			if row.SelectOptionID.Valid && property.FieldTypeData.SelectData != nil {
-				property.FieldTypeData.SelectData.SelectOptions = append(property.FieldTypeData.SelectData.SelectOptions, models.SelectOption{
-					ID:          row.SelectOptionID.UUID,
-					Name:        *row.SelectOptionName, // NOT NULL
-					Description: row.SelectOptionDescription,
-					IsCustom:    *row.SelectOptionIsCustom, // NOT NULL
-				})
+				property.FieldTypeData.SelectData.SelectOptions = append(
+					property.FieldTypeData.SelectData.SelectOptions,
+					models.SelectOption{
+						ID:          row.SelectOptionID.UUID,
+						Name:        *row.SelectOptionName, // NOT NULL
+						Description: row.SelectOptionDescription,
+						IsCustom:    *row.SelectOptionIsCustom, // NOT NULL
+					},
+				)
 			}
 		}
+
+		checks := hwutil.Map(properties, func(p *models.PropertyWithConsistency) hwauthz.PermissionCheck {
+			return hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(p.ID))
+		})
+
+		canGet, err := authz.BulkCheck(ctx, checks)
+		if err != nil {
+			return nil, err
+		}
+
+		properties = hwutil.Filter(properties, func(i int, _ *models.PropertyWithConsistency) bool {
+			return canGet[i]
+		})
 
 		return properties, nil
 	}

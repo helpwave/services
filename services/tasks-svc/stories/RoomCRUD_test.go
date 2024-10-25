@@ -4,12 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwtesting"
 	"hwutil"
 	"strconv"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
+
+	"github.com/stretchr/testify/require"
 )
 
 // TestCreateUpdateGetRoom:
@@ -20,18 +23,18 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 	roomClient := roomServiceClient()
 
 	// first, prepare ward
-	wardId, _ := prepareWard(t, ctx, "1")
+	wardID, _ := prepareWard(t, ctx, "1")
 
 	//
 	// create new room
 	//
 	createReq := &pb.CreateRoomRequest{
-		WardId: wardId,
+		WardId: wardID,
 		Name:   t.Name() + " room",
 	}
 	createRes, err := roomClient.CreateRoom(ctx, createReq)
 
-	assert.NoError(t, err, "could not create room")
+	require.NoError(t, err, "could not create room")
 
 	roomID := createRes.GetId()
 
@@ -40,11 +43,11 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 	//
 
 	getRoomRes, err := roomClient.GetRoom(ctx, &pb.GetRoomRequest{Id: roomID})
-	assert.NoError(t, err, "could not get room after creation")
+	require.NoError(t, err, "could not get room after creation")
 
-	assert.Equal(t, createReq.Name, getRoomRes.Name)
-	assert.Equal(t, createReq.WardId, getRoomRes.WardId)
-	assert.Equal(t, createRes.Consistency, getRoomRes.Consistency)
+	assert.Equal(t, createReq.GetName(), getRoomRes.GetName())
+	assert.Equal(t, createReq.GetWardId(), getRoomRes.GetWardId())
+	assert.Equal(t, createRes.GetConsistency(), getRoomRes.GetConsistency())
 
 	//
 	// update room
@@ -58,7 +61,7 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 		Consistency: &getRoomRes.Consistency,
 	}
 	updateRes, err := roomClient.UpdateRoom(ctx, updateReq)
-	assert.NoError(t, err, "could not update room after creation")
+	require.NoError(t, err, "could not update room after creation")
 
 	assert.NotEqual(t, getRoomRes.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
@@ -67,11 +70,10 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 	//
 
 	getRoomRes, err = roomClient.GetRoom(ctx, &pb.GetRoomRequest{Id: roomID})
-	assert.NoError(t, err, "could not get room after update")
+	require.NoError(t, err, "could not get room after update")
 
-	assert.Equal(t, *updateReq.Name, getRoomRes.Name)
-	assert.Equal(t, updateRes.Consistency, getRoomRes.Consistency)
-
+	assert.Equal(t, updateReq.GetName(), getRoomRes.GetName())
+	assert.Equal(t, updateRes.GetConsistency(), getRoomRes.GetConsistency())
 }
 
 func TestGetRooms(t *testing.T) {
@@ -90,20 +92,20 @@ func TestGetRooms(t *testing.T) {
 
 	for i, roomSfxs := range suffixMatrix {
 		wardSuffix := strconv.Itoa(i + 1)
-		wardId, _ := prepareWard(t, ctx, wardSuffix)
-		wardRoomsMap[wardId] = make([]string, 0)
+		wardID, _ := prepareWard(t, ctx, wardSuffix)
+		wardRoomsMap[wardID] = make([]string, 0)
 		for _, bedSuffix := range roomSfxs {
-			roomId, roomConsistency := prepareRoom(t, ctx, wardId, bedSuffix)
-			roomWardMap[roomId] = wardId
+			roomId, roomConsistency := prepareRoom(t, ctx, wardID, bedSuffix)
+			roomWardMap[roomId] = wardID
 			roomConsistencyMap[roomId] = roomConsistency
-			wardRoomsMap[wardId] = append(wardRoomsMap[wardId], roomId)
+			wardRoomsMap[wardID] = append(wardRoomsMap[wardID], roomId)
 		}
 	}
 
 	allRooms, err := roomClient.GetRooms(ctx, &pb.GetRoomsRequest{
 		WardId: nil,
 	})
-	assert.NoError(t, err, "could not get all rooms")
+	require.NoError(t, err, "could not get all rooms")
 
 	assert.GreaterOrEqual(t, len(allRooms.Rooms), 3) // other rooms might exist from other tests
 
@@ -122,14 +124,14 @@ func TestGetRooms(t *testing.T) {
 
 	// Part 2: GetRooms with ward
 
-	for wardId, roomIDs := range wardRoomsMap {
-		res, err := roomClient.GetRooms(ctx, &pb.GetRoomsRequest{WardId: &wardId})
-		assert.NoError(t, err, "could not get all rooms for ward %s", wardId)
+	for wardID, roomIDs := range wardRoomsMap {
+		res, err := roomClient.GetRooms(ctx, &pb.GetRoomsRequest{WardId: &wardID})
+		require.NoError(t, err, "could not get all rooms for ward %s", wardID)
 		assert.Len(t, res.Rooms, len(roomIDs))
 		actualRoomIDs := hwutil.Map(res.Rooms, func(room *pb.GetRoomsResponse_Room) string {
 			return room.Id
 		})
-		assert.Subset(t, roomIDs, actualRoomIDs, "actualRoomIDs not a subset for ward %s", wardId)
+		assert.Subset(t, roomIDs, actualRoomIDs, "actualRoomIDs not a subset for ward %s", wardID)
 	}
 }
 
@@ -140,9 +142,9 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 
 	// prepare all resources
 
-	wardId, _ := prepareWard(t, ctx, "")
-	roomIDA, _ := prepareRoom(t, ctx, wardId, "A")
-	roomIDB, _ := prepareRoom(t, ctx, wardId, "B")
+	wardID, _ := prepareWard(t, ctx, "")
+	roomIDA, _ := prepareRoom(t, ctx, wardID, "A")
+	roomIDB, _ := prepareRoom(t, ctx, wardID, "B")
 
 	bed1Id, _ := prepareBed(t, ctx, roomIDA, "1")
 	bed2Id, _ := prepareBed(t, ctx, roomIDA, "2")
@@ -161,7 +163,7 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 			BedId:       bedID,
 			Consistency: nil,
 		})
-		assert.NoError(t, err, "could not assign bed to patient", i)
+		require.NoError(t, err, "could not assign bed to patient", i)
 	}
 
 	// additionally, add unassigned bed and patient
@@ -174,32 +176,32 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 		PatientId:     patient1Id,
 		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_TODO),
 	})
-	assert.NoError(t, err, "could not create task for patient 1")
+	require.NoError(t, err, "could not create task for patient 1")
 	_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:          t.Name() + " Patient 1 Task 2",
 		PatientId:     patient1Id,
 		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
 	})
-	assert.NoError(t, err, "could not create task for patient 1")
+	require.NoError(t, err, "could not create task for patient 1")
 	_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:          t.Name() + " Patient 1 Task 3",
 		PatientId:     patient1Id,
 		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_DONE),
 	})
-	assert.NoError(t, err, "could not create task for patient 1")
+	require.NoError(t, err, "could not create task for patient 1")
 	_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:          t.Name() + " Patient 1 Task 4",
 		PatientId:     patient1Id,
 		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_DONE),
 	})
-	assert.NoError(t, err, "could not create task for patient 1")
+	require.NoError(t, err, "could not create task for patient 1")
 
 	hwtesting.WaitForProjectionsToSettle()
 
 	res, err := roomServiceClient().GetRoomOverviewsByWard(ctx, &pb.GetRoomOverviewsByWardRequest{
-		Id: wardId,
+		Id: wardID,
 	})
-	assert.NoError(t, err, "could not GetRoomOverviewsByWard")
+	require.NoError(t, err, "could not GetRoomOverviewsByWard")
 
 	assert.Len(t, res.Rooms, 2)
 
@@ -277,13 +279,13 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 	}
 
 	expectedRoomAJson, err := json.Marshal(expectedRoomA)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	expectedRoomBJson, err := json.Marshal(expectedRoomB)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	resRoomAJson, err := json.Marshal(resRoomA)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	resRoomBJson, err := json.Marshal(resRoomB)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.JSONEq(t, string(expectedRoomAJson), string(resRoomAJson))
 	assert.JSONEq(t, string(expectedRoomBJson), string(resRoomBJson))
@@ -305,7 +307,7 @@ func TestUpdateRoomConflict(t *testing.T) {
 		Name:        &name1,
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, update1Res.Conflict)
 	assert.NotEqual(t, initialConsistency, update1Res.Consistency)
 
@@ -317,7 +319,7 @@ func TestUpdateRoomConflict(t *testing.T) {
 		Name:        &name2,
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
 	assert.NotNil(t, update2Res.Conflict)
 
@@ -325,11 +327,10 @@ func TestUpdateRoomConflict(t *testing.T) {
 	assert.NotNil(t, nameRes)
 
 	nameIs := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	require.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
 	assert.Equal(t, name1, nameIs.Value)
 
 	nameWant := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
 	assert.Equal(t, name2, nameWant.Value)
-
 }

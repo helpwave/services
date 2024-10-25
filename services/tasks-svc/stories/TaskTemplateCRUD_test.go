@@ -3,44 +3,56 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwtesting"
 	"hwutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
+
+	"github.com/stretchr/testify/require"
 )
 
-func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
-	getAll, err := taskTemplateServiceClient().GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
-	assert.NoError(t, err, "could not get all task templates")
+func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetTaskTemplateResponse {
+	t.Helper()
 
-	var template *pb.GetAllTaskTemplatesResponse_TaskTemplate
-	for _, templ := range getAll.Templates {
-		if templ.Id == id {
-			template = templ
-			break
-		}
-	}
-	assert.NotNil(t, template)
-	return template
+	taskTemplate, err := taskTemplateServiceClient().GetTaskTemplate(ctx, &pb.GetTaskTemplateRequest{
+		Id: id,
+	})
+	require.NoError(t, err, "could not get all task templates")
+	assert.NotNil(t, taskTemplate)
+	return taskTemplate
 }
 
 func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	ctx := context.Background()
 	taskTemplateClient := taskTemplateServiceClient()
+	wardServiceClient := wardServiceClient()
+
+	//
+	// Create Ward for scoping
+	//
+	createWardReq := &pb.CreateWardRequest{
+		Name: "occupy",
+	}
+	wardRes, err := wardServiceClient.CreateWard(ctx, createWardReq)
+	require.NoError(t, err, "could not create ward")
+
+	// wardId will be used for scoping
+	wardId := wardRes.GetId()
 
 	//
 	// create new template
 	//
 	createReq := &pb.CreateTaskTemplateRequest{
-		WardId:      nil,
+		WardId:      &wardId,
 		Description: hwutil.PtrTo("Some Description"),
 		Subtasks:    make([]*pb.CreateTaskTemplateRequest_SubTask, 0),
 		Name:        t.Name() + " tt",
 	}
 	createRes, err := taskTemplateClient.CreateTaskTemplate(ctx, createReq)
 
-	assert.NoError(t, err, "could not create task template")
+	require.NoError(t, err, "could not create task template")
 
 	templateId := createRes.GetId()
 
@@ -55,7 +67,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	assert.Equal(t, createReq.Name, template.Name)
 	assert.Equal(t, *createReq.Description, template.Description)
 	assert.Equal(t, hwtesting.FakeTokenUser, template.CreatedBy)
-	assert.Equal(t, false, template.IsPublic)
+	assert.True(t, template.IsPublic)
 	assert.Equal(t, createRes.Consistency, template.Consistency)
 
 	//
@@ -69,7 +81,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		Consistency: &createRes.Consistency,
 	}
 	updateRes, err := taskTemplateClient.UpdateTaskTemplate(ctx, updateReq)
-	assert.NoError(t, err, "could not update task template after creation")
+	require.NoError(t, err, "could not update task template after creation")
 
 	assert.NotEqual(t, template.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
@@ -92,8 +104,8 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		TaskTemplateId: templateId,
 		Name:           t.Name() + " ST 1",
 	})
-	assert.NoError(t, err)
-	assert.NotEqual(t, template.Consistency, createStRes.TaskTemplateConsistency, "consitency was not updated")
+	require.NoError(t, err)
+	assert.NotEqual(t, template.Consistency, createStRes.TaskTemplateConsistency, "consistency was not updated")
 
 	//
 	// get updated template
@@ -114,7 +126,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		SubtaskId: createStRes.Id,
 		Name:      hwutil.PtrTo(t.Name() + " ST 2"),
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	//
 	// get updated template
@@ -127,6 +139,29 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	assert.Equal(t, t.Name()+" ST 2", template.Subtasks[0].Name)
 	assert.Equal(t, updateStRes.TaskTemplateConsistency, template.Consistency)
 
+	//
+	// create another template
+	//
+	createReq = &pb.CreateTaskTemplateRequest{
+		WardId:      &wardId,
+		Description: hwutil.PtrTo("Some Description"),
+		Subtasks:    make([]*pb.CreateTaskTemplateRequest_SubTask, 0),
+		Name:        t.Name() + " tt",
+	}
+	_, err = taskTemplateClient.CreateTaskTemplate(ctx, createReq)
+	require.NoError(t, err, "could not create task template")
+	hwtesting.WaitForProjectionsToSettle()
+
+	//
+	// get all templates
+	//
+
+	templates, err := taskTemplateClient.GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{
+		WardId: &wardId,
+	})
+
+	require.NoError(t, err)
+	assert.Len(t, templates.Templates, 2)
 }
 
 func TestUpdateTaskTemplateConflict(t *testing.T) {
@@ -139,7 +174,7 @@ func TestUpdateTaskTemplateConflict(t *testing.T) {
 		WardId:      nil,
 		Subtasks:    nil,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	ttId := ttRes.Id
 	initialConsistency := ttRes.Consistency
@@ -153,7 +188,7 @@ func TestUpdateTaskTemplateConflict(t *testing.T) {
 		Description: &name1,
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, update1Res.Conflict)
 	assert.NotEqual(t, initialConsistency, update1Res.Consistency)
 
@@ -166,7 +201,7 @@ func TestUpdateTaskTemplateConflict(t *testing.T) {
 		Description: &name2,
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
 	assert.NotNil(t, update2Res.Conflict)
 
@@ -174,24 +209,23 @@ func TestUpdateTaskTemplateConflict(t *testing.T) {
 	assert.NotNil(t, nameRes)
 
 	nameIs := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	require.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
 	assert.Equal(t, name1, nameIs.Value)
 
 	nameWant := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
 	assert.Equal(t, name2, nameWant.Value)
 
 	descrRes := update2Res.Conflict.ConflictingAttributes["description"]
 	assert.NotNil(t, descrRes)
 
 	descrIs := &wrapperspb.StringValue{}
-	assert.NoError(t, descrRes.Is.UnmarshalTo(descrIs))
+	require.NoError(t, descrRes.Is.UnmarshalTo(descrIs))
 	assert.Equal(t, name1, descrIs.Value)
 
 	descrWant := &wrapperspb.StringValue{}
-	assert.NoError(t, descrRes.Want.UnmarshalTo(descrWant))
+	require.NoError(t, descrRes.Want.UnmarshalTo(descrWant))
 	assert.Equal(t, name2, descrWant.Value)
-
 }
 
 func TestUpdateTaskTemplateSubTaskConflict(t *testing.T) {
@@ -204,13 +238,13 @@ func TestUpdateTaskTemplateSubTaskConflict(t *testing.T) {
 		WardId:      nil,
 		Subtasks:    nil,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	stRes, err := taskTemplateClient.CreateTaskTemplateSubTask(ctx, &pb.CreateTaskTemplateSubTaskRequest{
 		TaskTemplateId: ttRes.Id,
 		Name:           t.Name(),
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	stId := stRes.Id
 	initialConsistency := stRes.TaskTemplateConsistency
@@ -223,7 +257,7 @@ func TestUpdateTaskTemplateSubTaskConflict(t *testing.T) {
 		Name:                    &name1,
 		TaskTemplateConsistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, update1Res.Conflict)
 	assert.NotEqual(t, initialConsistency, update1Res.TaskTemplateConsistency)
 
@@ -235,7 +269,7 @@ func TestUpdateTaskTemplateSubTaskConflict(t *testing.T) {
 		Name:                    &name2,
 		TaskTemplateConsistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, update1Res.TaskTemplateConsistency, update2Res.TaskTemplateConsistency)
 	assert.NotNil(t, update2Res.Conflict)
 
@@ -243,11 +277,10 @@ func TestUpdateTaskTemplateSubTaskConflict(t *testing.T) {
 	assert.NotNil(t, nameRes)
 
 	nameIs := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	require.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
 	assert.Equal(t, name1, nameIs.Value)
 
 	nameWant := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
 	assert.Equal(t, name2, nameWant.Value)
-
 }

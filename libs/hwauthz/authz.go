@@ -1,10 +1,11 @@
 package hwauthz
 
 import (
-	"common"
+	"common/hwerr"
 	"common/locale"
 	"context"
 	"fmt"
+
 	"go.opentelemetry.io/otel/attribute"
 	"google.golang.org/grpc/codes"
 )
@@ -19,7 +20,13 @@ func StatusErrorPermissionDenied(ctx context.Context, check Relationship) error 
 		check.Resource.Type(),
 		check.Resource.ID(),
 	)
-	return common.NewStatusError(ctx, codes.PermissionDenied, msg, locale.PermissionDeniedError(ctx))
+	return hwerr.NewStatusError(
+		ctx,
+		codes.PermissionDenied,
+		msg,
+		locale.PermissionDeniedError(ctx),
+		// TODO: ErrorInfo
+	)
 }
 
 // ConsistencyToken are currently unused
@@ -37,7 +44,8 @@ type Relation string
 // See https://authzed.com/docs/spicedb/concepts/schema#permissions
 type Permission Relation
 
-// An Object must relate to an [Object Definition](https://authzed.com/docs/spicedb/concepts/schema#object-type-definitions) in the spicedb schema.
+// An Object must relate to an
+// [Object Definition](https://authzed.com/docs/spicedb/concepts/schema#object-type-definitions) in the spicedb schema.
 // We use this to build a v1.ObjectReference used for a Relationship
 type Object interface {
 	// Type of the Object definition, (e.g., "user")
@@ -61,6 +69,27 @@ type Relationship struct {
 	Resource Object
 }
 
+func (r *Relationship) DebugString() string {
+	return fmt.Sprintf(
+		"(sub: '%s:%s', rel: '%s', res: '%s:%s')",
+		r.Subject.Type(),
+		r.Subject.ID(),
+		r.Relation,
+		r.Resource.Type(),
+		r.Resource.ID(),
+	)
+}
+
+func (r *Relationship) SpanAttributeKeyValue() []attribute.KeyValue {
+	return []attribute.KeyValue{
+		attribute.String("hwauthz.resource.type", r.Resource.Type()),
+		attribute.String("hwauthz.resource.id", r.Resource.ID()),
+		attribute.String("hwauthz.relation", string(r.Relation)),
+		attribute.String("hwauthz.subject.type", r.Subject.Type()),
+		attribute.String("hwauthz.subject.id", r.Subject.ID()),
+	}
+}
+
 // NewRelationship constructs a new Relationship object
 // To store a new Relationship Tuple in SpiceDB, see AuthZ.Write
 func NewRelationship(subject Object, relation Relation, resource Object) Relationship {
@@ -79,16 +108,6 @@ type PermissionCheck = Relationship
 // Used to check if a Relationship exists, see AuthZ.Check
 func NewPermissionCheck(subject Object, permission Permission, resource Object) PermissionCheck {
 	return NewRelationship(subject, Relation(permission), resource)
-}
-
-func (r *Relationship) SpanAttributeKeyValue() []attribute.KeyValue {
-	return []attribute.KeyValue{
-		attribute.String("spice.resource.type", r.Resource.Type()),
-		attribute.String("spice.resource.id", r.Resource.ID()),
-		attribute.String("spice.relation", string(r.Relation)),
-		attribute.String("spice.subject.type", r.Subject.Type()),
-		attribute.String("spice.subject.id", r.Subject.ID()),
-	}
 }
 
 // A Writer can write to the permission graph
@@ -141,6 +160,9 @@ type AuthZ interface {
 	// Must performs a Check, and yields StatusErrorPermissionDenied, if it fails
 	// Note: it is NOT guaranteed, that the resulting error is StatusErrorPermissionDenied
 	Must(ctx context.Context, check PermissionCheck) error
+	// BulkCheck queries permission relations for many checks.
+	// The evaluated truthfulness of a check at index i in the checks slice is returned at index i in the yielded slice.
+	BulkCheck(ctx context.Context, checks []PermissionCheck) ([]bool, error)
 }
 
 // Error returns err, if not nil or StatusErrorPermissionDenied, if permissionGranted is false

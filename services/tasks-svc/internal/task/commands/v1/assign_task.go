@@ -3,16 +3,28 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/task/aggregate"
 	"tasks-svc/internal/task/models"
 )
 
-type AssignTaskCommandHandler func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Task], error)
+type AssignTaskCommandHandler func(
+	ctx context.Context,
+	taskID,
+	userID uuid.UUID,
+	expConsistency *common.ConsistencyToken,
+) (common.ConsistencyToken, *common.Conflict[*models.Task], error)
 
 func NewAssignTaskCommandHandler(as hwes.AggregateStore) AssignTaskCommandHandler {
-	return func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Task], error) {
+	return func(
+		ctx context.Context,
+		taskID,
+		userID uuid.UUID,
+		expConsistency *common.ConsistencyToken,
+	) (common.ConsistencyToken, *common.Conflict[*models.Task], error) {
 		task, oldState, err := aggregate.LoadTaskAggregateWithSnapshotAt(ctx, as, taskID, expConsistency)
 		if err != nil {
 			return 0, nil, err

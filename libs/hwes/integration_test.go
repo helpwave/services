@@ -3,11 +3,12 @@ package hwes_test
 import (
 	"context"
 	"errors"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"hwes"
 	"hwes/test"
-	"testing"
 )
 
 type UserModel struct {

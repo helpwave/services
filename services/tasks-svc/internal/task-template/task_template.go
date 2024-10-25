@@ -2,15 +2,18 @@ package task_template
 
 import (
 	"common"
+	"common/auth"
 	"context"
 	commonpb "gen/libs/common/v1"
+	"hwdb"
+	"hwgrpc"
+	"hwutil"
+
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/wrapperspb"
-	"hwdb"
-	"hwgrpc"
-	"hwutil"
+
 	"tasks-svc/repos/task_template_repo"
 
 	pb "gen/services/tasks_svc/v1"
@@ -25,7 +28,10 @@ func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskTemplateRequest) (*pb.CreateTaskTemplateResponse, error) {
+func (ServiceServer) CreateTaskTemplate(
+	ctx context.Context,
+	req *pb.CreateTaskTemplateRequest,
+) (*pb.CreateTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwdb.GetDB()
 	tx, rollback, err := hwdb.BeginTx(db, ctx)
@@ -35,7 +41,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	defer rollback()
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -45,13 +51,10 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		return nil, err
 	}
 
-	description := ""
-	if req.Description != nil {
-		description = *req.Description
-	}
+	description := req.GetDescription()
 
 	row, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
-		Name:        req.Name,
+		Name:        req.GetName(),
 		Description: description,
 		CreatedBy:   userID,
 		WardID:      wardID,
@@ -66,12 +69,13 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	consistency := row.Consistency
 
 	if req.Subtasks != nil {
-		subtaskNames := hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) task_template_repo.AppendSubTasksParams {
-			return task_template_repo.AppendSubTasksParams{
-				Name:           subtask.Name,
-				TaskTemplateID: templateID,
-			}
-		})
+		subtaskNames := hwutil.Map(req.GetSubtasks(),
+			func(subtask *pb.CreateTaskTemplateRequest_SubTask) task_template_repo.AppendSubTasksParams {
+				return task_template_repo.AppendSubTasksParams{
+					Name:           subtask.GetName(),
+					TaskTemplateID: templateID,
+				}
+			})
 
 		_, err = templateRepo.AppendSubTasks(ctx, subtaskNames)
 		err = hwdb.Error(ctx, err)
@@ -90,17 +94,20 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 
 	return &pb.CreateTaskTemplateResponse{
 		Id:          templateID.String(),
-		Consistency: common.ConsistencyToken(consistency).String(),
+		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskTemplateRequest) (*pb.DeleteTaskTemplateResponse, error) {
+func (ServiceServer) DeleteTaskTemplate(
+	ctx context.Context,
+	req *pb.DeleteTaskTemplateRequest,
+) (*pb.DeleteTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -118,7 +125,10 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 	return &pb.DeleteTaskTemplateResponse{}, nil
 }
 
-func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.DeleteTaskTemplateSubTaskRequest) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
+func (ServiceServer) DeleteTaskTemplateSubTask(
+	ctx context.Context,
+	req *pb.DeleteTaskTemplateSubTaskRequest,
+) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
@@ -131,7 +141,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -161,15 +171,19 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 		Msg("taskTemplateSubtask deleted")
 
 	return &pb.DeleteTaskTemplateSubTaskResponse{
-		TaskTemplateConsistency: common.ConsistencyToken(ttResult.Consistency).String(),
+		TaskTemplateConsistency: common.ConsistencyToken(ttResult.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskTemplateRequest) (*pb.UpdateTaskTemplateResponse, error) {
+func (ServiceServer) UpdateTaskTemplate(
+	ctx context.Context,
+	req *pb.UpdateTaskTemplateRequest,
+) (*pb.UpdateTaskTemplateResponse, error) {
+	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -185,7 +199,6 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		return nil, err
 	}
 	defer rollback()
-	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// do update
 	result, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
@@ -199,10 +212,11 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 	}
 
 	// conflict detection
-	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) {
+	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) { //nolint:gosec
 		// task_template is not event sourced yet and has more than one field,
 		// thus we are not able to pinpoint conflicts to a field, we only know *some* update has happened since
-		// for convenience we are filtering out obvious non-conflicts, where the update is the same as the is state, or the field was not changed
+		// for convenience we are filtering out obvious non-conflicts, where the update is the same as the is state,
+		// or the field was not changed
 
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
@@ -237,7 +251,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 					ConflictingAttributes: conflicts,
 					HistoryMissing:        true,
 				},
-				Consistency: common.ConsistencyToken(result.OldConsistency).String(),
+				Consistency: common.ConsistencyToken(result.OldConsistency).String(), //nolint:gosec
 			}, nil
 		}
 	}
@@ -249,17 +263,14 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 
 	return &pb.UpdateTaskTemplateResponse{
 		Conflict:    nil,
-		Consistency: common.ConsistencyToken(result.Consistency).String(),
+		Consistency: common.ConsistencyToken(result.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
-
-	expConsistency, ok := common.ParseConsistency(req.TaskTemplateConsistency)
-	if !ok {
-		return nil, common.UnparsableConsistencyError(ctx, "task_template_consistency")
-	}
-
+func (ServiceServer) UpdateTaskTemplateSubTask(
+	ctx context.Context,
+	req *pb.UpdateTaskTemplateSubTaskRequest,
+) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
 	// TX
 	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
 	if err != nil {
@@ -270,9 +281,14 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.SubtaskId)
+	id, err := uuid.Parse(req.GetSubtaskId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	expConsistency, ok := common.ParseConsistency(req.TaskTemplateConsistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "task_template_consistency")
 	}
 
 	// update subtask and get related taskTemplate
@@ -294,7 +310,7 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 	}
 
 	// conflict detection
-	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) {
+	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) { //nolint:gosec
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		if req.Name != nil && *req.Name != subTaskResult.OldName {
@@ -319,7 +335,7 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 					ConflictingAttributes: conflicts,
 					HistoryMissing:        true,
 				},
-				TaskTemplateConsistency: common.ConsistencyToken(result.OldConsistency).String(),
+				TaskTemplateConsistency: common.ConsistencyToken(result.OldConsistency).String(), //nolint:gosec
 			}, nil
 		}
 	}
@@ -330,25 +346,26 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 	}
 
 	return &pb.UpdateTaskTemplateSubTaskResponse{
-		Conflict:                nil,
-		TaskTemplateConsistency: common.ConsistencyToken(result.Consistency).String(),
+		TaskTemplateConsistency: common.ConsistencyToken(result.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.CreateTaskTemplateSubTaskRequest) (*pb.CreateTaskTemplateSubTaskResponse, error) {
+func (ServiceServer) CreateTaskTemplateSubTask(
+	ctx context.Context,
+	req *pb.CreateTaskTemplateSubTaskRequest,
+) (*pb.CreateTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
-	taskTemplateID, err := uuid.Parse(req.TaskTemplateId)
+	taskTemplateID, err := uuid.Parse(req.GetTaskTemplateId())
 	if err != nil {
 		return nil, err
 	}
 
 	row, err := templateRepo.CreateSubTask(ctx, task_template_repo.CreateSubTaskParams{
 		TaskTemplateID: taskTemplateID,
-		Name:           req.Name,
+		Name:           req.GetName(),
 	})
-
 	// implicitly checks the existence of the ward through the foreign key constraint
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -365,11 +382,14 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
 		Id:                      subtaskID.String(),
-		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTaskTemplatesRequest) (*pb.GetAllTaskTemplatesResponse, error) {
+func (ServiceServer) GetAllTaskTemplates(
+	ctx context.Context,
+	req *pb.GetAllTaskTemplatesRequest,
+) (*pb.GetAllTaskTemplatesResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
@@ -382,11 +402,12 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTask
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
-		CreatorID:   createdBy,
-		PrivateOnly: req.PrivateOnly,
-		WardID:      wardID,
-	})
+	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx,
+		task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
+			CreatorID:   createdBy,
+			PrivateOnly: req.GetPrivateOnly(),
+			WardID:      wardID,
+		})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
@@ -407,7 +428,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTask
 				IsPublic:    row.TaskTemplate.WardID.Valid,
 				Subtasks:    make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
 				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
-				Consistency: common.ConsistencyToken(row.TaskTemplate.Consistency).String(),
+				Consistency: common.ConsistencyToken(row.TaskTemplate.Consistency).String(), //nolint:gosec
 			}
 			templates = append(templates, template)
 			templateMap[row.TaskTemplate.ID] = len(templates) - 1
@@ -424,5 +445,50 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTask
 
 	return &pb.GetAllTaskTemplatesResponse{
 		Templates: templates,
+	}, nil
+}
+
+func (ServiceServer) GetTaskTemplate(
+	ctx context.Context,
+	req *pb.GetTaskTemplateRequest,
+) (*pb.GetTaskTemplateResponse, error) {
+	templateRepo := task_template_repo.New(hwdb.GetDB())
+
+	taskTemplateID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	rows, err := templateRepo.GetTaskTemplateWithSubtasksByID(ctx, taskTemplateID)
+	if err := hwdb.Error(ctx, err); err != nil {
+		return nil, err
+	}
+
+	if len(rows) == 0 {
+		return nil, status.Error(codes.NotFound, "task template not found")
+	}
+	taskTemplate := rows[0].TaskTemplate
+
+	taskTemplateSubtasks := hwutil.FlatMap(rows,
+		func(row task_template_repo.GetTaskTemplateWithSubtasksByIDRow) **pb.GetTaskTemplateResponse_SubTask {
+			if !row.SubTaskID.Valid {
+				return nil
+			}
+			return hwutil.PtrTo(
+				&pb.GetTaskTemplateResponse_SubTask{
+					Id:             row.SubTaskID.UUID.String(),
+					TaskTemplateId: row.TaskTemplate.ID.String(),
+					Name:           *row.SubTaskName, // NOT NULL
+				})
+		})
+
+	return &pb.GetTaskTemplateResponse{
+		Id:          taskTemplate.ID.String(),
+		Name:        taskTemplate.Name,
+		Description: taskTemplate.Description,
+		IsPublic:    taskTemplate.WardID.Valid,
+		CreatedBy:   taskTemplate.CreatedBy.String(),
+		Consistency: common.ConsistencyToken(taskTemplate.Consistency).String(), //nolint:gosec
+		Subtasks:    taskTemplateSubtasks,
 	}, nil
 }

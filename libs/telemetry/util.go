@@ -2,8 +2,9 @@ package telemetry
 
 import (
 	"fmt"
-	"github.com/fatih/structs"
 	"strings"
+
+	"github.com/fatih/structs"
 )
 
 type Loggable interface {
@@ -14,13 +15,13 @@ type Loggable interface {
 
 // Formatted formats anything but makes sure to encode newlines
 func Formatted(arg any) string {
-	return strings.Replace(fmt.Sprintf("%+v", arg), "\n", "\\n", -1)
+	return strings.ReplaceAll(fmt.Sprintf("%+v", arg), "\n", "\\n")
 }
 
 // Omit redacts pattern from source
 func Omit(source, pattern string) string {
 	replacement := fmt.Sprintf("<%d chars omitted>", len(pattern))
-	return strings.Replace(source, pattern, replacement, -1)
+	return strings.ReplaceAll(source, pattern, replacement)
 }
 
 // OmitAll redacts all

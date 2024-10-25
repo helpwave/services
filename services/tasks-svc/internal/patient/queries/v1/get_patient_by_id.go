@@ -3,8 +3,10 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/patient/aggregate"
 	"tasks-svc/internal/patient/models"
 )

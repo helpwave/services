@@ -3,8 +3,10 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/patient/aggregate"
 )
 
@@ -20,6 +22,12 @@ func NewDischargePatientCommandHandler(as hwes.AggregateStore) DischargePatientC
 		if err := a.DischargePatient(ctx); err != nil {
 			return 0, err
 		}
+
+		// If a patient is being discharged, the patient is also being unassigned from the bed
+		if err := a.UnassignBed(ctx); err != nil {
+			return 0, err
+		}
+
 		return as.Save(ctx, a)
 	}
 }

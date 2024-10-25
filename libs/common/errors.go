@@ -1,16 +1,20 @@
 package common
 
 import (
-	"common/locale"
 	"context"
+	"hwlocale"
+
+	"common/hwerr"
+
+	"common/locale"
+
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
-	"hwlocale"
 )
 
 // SingleInvalidFieldError builds a NewStatusError
 func SingleInvalidFieldError(ctx context.Context, field, msg string, locale hwlocale.Locale) error {
-	return NewStatusError(ctx,
+	return hwerr.NewStatusError(ctx,
 		codes.InvalidArgument,
 		msg,
 		locale,
@@ -20,7 +24,8 @@ func SingleInvalidFieldError(ctx context.Context, field, msg string, locale hwlo
 					Field:       field,
 					Description: hwlocale.Localize(ctx, locale),
 				},
-			}},
+			},
+		},
 	)
 }
 

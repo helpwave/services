@@ -1,16 +1,18 @@
 package task
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	pb "gen/services/task_svc/v1"
+	"hwdb"
+	"hwutil"
+
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"hwdb"
-	"hwutil"
+
 	"task-svc/repos/patient_repo"
 	"task-svc/repos/task_repo"
 )
@@ -30,17 +32,17 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	patientId, err := uuid.Parse(req.PatientId)
+	patientId, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -57,10 +59,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		return nil, status.Error(codes.InvalidArgument, "patientId not found")
 	}
 
-	description := ""
-	if req.Description != nil {
-		description = *req.Description
-	}
+	description := req.GetDescription()
 
 	// When changing this array also adjust the error message below
 	allowedInitialStatuses := []pb.TaskStatus{pb.TaskStatus_TASK_STATUS_TODO, pb.TaskStatus_TASK_STATUS_IN_PROGRESS}
@@ -69,16 +68,19 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		if hwutil.Contains(allowedInitialStatuses, *req.InitialStatus) {
 			initialStatus = *req.InitialStatus
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "only todo and in progress are allowed as an initial TaskStatus")
+			return nil, status.Error(
+				codes.InvalidArgument,
+				"only todo and in progress are allowed as an initial TaskStatus",
+			)
 		}
 	}
 
 	taskId, err := taskRepo.CreateTask(ctx, task_repo.CreateTaskParams{
-		Name:           req.Name,
+		Name:           req.GetName(),
 		Description:    description,
 		Status:         int32(initialStatus),
 		PatientID:      patientId,
-		Public:         req.Public,
+		Public:         req.GetPublic(),
 		OrganizationID: organizationID,
 		CreatedBy:      userID,
 		DueAt:          hwdb.TimeToTimestamp(req.DueAt.AsTime()),
@@ -103,7 +105,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -126,18 +128,20 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		assignedUserId = ""
 	}
 
-	subtasks := hwutil.FlatMap(rows, func(row task_repo.GetTaskWithSubTasksAndPatientNameRow) **pb.GetTaskResponse_SubTask {
-		if !row.SubtaskID.Valid {
-			return nil
-		}
-		val := &pb.GetTaskResponse_SubTask{
-			Id:        row.SubtaskID.UUID.String(),
-			Done:      *row.SubtaskDone,
-			Name:      *row.SubtaskName,
-			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
-		}
-		return &val
-	})
+	subtasks := hwutil.FlatMap(rows,
+		func(row task_repo.GetTaskWithSubTasksAndPatientNameRow) **pb.GetTaskResponse_SubTask {
+			if !row.SubtaskID.Valid {
+				return nil
+			}
+			val := &pb.GetTaskResponse_SubTask{
+				Id:        row.SubtaskID.UUID.String(),
+				Done:      *row.SubtaskDone,
+				Name:      *row.SubtaskName,
+				CreatedBy: row.SubtaskCreatedBy.UUID.String(),
+			}
+
+			return &val
+		})
 
 	patient := &pb.GetTaskResponse_Patient{
 		Id:   task.PatientID.String(),
@@ -159,17 +163,20 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 	}, nil
 }
 
-func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPatientRequest) (*pb.GetTasksByPatientResponse, error) {
+func (ServiceServer) GetTasksByPatient(
+	ctx context.Context,
+	req *pb.GetTasksByPatientRequest,
+) (*pb.GetTasksByPatientResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	patientID, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -226,17 +233,21 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 	}, nil
 }
 
-func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *pb.GetTasksByPatientSortedByStatusRequest) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
+func (ServiceServer) GetTasksByPatientSortedByStatus(
+	ctx context.Context,
+	req *pb.GetTasksByPatientSortedByStatusRequest,
+) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
+	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	patientID, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -277,12 +288,15 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 			ix := len(tasks) - 1
 			taskMap[row.Task.ID] = ix
 			taskStatus := pb.TaskStatus(row.Task.Status)
-			if taskStatus == pb.TaskStatus_TASK_STATUS_TODO {
+			switch taskStatus {
+			case pb.TaskStatus_TASK_STATUS_TODO:
 				todo[ix] = true
-			} else if taskStatus == pb.TaskStatus_TASK_STATUS_IN_PROGRESS {
+			case pb.TaskStatus_TASK_STATUS_IN_PROGRESS:
 				inprogress[ix] = true
-			} else if taskStatus == pb.TaskStatus_TASK_STATUS_DONE {
+			case pb.TaskStatus_TASK_STATUS_DONE:
 				done[ix] = true
+			case pb.TaskStatus_TASK_STATUS_UNSPECIFIED:
+				log.Warn().Str("taskID", row.Task.ID.String()).Msg("task status is UNSPECIFIED")
 			}
 		}
 
@@ -316,9 +330,12 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 	}, nil
 }
 
-func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
+func (ServiceServer) GetAssignedTasks(
+	ctx context.Context,
+	_ *pb.GetAssignedTasksRequest,
+) (*pb.GetAssignedTasksResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
-	assigneeID, err := common.GetUserID(ctx)
+	assigneeID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -381,7 +398,7 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -406,7 +423,7 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -423,17 +440,17 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) (*pb.AddSubTaskResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	taskId, err := uuid.Parse(req.TaskId)
+	taskId, err := uuid.Parse(req.GetTaskId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -451,13 +468,10 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 		return nil, status.Error(codes.InvalidArgument, "taskId not found")
 	}
 
-	done := false
-	if req.Done != nil {
-		done = *req.Done
-	}
+	done := req.GetDone()
 
 	subtaskID, err := taskRepo.CreateSubTask(ctx, task_repo.CreateSubTaskParams{
-		Name:      req.Name,
+		Name:      req.GetName(),
 		TaskID:    taskId,
 		Done:      done,
 		CreatedBy: userID,
@@ -470,12 +484,15 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	return &pb.AddSubTaskResponse{Id: subtaskID.String()}, nil
 }
 
-func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskRequest) (*pb.RemoveSubTaskResponse, error) {
+func (ServiceServer) RemoveSubTask(
+	ctx context.Context,
+	req *pb.RemoveSubTaskRequest,
+) (*pb.RemoveSubTaskResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	subtaskID, err := uuid.Parse(req.Id)
+	subtaskID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -489,10 +506,13 @@ func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskReq
 	return &pb.RemoveSubTaskResponse{}, nil
 }
 
-func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskRequest) (*pb.UpdateSubTaskResponse, error) {
+func (ServiceServer) UpdateSubTask(
+	ctx context.Context,
+	req *pb.UpdateSubTaskRequest,
+) (*pb.UpdateSubTaskResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
-	subtaskID, err := uuid.Parse(req.Id)
+	subtaskID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -510,12 +530,15 @@ func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskReq
 	return &pb.UpdateSubTaskResponse{}, nil
 }
 
-func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoRequest) (*pb.SubTaskToToDoResponse, error) {
+func (ServiceServer) SubTaskToToDo(
+	ctx context.Context,
+	req *pb.SubTaskToToDoRequest,
+) (*pb.SubTaskToToDoResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	subtaskID, err := uuid.Parse(req.Id)
+	subtaskID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -532,12 +555,15 @@ func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoReq
 	return &pb.SubTaskToToDoResponse{}, nil
 }
 
-func (ServiceServer) SubTaskToDone(ctx context.Context, req *pb.SubTaskToDoneRequest) (*pb.SubTaskToDoneResponse, error) {
+func (ServiceServer) SubTaskToDone(
+	ctx context.Context,
+	req *pb.SubTaskToDoneRequest,
+) (*pb.SubTaskToDoneResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	subtaskID, err := uuid.Parse(req.Id)
+	subtaskID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -557,7 +583,7 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -576,13 +602,16 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 	return &pb.TaskToToDoResponse{}, nil
 }
 
-func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgressRequest) (*pb.TaskToInProgressResponse, error) {
+func (ServiceServer) TaskToInProgress(
+	ctx context.Context,
+	req *pb.TaskToInProgressRequest,
+) (*pb.TaskToInProgressResponse, error) {
 	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -607,7 +636,7 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -626,18 +655,21 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 	return &pb.TaskToDoneResponse{}, nil
 }
 
-func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToUserRequest) (*pb.AssignTaskToUserResponse, error) {
+func (ServiceServer) AssignTaskToUser(
+	ctx context.Context,
+	req *pb.AssignTaskToUserRequest,
+) (*pb.AssignTaskToUserResponse, error) {
 	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	userId, err := uuid.Parse(req.UserId)
+	userId, err := uuid.Parse(req.GetUserId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -664,13 +696,16 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 	return &pb.AssignTaskToUserResponse{}, nil
 }
 
-func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignTaskFromUserRequest) (*pb.UnassignTaskFromUserResponse, error) {
+func (ServiceServer) UnassignTaskFromUser(
+	ctx context.Context,
+	req *pb.UnassignTaskFromUserRequest,
+) (*pb.UnassignTaskFromUserResponse, error) {
 	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -694,7 +729,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -712,13 +747,16 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 	return &pb.PublishTaskResponse{}, nil
 }
 
-func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskRequest) (*pb.UnpublishTaskResponse, error) {
+func (ServiceServer) UnpublishTask(
+	ctx context.Context,
+	req *pb.UnpublishTaskRequest,
+) (*pb.UnpublishTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

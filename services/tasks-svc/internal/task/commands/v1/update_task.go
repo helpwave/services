@@ -4,9 +4,11 @@ import (
 	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwes"
+
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"hwes"
+
 	"tasks-svc/internal/task/aggregate"
 	"tasks-svc/internal/task/models"
 )
@@ -23,7 +25,8 @@ type UpdateTaskCommandHandler func(
 ) (common.ConsistencyToken, *common.Conflict[*models.Task], error)
 
 func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandler {
-	return func(ctx context.Context,
+	return func(
+		ctx context.Context,
 		taskID uuid.UUID,
 		name *string,
 		description *string,

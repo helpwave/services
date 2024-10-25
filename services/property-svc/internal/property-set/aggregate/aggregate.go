@@ -2,8 +2,10 @@ package aggregate
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	propertySetEventsV1 "property-svc/internal/property-set/events/v1"
 	"property-svc/internal/property-set/models"
 )
@@ -20,14 +22,20 @@ func NewPropertySetAggregate(id uuid.UUID) *PropertySetAggregate {
 	aggregate.AggregateBase = hwes.NewAggregateBase(PropertySetAggregateType, id)
 	aggregate.PropertySet.ID = id
 	aggregate.initEventListeners()
+
 	return aggregate
 }
 
-func LoadPropertySetAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*PropertySetAggregate, error) {
+func LoadPropertySetAggregate(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+) (*PropertySetAggregate, error) {
 	propertySet := NewPropertySetAggregate(id)
 	if err := as.Load(ctx, propertySet); err != nil {
 		return nil, err
 	}
+
 	return propertySet, nil
 }
 

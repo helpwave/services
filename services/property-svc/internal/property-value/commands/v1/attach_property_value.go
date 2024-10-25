@@ -3,15 +3,18 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwdb"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property-value/aggregate"
 	"property-svc/internal/property-value/models"
 	"property-svc/repos/property_value_repo"
 )
 
-type AttachPropertyValueCommandHandler func(ctx context.Context,
+type AttachPropertyValueCommandHandler func(
+	ctx context.Context,
 	propertyValueID uuid.UUID,
 	propertyID uuid.UUID,
 	valueChange models.TypedValueChange,
@@ -20,11 +23,17 @@ type AttachPropertyValueCommandHandler func(ctx context.Context,
 ) (common.ConsistencyToken, *common.Conflict[*models.PropertyValue], error)
 
 func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachPropertyValueCommandHandler {
-	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, valueChange models.TypedValueChange, subjectID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.PropertyValue], error) {
+	return func(
+		ctx context.Context,
+		propertyValueID uuid.UUID,
+		propertyID uuid.UUID,
+		valueChange models.TypedValueChange,
+		subjectID uuid.UUID,
+		expConsistency *common.ConsistencyToken,
+	) (common.ConsistencyToken, *common.Conflict[*models.PropertyValue], error) {
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 
-		// first check if a value is already attached to the subject for this property
 		query := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)
 		existingPropertyValueID, err := query(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
 			PropertyID: propertyID,
@@ -42,7 +51,12 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 			}
 		} else { // else, update the existing value
 			var snapshot *models.PropertyValue
-			a, snapshot, err = aggregate.LoadPropertyValueAggregateWithSnapshotAt(ctx, as, *existingPropertyValueID, expConsistency)
+			a, snapshot, err = aggregate.LoadPropertyValueAggregateWithSnapshotAt(
+				ctx,
+				as,
+				*existingPropertyValueID,
+				expConsistency,
+			)
 			if err != nil {
 				return 0, nil, err
 			}

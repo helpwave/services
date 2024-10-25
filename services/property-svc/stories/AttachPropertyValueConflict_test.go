@@ -1,16 +1,20 @@
+//nolint:lll
 package stories
 
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwtesting"
 	"strconv"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func TestAttachPropertyValueConflict_Text(t *testing.T) {
@@ -30,7 +34,7 @@ func TestAttachPropertyValueConflict_Text(t *testing.T) {
 	}
 
 	createRes, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	hwtesting.WaitForProjectionsToSettle()
 
 	propertyID := createRes.PropertyId
@@ -47,7 +51,7 @@ func TestAttachPropertyValueConflict_Text(t *testing.T) {
 		Consistency: nil,
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, wasRes.Conflict)
 
 	initialConsistency := wasRes.Consistency
@@ -62,7 +66,7 @@ func TestAttachPropertyValueConflict_Text(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, isRes.Conflict)
 
 	// WANT
@@ -75,14 +79,13 @@ func TestAttachPropertyValueConflict_Text(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.NotNil(t, wantRes.Conflict)
 
 	s := "conflicting_attributes:{key:\"value\" value:{is:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + t.Name() + " IS\"}} " +
 		"want:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + t.Name() + " WANT\"}}}}"
 
 	assert.Equal(t, s, strings.ReplaceAll(wantRes.Conflict.String(), "  ", " "))
-
 }
 
 func TestAttachPropertyValueConflict_Number(t *testing.T) {
@@ -102,7 +105,7 @@ func TestAttachPropertyValueConflict_Number(t *testing.T) {
 	}
 
 	createRes, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	hwtesting.WaitForProjectionsToSettle()
 
 	propertyID := createRes.PropertyId
@@ -119,7 +122,7 @@ func TestAttachPropertyValueConflict_Number(t *testing.T) {
 		Consistency: nil,
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, wasRes.Conflict)
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -135,7 +138,7 @@ func TestAttachPropertyValueConflict_Number(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, isRes.Conflict)
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -149,14 +152,13 @@ func TestAttachPropertyValueConflict_Number(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.NotNil(t, wantRes.Conflict)
 
 	s := "conflicting_attributes:{key:\"value\" value:{is:{[type.googleapis.com/google.protobuf.DoubleValue]:{value:2}} " +
 		"want:{[type.googleapis.com/google.protobuf.DoubleValue]:{value:3}}}}"
 
 	assert.Equal(t, s, strings.ReplaceAll(wantRes.Conflict.String(), "  ", " "))
-
 }
 
 func TestAttachPropertyValueConflict_Date(t *testing.T) {
@@ -176,7 +178,7 @@ func TestAttachPropertyValueConflict_Date(t *testing.T) {
 	}
 
 	createRes, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	hwtesting.WaitForProjectionsToSettle()
 
 	propertyID := createRes.PropertyId
@@ -195,7 +197,7 @@ func TestAttachPropertyValueConflict_Date(t *testing.T) {
 		Consistency: nil,
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, wasRes.Conflict)
 
 	initialConsistency := wasRes.Consistency
@@ -213,7 +215,7 @@ func TestAttachPropertyValueConflict_Date(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, isRes.Conflict)
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -229,7 +231,7 @@ func TestAttachPropertyValueConflict_Date(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.NotNil(t, wantRes.Conflict)
 
 	s := "conflicting_attributes:{key:\"value\" " +
@@ -237,7 +239,6 @@ func TestAttachPropertyValueConflict_Date(t *testing.T) {
 		"want:{[type.googleapis.com/services.property_svc.v1.Date]:{date:{seconds:" + strconv.FormatInt(want.Unix(), 10) + " nanos:" + strconv.Itoa(want.Nanosecond()) + "}}}}}"
 
 	assert.Equal(t, s, strings.ReplaceAll(wantRes.Conflict.String(), "  ", " "))
-
 }
 
 func TestAttachPropertyValueConflict_DateTime(t *testing.T) {
@@ -257,7 +258,7 @@ func TestAttachPropertyValueConflict_DateTime(t *testing.T) {
 	}
 
 	createRes, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	hwtesting.WaitForProjectionsToSettle()
 
 	propertyID := createRes.PropertyId
@@ -276,7 +277,7 @@ func TestAttachPropertyValueConflict_DateTime(t *testing.T) {
 		Consistency: nil,
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, wasRes.Conflict)
 
 	initialConsistency := wasRes.Consistency
@@ -294,7 +295,7 @@ func TestAttachPropertyValueConflict_DateTime(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, isRes.Conflict)
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -310,7 +311,7 @@ func TestAttachPropertyValueConflict_DateTime(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.NotNil(t, wantRes.Conflict)
 
 	s := "conflicting_attributes:{key:\"value\" " +
@@ -318,7 +319,6 @@ func TestAttachPropertyValueConflict_DateTime(t *testing.T) {
 		"want:{[type.googleapis.com/google.protobuf.Timestamp]:{seconds:" + strconv.FormatInt(want.Unix(), 10) + " nanos:" + strconv.Itoa(want.Nanosecond()) + "}}}}"
 
 	assert.Equal(t, s, strings.ReplaceAll(wantRes.Conflict.String(), "  ", " "))
-
 }
 
 func TestAttachPropertyValueConflict_SingleSelect(t *testing.T) {
@@ -356,7 +356,7 @@ func TestAttachPropertyValueConflict_SingleSelect(t *testing.T) {
 	}
 
 	createRes, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	hwtesting.WaitForProjectionsToSettle()
 
 	propertyID := createRes.PropertyId
@@ -366,7 +366,7 @@ func TestAttachPropertyValueConflict_SingleSelect(t *testing.T) {
 		Id:         propertyID,
 		ViewSource: nil,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	opts := prop.GetSelectData().Options
 	was := opts[0].Id
 	is := opts[1].Id
@@ -383,7 +383,7 @@ func TestAttachPropertyValueConflict_SingleSelect(t *testing.T) {
 		Consistency: nil,
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, wasRes.Conflict)
 
 	initialConsistency := wasRes.Consistency
@@ -399,7 +399,7 @@ func TestAttachPropertyValueConflict_SingleSelect(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, isRes.Conflict)
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -413,7 +413,7 @@ func TestAttachPropertyValueConflict_SingleSelect(t *testing.T) {
 		},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.NotNil(t, wantRes.Conflict)
 
 	s := "conflicting_attributes:{key:\"value\" " +
@@ -421,5 +421,4 @@ func TestAttachPropertyValueConflict_SingleSelect(t *testing.T) {
 		"want:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + want + "\"}}}}"
 
 	assert.Equal(t, s, strings.ReplaceAll(wantRes.Conflict.String(), "  ", " "))
-
 }

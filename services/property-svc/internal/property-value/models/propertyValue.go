@@ -4,15 +4,16 @@ import (
 	"fmt"
 	commonpb "gen/libs/common/v1"
 	pb "gen/services/property_svc/v1"
+	"hwdb"
+	"hwutil"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
-	"hwdb"
-	"hwutil"
-	"time"
 )
 
 type PropertyValue struct {
@@ -42,7 +43,6 @@ type SelectValueOption struct {
 	Description string    `json:"description,omitempty"`
 }
 
-// TODO
 type SimpleTypedValue struct {
 	TextValue         *string
 	BoolValue         *bool
@@ -200,11 +200,11 @@ func (c TypedValueChange) Apply(value *SimpleTypedValue) bool {
 }
 
 type BasicChangeSettable interface {
-	SetTextValue(*string)
-	SetNumberValue(*float64)
-	SetBoolValue(*bool)
-	SetDateValue(pgtype.Date)
-	SetDateTimeValue(pgtype.Timestamp)
+	SetTextValue(value *string)
+	SetNumberValue(value *float64)
+	SetBoolValue(value *bool)
+	SetDateValue(value pgtype.Date)
+	SetDateTimeValue(value pgtype.Timestamp)
 }
 
 func (c TypedValueChange) SetBasicValues(settable BasicChangeSettable) bool {

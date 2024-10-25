@@ -3,14 +3,17 @@ package eventstoredb
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/assert"
-	"hwes"
 	"hwtesting"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/assert"
+	"hwes"
 )
 
 var endpoint string
@@ -45,45 +48,44 @@ func TestLoadN(t *testing.T) {
 
 	for i := 0; i < 4; i++ {
 		event, _ := hwes.NewEvent(sendAggregate, eventType, hwes.WithContext(ctx))
-		assert.NoError(t, sendAggregate.Apply(event))
+		require.NoError(t, sendAggregate.Apply(event))
 	}
 
 	_, err := as.Save(ctx, sendAggregate)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	time.Sleep(time.Millisecond * 100)
 
 	rxAggregate := hwes.NewAggregateBase(hwes.AggregateType(eventType), id)
 	rxAggregate.RegisterEventListener(eventType, func(evt hwes.Event) error { return nil })
-	assert.Len(t, sendAggregate.GetAppliedEvents(), 0)
+	assert.Empty(t, sendAggregate.GetAppliedEvents())
 
 	// LoadN 0 does nothing
 	err = as.LoadN(ctx, rxAggregate, 0)
-	assert.NoError(t, err)
-	assert.Len(t, rxAggregate.GetAppliedEvents(), 0)
+	require.NoError(t, err)
+	assert.Empty(t, rxAggregate.GetAppliedEvents())
 
 	// LoadN 1 loads the first event
 	err = as.LoadN(ctx, rxAggregate, 1)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Len(t, rxAggregate.GetAppliedEvents(), 1)
-	assert.Equal(t, rxAggregate.GetAppliedEvents()[0].Version, uint64(0))
+	assert.Equal(t, uint64(0), rxAggregate.GetAppliedEvents()[0].Version)
 
 	// LoadN 1 loads another event
 	err = as.LoadN(ctx, rxAggregate, 1)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Len(t, rxAggregate.GetAppliedEvents(), 2)
-	assert.Equal(t, rxAggregate.GetAppliedEvents()[1].Version, uint64(1))
+	assert.Equal(t, uint64(1), rxAggregate.GetAppliedEvents()[1].Version)
 
 	// LoadN 2 loads the rest
 	err = as.LoadN(ctx, rxAggregate, 2)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Len(t, rxAggregate.GetAppliedEvents(), 4)
-	assert.Equal(t, rxAggregate.GetAppliedEvents()[2].Version, uint64(2))
-	assert.Equal(t, rxAggregate.GetAppliedEvents()[3].Version, uint64(3))
+	assert.Equal(t, uint64(2), rxAggregate.GetAppliedEvents()[2].Version)
+	assert.Equal(t, uint64(3), rxAggregate.GetAppliedEvents()[3].Version)
 
 	// LoadN 1 now does nothing anymore
 	err = as.LoadN(ctx, rxAggregate, 1)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Len(t, rxAggregate.GetAppliedEvents(), 4)
-
 }

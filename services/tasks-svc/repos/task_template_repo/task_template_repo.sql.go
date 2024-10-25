@@ -153,6 +153,55 @@ func (q *Queries) GetAllTaskTemplatesWithSubTasks(ctx context.Context, arg GetAl
 	return items, nil
 }
 
+const getTaskTemplateWithSubtasksByID = `-- name: GetTaskTemplateWithSubtasksByID :many
+SELECT
+	task_templates.id, task_templates.name, task_templates.description, task_templates.ward_id, task_templates.created_by, task_templates.consistency,
+	task_template_subtasks.id as sub_task_id,
+	task_template_subtasks.name as sub_task_name
+FROM
+	task_templates
+LEFT JOIN
+	task_template_subtasks
+ON
+	task_template_subtasks.task_template_id = task_templates.id
+WHERE task_templates.id = $1
+`
+
+type GetTaskTemplateWithSubtasksByIDRow struct {
+	TaskTemplate TaskTemplate
+	SubTaskID    uuid.NullUUID
+	SubTaskName  *string
+}
+
+func (q *Queries) GetTaskTemplateWithSubtasksByID(ctx context.Context, id uuid.UUID) ([]GetTaskTemplateWithSubtasksByIDRow, error) {
+	rows, err := q.db.Query(ctx, getTaskTemplateWithSubtasksByID, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetTaskTemplateWithSubtasksByIDRow{}
+	for rows.Next() {
+		var i GetTaskTemplateWithSubtasksByIDRow
+		if err := rows.Scan(
+			&i.TaskTemplate.ID,
+			&i.TaskTemplate.Name,
+			&i.TaskTemplate.Description,
+			&i.TaskTemplate.WardID,
+			&i.TaskTemplate.CreatedBy,
+			&i.TaskTemplate.Consistency,
+			&i.SubTaskID,
+			&i.SubTaskName,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateSubtask = `-- name: UpdateSubtask :one
 WITH old_table AS (
 	SELECT name as old_name

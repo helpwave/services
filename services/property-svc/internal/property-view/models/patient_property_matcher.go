@@ -3,9 +3,11 @@ package models
 import (
 	"context"
 	"errors"
-	"github.com/google/uuid"
 	"hwdb"
 	"hwutil"
+
+	"github.com/google/uuid"
+
 	"property-svc/repos/patient_views_repo"
 )
 
@@ -16,12 +18,13 @@ type PatientPropertyMatchers struct {
 	PatientID uuid.NullUUID `json:"patient_id,omitempty"`
 }
 
-func (m PatientPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
+func (m PatientPropertyMatchers) FindExactRuleID(ctx context.Context) (*uuid.UUID, error) {
 	patientViews := patient_views_repo.New(hwdb.GetDB())
-	return hwdb.Optional(patientViews.GetPatientRuleIdUsingExactMatchers)(ctx, patient_views_repo.GetPatientRuleIdUsingExactMatchersParams{
-		WardID:    m.WardID,
-		PatientID: m.PatientID,
-	})
+	return hwdb.Optional(patientViews.GetPatientRuleIdUsingExactMatchers)(ctx,
+		patient_views_repo.GetPatientRuleIdUsingExactMatchersParams{
+			WardID:    m.WardID,
+			PatientID: m.PatientID,
+		})
 }
 
 type queryPatientPropertiesRow struct {
@@ -47,10 +50,12 @@ func (m PatientPropertyMatchers) GetType() string {
 func (m PatientPropertyMatchers) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
 	patientViews := patient_views_repo.New(hwdb.GetDB())
 
-	rows, err := patientViews.GetPatientPropertiesUsingMatchers(ctx, patient_views_repo.GetPatientPropertiesUsingMatchersParams{
-		WardID:    m.WardID,
-		PatientID: m.PatientID,
-	})
+	rows, err := patientViews.GetPatientPropertiesUsingMatchers(
+		ctx,
+		patient_views_repo.GetPatientPropertiesUsingMatchersParams{
+			WardID:    m.WardID,
+			PatientID: m.PatientID,
+		})
 
 	cast := func(row patient_views_repo.GetPatientPropertiesUsingMatchersRow) PropertiesQueryRow {
 		return queryPatientPropertiesRow{row}
@@ -59,9 +64,9 @@ func (m PatientPropertyMatchers) QueryProperties(ctx context.Context) ([]Propert
 	return hwutil.Map(rows, cast), err
 }
 
-func (m PatientPropertyMatchers) GetSubjectId() (uuid.UUID, error) {
+func (m PatientPropertyMatchers) GetSubjectID() (uuid.UUID, error) {
 	if !m.PatientID.Valid {
-		return uuid.UUID{}, errors.New("PatientPropertyMatchers GetSubjectId: PatientID not valid")
+		return uuid.UUID{}, errors.New("PatientPropertyMatchers GetSubjectID: PatientID not valid")
 	}
 	return m.PatientID.UUID, nil
 }

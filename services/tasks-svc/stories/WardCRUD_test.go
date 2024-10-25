@@ -3,14 +3,17 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwtesting"
 	"hwutil"
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
+
+	"github.com/stretchr/testify/require"
 )
 
 // TestCreateUpdateGetWard:
@@ -28,7 +31,7 @@ func TestCreateUpdateGetWard(t *testing.T) {
 		Name: t.Name() + " ward",
 	}
 	createRes, err := wardServiceClient().CreateWard(ctx, createReq)
-	assert.NoError(t, err, "could not create ward")
+	require.NoError(t, err, "could not create ward")
 
 	wardID := createRes.GetId()
 
@@ -37,7 +40,7 @@ func TestCreateUpdateGetWard(t *testing.T) {
 	//
 
 	getWardRes, err := wardClient.GetWard(ctx, &pb.GetWardRequest{Id: wardID})
-	assert.NoError(t, err, "could not get ward after creation")
+	require.NoError(t, err, "could not get ward after creation")
 
 	assert.Equal(t, createReq.Name, getWardRes.Name)
 	assert.Equal(t, createRes.Consistency, getWardRes.Consistency)
@@ -52,32 +55,35 @@ func TestCreateUpdateGetWard(t *testing.T) {
 		Consistency: &getWardRes.Consistency,
 	}
 	updateRes, err := wardClient.UpdateWard(ctx, updateReq)
-	assert.NoError(t, err, "could not update ward after creation")
-	assert.Nil(t, updateRes.Conflict)
+	require.NoError(t, err, "could not update ward after creation")
 
-	assert.NotEqual(t, getWardRes.Consistency, updateRes.Consistency, "consistency has not changed in update")
+	assert.NotEqual(
+		t,
+		getWardRes.Consistency,
+		updateRes.Consistency,
+		"consistency has not changed in update",
+	)
 
 	//
 	// get updated ward
 	//
 
 	getWardRes, err = wardClient.GetWard(ctx, &pb.GetWardRequest{Id: wardID})
-	assert.NoError(t, err, "could not get room after update")
+	require.NoError(t, err, "could not get room after update")
 
 	assert.Equal(t, *updateReq.Name, getWardRes.Name)
 	assert.Equal(t, updateRes.Consistency, getWardRes.Consistency)
-
 }
 
-func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient, N int) []string {
-	ids := make([]string, 0, N)
-	for i := 1; i <= N; i++ {
+func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient, amount int) []string {
+	t.Helper()
+
+	ids := make([]string, 0, amount)
+	for i := 1; i <= amount; i++ {
 		wardRes, err := client.CreateWard(ctx, &pb.CreateWardRequest{
 			Name: t.Name() + " ward " + strconv.Itoa(i),
 		})
-		if !assert.NoError(t, err, "prepareWard failed: could not create ward", i) {
-			return nil
-		}
+		require.NoError(t, err, "prepareWard failed: could not create ward", i)
 		ids = append(ids, wardRes.Id)
 	}
 	return ids
@@ -112,23 +118,24 @@ func TestGetRecentWards(t *testing.T) {
 			})
 			hwtesting.WaitForProjectionsToSettle()
 
-			assert.NoError(t, err, "could not assign bed to patient")
+			require.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
-				Name:          t.Name() + " Patient " + bedSuffix + " Task ",
-				PatientId:     patientID,
-				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), // this is dirty, lol
+				Name:      t.Name() + " Patient " + bedSuffix + " Task ",
+				PatientId: patientID,
+				// behold: peak enginering:
+				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), //nolint:gosec
 			})
-			assert.NoError(t, err, "could not create task for patient")
+			require.NoError(t, err, "could not create task for patient")
 		}
 	}
 
 	hwtesting.WaitForProjectionsToSettle()
 
 	// touch each ward, to push it into RecentWards
-	for _, wardId := range wardIds {
-		res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{Id: wardId})
-		assert.NoError(t, err, "could not update ward %s", wardId)
-		consistencies[wardId] = res.Consistency
+	for _, wardID := range wardIds {
+		res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{Id: wardID})
+		require.NoError(t, err, "could not update ward %s", wardID)
+		consistencies[wardID] = res.Consistency
 		hwtesting.WaitForProjectionsToSettle()
 	}
 
@@ -137,7 +144,7 @@ func TestGetRecentWards(t *testing.T) {
 
 	// GetRecentWards
 	res, err := wardClient.GetRecentWards(ctx, &pb.GetRecentWardsRequest{})
-	assert.NoError(t, err, "could not GetRecentWards")
+	require.NoError(t, err, "could not GetRecentWards")
 
 	// assertions
 	actualWardIds := hwutil.Map(res.Wards, func(ward *pb.GetRecentWardsResponse_Ward) string {
@@ -165,10 +172,10 @@ func TestGetWards(t *testing.T) {
 	}
 
 	wardRes, err := wardClient.CreateWard(ctx, createReq)
-	assert.NoError(t, err, "could not create ward")
+	require.NoError(t, err, "could not create ward")
 
 	res, err := wardClient.GetWards(ctx, &pb.GetWardsRequest{})
-	assert.NoError(t, err, "could not GetWardOverviews")
+	require.NoError(t, err, "could not GetWardOverviews")
 
 	found := false
 	for _, ward := range res.Wards {
@@ -207,11 +214,11 @@ func TestGetWardOverviews(t *testing.T) {
 		{},             // Room 3
 	}
 
-	wardId, consistency := prepareWard(t, ctx, "")
+	wardID, consistency := prepareWard(t, ctx, "")
 
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, _ := prepareRoom(t, ctx, wardId, roomSuffix)
+		roomId, _ := prepareRoom(t, ctx, wardID, roomSuffix)
 		for j, bedSuffix := range bedSfxs {
 			bedId, _ := prepareBed(t, ctx, roomId, bedSuffix)
 			patientID := preparePatient(t, ctx, bedSuffix)
@@ -219,28 +226,29 @@ func TestGetWardOverviews(t *testing.T) {
 				Id:    patientID,
 				BedId: bedId,
 			})
-			assert.NoError(t, err, "could not assign bed to patient")
+			require.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
-				Name:          t.Name() + " Patient " + bedSuffix + " Task ",
-				PatientId:     patientID,
-				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), // this is dirty, lol
+				Name:      t.Name() + " Patient " + bedSuffix + " Task ",
+				PatientId: patientID,
+				// behold: peak enginering:
+				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), //nolint:gosec
 			})
-			assert.NoError(t, err, "could not create task for patient")
+			require.NoError(t, err, "could not create task for patient")
 		}
 	}
 
 	res, err := wardClient.GetWardOverviews(ctx, &pb.GetWardOverviewsRequest{})
-	assert.NoError(t, err, "could not GetWardOverviews")
+	require.NoError(t, err, "could not GetWardOverviews")
 
 	found := false
 	for _, ward := range res.Wards {
-		if ward.Id != wardId {
+		if ward.Id != wardID {
 			continue
 		}
 		found = true
 
 		expected := map[string]interface{}{
-			"id":                wardId,
+			"id":                wardID,
 			"name":              t.Name() + " ward ",
 			"bed_count":         uint32(3),
 			"tasks_todo":        uint32(2),
@@ -269,10 +277,10 @@ func TestGetWardDetails(t *testing.T) {
 	wardClient := wardServiceClient()
 	taskTemplateClient := taskTemplateServiceClient()
 	ctx := context.Background()
-	wardId, consistency := prepareWard(t, ctx, "")
+	wardID, consistency := prepareWard(t, ctx, "")
 
 	expected := map[string]interface{}{
-		"id":          wardId,
+		"id":          wardID,
 		"name":        t.Name() + " ward ",
 		"consistency": consistency,
 	}
@@ -282,15 +290,15 @@ func TestGetWardDetails(t *testing.T) {
 	ttres, err := taskTemplateClient.CreateTaskTemplate(ctx, &pb.CreateTaskTemplateRequest{
 		Name:        t.Name() + " task template",
 		Description: nil,
-		WardId:      &wardId,
+		WardId:      &wardID,
 	})
-	assert.NoError(t, err, "could not CreateTaskTemplate")
+	require.NoError(t, err, "could not CreateTaskTemplate")
 
 	st, err := taskTemplateClient.CreateTaskTemplateSubTask(ctx, &pb.CreateTaskTemplateSubTaskRequest{
 		TaskTemplateId: ttres.Id,
 		Name:           t.Name() + " substask",
 	})
-	assert.NoError(t, err, "could not CreateTaskTemplateSubTask")
+	require.NoError(t, err, "could not CreateTaskTemplateSubTask")
 
 	expected["task_templates"] = []map[string]interface{}{
 		{
@@ -317,7 +325,7 @@ func TestGetWardDetails(t *testing.T) {
 	rooms := make([]map[string]interface{}, 0)
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, roomConsistency := prepareRoom(t, ctx, wardId, roomSuffix)
+		roomId, roomConsistency := prepareRoom(t, ctx, wardID, roomSuffix)
 		expectedRoom := map[string]interface{}{
 			"id":          roomId,
 			"name":        t.Name() + " room " + roomSuffix,
@@ -340,9 +348,9 @@ func TestGetWardDetails(t *testing.T) {
 	// get GetWardDetails
 
 	ward, err := wardClient.GetWardDetails(ctx, &pb.GetWardDetailsRequest{
-		Id: wardId,
+		Id: wardID,
 	})
-	assert.NoError(t, err, "could GetWardDetailsRequest")
+	require.NoError(t, err, "could GetWardDetailsRequest")
 
 	// assertions
 
@@ -364,23 +372,24 @@ func TestGetWardDetails(t *testing.T) {
 				}),
 			}
 		}),
-		"task_templates": hwutil.Map(ward.TaskTemplates, func(tt *pb.GetWardDetailsResponse_TaskTemplate) map[string]interface{} {
-			return map[string]interface{}{
-				"id":          tt.Id,
-				"name":        tt.Name,
-				"consistency": tt.Consistency,
-				"subtasks": hwutil.Map(tt.Subtasks, func(st *pb.GetWardDetailsResponse_Subtask) map[string]interface{} {
-					return map[string]interface{}{
-						"id":   st.Id,
-						"name": st.Name,
-					}
-				}),
-			}
-		}),
+		"task_templates": hwutil.Map(ward.TaskTemplates,
+			func(tt *pb.GetWardDetailsResponse_TaskTemplate) map[string]interface{} {
+				return map[string]interface{}{
+					"id":          tt.Id,
+					"name":        tt.Name,
+					"consistency": tt.Consistency,
+					"subtasks": hwutil.Map(tt.Subtasks,
+						func(st *pb.GetWardDetailsResponse_Subtask) map[string]interface{} {
+							return map[string]interface{}{
+								"id":   st.Id,
+								"name": st.Name,
+							}
+						}),
+				}
+			}),
 	}
 
 	assert.Equal(t, expected, actual)
-
 }
 
 func TestUpdateWardConflict(t *testing.T) {
@@ -398,7 +407,7 @@ func TestUpdateWardConflict(t *testing.T) {
 		Name:        &name1,
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, update1Res.Conflict)
 	assert.NotEqual(t, initialConsistency, update1Res.Consistency)
 
@@ -410,7 +419,7 @@ func TestUpdateWardConflict(t *testing.T) {
 		Name:        &name2,
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
 	assert.NotNil(t, update2Res.Conflict)
 
@@ -418,11 +427,10 @@ func TestUpdateWardConflict(t *testing.T) {
 	assert.NotNil(t, nameRes)
 
 	nameIs := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	require.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
 	assert.Equal(t, name1, nameIs.Value)
 
 	nameWant := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
 	assert.Equal(t, name2, nameWant.Value)
-
 }

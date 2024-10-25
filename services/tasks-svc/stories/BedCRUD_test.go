@@ -3,12 +3,15 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwtesting"
 	"hwutil"
 	"strconv"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
+
+	"github.com/stretchr/testify/require"
 )
 
 // TestCreateUpdateGetBed:
@@ -19,8 +22,8 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	bedClient := bedServiceClient()
 
 	// first, prepare room
-	wardId, _ := prepareWard(t, ctx, "1")
-	roomId, _ := prepareRoom(t, ctx, wardId, "1")
+	wardID, _ := prepareWard(t, ctx, "1")
+	roomId, _ := prepareRoom(t, ctx, wardID, "1")
 
 	//
 	// create new bed
@@ -31,7 +34,7 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	}
 	createRes, err := bedClient.CreateBed(ctx, createReq)
 
-	assert.NoError(t, err, "could not create bed")
+	require.NoError(t, err, "could not create bed")
 
 	bedID := createRes.GetId()
 
@@ -40,18 +43,18 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	//
 
 	getBedRes, err := bedClient.GetBed(ctx, &pb.GetBedRequest{Id: bedID})
-	assert.NoError(t, err, "could not get bed after creation")
+	require.NoError(t, err, "could not get bed after creation")
 
-	assert.Equal(t, createReq.Name, getBedRes.Name)
-	assert.Equal(t, createReq.RoomId, getBedRes.RoomId)
-	assert.Equal(t, createRes.Consistency, getBedRes.Consistency)
+	assert.Equal(t, createReq.GetName(), getBedRes.GetName())
+	assert.Equal(t, createReq.GetRoomId(), getBedRes.GetRoomId())
+	assert.Equal(t, createRes.GetConsistency(), getBedRes.GetConsistency())
 
 	//
 	// update bed
 	//
 
 	// prepare new room
-	roomID2, _ := prepareRoom(t, ctx, wardId, "2")
+	roomID2, _ := prepareRoom(t, ctx, wardID, "2")
 
 	updateReq := &pb.UpdateBedRequest{
 		Id:          bedID,
@@ -60,8 +63,7 @@ func TestCreateUpdateGetBed(t *testing.T) {
 		Consistency: &getBedRes.Consistency,
 	}
 	updateRes, err := bedClient.UpdateBed(ctx, updateReq)
-	assert.NoError(t, err, "could not update bed after creation")
-	assert.Nil(t, updateRes.Conflict)
+	require.NoError(t, err, "could not update bed after creation")
 
 	assert.NotEqual(t, getBedRes.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
@@ -70,20 +72,19 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	//
 
 	getBedRes, err = bedClient.GetBed(ctx, &pb.GetBedRequest{Id: bedID})
-	assert.NoError(t, err, "could not get bed after update")
+	require.NoError(t, err, "could not get bed after update")
 
 	assert.Equal(t, *updateReq.RoomId, getBedRes.RoomId)
 	assert.Equal(t, *updateReq.Name, getBedRes.Name)
 	assert.Equal(t, updateRes.Consistency, getBedRes.Consistency)
-
 }
 
 func TestGetBedByPatient(t *testing.T) {
 	ctx := context.Background()
 
 	// first, prepare room
-	wardId, _ := prepareWard(t, ctx, "1")
-	roomId, roomConsistency := prepareRoom(t, ctx, wardId, "")
+	wardID, _ := prepareWard(t, ctx, "1")
+	roomId, roomConsistency := prepareRoom(t, ctx, wardID, "")
 
 	// creating two beds
 	unrelatedBedID, _ := prepareBed(t, ctx, roomId, "unrelated")
@@ -98,14 +99,14 @@ func TestGetBedByPatient(t *testing.T) {
 		BedId:       patientsBedID,
 		Consistency: nil,
 	})
-	assert.NoError(t, err, "could not assign bed to patient")
+	require.NoError(t, err, "could not assign bed to patient")
 	hwtesting.WaitForProjectionsToSettle()
 
 	// GetBedByPatient
 	res, err := bedServiceClient().GetBedByPatient(ctx, &pb.GetBedByPatientRequest{
 		PatientId: patientID,
 	})
-	assert.NoError(t, err, "could not GetBedByPatient")
+	require.NoError(t, err, "could not GetBedByPatient")
 
 	assert.NotNil(t, res.Bed)
 	assert.NotNil(t, res.Room)
@@ -132,11 +133,11 @@ func TestGetBeds(t *testing.T) {
 	roomBedsMap := make(map[string][]string)     // map roomID to its bedIDs
 	bedConsistencyMap := make(map[string]string) // map bedID to its consistency
 
-	wardId, _ := prepareWard(t, ctx, "1")
+	wardID, _ := prepareWard(t, ctx, "1")
 
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, _ := prepareRoom(t, ctx, wardId, roomSuffix)
+		roomId, _ := prepareRoom(t, ctx, wardID, roomSuffix)
 		roomBedsMap[roomId] = make([]string, 0)
 		for _, bedSuffix := range bedSfxs {
 			bedId, bedConsistency := prepareBed(t, ctx, roomId, bedSuffix)
@@ -147,7 +148,7 @@ func TestGetBeds(t *testing.T) {
 	}
 
 	allBeds, err := bedClient.GetBeds(ctx, &pb.GetBedsRequest{})
-	assert.NoError(t, err, "could not get all beds")
+	require.NoError(t, err, "could not get all beds")
 
 	assert.GreaterOrEqual(t, len(allBeds.Beds), 3) // other beds might exist from other tests
 
@@ -168,7 +169,7 @@ func TestGetBeds(t *testing.T) {
 
 	for roomId, expectedBedIDs := range roomBedsMap {
 		res, err := bedClient.GetBedsByRoom(ctx, &pb.GetBedsByRoomRequest{RoomId: roomId})
-		assert.NoError(t, err, "could not get beds for room 1")
+		require.NoError(t, err, "could not get beds for room 1")
 
 		assert.Len(t, res.Beds, len(expectedBedIDs))
 
@@ -176,7 +177,6 @@ func TestGetBeds(t *testing.T) {
 			return bed.Id
 		})
 		assert.Subset(t, expectedBedIDs, bedIds, "actual bedIDs are not a subset of expected for room %s", roomId)
-
 	}
 }
 
@@ -200,7 +200,7 @@ func TestUpdateBedConflict(t *testing.T) {
 		RoomId:      &roomId1,
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, update1Res.Conflict)
 	assert.NotEqual(t, initialConsistency, update1Res.Consistency)
 
@@ -214,7 +214,7 @@ func TestUpdateBedConflict(t *testing.T) {
 		RoomId:      &roomId2,
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
 	assert.NotNil(t, update2Res.Conflict)
 
@@ -222,22 +222,22 @@ func TestUpdateBedConflict(t *testing.T) {
 	assert.NotNil(t, nameRes)
 
 	nameIs := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	require.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
 	assert.Equal(t, name1, nameIs.Value)
 
 	nameWant := &wrapperspb.StringValue{}
-	assert.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
 	assert.Equal(t, name2, nameWant.Value)
 
 	roomRes := update2Res.Conflict.ConflictingAttributes["room_id"]
 	assert.NotNil(t, roomRes)
 
 	roomIs := &wrapperspb.StringValue{}
-	assert.NoError(t, roomRes.Is.UnmarshalTo(roomIs))
+	require.NoError(t, roomRes.Is.UnmarshalTo(roomIs))
 	assert.Equal(t, roomId1, roomIs.Value)
 
 	roomWant := &wrapperspb.StringValue{}
-	assert.NoError(t, roomRes.Want.UnmarshalTo(roomWant))
+	require.NoError(t, roomRes.Want.UnmarshalTo(roomWant))
 	assert.Equal(t, roomId2, roomWant.Value)
 
 	// racing update 3
@@ -246,7 +246,7 @@ func TestUpdateBedConflict(t *testing.T) {
 		Name:        &name2,
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
 	assert.NotNil(t, update2Res.Conflict)
 

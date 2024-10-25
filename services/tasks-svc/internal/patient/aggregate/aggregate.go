@@ -4,9 +4,11 @@ import (
 	"common"
 	"context"
 	"fmt"
+	"hwes"
+
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
-	"hwes"
+
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"tasks-svc/internal/patient/models"
 )
@@ -34,7 +36,12 @@ func LoadPatientAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.U
 	return patientAggregate, nil
 }
 
-func LoadPatientAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *common.ConsistencyToken) (*PatientAggregate, *models.Patient, error) {
+func LoadPatientAggregateWithSnapshotAt(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+	pauseAt *common.ConsistencyToken,
+) (*PatientAggregate, *models.Patient, error) {
 	patientAggregate := NewPatientAggregate(id)
 	var snapshot *models.Patient
 

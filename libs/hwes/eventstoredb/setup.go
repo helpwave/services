@@ -2,9 +2,10 @@ package eventstoredb
 
 import (
 	"context"
+	"hwutil"
+
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/rs/zerolog/log"
-	"hwutil"
 )
 
 func SetupEventStoreByEnv() *esdb.Client {

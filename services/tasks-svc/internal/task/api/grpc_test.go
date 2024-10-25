@@ -5,15 +5,17 @@ import (
 	common_test "common/test"
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	hwes_test "hwes/test"
 	"hwutil"
+	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/require"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+
 	"tasks-svc/internal/task/api"
 	"tasks-svc/internal/task/handlers"
-	"testing"
 )
 
 func server() (context.Context, pb.TaskServiceClient, func()) {
@@ -24,7 +26,7 @@ func server() (context.Context, pb.TaskServiceClient, func()) {
 	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
 	// Start Server
-	grpcServer := grpc.NewServer(common.DefaultInterceptorChain())
+	grpcServer := grpc.NewServer(common.DefaultServerOptions()...)
 	pb.RegisterTaskServiceServer(grpcServer, taskGrpcService)
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
@@ -50,7 +52,7 @@ func TestTaskGrpcService_CreateTask_Validation(t *testing.T) {
 		Name:      taskName,
 		PatientId: "",
 	})
-	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts emtpy patientID")
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts empty patientID")
 
 	// patientID invalid -> error
 	_, err = client.CreateTask(ctx, &pb.CreateTaskRequest{
@@ -113,8 +115,7 @@ func TestTaskGrpcService_CreateTask_Validation(t *testing.T) {
 			},
 		},
 	})
-	assert.NoError(t, err, codes.InvalidArgument, "rejects fully valid request")
-
+	require.NoError(t, err, codes.InvalidArgument, "rejects fully valid request")
 }
 
 func TestTaskGrpcService_UpdateTask_Validation(t *testing.T) {
@@ -137,7 +138,7 @@ func TestTaskGrpcService_UpdateTask_Validation(t *testing.T) {
 	_, err = client.UpdateTask(ctx, &pb.UpdateTaskRequest{
 		Id: uuid.NewString(),
 	})
-	assert.NoError(t, err, codes.InvalidArgument, "rejects valid id")
+	require.NoError(t, err, codes.InvalidArgument, "rejects valid id")
 }
 
 func TestTaskGrpcService_AssignTask_Validation(t *testing.T) {
@@ -163,7 +164,7 @@ func TestTaskGrpcService_AssignTask_Validation(t *testing.T) {
 		TaskId: uuid.NewString(),
 		UserId: uuid.NewString(),
 	})
-	assert.NoError(t, err, codes.InvalidArgument, "rejects valid id")
+	require.NoError(t, err, codes.InvalidArgument, "rejects valid id")
 }
 
 func TestTaskGrpcService_UnassignTask_Validation(t *testing.T) {
@@ -189,7 +190,7 @@ func TestTaskGrpcService_UnassignTask_Validation(t *testing.T) {
 		TaskId: uuid.NewString(),
 		UserId: uuid.NewString(),
 	})
-	assert.NoError(t, err, codes.InvalidArgument, "rejects valid id")
+	require.NoError(t, err, codes.InvalidArgument, "rejects valid id")
 }
 
 func TestTaskGrpcService_CreateSubtask_Validation(t *testing.T) {
@@ -237,7 +238,7 @@ func TestTaskGrpcService_CreateSubtask_Validation(t *testing.T) {
 			Name: "subtask",
 		},
 	})
-	assert.NoError(t, err, codes.InvalidArgument, "rejects fully valid request")
+	require.NoError(t, err, codes.InvalidArgument, "rejects fully valid request")
 }
 
 func TestTaskGrpcService_UpdateSubtask_Validation(t *testing.T) {
@@ -295,7 +296,7 @@ func TestTaskGrpcService_DeleteSubtask_Validation(t *testing.T) {
 		TaskId:    uuid.NewString(),
 		SubtaskId: uuid.NewString(),
 	})
-	assert.NoError(t, err, "rejects fully valid request")
+	require.NoError(t, err, "rejects fully valid request")
 }
 
 func TestTaskGrpcService_RemoveTaskDueDate_Validation(t *testing.T) {
@@ -318,7 +319,7 @@ func TestTaskGrpcService_RemoveTaskDueDate_Validation(t *testing.T) {
 	_, err = client.RemoveTaskDueDate(ctx, &pb.RemoveTaskDueDateRequest{
 		TaskId: uuid.NewString(),
 	})
-	assert.NoError(t, err, "rejects fully valid request")
+	require.NoError(t, err, "rejects fully valid request")
 }
 
 func TestTaskGrpcService_DeleteTask_Validation(t *testing.T) {
@@ -341,5 +342,5 @@ func TestTaskGrpcService_DeleteTask_Validation(t *testing.T) {
 	_, err = client.DeleteTask(ctx, &pb.DeleteTaskRequest{
 		Id: uuid.NewString(),
 	})
-	assert.NoError(t, err, "rejects fully valid request")
+	require.NoError(t, err, "rejects fully valid request")
 }

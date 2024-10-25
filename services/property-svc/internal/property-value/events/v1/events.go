@@ -2,9 +2,11 @@ package v1
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
 	"property-svc/internal/property-value/models"
+
+	"github.com/google/uuid"
 )
 
 const (
@@ -19,7 +21,14 @@ type PropertyValueCreatedEvent struct {
 	SubjectID   string                  `json:"subject_id"`
 }
 
-func NewPropertyValueCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, propertyID uuid.UUID, valueChange models.TypedValueChange, subjectID uuid.UUID) (hwes.Event, error) {
+func NewPropertyValueCreatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	id uuid.UUID,
+	propertyID uuid.UUID,
+	valueChange models.TypedValueChange,
+	subjectID uuid.UUID,
+) (hwes.Event, error) {
 	payload := PropertyValueCreatedEvent{
 		ID:          id.String(),
 		PropertyID:  propertyID.String(),
@@ -33,7 +42,11 @@ type PropertyValueUpdatedEvent struct {
 	ValueChange models.TypedValueChange `json:"value_change"`
 }
 
-func NewPropertyValueUpdatedEvent(ctx context.Context, a hwes.Aggregate, value models.TypedValueChange) (hwes.Event, error) {
+func NewPropertyValueUpdatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	value models.TypedValueChange,
+) (hwes.Event, error) {
 	payload := PropertyValueUpdatedEvent{
 		ValueChange: value,
 	}

@@ -505,5 +505,66 @@ proto.services.tasks_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTas
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.services.tasks_svc.v1.GetTaskTemplateRequest,
+ *   !proto.services.tasks_svc.v1.GetTaskTemplateResponse>}
+ */
+const methodDescriptor_TaskTemplateService_GetTaskTemplate = new grpc.web.MethodDescriptor(
+  '/services.tasks_svc.v1.TaskTemplateService/GetTaskTemplate',
+  grpc.web.MethodType.UNARY,
+  proto.services.tasks_svc.v1.GetTaskTemplateRequest,
+  proto.services.tasks_svc.v1.GetTaskTemplateResponse,
+  /**
+   * @param {!proto.services.tasks_svc.v1.GetTaskTemplateRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.services.tasks_svc.v1.GetTaskTemplateResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.GetTaskTemplateRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.GetTaskTemplateResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.GetTaskTemplateResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.services.tasks_svc.v1.TaskTemplateServiceClient.prototype.getTaskTemplate =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskTemplateService/GetTaskTemplate',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_GetTaskTemplate,
+      callback);
+};
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.GetTaskTemplateRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.services.tasks_svc.v1.GetTaskTemplateResponse>}
+ *     Promise that resolves to the response
+ */
+proto.services.tasks_svc.v1.TaskTemplateServicePromiseClient.prototype.getTaskTemplate =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskTemplateService/GetTaskTemplate',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_GetTaskTemplate);
+};
+
+
 module.exports = proto.services.tasks_svc.v1;
 

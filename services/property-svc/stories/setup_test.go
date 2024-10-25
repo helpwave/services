@@ -3,27 +3,33 @@ package stories
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
+	"hwtesting"
+	"hwutil"
+	"os"
+	"os/signal"
+	"sort"
+	"testing"
+	"time"
+
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
-	"hwtesting"
-	"hwutil"
-	"os/signal"
-	"property-svc/cmd/service"
-	"sort"
 
-	"os"
-	"testing"
-	"time"
+	"property-svc/cmd/service"
 )
 
 func TestMain(m *testing.M) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	zlog.Info().Msg("starting containers")
-	endpoints, teardownContainers := hwtesting.StartContainers(ctx, hwtesting.Postgres, hwtesting.Eventstore)
+	endpoints, teardownContainers := hwtesting.StartContainers(ctx,
+		hwtesting.Postgres,
+		hwtesting.Eventstore,
+		hwtesting.Spice,
+	)
 	postgresEndpoint := endpoints.Get(hwtesting.Postgres)
 	eventstoreEndpoint := endpoints.Get(hwtesting.Eventstore)
+	spiceDBEndpoint := endpoints.Get(hwtesting.Spice)
 
 	zlog.Info().
 		Str("postgresEndpoint", postgresEndpoint).
@@ -34,9 +40,12 @@ func TestMain(m *testing.M) {
 	hwtesting.SetCommonEnv()
 	hwtesting.SetEventstoreEnv(eventstoreEndpoint)
 	postgresDSN := hwtesting.SetPostgresEnv(postgresEndpoint)
+	hwtesting.SetSpiceEnv(spiceDBEndpoint)
 
 	// `go test` sets the wd to the directory of this file
 	hwtesting.MigratePostgres("file://../migrations", postgresDSN)
+
+	hwtesting.MigrateSpiceDB(ctx, spiceDBEndpoint)
 
 	// start service
 	ready := make(chan bool)

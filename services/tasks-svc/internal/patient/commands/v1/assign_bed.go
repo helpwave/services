@@ -3,16 +3,28 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/patient/aggregate"
 	"tasks-svc/internal/patient/models"
 )
 
-type AssignBedCommandHandler func(ctx context.Context, patientID uuid.UUID, bedID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Patient], error)
+type AssignBedCommandHandler func(
+	ctx context.Context,
+	patientID uuid.UUID,
+	bedID uuid.UUID,
+	expConsistency *common.ConsistencyToken,
+) (common.ConsistencyToken, *common.Conflict[*models.Patient], error)
 
 func NewAssignBedCommandHandler(as hwes.AggregateStore) AssignBedCommandHandler {
-	return func(ctx context.Context, patientID uuid.UUID, bedID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Patient], error) {
+	return func(
+		ctx context.Context,
+		patientID uuid.UUID,
+		bedID uuid.UUID,
+		expConsistency *common.ConsistencyToken,
+	) (common.ConsistencyToken, *common.Conflict[*models.Patient], error) {
 		a, oldState, err := aggregate.LoadPatientAggregateWithSnapshotAt(ctx, as, patientID, expConsistency)
 		if err != nil {
 			return 0, nil, err

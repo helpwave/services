@@ -3,14 +3,17 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"math"
 	"strconv"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func TestUpdateTaskConflict_Name(t *testing.T) {
@@ -48,7 +51,7 @@ func TestUpdateTaskConflict_Name(t *testing.T) {
 				AssignedUserId: nil,
 				Subtasks:       nil,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			id := task.Id
 			initialConsistency := task.Consistency
@@ -59,7 +62,7 @@ func TestUpdateTaskConflict_Name(t *testing.T) {
 				Name:        &o.is,
 				Consistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// WANT
 			updateRes, err := taskClient.UpdateTask(ctx, &pb.UpdateTaskRequest{
@@ -67,7 +70,7 @@ func TestUpdateTaskConflict_Name(t *testing.T) {
 				Name:        o.want,
 				Consistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// EXPECT
 			assert.Equal(t, o.expectConflict, updateRes.Conflict != nil)
@@ -117,7 +120,7 @@ func TestUpdateTaskConflict_Description(t *testing.T) {
 				AssignedUserId: nil,
 				Subtasks:       nil,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			id := task.Id
 			initialConsistency := task.Consistency
@@ -128,7 +131,7 @@ func TestUpdateTaskConflict_Description(t *testing.T) {
 				Description: &o.is,
 				Consistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// WANT
 			updateRes, err := taskClient.UpdateTask(ctx, &pb.UpdateTaskRequest{
@@ -136,7 +139,7 @@ func TestUpdateTaskConflict_Description(t *testing.T) {
 				Description: o.want,
 				Consistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// EXPECT
 			assert.Equal(t, o.expectConflict, updateRes.Conflict != nil)
@@ -188,7 +191,7 @@ func TestUpdateTaskConflict_DueAt(t *testing.T) {
 				AssignedUserId: nil,
 				Subtasks:       nil,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			id := task.Id
 			initialConsistency := task.Consistency
@@ -199,7 +202,7 @@ func TestUpdateTaskConflict_DueAt(t *testing.T) {
 				DueAt:       o.is,
 				Consistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// WANT
 			updateRes, err := taskClient.UpdateTask(ctx, &pb.UpdateTaskRequest{
@@ -207,7 +210,7 @@ func TestUpdateTaskConflict_DueAt(t *testing.T) {
 				DueAt:       o.want,
 				Consistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// EXPECT
 			assert.Equal(t, o.expectConflict, updateRes.Conflict != nil)
@@ -260,7 +263,7 @@ func TestUpdateTaskConflict_Status(t *testing.T) {
 				AssignedUserId: nil,
 				Subtasks:       nil,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			id := task.Id
 			initialConsistency := task.Consistency
@@ -271,7 +274,7 @@ func TestUpdateTaskConflict_Status(t *testing.T) {
 				Status:      o.is,
 				Consistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// WANT
 			updateRes, err := taskClient.UpdateTask(ctx, &pb.UpdateTaskRequest{
@@ -279,7 +282,7 @@ func TestUpdateTaskConflict_Status(t *testing.T) {
 				Status:      o.want,
 				Consistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// EXPECT
 			assert.Equal(t, o.expectConflict, updateRes.Conflict != nil)
@@ -334,7 +337,7 @@ func TestAssignTaskConflict(t *testing.T) {
 				AssignedUserId: o.was,
 				Subtasks:       nil,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			id := task.Id
 			initialConsistency := task.Consistency
@@ -346,14 +349,14 @@ func TestAssignTaskConflict(t *testing.T) {
 					UserId:      *o.is,
 					Consistency: &initialConsistency,
 				})
-				assert.NoError(t, err)
+				require.NoError(t, err)
 				assert.Nil(t, a.Conflict)
 			} else {
 				a, err := taskClient.UnassignTask(ctx, &pb.UnassignTaskRequest{
 					TaskId: id,
 					UserId: *o.was,
 				})
-				assert.NoError(t, err)
+				require.NoError(t, err)
 				assert.Nil(t, a.Conflict)
 			}
 
@@ -363,7 +366,7 @@ func TestAssignTaskConflict(t *testing.T) {
 				UserId:      o.want,
 				Consistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// EXPECT
 			assert.Equal(t, o.expectConflict, updateRes.Conflict != nil)
@@ -415,7 +418,7 @@ func TestUpdateSubtaskConflict(t *testing.T) {
 				AssignedUserId: nil,
 				Subtasks:       nil,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			subTask, err := taskClient.CreateSubtask(ctx, &pb.CreateSubtaskRequest{
 				TaskId: task.Id,
@@ -424,7 +427,7 @@ func TestUpdateSubtaskConflict(t *testing.T) {
 					Done: nil,
 				},
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			taskId := task.Id
 			id := subTask.SubtaskId
@@ -439,7 +442,7 @@ func TestUpdateSubtaskConflict(t *testing.T) {
 				},
 				TaskConsistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.Nil(t, a.Conflict)
 
 			// WANT
@@ -451,7 +454,7 @@ func TestUpdateSubtaskConflict(t *testing.T) {
 				},
 				TaskConsistency: &initialConsistency,
 			})
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			// EXPECT
 			assert.Equal(t, o.expectConflict, updateRes.Conflict != nil)

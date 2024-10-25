@@ -1,27 +1,39 @@
 package hwes_test
 
 import (
-	"common"
+	"common/auth"
 	"context"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"hwes"
-	"testing"
 )
 
 func TestEventWithUserID(t *testing.T) {
 	ctx := context.Background()
 	u := uuid.New()
-	o := uuid.New()
 	e := hwes.Event{}
 
-	ctx = common.ContextWithUserID(ctx, u)
-	ctx = common.ContextWithOrganizationID(ctx, o)
+	ctx = auth.ContextWithUserID(ctx, u)
 
 	if err := e.SetCommitterFromCtx(ctx); err != nil {
 		t.Error(err)
 	}
 
-	assert.Equal(t, u, *e.CommitterUserID)
-	assert.Equal(t, o, *e.CommitterOrganizationID)
+	assert.Equal(t, u, *e.CommitterUserID, "event does not have the correct CommitterUserID")
+}
+
+func TestEventWithOrganizationID(t *testing.T) {
+	ctx := context.Background()
+	u := uuid.New()
+	e := hwes.Event{}
+
+	ctx = auth.ContextWithOrganizationID(ctx, u)
+
+	if err := e.SetOrganizationFromCtx(ctx); err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, u, *e.OrganizationID, "event does not have the correct OrganizationID")
 }

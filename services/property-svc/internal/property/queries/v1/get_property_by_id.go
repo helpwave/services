@@ -2,35 +2,56 @@ package v1
 
 import (
 	"common"
+	"common/auth"
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
+	"hwauthz"
 	"hwdb"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property/models"
+	"property-svc/internal/property/perm"
 	"property-svc/repos/property_repo"
 )
 
-type GetPropertyByIDQueryHandler func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error)
+type GetPropertyByIDQueryHandler func(
+	ctx context.Context,
+	propertyID uuid.UUID,
+) (*models.Property, common.ConsistencyToken, error)
 
-func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
+func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHandler {
 	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error) {
-		propertyRepo := property_repo.New(hwdb.GetDB())
-
-		organizationID, err := common.GetOrganizationID(ctx)
+		user, err := perm.UserFromCtx(ctx)
 		if err != nil {
 			return nil, 0, err
 		}
 
-		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
-			ID:             uuid.NullUUID{UUID: propertyID, Valid: true},
-			OrganizationID: organizationID,
-		})
+		// Verify user is allowed to see this property
+		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))
+		if err = authz.Must(ctx, check); err != nil {
+			return nil, 0, err
+		}
+
+		propertyRepo := property_repo.New(hwdb.GetDB())
+
+		organizationID, err := auth.GetOrganizationID(ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
+			ctx,
+			property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
+				ID:             uuid.NullUUID{UUID: propertyID, Valid: true},
+				OrganizationID: organizationID,
+			})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, 0, err
 		}
 		if len(rows) == 0 {
-			return nil, 0, fmt.Errorf("record with id %s not found.", propertyID.String())
+			return nil, 0, fmt.Errorf("record with id %s not found", propertyID.String())
 		}
 
 		property := &models.Property{
@@ -54,15 +75,17 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 			}
 
 			if row.SelectOptionID.Valid && property.FieldTypeData.SelectData != nil {
-				property.FieldTypeData.SelectData.SelectOptions = append(property.FieldTypeData.SelectData.SelectOptions, models.SelectOption{
-					ID:          row.SelectOptionID.UUID,
-					Name:        *row.SelectOptionName, // NOT NULL
-					Description: row.SelectOptionDescription,
-					IsCustom:    *row.SelectOptionIsCustom, // NOT NULL
-				})
+				property.FieldTypeData.SelectData.SelectOptions = append(
+					property.FieldTypeData.SelectData.SelectOptions,
+					models.SelectOption{
+						ID:          row.SelectOptionID.UUID,
+						Name:        *row.SelectOptionName, // NOT NULL
+						Description: row.SelectOptionDescription,
+						IsCustom:    *row.SelectOptionIsCustom, // NOT NULL
+					})
 			}
 		}
 
-		return property, common.ConsistencyToken(rows[0].Property.Consistency), nil
+		return property, common.ConsistencyToken(rows[0].Property.Consistency), nil //nolint:gosec
 	}
 }

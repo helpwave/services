@@ -5,12 +5,14 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
+	"hwes"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
-	"hwes"
+
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
-	"time"
 )
 
 const TaskAggregateType = "task"
@@ -41,7 +43,12 @@ func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID
 	return taskAggregate, nil
 }
 
-func LoadTaskAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *common.ConsistencyToken) (*TaskAggregate, *models.Task, error) {
+func LoadTaskAggregateWithSnapshotAt(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+	pauseAt *common.ConsistencyToken,
+) (*TaskAggregate, *models.Task, error) {
 	taskAggregate := NewTaskAggregate(id)
 	var snapshot *models.Task
 

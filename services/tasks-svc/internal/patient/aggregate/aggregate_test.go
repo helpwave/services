@@ -1,16 +1,20 @@
 package aggregate_test
 
 import (
-	"common"
+	"common/auth"
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+	"testing"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/patient/aggregate"
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
-	"testing"
 )
 
 func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwes.Event, error)) {
+	t.Helper()
+
 	event, err := newEvent()
 	if err != nil {
 		t.Error(err)
@@ -22,7 +26,9 @@ func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwe
 }
 
 func TestPatientAggregate_CreatePatient(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := context.Background()
+	ctx = auth.ContextWithUserID(ctx, uuid.New())
+	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
 
 	patientID := uuid.New()
 
@@ -32,11 +38,18 @@ func TestPatientAggregate_CreatePatient(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, patientNotes)
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			patientHumanReadableIdentifier,
+			patientNotes,
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
-		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'", patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'",
+			patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 
 	if patientAggregate.Patient.Notes != patientNotes {
@@ -45,7 +58,9 @@ func TestPatientAggregate_CreatePatient(t *testing.T) {
 }
 
 func TestPatientAggregate_UpdateNotes(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := context.Background()
+	ctx = auth.ContextWithUserID(ctx, uuid.New())
+	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
 
 	patientID := uuid.New()
 
@@ -56,7 +71,13 @@ func TestPatientAggregate_UpdateNotes(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, initialPatientNotes)
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			patientHumanReadableIdentifier,
+			initialPatientNotes,
+		)
 	})
 
 	if patientAggregate.Patient.Notes != initialPatientNotes {
@@ -73,7 +94,9 @@ func TestPatientAggregate_UpdateNotes(t *testing.T) {
 }
 
 func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := context.Background()
+	ctx = auth.ContextWithUserID(ctx, uuid.New())
+	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
 
 	patientID := uuid.New()
 
@@ -83,35 +106,56 @@ func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, initialPatientHumanReadableIdentifier, "")
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			initialPatientHumanReadableIdentifier,
+			"",
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != initialPatientHumanReadableIdentifier {
-		t.Errorf("Patient Notes: expected '%s' got '%s'", initialPatientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient Notes: expected '%s' got '%s'",
+			initialPatientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(ctx, patientAggregate, updatedPatientHumanReadableIdentifier)
+		return patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(
+			ctx,
+			patientAggregate,
+			updatedPatientHumanReadableIdentifier,
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != updatedPatientHumanReadableIdentifier {
-		t.Errorf("Patient Notes: expected '%s' got '%s'", updatedPatientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient Notes: expected '%s' got '%s'",
+			updatedPatientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 }
 
 func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := context.Background()
+	ctx = auth.ContextWithUserID(ctx, uuid.New())
+	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
 
 	patientID := uuid.New()
 	patientHumanReadableIdentifier := "tester"
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, "")
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			patientHumanReadableIdentifier,
+			"",
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
-		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'", patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'",
+			patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
@@ -132,7 +176,9 @@ func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
 }
 
 func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := context.Background()
+	ctx = auth.ContextWithUserID(ctx, uuid.New())
+	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
 
 	patientID := uuid.New()
 
@@ -141,11 +187,18 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, "")
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			patientHumanReadableIdentifier,
+			"",
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
-		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'", patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'",
+			patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
@@ -153,7 +206,8 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	})
 
 	if patientAggregate.Patient.BedID.UUID != newBedID {
-		t.Errorf("Patient BedID: expected '%s' got '%s'", newBedID.String(), patientAggregate.Patient.BedID.UUID.String())
+		t.Errorf("Patient BedID: expected '%s' got '%s'",
+			newBedID.String(), patientAggregate.Patient.BedID.UUID.String())
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
@@ -161,12 +215,13 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	})
 
 	if patientAggregate.Patient.BedID.UUID != uuid.Nil {
-		t.Errorf("Patient BedID: expected '%s' got '%s'", uuid.Nil.String(), patientAggregate.Patient.BedID.UUID.String())
+		t.Errorf("Patient BedID: expected '%s' got '%s'",
+			uuid.Nil.String(), patientAggregate.Patient.BedID.UUID.String())
 	}
 }
 
 func TestPatientAggregate_DeletePatient(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := auth.ContextWithUserID(context.Background(), uuid.New())
 
 	patientID := uuid.New()
 

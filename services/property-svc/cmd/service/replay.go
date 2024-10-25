@@ -3,15 +3,17 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
+	"telemetry"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+
 	propertyValueAggregate "property-svc/internal/property-value/aggregate"
 	"property-svc/internal/property-value/projections/property_value_postgres_projection"
 	propertyAggregate "property-svc/internal/property/aggregate"
-	"property-svc/internal/property/projections/property_postgres_projection"
-	"telemetry"
+	"property-svc/internal/property/projections/postgres_projection"
 )
 
 // replay mechanism for projections of the property-svc
@@ -37,7 +39,7 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 
 	log.Info().Msg("starting event replay")
 
-	propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName, tx)
+	propertyPostgresProjection := postgres_projection.NewProjection(eventStore, ServiceName, tx)
 	propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName, tx)
 
 	err = eventstoredb.Replay(
@@ -53,11 +55,10 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 			return
 		},
 		&[]string{
-			fmt.Sprintf("%s-", propertyAggregate.PropertyAggregateType),
-			fmt.Sprintf("%s-", propertyValueAggregate.PropertyValueAggregateType),
+			propertyAggregate.PropertyAggregateType + "-",
+			propertyValueAggregate.PropertyValueAggregateType + "-",
 		},
 	)
-
 	if err != nil {
 		return err
 	}

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"hwdb"
 	"hwutil"
+
 	"property-svc/repos/task_views_repo"
 
 	"github.com/google/uuid"
@@ -18,12 +19,13 @@ type TaskPropertyMatchers struct {
 	TaskID uuid.NullUUID `json:"task_id,omitempty"`
 }
 
-func (m TaskPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
+func (m TaskPropertyMatchers) FindExactRuleID(ctx context.Context) (*uuid.UUID, error) {
 	taskViews := task_views_repo.New(hwdb.GetDB())
-	return hwdb.Optional(taskViews.GetTaskRuleIdUsingExactMatchers)(ctx, task_views_repo.GetTaskRuleIdUsingExactMatchersParams{
-		WardID: m.WardID,
-		TaskID: m.TaskID,
-	})
+	return hwdb.Optional(taskViews.GetTaskRuleIdUsingExactMatchers)(ctx,
+		task_views_repo.GetTaskRuleIdUsingExactMatchersParams{
+			WardID: m.WardID,
+			TaskID: m.TaskID,
+		})
 }
 
 type queryTaskPropertiesRow struct {
@@ -61,9 +63,9 @@ func (m TaskPropertyMatchers) QueryProperties(ctx context.Context) ([]Properties
 	return hwutil.Map(rows, cast), err
 }
 
-func (m TaskPropertyMatchers) GetSubjectId() (uuid.UUID, error) {
+func (m TaskPropertyMatchers) GetSubjectID() (uuid.UUID, error) {
 	if !m.TaskID.Valid {
-		return uuid.UUID{}, errors.New("TaskPropertyMatchers GetSubjectId: TaskID not valid")
+		return uuid.UUID{}, errors.New("TaskPropertyMatchers GetSubjectID: TaskID not valid")
 	}
 	return m.TaskID.UUID, nil
 }
@@ -109,8 +111,8 @@ func TaskPropertyMatchersFromMap(m map[string]interface{}) (TaskPropertyMatchers
 
 	matcher := TaskPropertyMatchers{}
 
-	if wardIdRaw, ok := m["WardId"].(string); ok {
-		parsed, err := hwutil.ParseNullUUID(&wardIdRaw)
+	if wardIDRaw, ok := m["WardId"].(string); ok {
+		parsed, err := hwutil.ParseNullUUID(&wardIDRaw)
 		if err != nil {
 			return TaskPropertyMatchers{}, false
 		}
@@ -118,8 +120,8 @@ func TaskPropertyMatchersFromMap(m map[string]interface{}) (TaskPropertyMatchers
 	} else {
 		matcher.WardID = uuid.NullUUID{Valid: false}
 	}
-	if taskIdRaw, ok := m["TaskId"].(string); ok {
-		parsed, err := hwutil.ParseNullUUID(&taskIdRaw)
+	if taskIDRaw, ok := m["TaskId"].(string); ok {
+		parsed, err := hwutil.ParseNullUUID(&taskIDRaw)
 		if err != nil {
 			return TaskPropertyMatchers{}, false
 		}

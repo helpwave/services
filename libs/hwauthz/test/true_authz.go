@@ -2,6 +2,7 @@ package test
 
 import (
 	"context"
+
 	"hwauthz"
 )
 
@@ -12,7 +13,11 @@ func NewTrueAuthZ() *TrueAuthZ {
 	return &TrueAuthZ{}
 }
 
-func (a *TrueAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship, deletes []hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
+func (a *TrueAuthZ) Write(
+	ctx context.Context,
+	writes []hwauthz.Relationship,
+	deletes []hwauthz.Relationship,
+) (hwauthz.ConsistencyToken, error) {
 	return "", nil
 }
 
@@ -30,4 +35,12 @@ func (a *TrueAuthZ) Check(ctx context.Context, check hwauthz.PermissionCheck) (p
 
 func (a *TrueAuthZ) Must(ctx context.Context, check hwauthz.PermissionCheck) error {
 	return nil
+}
+
+func BulkCheck(_ context.Context, checks []hwauthz.PermissionCheck) ([]bool, error) {
+	bs := make([]bool, len(checks))
+	for i := range bs {
+		bs[i] = true
+	}
+	return bs, nil
 }

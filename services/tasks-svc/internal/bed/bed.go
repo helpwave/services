@@ -2,15 +2,18 @@ package bed
 
 import (
 	"common"
+	"common/hwerr"
 	"context"
 	commonpb "gen/libs/common/v1"
-	"github.com/jackc/pgx/v5/pgconn"
-	"google.golang.org/genproto/googleapis/rpc/errdetails"
-	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwdb"
 	"hwgrpc"
 	"hwlocale"
 	"hwutil"
+
+	"github.com/jackc/pgx/v5/pgconn"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	"google.golang.org/protobuf/types/known/wrapperspb"
+
 	"tasks-svc/locale"
 	"tasks-svc/repos/bed_repo"
 
@@ -34,18 +37,18 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	roomId, err := uuid.Parse(req.RoomId)
+	roomId, err := uuid.Parse(req.GetRoomId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	bed, err := bedRepo.CreateBed(ctx, bed_repo.CreateBedParams{
 		RoomID: roomId,
-		Name:   req.Name,
+		Name:   req.GetName(),
 	})
 	err = hwdb.Error(ctx, err,
 		hwdb.WithOnFKViolation("beds_room_id_fkey", func(pgErr *pgconn.PgError) error {
-			return common.NewStatusError(ctx,
+			return hwerr.NewStatusError(ctx,
 				codes.InvalidArgument,
 				pgErr.Error(),
 				locale.InvalidRoomIdError(ctx),
@@ -55,7 +58,8 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 							Field:       "room_id",
 							Description: hwlocale.Localize(ctx, locale.InvalidRoomIdError(ctx)),
 						},
-					}})
+					},
+				})
 		}))
 	if err != nil {
 		return nil, err
@@ -63,20 +67,20 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 
 	log.Info().
 		Str("bedID", bed.ID.String()).
-		Str("roomID", req.RoomId).
+		Str("roomID", req.GetRoomId()).
 		Str("name", bed.Name).
 		Msg("bed created")
 
 	return &pb.CreateBedResponse{
 		Id:          bed.ID.String(),
-		Consistency: common.ConsistencyToken(bed.Consistency).String(),
+		Consistency: common.ConsistencyToken(bed.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
 func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.GetBedResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -94,16 +98,19 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		Id:          bed.ID.String(),
 		RoomId:      bed.RoomID.String(),
 		Name:        bed.Name,
-		Consistency: common.ConsistencyToken(bed.Consistency).String(),
+		Consistency: common.ConsistencyToken(bed.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatientRequest) (*pb.GetBedByPatientResponse, error) {
+func (ServiceServer) GetBedByPatient(
+	ctx context.Context,
+	req *pb.GetBedByPatientRequest,
+) (*pb.GetBedByPatientResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	patientId, err := uuid.Parse(req.PatientId)
+	patientId, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -120,14 +127,14 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 				Id:          res.RoomID.String(),
 				Name:        res.RoomName,
 				WardId:      res.WardID.String(),
-				Consistency: common.ConsistencyToken(res.RoomConsistency).String(),
+				Consistency: common.ConsistencyToken(res.RoomConsistency).String(), //nolint:gosec
 			}
 		}),
 		Bed: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientRow) pb.GetBedByPatientResponse_Bed {
 			return pb.GetBedByPatientResponse_Bed{
 				Id:          res.BedID.String(),
 				Name:        res.BedName,
-				Consistency: common.ConsistencyToken(res.BedConsistency).String(),
+				Consistency: common.ConsistencyToken(res.BedConsistency).String(), //nolint:gosec
 			}
 		}),
 	}, nil
@@ -152,14 +159,17 @@ func (ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb.G
 				Id:          bed.ID.String(),
 				RoomId:      bed.RoomID.String(),
 				Name:        bed.Name,
-				Consistency: common.ConsistencyToken(bed.Consistency).String(),
+				Consistency: common.ConsistencyToken(bed.Consistency).String(), //nolint:gosec
 			}
 		}),
 	}, nil
 }
 
-func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomRequest) (*pb.GetBedsByRoomResponse, error) {
-	roomID, err := uuid.Parse(req.RoomId)
+func (ServiceServer) GetBedsByRoom(
+	ctx context.Context,
+	req *pb.GetBedsByRoomRequest,
+) (*pb.GetBedsByRoomResponse, error) {
+	roomID, err := uuid.Parse(req.GetRoomId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -185,7 +195,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 		res.Beds = append(res.Beds, &pb.GetBedsByRoomResponse_Bed{
 			Id:          bed.ID.String(),
 			Name:        bed.Name,
-			Consistency: common.ConsistencyToken(bed.Consistency).String(),
+			Consistency: common.ConsistencyToken(bed.Consistency).String(), //nolint:gosec
 		})
 	}
 
@@ -193,8 +203,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 }
 
 func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
-
-	bedID, err := uuid.Parse(req.Id)
+	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -229,10 +238,11 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 	}
 
 	// conflict detection
-	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) {
+	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) { //nolint:gosec
 		// bed is not event sourced yet and has more than one field,
 		// thus we are not able to pinpoint conflicts to a field, we only know *some* update has happened since
-		// for convenience we are filtering out obvious non-conflicts, where the update is the same as the is state, or the field was not changed
+		// for convenience we are filtering out obvious non-conflicts, where the update is the same as the is state,
+		// or the field was not changed
 
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
@@ -268,7 +278,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 					ConflictingAttributes: conflicts,
 					HistoryMissing:        true,
 				},
-				Consistency: common.ConsistencyToken(result.OldConsistency).String(),
+				Consistency: common.ConsistencyToken(result.OldConsistency).String(), //nolint:gosec
 			}, nil
 		}
 	}
@@ -279,7 +289,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 
 	return &pb.UpdateBedResponse{
 		Conflict:    nil,
-		Consistency: common.ConsistencyToken(result.Consistency).String(),
+		Consistency: common.ConsistencyToken(result.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -287,7 +297,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	bedID, err := uuid.Parse(req.Id)
+	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

@@ -1,14 +1,18 @@
+//nolint:lll
 package stories
 
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/stretchr/testify/assert"
 	"hwtesting"
 	"hwutil"
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUpdatePropertyConflict(t *testing.T) {
@@ -35,7 +39,7 @@ func TestUpdatePropertyConflict(t *testing.T) {
 	}
 
 	createRes, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	hwtesting.WaitForProjectionsToSettle()
 
 	propertyID := createRes.PropertyId
@@ -44,7 +48,7 @@ func TestUpdatePropertyConflict(t *testing.T) {
 	getRes, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
 		Id: propertyID,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	initialOpts := getRes.GetSelectData().Options
 	assert.Len(t, initialOpts, 1)
@@ -68,7 +72,7 @@ func TestUpdatePropertyConflict(t *testing.T) {
 		Consistency: &initialConsistency,
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, is.Conflict)
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -89,7 +93,7 @@ func TestUpdatePropertyConflict(t *testing.T) {
 		}},
 		Consistency: &initialConsistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	// Assertions
 	assert.NotNil(t, want.Conflict)
@@ -131,5 +135,4 @@ func TestUpdatePropertyConflict(t *testing.T) {
 			strings.ReplaceAll(want.Conflict.ConflictingAttributes[key].String(), "  ", " "),
 		)
 	}
-
 }
