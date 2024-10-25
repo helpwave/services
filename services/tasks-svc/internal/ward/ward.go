@@ -308,6 +308,8 @@ func (s ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest
 		return nil, err
 	}
 
+	// TODO: remove from spice (also rooms and beds)
+
 	// remove from "recently used"
 	tracking.RemoveWardFromRecentActivity(ctx, id.String())
 
