@@ -125,6 +125,20 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} 
 	&& go clean -modcache
 
 
+# TODO: renovate
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.1
+RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.4.0
+ENV PATH="$PATH:$(go env GOPATH)/bin"
+
+# TODO: renovate
+ENV PROTOC_JS_VERSION=3.21.4
+RUN wget -qO- https://github.com/protocolbuffers/protobuf-javascript/releases/download/v${PROTOC_JS_VERSION}/protobuf-javascript-${PROTOC_JS_VERSION}-linux-x86_64.tar.gz \
+	| tar -xz --strip-components=1 -C /usr/local/bin bin/protoc-gen-js
+
+ENV PROTOC_WEB_VERSION=1.5.0
+RUN wget -q https://github.com/grpc/grpc-web/releases/download/${PROTOC_WEB_VERSION}/protoc-gen-grpc-web-${PROTOC_WEB_VERSION}-linux-x86_64 \
+	-O /usr/local/bin/protoc-gen-grpc-web
+
 # install gofumpt, a stricter gofmt
 #  https://github.com/mvdan/gofumpt
 # renovate: datasource=github-releases depName=mvdan/gofumpt
