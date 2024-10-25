@@ -6,6 +6,4 @@ definition room {
 	permission get = ward->get;
 	permission update = ward->update;
 	permission delete = ward->delete;
-
-	// TODO: add tests for the three above
 }
