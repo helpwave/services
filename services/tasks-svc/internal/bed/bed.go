@@ -10,6 +10,7 @@ import (
 	"hwdb"
 	"hwlocale"
 	"hwutil"
+
 	"tasks-svc/internal/bed/perm"
 	roomPerm "tasks-svc/internal/room/perm"
 
