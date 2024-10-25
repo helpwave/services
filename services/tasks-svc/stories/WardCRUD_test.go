@@ -3,6 +3,9 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
+	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
 	"strconv"
@@ -88,11 +91,23 @@ func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient
 }
 
 func TestGetRecentWards(t *testing.T) {
+	ctx := context.Background()
 	userID := uuid.New() // new user for this test, to prevent interference with other tests
+
+	// give user appropriate permissions
+	authz := spicedb.NewSpiceDBAuthZ()
+	_, err := authz.Create(
+		hwauthz.NewRelationship(
+			commonPerm.User(userID),
+			"member",
+			commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization)),
+		),
+	).Commit(ctx)
+	require.NoError(t, err)
+
 	wardClient := pb.NewWardServiceClient(hwtesting.GetGrpcConn(userID.String()))
 	taskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String()))
 	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
-	ctx := context.Background()
 
 	wardIds := prepareWards(t, ctx, wardClient, 11)
 	consistencies := make(map[string]string)
