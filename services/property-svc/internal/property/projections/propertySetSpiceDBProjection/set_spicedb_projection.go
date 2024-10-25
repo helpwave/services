@@ -1,4 +1,4 @@
-package spicedb_projection
+package propertySetSpiceDBProjection
 
 import (
 	"context"
@@ -9,14 +9,14 @@ import (
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 
-	"property-svc/internal/property/aggregate"
+	"property-svc/internal/property-set/aggregate"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 
-	propertyEventsV1 "property-svc/internal/property/events/v1"
-	"property-svc/internal/property/perm"
+	propertySetEventsV1 "property-svc/internal/property-set/events/v1"
+	"property-svc/internal/property-set/perm"
 )
 
 type Projection struct {
@@ -25,12 +25,12 @@ type Projection struct {
 }
 
 func NewProjection(es *esdb.Client, serviceName string, authz hwauthz.AuthZ) *Projection {
-	subscriptionGroupName := serviceName + "-spicedb-projection"
+	subscriptionGroupName := serviceName + "-property-set-spicedb-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
 			es,
 			subscriptionGroupName,
-			&[]string{aggregate.PropertyAggregateType + "-"},
+			&[]string{aggregate.PropertySetAggregateType + "-"},
 		),
 		authz: authz,
 	}
@@ -39,20 +39,20 @@ func NewProjection(es *esdb.Client, serviceName string, authz hwauthz.AuthZ) *Pr
 }
 
 func (p *Projection) initEventListeners() {
-	p.RegisterEventListener(propertyEventsV1.PropertyCreated, p.onPropertyCreated)
+	p.RegisterEventListener(propertySetEventsV1.PropertySetCreated, p.onPropertySetCreated)
 }
 
-func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPropertySetCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
 	// Parse Values
-	var payload propertyEventsV1.PropertyCreatedEvent
+	var payload propertySetEventsV1.PropertySetCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	propertyID, err := uuid.Parse(payload.ID)
+	propertySetID, err := uuid.Parse(payload.ID)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -64,8 +64,9 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 
 	relationship := hwauthz.NewRelationship(
 		perm.Organization(organizationID),
-		perm.PropertyOrganization,
-		perm.Property(propertyID))
+		perm.PropertySetOrganization,
+		perm.PropertySet(propertySetID),
+	)
 
 	// add to permission graph
 	_, err = p.authz.

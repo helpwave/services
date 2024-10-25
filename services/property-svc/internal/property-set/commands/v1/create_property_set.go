@@ -5,7 +5,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"hwauthz"
 	"hwes"
+
+	"property-svc/internal/property-set/perm"
 
 	"github.com/google/uuid"
 
@@ -20,8 +23,22 @@ type CreatePropertySetCommandHandler func(
 	name string,
 ) (common.ConsistencyToken, error)
 
-func NewCreatePropertySetCommandHandler(as hwes.AggregateStore) CreatePropertySetCommandHandler {
+func NewCreatePropertySetCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreatePropertySetCommandHandler {
 	return func(ctx context.Context, propertySetID uuid.UUID, name string) (common.ConsistencyToken, error) {
+		user, err := perm.UserFromCtx(ctx)
+		if err != nil {
+			return 0, err
+		}
+		org, err := perm.OrganizationFromCtx(ctx)
+		if err != nil {
+			return 0, err
+		}
+
+		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreatePropertySet, org)
+		if err := authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
+
 		a := aggregate.NewPropertySetAggregate(propertySetID)
 
 		exists, err := as.Exists(ctx, a)

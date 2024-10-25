@@ -13,6 +13,9 @@ definition organization {
 
 	// all members can create new properties
 	permission create_property = membership;
+
+	// all members can create new property_sets
+	permission create_property_set = membership;
 }
 
 definition organization_invite {

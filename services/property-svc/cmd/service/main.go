@@ -22,7 +22,8 @@ import (
 	property "property-svc/internal/property/api"
 	ph "property-svc/internal/property/handlers"
 	propertyPostgresProjection "property-svc/internal/property/projections/postgres_projection"
-	propertySpicedbProjection "property-svc/internal/property/projections/spicedb_projection"
+	"property-svc/internal/property/projections/propertySetSpiceDBProjection"
+	"property-svc/internal/property/projections/propertySpiceDBProjection"
 )
 
 const ServiceName = "property-svc"
@@ -53,14 +54,15 @@ func Main(version string, ready func()) {
 	go projections.StartProjections(
 		ctx,
 		common.Shutdown,
-		propertySpicedbProjection.NewProjection(eventStore, ServiceName, authz),
+		propertySpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
+		propertySetSpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
 		propertyPostgresProjection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
 		property_value_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
 		property_rules_postgres.NewProjection(eventStore, ServiceName),
 	)
 
 	propertyHandlers := ph.NewPropertyHandlers(aggregateStore, authz)
-	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore)
+	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore, authz)
 	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore)
 	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore)
 

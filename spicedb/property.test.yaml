@@ -20,7 +20,12 @@ relationships:
   - "property:a#organization@organization:a"
   - "property:b#organization@organization:b"
 
+  # property_set S1 belongs to org A, and S2 to B
+  - "property_set:S1#organization@organization:a"
+  - "property_set:S2#organization@organization:b"
+
 tests:
+  # properties
   - name: all members can get any prop in their org
     check:
       - "property:a#get@user:alice"
@@ -33,3 +38,11 @@ tests:
       - "property:a#update@user:charlie"
       - "property:b#update@user:charlie"
       - not: "property:b#update@user:alice"
+
+  # property_sets
+  - name: all members can get any set in their org
+    check:
+      - "property:a#get@user:alice"
+      - "property:a#get@user:charlie"
+      - "property:b#get@user:charlie"
+      - not: "property:b#get@user:alice"
