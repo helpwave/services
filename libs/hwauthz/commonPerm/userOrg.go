@@ -32,4 +32,3 @@ func OrganizationFromCtx(ctx context.Context) (Organization, error) {
 	}
 	return Organization(organizationID), nil
 }
-
