@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"hwauthz"
 	"hwes"
 
 	commandsV1 "tasks-svc/internal/patient/commands/v1"
@@ -20,12 +21,12 @@ type Handlers struct {
 	Queries  *Queries
 }
 
-func NewPatientHandlers(as hwes.AggregateStore) *Handlers {
+func NewPatientHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 	return &Handlers{
 		Commands: &Commands{
 			V1: &commandsV1.PatientCommands{
 				AssignBed:        commandsV1.NewAssignBedCommandHandler(as),
-				CreatePatient:    commandsV1.NewCreatePatientCommandHandler(as),
+				CreatePatient:    commandsV1.NewCreatePatientCommandHandler(as, authz),
 				DischargePatient: commandsV1.NewDischargePatientCommandHandler(as),
 				ReadmitPatient:   commandsV1.NewReadmitPatientCommandHandler(as),
 				UnassignBed:      commandsV1.NewUnassignBedCommandHandler(as),

@@ -13,8 +13,8 @@ import (
 	ph "tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/projections/patient_postgres_projection"
 	th "tasks-svc/internal/task/handlers"
-	"tasks-svc/internal/task/projections/spicedb"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
+	"tasks-svc/internal/task/projections/task_spicedb"
 	"tasks-svc/internal/tracking"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
@@ -42,12 +42,12 @@ func Main(version string, ready func()) {
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 	taskHandlers := th.NewTaskHandlers(aggregateStore)
-	patientHandlers := ph.NewPatientHandlers(aggregateStore)
+	patientHandlers := ph.NewPatientHandlers(aggregateStore, authz)
 
 	go projections.StartProjections(
 		ctx,
 		common.Shutdown,
-		spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
+		task_spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
 		task_postgres_projection.NewProjection(eventStore, ServiceName),
 		patient_postgres_projection.NewProjection(eventStore, ServiceName),
 	)

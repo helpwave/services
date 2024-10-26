@@ -1,0 +1,41 @@
+
+relationships:
+  # Alice leads the A organization
+  - "organization:a#leader@user:alice"
+  # Bob leads the B organization
+  - "organization:b#leader@user:bob"
+  # Bob is also, explicitly, a member of the B organization
+  - "organization:b#member@user:bob"
+  # Charlie is a common member
+  - "organization:a#member@user:charlie"
+  - "organization:b#member@user:charlie"
+  # Clara is a common member, and leader of the A organization
+  - "organization:a#leader@user:clara"
+  - "organization:a#member@user:clara"
+  - "organization:b#member@user:clara"
+  # Oscar is only a member of one organization (A organization)
+  - "organization:a#member@user:oscar"
+
+  # patient A belongs to org A, and B to B
+  - "patient:a#organization@organization:a"
+  - "patient:b#organization@organization:b"
+
+tests:
+  - name: all members can get any patient in their org
+    check:
+      - "patient:a#get@user:alice"
+      - "patient:a#get@user:charlie"
+      - "patient:b#get@user:charlie"
+      - not: "patient:b#get@user:alice"
+  - name: all members can update any patient in their org
+    check:
+      - "patient:a#update@user:alice"
+      - "patient:a#update@user:charlie"
+      - "patient:b#update@user:charlie"
+      - not: "patient:b#update@user:alice"
+  - name: all members can delete any patient in their org
+    check:
+      - "patient:a#delete@user:alice"
+      - "patient:a#delete@user:charlie"
+      - "patient:b#delete@user:charlie"
+      - not: "patient:b#delete@user:alice"

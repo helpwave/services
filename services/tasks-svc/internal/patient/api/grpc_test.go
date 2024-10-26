@@ -6,6 +6,7 @@ import (
 	"context"
 	"decaying_lru"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz/test"
 	hwes_test "hwes/test"
 	"testing"
 	"time"
@@ -25,7 +26,8 @@ import (
 func server() (context.Context, pb.PatientServiceClient, func()) {
 	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
-	patientHandlers := handlers.NewPatientHandlers(aggregateStore)
+	authz := test.NewTrueAuthZ()
+	patientHandlers := handlers.NewPatientHandlers(aggregateStore, authz)
 
 	patientGrpcService := api.NewPatientGrpcService(aggregateStore, patientHandlers)
 

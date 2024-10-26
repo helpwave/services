@@ -76,3 +76,8 @@ tests:
     check:
       - "organization:a#create_ward@user:alice" # alice is a leader
       - "organization:a#create_ward@user:charlie" # charlie is a member
+
+  - name: members can create new patients in their orgs
+    check:
+      - "organization:a#create_patient@user:alice" # alice is a leader
+      - "organization:a#create_patient@user:charlie" # charlie is a member

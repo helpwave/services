@@ -1,0 +1,9 @@
+definition patient {
+	// beds belong to an organization
+	relation organization: organization;
+
+	// all members of the organization can RUD the patient
+	permission get = organization->membership;
+	permission update = organization->membership;
+	permission delete = organization->membership;
+}

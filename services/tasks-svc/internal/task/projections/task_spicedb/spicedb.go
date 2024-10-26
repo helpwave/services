@@ -1,4 +1,4 @@
-package spicedb
+package task_spicedb
 
 import (
 	"hwauthz"
@@ -15,7 +15,7 @@ type Projection struct {
 }
 
 func NewSpiceDBProjection(es *esdb.Client, authz hwauthz.AuthZ, serviceName string) *Projection {
-	subscriptionGroupName := serviceName + "-spicedb-projection"
+	subscriptionGroupName := serviceName + "-task-spicedb-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
 			es,

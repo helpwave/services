@@ -4,7 +4,10 @@ import (
 	"common"
 	"context"
 	"errors"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
+	"tasks-svc/internal/patient/perm"
 
 	"github.com/google/uuid"
 
@@ -18,7 +21,7 @@ type CreatePatientCommandHandler func(
 	notes *string,
 ) (common.ConsistencyToken, error)
 
-func NewCreatePatientCommandHandler(as hwes.AggregateStore) CreatePatientCommandHandler {
+func NewCreatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreatePatientCommandHandler {
 	return func(
 		ctx context.Context,
 		patientID uuid.UUID,
@@ -26,6 +29,20 @@ func NewCreatePatientCommandHandler(as hwes.AggregateStore) CreatePatientCommand
 		notes *string,
 	) (common.ConsistencyToken, error) {
 		a := aggregate.NewPatientAggregate(patientID)
+
+		// check permissions
+		user, err := commonPerm.UserFromCtx(ctx)
+		if err != nil {
+			return 0, nil
+		}
+		org, err := commonPerm.OrganizationFromCtx(ctx)
+		if err != nil {
+			return 0, nil
+		}
+		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreatePatient, org)
+		if err := authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
 
 		exists, err := as.Exists(ctx, a)
 		if err != nil {
