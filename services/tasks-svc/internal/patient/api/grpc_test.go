@@ -29,7 +29,7 @@ func server() (context.Context, pb.PatientServiceClient, func()) {
 	authz := test.NewTrueAuthZ()
 	patientHandlers := handlers.NewPatientHandlers(aggregateStore, authz)
 
-	patientGrpcService := api.NewPatientGrpcService(aggregateStore, patientHandlers)
+	patientGrpcService := api.NewPatientGrpcService(aggregateStore, authz, patientHandlers)
 
 	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 

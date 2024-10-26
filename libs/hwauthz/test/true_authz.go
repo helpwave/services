@@ -44,3 +44,7 @@ func (a *TrueAuthZ) BulkCheck(_ context.Context, checks []hwauthz.PermissionChec
 	}
 	return bs, nil
 }
+
+func (s *TrueAuthZ) BulkMust(_ context.Context, _ ...hwauthz.PermissionCheck) error {
+	return nil
+}

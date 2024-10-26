@@ -163,6 +163,9 @@ type AuthZ interface {
 	// BulkCheck queries permission relations for many checks.
 	// The evaluated truthfulness of a check at index i in the checks slice is returned at index i in the yielded slice.
 	BulkCheck(ctx context.Context, checks []PermissionCheck) ([]bool, error)
+	// BulkMust performs many checks and errors if any one fails.
+	// Also see Must and BulkCheck
+	BulkMust(ctx context.Context, checks ...PermissionCheck) error
 }
 
 // Error returns err, if not nil or StatusErrorPermissionDenied, if permissionGranted is false
