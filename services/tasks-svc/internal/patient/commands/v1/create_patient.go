@@ -7,6 +7,7 @@ import (
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+
 	"tasks-svc/internal/patient/perm"
 
 	"github.com/google/uuid"
@@ -33,11 +34,11 @@ func NewCreatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 		// check permissions
 		user, err := commonPerm.UserFromCtx(ctx)
 		if err != nil {
-			return 0, nil
+			return 0, err
 		}
 		org, err := commonPerm.OrganizationFromCtx(ctx)
 		if err != nil {
-			return 0, nil
+			return 0, err
 		}
 		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreatePatient, org)
 		if err := authz.Must(ctx, check); err != nil {

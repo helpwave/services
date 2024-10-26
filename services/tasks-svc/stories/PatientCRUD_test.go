@@ -3,6 +3,9 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
+	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
 	"strconv"
@@ -629,9 +632,18 @@ func TestGetPatientDetails(t *testing.T) {
 }
 
 func TestGetRecentPatients(t *testing.T) {
-	userID := uuid.New() // new user for this test, to prevent interference with other tests
-	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
 	ctx := context.Background()
+
+	userID := uuid.New() // new user for this test, to prevent interference with other tests
+
+	// give new user appropriate permissions
+	authz := spicedb.NewSpiceDBAuthZ()
+	user := commonPerm.User(userID)
+	org := commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
+	_, err := authz.Create(hwauthz.NewRelationship(user, "member", org)).Commit(ctx)
+	require.NoError(t, err)
+
+	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
 
 	wardID, _ := prepareWard(t, ctx, "")
 	roomId, roomConsistency := prepareRoom(t, ctx, wardID, "")

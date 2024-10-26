@@ -2,6 +2,7 @@ package v1
 
 import (
 	"common"
+	"common/auth"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwdb"
@@ -19,7 +20,12 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 	return func(ctx context.Context) ([]*models.PatientDetails, error) {
 		patientRepo := patient_repo.New(hwdb.GetDB())
 
-		rows, err := patientRepo.GetAllPatientsWithTasksBedAndRoom(ctx)
+		organizationID, err := auth.GetOrganizationID(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		rows, err := patientRepo.GetAllPatientsWithTasksBedAndRoom(ctx, organizationID)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err
 		}
