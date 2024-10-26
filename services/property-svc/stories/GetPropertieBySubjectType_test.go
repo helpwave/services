@@ -19,6 +19,14 @@ import (
 //   - Check GetPropertiesBySubjectType
 func TestGetProperties(t *testing.T) {
 	orgID := uuid.New().String()
+	/* TODO: blocked by #880
+	authz := spicedb.NewSpiceDBAuthZ()
+	authz.Create(hwauthz.NewRelationship(
+		commonPerm.User(uuid.MustParse(hwtesting.FakeTokenUser)),
+		"member",
+		commonPerm.Organization(orgID),
+	))
+	*/
 	propertyClient := pb.NewPropertyServiceClient(hwtesting.GetGrpcConn("", orgID))
 
 	ctx := context.Background()

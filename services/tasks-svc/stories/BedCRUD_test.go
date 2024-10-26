@@ -227,7 +227,7 @@ func TestUpdateBedConflict(t *testing.T) {
 
 	nameWant := &wrapperspb.StringValue{}
 	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
-	assert.Equal(t, name2, nameWant.Value)
+	assert.Equal(t, name2, nameWant.Value) //nolint:testifylint // false positive
 
 	roomRes := update2Res.Conflict.ConflictingAttributes["room_id"]
 	assert.NotNil(t, roomRes)
@@ -238,7 +238,7 @@ func TestUpdateBedConflict(t *testing.T) {
 
 	roomWant := &wrapperspb.StringValue{}
 	require.NoError(t, roomRes.Want.UnmarshalTo(roomWant))
-	assert.Equal(t, roomId2, roomWant.Value)
+	assert.Equal(t, roomId2, roomWant.Value) //nolint:testifylint // false positive
 
 	// racing update 3
 	update3Res, err := bedClient.UpdateBed(ctx, &pb.UpdateBedRequest{

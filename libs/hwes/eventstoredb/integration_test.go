@@ -46,7 +46,7 @@ func TestLoadN(t *testing.T) {
 	sendAggregate := hwes.NewAggregateBase(hwes.AggregateType(eventType), id)
 	sendAggregate.RegisterEventListener(eventType, func(evt hwes.Event) error { return nil })
 
-	for i := 0; i < 4; i++ {
+	for range 4 {
 		event, _ := hwes.NewEvent(sendAggregate, eventType, hwes.WithContext(ctx))
 		require.NoError(t, sendAggregate.Apply(event))
 	}

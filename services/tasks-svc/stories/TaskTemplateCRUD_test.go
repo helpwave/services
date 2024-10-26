@@ -214,7 +214,7 @@ func TestUpdateTaskTemplateConflict(t *testing.T) {
 
 	nameWant := &wrapperspb.StringValue{}
 	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
-	assert.Equal(t, name2, nameWant.Value)
+	assert.Equal(t, name2, nameWant.Value) //nolint:testifylint // false positive
 
 	descrRes := update2Res.Conflict.ConflictingAttributes["description"]
 	assert.NotNil(t, descrRes)
@@ -225,7 +225,7 @@ func TestUpdateTaskTemplateConflict(t *testing.T) {
 
 	descrWant := &wrapperspb.StringValue{}
 	require.NoError(t, descrRes.Want.UnmarshalTo(descrWant))
-	assert.Equal(t, name2, descrWant.Value)
+	assert.Equal(t, name2, descrWant.Value) //nolint:testifylint // false positive
 }
 
 func TestUpdateTaskTemplateSubTaskConflict(t *testing.T) {
@@ -282,5 +282,5 @@ func TestUpdateTaskTemplateSubTaskConflict(t *testing.T) {
 
 	nameWant := &wrapperspb.StringValue{}
 	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
-	assert.Equal(t, name2, nameWant.Value)
+	assert.Equal(t, name2, nameWant.Value) //nolint:testifylint // false positive
 }

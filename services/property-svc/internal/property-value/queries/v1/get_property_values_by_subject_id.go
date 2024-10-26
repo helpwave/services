@@ -90,12 +90,13 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 				}
 
 				// add multiselectvalue to array
-				arr := properties[row.Property.ID].Value.(models.MultiSelectValues)
-				properties[row.Property.ID].Value = append(arr, models.SelectValueOption{
+				arr := properties[row.Property.ID].Value.(models.MultiSelectValues) //nolint:forcetypeassert
+				arr = append(arr, models.SelectValueOption{
 					Id:          row.SelectOptionID.UUID,      // known to be valid by if
 					Name:        *row.SelectOptionName,        // known to be set due to NOT NULL and successful LEFT JOIN
 					Description: *row.SelectOptionDescription, // known to be set due to NOT NULL and successful LEFT JOIN
 				})
+				properties[row.Property.ID].Value = arr
 			} else {
 				// basic values can just be set, we expect only one of them to be not null,
 				// but at least one has to due to ifs

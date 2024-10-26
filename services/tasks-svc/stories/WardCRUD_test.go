@@ -432,5 +432,5 @@ func TestUpdateWardConflict(t *testing.T) {
 
 	nameWant := &wrapperspb.StringValue{}
 	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
-	assert.Equal(t, name2, nameWant.Value)
+	assert.Equal(t, name2, nameWant.Value) //nolint:testifylint // false positive
 }
