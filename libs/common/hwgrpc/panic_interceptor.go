@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-var panicsRecovered = telemetry.Factory().NewCounter(prometheus.CounterOpts{
+var panicsRecovered = telemetry.NewLazyCounter(prometheus.CounterOpts{
 	Name: "services_panics_recovered_total",
 	Help: "Total number of panics recovered by PanicRecoverInterceptor",
 })
@@ -28,19 +28,23 @@ func recoveryHandlerFn() recovery.RecoveryHandlerFuncContext {
 			Str("stack", string(debug.Stack())).
 			Msg("recovered a panic")
 
-		panicsRecovered.Inc()
+		panicsRecovered.Counter().Inc()
 
 		return hwerr.NewStatusError(ctx, codes.Internal, "panic recovered", locale.GenericError(ctx))
 	}
 }
 
 func UnaryPanicRecoverInterceptor() grpc.UnaryServerInterceptor {
+	panicsRecovered.Ensure()
+
 	return recovery.UnaryServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),
 	)
 }
 
 func StreamPanicRecoverInterceptor() grpc.StreamServerInterceptor {
+	panicsRecovered.Ensure()
+
 	return recovery.StreamServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),
 	)
