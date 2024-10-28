@@ -6,67 +6,46 @@ import (
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
+	"hwutil"
 	"property-svc/internal/property/models"
 )
 
-const (
-	PropertyCreated                            = "PROPERTY_CREATED_v1"
-	PropertyDescriptionUpdated                 = "PROPERTY_DESCRIPTION_UPDATED_v1"
-	PropertySetIDUpdated                       = "PROPERTY_SET_ID_UPDATED_v1"
-	PropertySubjectTypeUpdated                 = "PROPERTY_SUBJECT_TYPE_UPDATED_v1"
-	PropertyFieldTypeUpdated                   = "PROPERTY_FIELD_TYPE_UPDATED_v1"
-	PropertyFieldTypeDataCreated               = "PROPERTY_FIELD_TYPE_DATA_CREATED_v1"
-	PropertyNameUpdated                        = "PROPERTY_NAME_UPDATED_v1"
-	PropertyFieldTypeDataAllowFreetextUpdated  = "PROPERTY_FIELD_TYPE_DATA_ALLOW_FREETEXT_UPDATED_v1"
-	PropertyFieldTypeDataSelectOptionsRemoved  = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_REMOVED_v1"
-	PropertyFieldTypeDataSelectOptionsUpserted = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_UPSERTED_v1"
-	PropertyArchived                           = "PROPERTY_ARCHIVED_v1"
-	PropertyRetrieved                          = "PROPERTY_RETRIEVED_v1"
-)
-
-type PropertyCreatedEvent struct {
-	ID string `json:"id"`
-
-	SubjectType string `json:"subject_type"`
-	FieldType   string `json:"field_type"`
-
-	Name string `json:"name"`
-}
-
 func NewPropertyCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string) (hwes.Event, error) {
-	payload := PropertyCreatedEvent{
-		ID:          id.String(),
-		SubjectType: subjectType.String(),
-		FieldType:   fieldType.String(),
+	payload := pbTechnicalEventsV1.PropertyCreatedEvent{
+		Id:          id.String(),
+		SubjectType: subjectType,
+		FieldType:   fieldType,
 		Name:        name,
 	}
-	return hwes.NewEvent(a, PropertyCreated, hwes.WithContext(ctx), hwes.WithData(payload))
-}
-
-type FieldTypeDataCreatedEvent struct {
-	FieldTypeData models.FieldTypeData
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewFieldTypeDataCreatedEvent(ctx context.Context, a hwes.Aggregate, fieldTypeData models.FieldTypeData) (hwes.Event, error) {
-	payload := FieldTypeDataCreatedEvent{
-		FieldTypeData: fieldTypeData,
-	}
-	return hwes.NewEvent(a, PropertyFieldTypeDataCreated, hwes.WithContext(ctx), hwes.WithData(payload))
-}
+	protoFieldTypeData := pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_FieldTypeData{}
 
-type PropertyDescriptionUpdatedEvent struct {
-	Description string `json:"description"`
+	if fieldTypeData.SelectData != nil {
+		protoFieldTypeData.SelectData.AllowFreetext = fieldTypeData.SelectData.AllowFreetext
+		protoFieldTypeData.SelectData.SelectOptions = hwutil.Map(fieldTypeData.SelectData.SelectOptions, func(opt models.SelectOption) *pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_SelectOption {
+			return &pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_SelectOption{
+				Id:          opt.ID.String(),
+				Name:        opt.Name,
+				Description: opt.Description,
+				IsCustom:    opt.IsCustom,
+			}
+		})
+	}
+
+	payload := pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent{
+		FieldTypeData: &protoFieldTypeData,
+	}
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewPropertyDescriptionUpdatedEvent(ctx context.Context, a hwes.Aggregate, description string) (hwes.Event, error) {
-	payload := PropertyDescriptionUpdatedEvent{
+	payload := pbTechnicalEventsV1.PropertyDescriptionUpdatedEvent{
 		Description: description,
 	}
-	return hwes.NewEvent(a, PropertyDescriptionUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
-}
-
-type PropertySetIDUpdatedEvent struct {
-	SetID string `json:"set_id"`
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewPropertySetIDUpdatedEvent(ctx context.Context, a hwes.Aggregate, setID uuid.NullUUID) (hwes.Event, error) {
@@ -74,82 +53,68 @@ func NewPropertySetIDUpdatedEvent(ctx context.Context, a hwes.Aggregate, setID u
 	if setID.Valid {
 		sids = setID.UUID.String()
 	}
-	payload := PropertySetIDUpdatedEvent{
-		SetID: sids,
+	payload := pbTechnicalEventsV1.PropertySetIDUpdatedEvent{
+		SetId: sids,
 	}
-	return hwes.NewEvent(a, PropertySetIDUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
-}
-
-type PropertySubjectTypeUpdatedEvent struct {
-	SubjectType string `json:"subject_type"`
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewPropertySubjectTypeUpdatedEvent(ctx context.Context, a hwes.Aggregate, subjectType pb.SubjectType) (hwes.Event, error) {
-	payload := PropertySubjectTypeUpdatedEvent{
+	payload := pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent{
 		SubjectType: subjectType.String(),
 	}
-	return hwes.NewEvent(a, PropertySubjectTypeUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
-}
-
-type PropertyFieldTypeUpdatedEvent struct {
-	FieldType string `json:"field_type"`
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewPropertyFieldTypeUpdatedEvent(ctx context.Context, a hwes.Aggregate, fieldType pb.FieldType) (hwes.Event, error) {
-	payload := PropertyFieldTypeUpdatedEvent{
+	payload := pbTechnicalEventsV1.PropertyFieldTypeUpdatedEvent{
 		FieldType: fieldType.String(),
 	}
-	return hwes.NewEvent(a, PropertyFieldTypeUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
-}
-
-type PropertyNameUpdatedEvent struct {
-	Name string `json:"name"`
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewPropertyNameUpdatedEvent(ctx context.Context, a hwes.Aggregate, name string) (hwes.Event, error) {
-	payload := &pbTechnicalEventsV1.UpdateNameEvent{
+	payload := pbTechnicalEventsV1.PropertyNameUpdatedEvent{
 		Name: name,
 	}
-	return hwes.NewEventFromProto(a, payload, hwes.WithContext(ctx))
-}
-
-type FieldTypeDataAllowFreetextUpdatedEvent struct {
-	NewAllowFreetext bool `json:"new_allow_freetext"`
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewFieldTypeDataAllowFreetextUpdatedEvent(ctx context.Context, a hwes.Aggregate, newAllowFreetext bool) (hwes.Event, error) {
-	payload := FieldTypeDataAllowFreetextUpdatedEvent{
+	payload := pbTechnicalEventsV1.PropertyFieldTypeDataAllowFreetextUpdatedEvent{
 		NewAllowFreetext: newAllowFreetext,
 	}
-	return hwes.NewEvent(a, PropertyFieldTypeDataAllowFreetextUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
-}
-
-type FieldTypeDataSelectOptionsRemovedEvent struct {
-	RemovedSelectOptions []string `json:"removed_select_options"`
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewFieldTypeDataSelectOptionsRemovedEvent(ctx context.Context, a hwes.Aggregate, toBeRemoved []string) (hwes.Event, error) {
-	payload := FieldTypeDataSelectOptionsRemovedEvent{
+	payload := pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsRemovedEvent{
 		RemovedSelectOptions: toBeRemoved,
 	}
-	return hwes.NewEvent(a, PropertyFieldTypeDataSelectOptionsRemoved, hwes.WithContext(ctx), hwes.WithData(payload))
-}
-
-type FieldTypeDataSelectOptionsUpsertedEvent struct {
-	UpsertedSelectOptions []models.UpdateSelectOption `json:"UpsertedSelectOptions"`
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewFieldTypeDataSelectOptionsUpsertedEvent(ctx context.Context, a hwes.Aggregate, upsertOptions []models.UpdateSelectOption) (hwes.Event, error) {
-	payload := FieldTypeDataSelectOptionsUpsertedEvent{
-		UpsertedSelectOptions: upsertOptions,
+	updateSelectOptions := hwutil.Map(upsertOptions, func(upsertOptions models.UpdateSelectOption) *pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent_UpdateSelectOption {
+		return &pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent_UpdateSelectOption{
+			Id:          upsertOptions.ID.String(),
+			Name:        upsertOptions.Name,
+			Description: upsertOptions.Description,
+			IsCustom:    upsertOptions.IsCustom,
+		}
+	})
+
+	payload := pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent{
+		UpsertedSelectOptions: updateSelectOptions,
 	}
-	return hwes.NewEvent(a, PropertyFieldTypeDataSelectOptionsUpserted, hwes.WithContext(ctx), hwes.WithData(payload))
+
+	return hwes.NewEventFromProto(a, &payload, hwes.WithContext(ctx))
 }
 
 func NewPropertyArchivedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	return hwes.NewEvent(a, PropertyArchived, hwes.WithContext(ctx))
+	return hwes.NewEventFromProto(a, &pbTechnicalEventsV1.PropertyArchivedEvent{}, hwes.WithContext(ctx))
 }
 
 func NewPropertyRetrievedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	return hwes.NewEvent(a, PropertyRetrieved, hwes.WithContext(ctx))
+	return hwes.NewEventFromProto(a, &pbTechnicalEventsV1.PropertyRetrievedEvent{}, hwes.WithContext(ctx))
 }

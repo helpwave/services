@@ -2,8 +2,118 @@ syntax = "proto3";
 
 package libs.technical_events.property_svc.v1;
 
+import "libs/events/v1/options.proto";
+import "services/property_svc/v1/types.proto";
+
 option go_package = "gen/libs/technical-events/property-svc/v1";
 
-message UpdateNameEvent {
+message PropertyCreatedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_CREATED_v1";
+
+  string id = 1;
+  services.property_svc.v1.SubjectType subject_type = 2;
+  services.property_svc.v1.FieldType field_type = 3;
+  string name = 4;
+}
+
+message PropertyDescriptionUpdatedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_DESCRIPTION_UPDATED_v1";
+
+  string description = 1;
+}
+
+message PropertySetIDUpdatedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_SET_ID_UPDATED_v1";
+
+  string set_id = 1;
+}
+
+message PropertySubjectTypeUpdatedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_SUBJECT_TYPE_UPDATED_v1";
+
+  string subject_type = 1;
+}
+
+message PropertyFieldTypeUpdatedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_FIELD_TYPE_UPDATED_v1";
+
+  string field_type = 1;
+}
+
+message PropertyFieldTypeDataCreatedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_FIELD_TYPE_DATA_CREATED_v1";
+
+  message SelectOption {
+    string id = 1;
+    string name = 2;
+    optional string description = 3;
+    bool is_custom = 4;
+  }
+
+  message SelectData {
+    bool allow_freetext = 1;
+    repeated SelectOption select_options = 2;
+  }
+
+  message FieldTypeData {
+    optional SelectData select_data = 1;
+  }
+
+  FieldTypeData field_type_data = 1;
+}
+
+message PropertyNameUpdatedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_NAME_UPDATED_v1";
+
   string name = 1;
+}
+
+message PropertyFieldTypeDataAllowFreetextUpdatedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_FIELD_TYPE_DATA_ALLOW_FREETEXT_UPDATED_v1";
+
+  bool new_allow_freetext = 1;
+}
+
+message PropertyFieldTypeDataSelectOptionsRemovedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_REMOVED_v1";
+
+  repeated string removed_select_options = 1;
+}
+
+message PropertyFieldTypeDataSelectOptionsUpsertedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_UPSERTED_v1";
+
+  message UpdateSelectOption {
+    string id = 1;
+    optional string name = 2;
+    optional string description = 3;
+    optional bool is_custom = 4;
+  }
+
+  repeated UpdateSelectOption upserted_select_options = 1;
+}
+
+message PropertyArchivedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_ARCHIVED_v1";
+}
+
+message PropertyRetrievedEvent {
+  option (libs.events.v1.event_type) = "PROPERTY_RETRIEVED_v1";
+}
+
+message TechnicalEvent {
+  oneof event {
+    PropertyCreatedEvent property_created = 1;
+    PropertyDescriptionUpdatedEvent property_description_updated = 2;
+    PropertySetIDUpdatedEvent property_set_id_updated = 3;
+    PropertySubjectTypeUpdatedEvent property_subject_type_updated = 4;
+    PropertyFieldTypeUpdatedEvent property_field_type_updated = 5;
+    PropertyFieldTypeDataCreatedEvent property_field_type_data_created = 6;
+    PropertyNameUpdatedEvent property_name_updated = 7;
+    PropertyFieldTypeDataAllowFreetextUpdatedEvent property_field_type_data_allow_freetext_updated = 8;
+    PropertyFieldTypeDataSelectOptionsRemovedEvent property_field_type_data_select_options_removed = 9;
+    PropertyFieldTypeDataSelectOptionsUpsertedEvent property_field_type_data_select_options_upserted = 10;
+    PropertyArchivedEvent property_archived = 11;
+    PropertyRetrievedEvent property_retrieved = 12;
+  }
 }

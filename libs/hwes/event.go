@@ -15,6 +15,8 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
+
+	pbEventsV1 "gen/libs/events/v1"
 )
 
 type Event struct {
@@ -49,19 +51,12 @@ type metadata struct {
 	DataIsProto bool      `json:"data_is_proto"`
 }
 
-func MessageToEventName(protoMessage proto.Message) (string, error) {
-	protoPath := proto.MessageName(protoMessage)
-
-	messageName := string(protoPath.Name())
-	probablyVersion := string(protoPath.Parent().Name())
-
-	if !strings.HasPrefix(probablyVersion, "v") {
-		return "", fmt.Errorf("%s does not look like a version for proto %s", probablyVersion, protoPath)
+func MessageToEventName(protoMessage proto.Message) string {
+	protoEventType := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), pbEventsV1.E_EventType).(string)
+	if protoEventType == "" {
+		panic("protoMessage does not has EventType extension") // TODO: optimize
 	}
-
-	eventName := fmt.Sprintf("%s_%s", messageName, probablyVersion)
-
-	return eventName, nil
+	return protoEventType
 }
 
 // EventOption used to apply configurations in hwes.NewEvent()
@@ -115,10 +110,11 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 }
 
 func NewEventFromProto(aggregate Aggregate, message proto.Message, opts ...EventOption) (Event, error) {
-	eventType, err := MessageToEventName(message)
-	if err != nil {
-		return Event{}, err
-	}
+	eventType := MessageToEventName(message)
+
+	fmt.Println("==============================")
+	fmt.Println(eventType)
+	fmt.Println("==============================")
 
 	event, err := NewEvent(aggregate, eventType, opts...)
 	if err != nil {

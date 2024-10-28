@@ -8,7 +8,6 @@ import (
 	"github.com/google/uuid"
 	"hwes"
 	"hwutil"
-	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
 )
 
@@ -41,84 +40,94 @@ func LoadPropertyAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.
 }
 
 func (a *PropertyAggregate) initEventListeners() {
-
-	// TODO: Resolve name not in such a way ...
-	updateNameEvent := &pbTechnicalEventsV1.UpdateNameEvent{}
-	updateNameEventName, err := hwes.MessageToEventName(updateNameEvent)
-	if err != nil {
-		panic(err)
-	}
-
-	a.RegisterEventListener(propertyEventsV1.PropertyCreated, a.onPropertyCreated)
-	a.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, a.onDescriptionUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, a.onSetIDUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
-	a.RegisterEventListener(updateNameEventName, a.onNameUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, a.onFieldTypeDataCreated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, a.onAllowFreetextUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, a.onFieldTypeDataSelectOptionsUpserted)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, a.onFieldTypeDataSelectOptionsRemoved)
-	a.RegisterEventListener(propertyEventsV1.PropertyArchived, a.onPropertyArchived)
-	a.RegisterEventListener(propertyEventsV1.PropertyRetrieved, a.onPropertyRetrieved)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyCreatedEvent{}), a.onPropertyCreated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyDescriptionUpdatedEvent{}), a.onDescriptionUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySetIDUpdatedEvent{}), a.onSetIDUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent{}), a.onSubjectTypeUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyNameUpdatedEvent{}), a.onNameUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent{}), a.onFieldTypeDataCreated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataAllowFreetextUpdatedEvent{}), a.onAllowFreetextUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent{}), a.onFieldTypeDataSelectOptionsUpserted)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsRemovedEvent{}), a.onFieldTypeDataSelectOptionsRemoved)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyArchivedEvent{}), a.onPropertyArchived)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyRetrievedEvent{}), a.onPropertyRetrieved)
 }
 
 // Event handlers
 func (a *PropertyAggregate) onPropertyCreated(evt hwes.Event) error {
-	var payload propertyEventsV1.PropertyCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyCreatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 
-	val, found := pb.FieldType_value[payload.FieldType]
+	val, found := pb.FieldType_value[payload.GetFieldType().String()]
 	if !found {
-		return fmt.Errorf("invalid property fieldType: %s", payload.FieldType)
+		return fmt.Errorf("invalid property fieldType: %s", payload.GetFieldType())
 	}
 	fieldType := (pb.FieldType)(val)
 
-	val, found = pb.SubjectType_value[payload.SubjectType]
+	val, found = pb.SubjectType_value[payload.GetSubjectType().String()]
 	if !found {
-		return fmt.Errorf("invalid property subjectType: %s", payload.SubjectType)
+		return fmt.Errorf("invalid property subjectType: %s", payload.GetSubjectType())
 	}
 	subjectType := (pb.SubjectType)(val)
 
 	a.Property.SubjectType = subjectType
 	a.Property.FieldType = fieldType
-	a.Property.Name = payload.Name
+	a.Property.Name = payload.GetName()
 
 	return nil
 }
 
 func (a *PropertyAggregate) onFieldTypeDataCreated(evt hwes.Event) error {
-	var payload propertyEventsV1.FieldTypeDataCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 
-	a.Property.FieldTypeData = payload.FieldTypeData
+	fieldTypeData := models.FieldTypeData{}
+
+	if payload.GetFieldTypeData() != nil {
+		opts := hwutil.Map(payload.GetFieldTypeData().GetSelectData().GetSelectOptions(), func(opt *pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_SelectOption) models.SelectOption {
+			return models.SelectOption{
+				ID:          uuid.MustParse(opt.GetId()),
+				Name:        opt.GetName(),
+				Description: opt.Description,
+				IsCustom:    opt.GetIsCustom(),
+			}
+		})
+
+		fieldTypeData.SelectData = &models.SelectData{
+			AllowFreetext: payload.GetFieldTypeData().GetSelectData().GetAllowFreetext(),
+			SelectOptions: opts,
+		}
+	}
+
+	a.Property.FieldTypeData = fieldTypeData
 
 	return nil
 }
 
 func (a *PropertyAggregate) onDescriptionUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.PropertyDescriptionUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyDescriptionUpdatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 
-	a.Property.Description = payload.Description
+	a.Property.Description = payload.GetDescription()
 
 	return nil
 }
 
 func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.PropertySetIDUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertySetIDUpdatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 
 	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
-	if len(payload.SetID) > 0 {
-		parsedID, err := hwutil.ParseNullUUID(&payload.SetID)
+	if len(payload.GetSetId()) > 0 {
+		parsedID, err := hwutil.ParseNullUUID(&payload.SetId)
 		if err != nil {
 			return err
 		}
@@ -130,14 +139,14 @@ func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 }
 
 func (a *PropertyAggregate) onSubjectTypeUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.PropertySubjectTypeUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 
-	value, found := pb.SubjectType_value[payload.SubjectType]
+	value, found := pb.SubjectType_value[payload.GetSubjectType()]
 	if !found {
-		return fmt.Errorf("invalid subjectType: %s", payload.SubjectType)
+		return fmt.Errorf("invalid subjectType: %s", payload.GetSubjectType())
 	}
 	subjectType := (pb.SubjectType)(value)
 
@@ -146,18 +155,18 @@ func (a *PropertyAggregate) onSubjectTypeUpdated(evt hwes.Event) error {
 }
 
 func (a *PropertyAggregate) onNameUpdated(evt hwes.Event) error {
-	var payload pbTechnicalEventsV1.UpdateNameEvent
+	var payload pbTechnicalEventsV1.PropertyNameUpdatedEvent
 	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 
-	a.Property.Name = payload.Name
+	a.Property.Name = payload.GetName()
 	return nil
 }
 
 func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyFieldTypeDataAllowFreetextUpdatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 
@@ -173,8 +182,8 @@ func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 }
 
 func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event) error {
-	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 
@@ -187,17 +196,19 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 	}
 
 	for _, option := range payload.UpsertedSelectOptions {
-		if _, exists := selectOptions[option.ID]; !exists {
+		optionId := uuid.MustParse(option.Id)
+
+		if _, exists := selectOptions[optionId]; !exists {
 			if option.Name == nil {
-				return fmt.Errorf("name missing for selectOption with id %s", option.ID.String())
+				return fmt.Errorf("name missing for selectOption with id %s", optionId.String())
 			}
-			selectOptions[option.ID] = models.SelectOption{
-				ID:          option.ID,
+			selectOptions[optionId] = models.SelectOption{
+				ID:          optionId,
 				Name:        *option.Name,
 				Description: option.Description,
 			}
 		} else {
-			updatedOpt := selectOptions[option.ID]
+			updatedOpt := selectOptions[optionId]
 			if option.Name != nil {
 				updatedOpt.Name = *option.Name
 			}
@@ -207,7 +218,7 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 			if option.IsCustom != nil {
 				updatedOpt.IsCustom = *option.IsCustom
 			}
-			selectOptions[option.ID] = updatedOpt
+			selectOptions[optionId] = updatedOpt
 		}
 	}
 
@@ -232,8 +243,8 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 }
 
 func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) error {
-	var payload propertyEventsV1.FieldTypeDataSelectOptionsRemovedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsRemovedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 
@@ -251,12 +262,12 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) 
 	return nil
 }
 
-func (a *PropertyAggregate) onPropertyArchived(evt hwes.Event) error {
+func (a *PropertyAggregate) onPropertyArchived(_ hwes.Event) error {
 	a.Property.IsArchived = true
 	return nil
 }
 
-func (a *PropertyAggregate) onPropertyRetrieved(evt hwes.Event) error {
+func (a *PropertyAggregate) onPropertyRetrieved(_ hwes.Event) error {
 	a.Property.IsArchived = false
 	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	pbTechnicalEventsV1 "gen/libs/technical_events/property_svc/v1"
 	pb "gen/services/property_svc/v1"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
@@ -14,7 +15,6 @@ import (
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 	"property-svc/internal/property/aggregate"
-	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
 	"property-svc/repos/property_repo"
 )
@@ -37,43 +37,43 @@ func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projectio
 }
 
 func (p *Projection) initEventListeners() {
-	p.RegisterEventListener(propertyEventsV1.PropertyCreated, p.onPropertyCreated)
-	p.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, p.onPropertyDescriptionUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, p.onPropertySetIDUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, p.onSubjectTypeUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, p.onNameUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertyArchived, p.onPropertyArchived)
-	p.RegisterEventListener(propertyEventsV1.PropertyRetrieved, p.onPropertyRetrieved)
-	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, p.onPropertyFieldTypeDataCreated)
-	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, p.onAllowFreetextUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, p.onFieldTypeDataSelectOptionsRemoved)
-	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, p.onFieldTypeDataSelectOptionsUpserted)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyCreatedEvent{}), p.onPropertyCreated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyDescriptionUpdatedEvent{}), p.onPropertyDescriptionUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySetIDUpdatedEvent{}), p.onPropertySetIDUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent{}), p.onSubjectTypeUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyNameUpdatedEvent{}), p.onNameUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyArchivedEvent{}), p.onPropertyArchived)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyRetrievedEvent{}), p.onPropertyRetrieved)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent{}), p.onPropertyFieldTypeDataCreated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataAllowFreetextUpdatedEvent{}), p.onAllowFreetextUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsRemovedEvent{}), p.onFieldTypeDataSelectOptionsRemoved)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent{}), p.onFieldTypeDataSelectOptionsUpserted)
 }
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
-	var payload propertyEventsV1.PropertyCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyCreatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	// Create Property
-	propertyID, err := uuid.Parse(payload.ID)
+	propertyID, err := uuid.Parse(payload.GetId())
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	value, found := pb.SubjectType_value[payload.SubjectType]
+	value, found := pb.SubjectType_value[payload.GetSubjectType().String()]
 	if !found {
-		return fmt.Errorf("subject_type %s invalid", payload.SubjectType), hwutil.PtrTo(esdb.NackActionPark)
+		return fmt.Errorf("subject_type %s invalid", payload.GetSubjectType()), hwutil.PtrTo(esdb.NackActionPark)
 	}
 	subjectType := (pb.SubjectType)(value)
 
-	value, found = pb.FieldType_value[payload.FieldType]
+	value, found = pb.FieldType_value[payload.GetFieldType().String()]
 	if !found {
-		return fmt.Errorf("field_type %s invalid", payload.FieldType), hwutil.PtrTo(esdb.NackActionPark)
+		return fmt.Errorf("field_type %s invalid", payload.GetFieldType()), hwutil.PtrTo(esdb.NackActionPark)
 	}
 	fieldType := (pb.FieldType)(value)
 
@@ -81,7 +81,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		ID:          propertyID,
 		SubjectType: int32(subjectType),
 		FieldType:   int32(fieldType),
-		Name:        payload.Name,
+		Name:        payload.GetName(),
 		Consistency: int64(evt.GetVersion()),
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
@@ -94,8 +94,8 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 func (p *Projection) onPropertyDescriptionUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
-	var payload propertyEventsV1.PropertyDescriptionUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyDescriptionUpdatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -116,15 +116,15 @@ func (p *Projection) onPropertyDescriptionUpdated(ctx context.Context, evt hwes.
 func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
-	var payload propertyEventsV1.PropertySetIDUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertySetIDUpdatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
-	if payload.SetID != "" {
-		if parsedID, err := hwutil.ParseNullUUID(&payload.SetID); err != nil {
+	if payload.GetSetId() != "" {
+		if parsedID, err := hwutil.ParseNullUUID(&payload.SetId); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionPark)
 		} else {
 			setID = parsedID
@@ -147,15 +147,15 @@ func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event)
 func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
-	var payload propertyEventsV1.PropertySubjectTypeUpdatedEvent
+	var payload pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	value, found := pb.SubjectType_value[payload.SubjectType]
+	value, found := pb.SubjectType_value[payload.GetSubjectType()]
 	if !found {
-		return fmt.Errorf("invalid fieldType: %s", payload.SubjectType), hwutil.PtrTo(esdb.NackActionPark)
+		return fmt.Errorf("invalid fieldType: %s", payload.GetSubjectType()), hwutil.PtrTo(esdb.NackActionPark)
 	}
 	subjectType := (pb.SubjectType)(value)
 
@@ -175,7 +175,7 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
-	var payload propertyEventsV1.PropertyNameUpdatedEvent
+	var payload pbTechnicalEventsV1.PropertyNameUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
@@ -229,20 +229,21 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 	defer rollback()
 	propertyRepo := p.propertyRepo.WithTx(tx)
 
-	var payload propertyEventsV1.FieldTypeDataCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	if payload.FieldTypeData.SelectData != nil {
-		selectDataID, err := propertyRepo.CreateSelectData(ctx, payload.FieldTypeData.SelectData.AllowFreetext)
+	if payload.GetFieldTypeData().GetSelectData() != nil {
+		selectDataID, err := propertyRepo.CreateSelectData(ctx, payload.GetFieldTypeData().GetSelectData().GetAllowFreetext())
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
 		}
-		for _, option := range payload.FieldTypeData.SelectData.SelectOptions {
+		for _, option := range payload.GetFieldTypeData().GetSelectData().GetSelectOptions() {
+			optionId := uuid.MustParse(option.GetId())
 			err := propertyRepo.CreateSelectOption(ctx, property_repo.CreateSelectOptionParams{
-				ID:           option.ID,
+				ID:           optionId,
 				Name:         option.Name,
 				Description:  option.Description,
 				IsCustom:     option.IsCustom,
@@ -280,8 +281,8 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 	defer rollback()
 	propertyRepo := p.propertyRepo.WithTx(tx)
 
-	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyFieldTypeDataAllowFreetextUpdatedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -294,7 +295,7 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 	if property.SelectDataID.Valid {
 		err := propertyRepo.UpdateSelectData(ctx, property_repo.UpdateSelectDataParams{
 			ID:            property.SelectDataID.UUID,
-			AllowFreetext: payload.NewAllowFreetext,
+			AllowFreetext: payload.GetNewAllowFreetext(),
 			Consistency:   int64(evt.GetVersion()),
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
@@ -302,7 +303,7 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		}
 	} else if property.FieldType == int32(pb.FieldType_FIELD_TYPE_SELECT) || property.FieldType == int32(pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
 		// if the property was created with field_type_select but selectData wasn't created initially we have to do it here
-		sdID, err := propertyRepo.CreateSelectData(ctx, payload.NewAllowFreetext)
+		sdID, err := propertyRepo.CreateSelectData(ctx, payload.GetNewAllowFreetext())
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
 		}
@@ -332,8 +333,8 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 	defer rollback()
 	propertyRepo := p.propertyRepo.WithTx(tx)
 
-	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -366,13 +367,19 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 
 	selectOptions := make(map[uuid.UUID]models.UpdateSelectOption)
 	existsSelectOptions := make(map[uuid.UUID]bool) // Map indicates if selectOption already exists
-	for _, option := range payload.UpsertedSelectOptions {
-		selectOptions[option.ID] = option
-		existsSelectOptions[option.ID] = false
+	for _, option := range payload.GetUpsertedSelectOptions() {
+		optionId := uuid.MustParse(option.Id)
+		selectOptions[optionId] = models.UpdateSelectOption{
+			ID:          optionId,
+			Name:        option.Name,
+			Description: option.Description,
+			IsCustom:    option.IsCustom,
+		}
+		existsSelectOptions[optionId] = false
 	}
 
-	selectOptionsID := hwutil.Map(payload.UpsertedSelectOptions, func(opt models.UpdateSelectOption) uuid.UUID {
-		return opt.ID
+	selectOptionsID := hwutil.Map(payload.GetUpsertedSelectOptions(), func(opt *pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent_UpdateSelectOption) uuid.UUID {
+		return uuid.MustParse(opt.Id)
 	})
 
 	// Check for existing SelectOptions
@@ -482,13 +489,13 @@ func (p *Projection) onFieldTypeDataSelectOptionsRemoved(ctx context.Context, ev
 	defer rollback()
 	propertyRepo := p.propertyRepo.WithTx(tx)
 
-	var payload propertyEventsV1.FieldTypeDataSelectOptionsRemovedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsRemovedEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	parsedIDs := hwutil.FlatMap(payload.RemovedSelectOptions, func(s string) *uuid.UUID {
+	parsedIDs := hwutil.FlatMap(payload.GetRemovedSelectOptions(), func(s string) *uuid.UUID {
 		parsed, err := uuid.Parse(s)
 		if err != nil {
 			log.Warn().Str("uuid", s).Msg("invalid uuid in removedSelectOptions.")
