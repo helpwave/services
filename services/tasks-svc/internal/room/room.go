@@ -46,10 +46,7 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 	}
 
 	// check permission
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := commonPerm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserCreateRoom, wardPerm.Ward(wardID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -102,10 +99,7 @@ func (s ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb
 	}
 
 	// check permission
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := commonPerm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserGet, perm.Room(id))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -156,10 +150,7 @@ func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest
 	}
 
 	// check permission
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := commonPerm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserUpdate, perm.Room(roomID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -229,11 +220,7 @@ func (s ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*
 	})
 
 	// check permissions
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
-
+	user := commonPerm.UserFromCtx(ctx)
 	checks := hwutil.Map(rooms, func(r *pb.GetRoomsResponse_Room) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.RoomCanUserGet, perm.Room(uuid.MustParse(r.Id)))
 	})
@@ -261,10 +248,7 @@ func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest
 	}
 
 	// check permission
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := commonPerm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserDelete, perm.Room(id))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err

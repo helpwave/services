@@ -5,11 +5,11 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
 
 	"github.com/google/uuid"
 
-	"hwauthz/commonPerm"
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
 	"property-svc/internal/property/perm"

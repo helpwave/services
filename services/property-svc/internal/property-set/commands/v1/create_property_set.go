@@ -26,14 +26,8 @@ type CreatePropertySetCommandHandler func(
 
 func NewCreatePropertySetCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreatePropertySetCommandHandler {
 	return func(ctx context.Context, propertySetID uuid.UUID, name string) (common.ConsistencyToken, error) {
-		user, err := commonPerm.UserFromCtx(ctx)
-		if err != nil {
-			return 0, err
-		}
-		org, err := commonPerm.OrganizationFromCtx(ctx)
-		if err != nil {
-			return 0, err
-		}
+		user := commonPerm.UserFromCtx(ctx)
+		org := commonPerm.OrganizationFromCtx(ctx)
 
 		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreatePropertySet, org)
 		if err := authz.Must(ctx, check); err != nil {

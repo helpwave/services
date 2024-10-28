@@ -38,14 +38,8 @@ func (s ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	// check permissions
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
-	organization, err := commonPerm.OrganizationFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := commonPerm.UserFromCtx(ctx)
+	organization := commonPerm.OrganizationFromCtx(ctx)
 
 	check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreateWard, organization)
 	if err := s.authz.Must(ctx, check); err != nil {
@@ -100,10 +94,7 @@ func (s ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb
 	}
 
 	// check permission
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := commonPerm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.WardCanUserGet, perm.Ward(id))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -136,11 +127,7 @@ func (s ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*
 		return nil, err
 	}
 
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
-
+	user := commonPerm.UserFromCtx(ctx)
 	checks := hwutil.Map(wards, func(w ward_repo.Ward) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.WardCanUserGet, perm.Ward(w.ID))
 	})
@@ -199,10 +186,7 @@ func (s ServiceServer) GetRecentWards(
 	}
 
 	// check permissions
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := commonPerm.UserFromCtx(ctx)
 	checks := hwutil.Map(rows, func(w ward_repo.GetWardsWithCountsRow) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.WardCanUserGet, perm.Ward(w.Ward.ID))
 	})
@@ -241,11 +225,7 @@ func (s ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest
 	}
 
 	// check permissions
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
-
+	user := commonPerm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.WardCanUserUpdate, perm.Ward(id))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -281,11 +261,7 @@ func (s ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest
 	}
 
 	// check permissions
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
-
+	user := commonPerm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.WardCanUserDelete, perm.Ward(id))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -334,11 +310,7 @@ func (s ServiceServer) GetWardOverviews(
 		return nil, err
 	}
 
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
-
+	user := commonPerm.UserFromCtx(ctx)
 	checks := hwutil.Map(rows, func(w ward_repo.GetWardsWithCountsRow) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.WardCanUserGet, perm.Ward(w.Ward.ID))
 	})
