@@ -5,11 +5,11 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
 	"hwes"
 
 	"github.com/google/uuid"
 
+	"hwauthz/commonPerm"
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
 	"property-svc/internal/property/perm"
@@ -41,13 +41,10 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		removeOptions []string,
 		isArchived *bool,
 	) (common.ConsistencyToken, error) {
-		user, err := commonPerm.UserFromCtx(ctx)
-		if err != nil {
-			return 0, err
-		}
+		user := commonPerm.UserFromCtx(ctx)
 
 		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserUpdate, perm.Property(propertyID))
-		if err = authz.Must(ctx, check); err != nil {
+		if err := authz.Must(ctx, check); err != nil {
 			return 0, err
 		}
 

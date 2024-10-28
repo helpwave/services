@@ -8,6 +8,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus/promauto"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog"
@@ -105,4 +107,30 @@ func SetupMetrics(ctx context.Context, shutdown func(error)) {
 
 func PrometheusRegistry() *prometheus.Registry {
 	return prometheusRegistry
+}
+
+// LazyCounter prevents access to PrometheusRegistry, before it is initialized
+// by creating the counter only when it is needed
+type LazyCounter struct {
+	opts    prometheus.CounterOpts
+	counter *prometheus.Counter
+}
+
+func NewLazyCounter(opts prometheus.CounterOpts) LazyCounter {
+	return LazyCounter{
+		opts:    opts,
+		counter: nil,
+	}
+}
+
+func (lc *LazyCounter) Counter() prometheus.Counter {
+	if lc.counter != nil {
+		return *lc.counter
+	}
+	lc.counter = hwutil.PtrTo(promauto.With(prometheusRegistry).NewCounter(lc.opts))
+	return *lc.counter
+}
+
+func (lc *LazyCounter) Ensure() {
+	lc.Counter()
 }

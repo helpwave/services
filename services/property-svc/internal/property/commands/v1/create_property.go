@@ -36,15 +36,8 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		setID *string,
 		fieldTypeData *models.FieldTypeData,
 	) (version common.ConsistencyToken, err error) {
-		user, err := commonPerm.UserFromCtx(ctx)
-		if err != nil {
-			return 0, err
-		}
-
-		organization, err := commonPerm.OrganizationFromCtx(ctx)
-		if err != nil {
-			return 0, err
-		}
+		user := commonPerm.UserFromCtx(ctx)
+		organization := commonPerm.OrganizationFromCtx(ctx)
 
 		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreateProperty, organization)
 		if err = authz.Must(ctx, check); err != nil {
