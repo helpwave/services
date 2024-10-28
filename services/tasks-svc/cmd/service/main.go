@@ -8,10 +8,11 @@ import (
 	"hwdb"
 	"hwes/eventstoredb"
 	"hwes/eventstoredb/projections"
+	"tasks-svc/internal/patient/projections/patientSpiceDBProjection"
 	"time"
 
 	ph "tasks-svc/internal/patient/handlers"
-	"tasks-svc/internal/patient/projections/patient_postgres_projection"
+	"tasks-svc/internal/patient/projections/patientPostgresProjection"
 	th "tasks-svc/internal/task/handlers"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
 	"tasks-svc/internal/task/projections/task_spicedb"
@@ -49,7 +50,8 @@ func Main(version string, ready func()) {
 		common.Shutdown,
 		task_spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
 		task_postgres_projection.NewProjection(eventStore, ServiceName),
-		patient_postgres_projection.NewProjection(eventStore, ServiceName),
+		patientPostgresProjection.NewProjection(eventStore, ServiceName),
+		patientSpiceDBProjection.NewProjection(eventStore, authz, ServiceName),
 	)
 
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {

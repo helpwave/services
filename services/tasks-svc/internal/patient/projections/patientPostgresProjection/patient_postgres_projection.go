@@ -1,4 +1,4 @@
-package patient_postgres_projection
+package patientPostgresProjection
 
 import (
 	"context"

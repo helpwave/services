@@ -34,6 +34,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
 	require.NoError(t, err, "could not create patient")
 
+	hwtesting.WaitForProjectionsToSettle()
+
 	patientId := createRes.GetId()
 
 	//
