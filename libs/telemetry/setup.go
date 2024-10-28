@@ -3,6 +3,7 @@ package telemetry
 import (
 	"context"
 	"errors"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"hwutil"
 	"net/http"
 	"os"
@@ -105,4 +106,9 @@ func SetupMetrics(ctx context.Context, shutdown func(error)) {
 
 func PrometheusRegistry() *prometheus.Registry {
 	return prometheusRegistry
+}
+
+// Factory wraps promauto.With
+func Factory() promauto.Factory {
+	return promauto.With(prometheusRegistry)
 }
