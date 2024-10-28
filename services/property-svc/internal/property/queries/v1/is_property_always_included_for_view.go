@@ -32,14 +32,11 @@ func NewIsPropertyAlwaysIncludedForViewSourceHandler(authz hwauthz.AuthZ) IsProp
 		subjectType pb.SubjectType,
 		propertyID uuid.UUID,
 	) (bool, error) {
-		user, err := perm.UserFromCtx(ctx)
-		if err != nil {
-			return false, err
-		}
+		user := perm.UserFromCtx(ctx)
 
 		// Is user allowed to see this property?
 		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))
-		if err = authz.Must(ctx, check); err != nil {
+		if err := authz.Must(ctx, check); err != nil {
 			return false, err
 		}
 
