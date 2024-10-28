@@ -40,13 +40,10 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		removeOptions []string,
 		isArchived *bool,
 	) (common.ConsistencyToken, error) {
-		user, err := perm.UserFromCtx(ctx)
-		if err != nil {
-			return 0, err
-		}
+		user := perm.UserFromCtx(ctx)
 
 		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserUpdate, perm.Property(propertyID))
-		if err = authz.Must(ctx, check); err != nil {
+		if err := authz.Must(ctx, check); err != nil {
 			return 0, err
 		}
 

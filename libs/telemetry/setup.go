@@ -3,11 +3,12 @@ package telemetry
 import (
 	"context"
 	"errors"
-	"github.com/prometheus/client_golang/prometheus/promauto"
 	"hwutil"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus/promauto"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"

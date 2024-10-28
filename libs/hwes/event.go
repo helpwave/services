@@ -260,29 +260,29 @@ func (e *Event) GetJsonData(data interface{}) error {
 	return json.Unmarshal(e.Data, data)
 }
 
-// SetCommitterFromCtx injects the UserID from the passed context via common.GetUserID().
+// SetCommitterFromCtx injects the UserID from the passed context via auth.MustGetUserID().
 func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
+	userID := auth.MaybeGetUserID(ctx)
+	if userID == nil {
 		// don't set a user, if no user is available
-		return nil //nolint:nilerr
+		return nil
 	}
 
-	e.CommitterUserID = &userID
+	e.CommitterUserID = userID
 
 	telemetry.SetSpanStr(ctx, "committerUserID", e.CommitterUserID.String())
 	return nil
 }
 
-// SetOrganizationFromCtx injects the OrganizationID from the passed context via common.GetOrganizationID().
+// SetOrganizationFromCtx injects the OrganizationID from the passed context via common.MustGetOrganizationID().
 func (e *Event) SetOrganizationFromCtx(ctx context.Context) error {
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
+	organizationID := auth.MaybeGetOrganizationID(ctx)
+	if organizationID == nil {
 		// don't set an org, if no org is available
-		return nil //nolint:nilerr
+		return nil
 	}
 
-	e.OrganizationID = &organizationID
+	e.OrganizationID = organizationID
 
 	if _, err := uuid.Parse(e.OrganizationID.String()); err != nil {
 		return fmt.Errorf("SetOrganizationFromCtx: cant parse organization uid: %w", err)

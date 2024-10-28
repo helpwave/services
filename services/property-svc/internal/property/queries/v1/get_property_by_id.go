@@ -22,14 +22,11 @@ type GetPropertyByIDQueryHandler func(
 
 func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHandler {
 	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error) {
-		user, err := perm.UserFromCtx(ctx)
-		if err != nil {
-			return nil, 0, err
-		}
+		user := perm.UserFromCtx(ctx)
 
 		// Verify user is allowed to see this property
 		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))
-		if err = authz.Must(ctx, check); err != nil {
+		if err := authz.Must(ctx, check); err != nil {
 			return nil, 0, err
 		}
 
