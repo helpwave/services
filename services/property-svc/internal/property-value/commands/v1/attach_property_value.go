@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 
 	"property-svc/internal/property-value/aggregate"
+	"property-svc/internal/property-value/models"
 	"property-svc/repos/property_value_repo"
 )
 
@@ -16,18 +17,20 @@ type AttachPropertyValueCommandHandler func(
 	ctx context.Context,
 	propertyValueID uuid.UUID,
 	propertyID uuid.UUID,
-	value interface{},
+	valueChange models.TypedValueChange,
 	subjectID uuid.UUID,
-) (common.ConsistencyToken, error)
+	expConsistency *common.ConsistencyToken,
+) (common.ConsistencyToken, *common.Conflict[*models.PropertyValue], error)
 
 func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachPropertyValueCommandHandler {
 	return func(
 		ctx context.Context,
 		propertyValueID uuid.UUID,
 		propertyID uuid.UUID,
-		value interface{},
+		valueChange models.TypedValueChange,
 		subjectID uuid.UUID,
-	) (common.ConsistencyToken, error) {
+		expConsistency *common.ConsistencyToken,
+	) (common.ConsistencyToken, *common.Conflict[*models.PropertyValue], error) {
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 
@@ -37,24 +40,44 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 			SubjectID:  subjectID,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
-			return 0, err
+			return 0, nil, err
 		}
 
-		if existingPropertyValueID != nil {
-			if a, err = aggregate.LoadPropertyValueAggregate(ctx, as, *existingPropertyValueID); err != nil {
-				return 0, err
-			}
-			// TODO: update value will be triggered, even if the value is not the type the property defines
-			if err := a.UpdatePropertyValue(ctx, value); err != nil {
-				return 0, err
-			}
-		} else {
+		// if no value exists yet, create one
+		if existingPropertyValueID == nil {
 			a = aggregate.NewPropertyValueAggregate(propertyValueID)
-			if err := a.CreatePropertyValue(ctx, propertyID, value, subjectID); err != nil {
-				return 0, err
+			if err := a.CreatePropertyValue(ctx, propertyID, valueChange, subjectID); err != nil {
+				return 0, nil, err
+			}
+		} else { // else, update the existing value
+			var snapshot *models.PropertyValue
+			a, snapshot, err = aggregate.LoadPropertyValueAggregateWithSnapshotAt(
+				ctx,
+				as,
+				*existingPropertyValueID,
+				expConsistency,
+			)
+			if err != nil {
+				return 0, nil, err
+			}
+
+			// conflict detection
+			consistency := common.ConsistencyToken(a.GetVersion())
+			if expConsistency != nil && consistency != *expConsistency {
+				return consistency, &common.Conflict[*models.PropertyValue]{
+					Was: snapshot,
+					Is:  a.PropertyValue,
+				}, err
+			}
+
+			// TODO: update value will be triggered, even if the value is not the type the property defines
+
+			if err := a.UpdatePropertyValue(ctx, valueChange); err != nil {
+				return 0, nil, err
 			}
 		}
 
-		return as.Save(ctx, a)
+		consistency, err := as.Save(ctx, a)
+		return consistency, nil, err
 	}
 }

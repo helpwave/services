@@ -43,3 +43,4 @@ linters:
     - stylecheck # TODO
     - tagliatelle # TODO
     - testpackage # TODO
+    - maintidx # TODO

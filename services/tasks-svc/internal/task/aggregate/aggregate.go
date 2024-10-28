@@ -1,6 +1,7 @@
 package aggregate
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
@@ -8,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
@@ -39,6 +41,36 @@ func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID
 	}
 
 	return taskAggregate, nil
+}
+
+func LoadTaskAggregateWithSnapshotAt(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+	pauseAt *common.ConsistencyToken,
+) (*TaskAggregate, *models.Task, error) {
+	taskAggregate := NewTaskAggregate(id)
+	var snapshot *models.Task
+
+	if pauseAt != nil {
+		//  load pauseAt+1-many events (version is 0-indexed)
+		if err := as.LoadN(ctx, taskAggregate, uint64(*pauseAt)+1); err != nil {
+			return nil, nil, err
+		}
+
+		var cpy models.Task
+		if err := copier.CopyWithOption(&cpy, taskAggregate.Task, copier.Option{DeepCopy: true}); err != nil {
+			return nil, nil, fmt.Errorf("LoadTaskAggregateWithSnapshotAt: could not copy snapshot: %w", err)
+		}
+		snapshot = &cpy
+	}
+
+	// continue loading all other events
+	if err := as.Load(ctx, taskAggregate); err != nil {
+		return nil, nil, err
+	}
+
+	return taskAggregate, snapshot, nil
 }
 
 func (a *TaskAggregate) initEventListeners() {

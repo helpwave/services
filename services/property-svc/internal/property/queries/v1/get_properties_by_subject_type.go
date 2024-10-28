@@ -2,7 +2,9 @@ package v1
 
 import (
 	"common"
+	"common/auth"
 	"context"
+	"errors"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
 	"hwdb"
@@ -29,6 +31,11 @@ func NewGetPropertiesQueryHandler(authz hwauthz.AuthZ) GetPropertiesQueryHandler
 
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
+		organizationID, err := auth.GetOrganizationID(ctx)
+		if err != nil {
+			return nil, errors.New("GetPropertiesQueryHandler called without organization in context")
+		}
+
 		var subjectTypeID *int32
 		if subjectType != nil {
 			subjectTypeID = hwutil.PtrTo(int32(*subjectType))
@@ -37,7 +44,8 @@ func NewGetPropertiesQueryHandler(authz hwauthz.AuthZ) GetPropertiesQueryHandler
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
 			ctx,
 			property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
-				SubjectType: subjectTypeID,
+				SubjectType:    subjectTypeID,
+				OrganizationID: organizationID,
 			})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err

@@ -25,7 +25,8 @@ type UpdatePropertyCommandHandler func(
 	upsertOptions *[]models.UpdateSelectOption,
 	removeOptions []string,
 	isArchived *bool,
-) (common.ConsistencyToken, error)
+	expConsistency *common.ConsistencyToken,
+) (common.ConsistencyToken, *common.Conflict[*models.Property], error)
 
 func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) UpdatePropertyCommandHandler {
 	return func(
@@ -39,43 +40,53 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		upsertOptions *[]models.UpdateSelectOption,
 		removeOptions []string,
 		isArchived *bool,
-	) (common.ConsistencyToken, error) {
+		expConsistency *common.ConsistencyToken,
+	) (common.ConsistencyToken, *common.Conflict[*models.Property], error) {
 		user, err := perm.UserFromCtx(ctx)
 		if err != nil {
-			return 0, err
+			return 0, nil, err
 		}
 
 		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserUpdate, perm.Property(propertyID))
 		if err = authz.Must(ctx, check); err != nil {
-			return 0, err
+			return 0, nil, err
 		}
 
-		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
+		a, oldState, err := aggregate.LoadPropertyAggregateWithSnapshotAt(ctx, as, propertyID, expConsistency)
 		if err != nil {
-			return 0, err
+			return 0, nil, err
+		}
+
+		// update happened since?
+		newToken := common.ConsistencyToken(a.GetVersion())
+		if expConsistency != nil && *expConsistency != newToken {
+			return newToken, &common.Conflict[*models.Property]{
+				Was: oldState,
+				Is:  a.Property,
+			}, nil
 		}
 
 		if subjectType != nil {
 			if err := a.UpdateSubjectType(ctx, *subjectType); err != nil {
-				return 0, err
+				return 0, nil, err
 			}
 		}
 
 		if name != nil {
 			if err := a.UpdateName(ctx, *name); err != nil {
-				return 0, err
+				return 0, nil, err
 			}
 		}
 
 		if description != nil {
 			if err := a.UpdateDescription(ctx, *description); err != nil {
-				return 0, err
+				return 0, nil, err
 			}
 		}
 
 		if setID != nil {
 			if err := a.UpdateSetID(ctx, *setID); err != nil {
-				return 0, err
+				return 0, nil, err
 			}
 		}
 
@@ -83,7 +94,7 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT ||
 				a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 				if err := a.UpdateAllowFreetext(ctx, *allowFreetext); err != nil {
-					return 0, err
+					return 0, nil, err
 				}
 			}
 		}
@@ -92,7 +103,7 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT ||
 				a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 				if err := a.FieldTypeDataUpsertOptions(ctx, *upsertOptions); err != nil {
-					return 0, err
+					return 0, nil, err
 				}
 			}
 		}
@@ -102,7 +113,7 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT ||
 				a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 				if err := a.FieldTypeDataRemoveOptions(ctx, removeOptions); err != nil {
-					return 0, err
+					return 0, nil, err
 				}
 			}
 		}
@@ -110,15 +121,16 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		if isArchived != nil {
 			if *isArchived {
 				if err := a.ArchiveProperty(ctx); err != nil {
-					return 0, err
+					return 0, nil, err
 				}
 			} else {
 				if err := a.RetrieveProperty(ctx); err != nil {
-					return 0, err
+					return 0, nil, err
 				}
 			}
 		}
 
-		return as.Save(ctx, a)
+		consistency, err := as.Save(ctx, a)
+		return consistency, nil, err
 	}
 }

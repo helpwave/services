@@ -14,7 +14,7 @@ import (
 
 // TestCreateAttachUpdateTextProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Update said value
 func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
@@ -86,11 +86,13 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
-			TextValue: "Initial Text Value",
+			TextValue: "Initial Text ValueChange",
 		},
 	})
 
 	require.NoError(t, err, "could not attach value")
+
+	assert.Nil(t, attachResponse.Conflict)
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -111,24 +113,25 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.Len(t, attachedValuesResponse.Values, 1)
 
-	assert.Equal(t, "Initial Text Value", attachedValuesResponse.Values[0].GetTextValue())
+	assert.Equal(t, "Initial Text ValueChange", attachedValuesResponse.Values[0].GetTextValue())
 
 	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
-			TextValue: "Updated Text Value",
+			TextValue: "Updated Text ValueChange",
 		},
 	})
 
 	require.NoError(t, err, "could not update value")
 
+	assert.Nil(t, updateResponse.Conflict)
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
 	hwtesting.WaitForProjectionsToSettle()
@@ -150,7 +153,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.Len(t, attachedValuesResponse.Values, 1)
 
-	assert.Equal(t, "Updated Text Value", attachedValuesResponse.Values[0].GetTextValue())
+	assert.Equal(t, "Updated Text ValueChange", attachedValuesResponse.Values[0].GetTextValue())
 
 	assert.Equal(
 		t,
@@ -162,7 +165,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 // TestCreateAttachUpdateSelectProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Update said value
 func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
@@ -259,6 +262,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	})
 
 	require.NoError(t, err, "could not attach value")
+	assert.Nil(t, attachResponse.Conflict)
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -284,7 +288,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
@@ -296,6 +300,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	})
 
 	require.NoError(t, err, "could not update value")
+	assert.Nil(t, updateResponse.Conflict)
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
@@ -330,7 +335,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 
 // TestCreateAttachUpdateMultiSelectProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Update said value
 func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
@@ -435,6 +440,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	})
 
 	require.NoError(t, err, "could not attach value")
+	assert.Nil(t, attachResponse.Conflict)
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -464,7 +470,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
@@ -479,6 +485,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	})
 
 	require.NoError(t, err, "could not update value")
+	assert.Nil(t, updateResponse.Conflict)
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
@@ -517,9 +524,9 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 
 // TestCreateAttachAddOptionAttachSelectProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Upsert an Option
-//   - Attach another Value
+//   - Attach another ValueChange
 func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
 	ctx := context.Background()
@@ -638,7 +645,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	option2 := propertyResponse.GetSelectData().Options[1].GetId() // not guaranteed tbf
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
@@ -675,9 +682,9 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 
 // TestCreateAttachAddOptionAttachMultiSelectProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Upsert an Option
-//   - Attach another Value
+//   - Attach another ValueChange
 func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
 	ctx := context.Background()
@@ -804,7 +811,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	option2 := propertyResponse.GetSelectData().Options[1].GetId() // order not guaranteed
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{

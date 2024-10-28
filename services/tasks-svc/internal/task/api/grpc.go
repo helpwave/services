@@ -1,19 +1,28 @@
 package api
 
 import (
+	"common"
 	"common/auth"
 	"context"
+	"errors"
+	"fmt"
+	commonpb "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
 	"hwes"
+	"hwgrpc"
 	"hwutil"
+	"time"
 
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
+	zlog "github.com/rs/zerolog"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	"tasks-svc/internal/task/handlers"
+	"tasks-svc/internal/task/models"
 )
 
 type TaskGrpcService struct {
@@ -63,16 +72,114 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 	}, nil
 }
 
+func timeAlreadyUpdated(was, is *time.Time) bool {
+	if was != nil && is != nil {
+		return !was.Round(time.Second).Equal(is.Round(time.Second))
+	}
+
+	return true
+}
+
 func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) (*pb.UpdateTaskResponse, error) {
+	log := zlog.Ctx(ctx)
+
 	taskID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
 
-	consistency, err := s.handlers.Commands.V1.UpdateTask(
-		ctx, taskID, req.Name, req.Description, req.Status, req.Public, req.DueAt)
-	if err != nil {
-		return nil, err
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	var consistency common.ConsistencyToken
+
+	for i := 0; true; i++ {
+		if i > 10 {
+			log.Warn().Msg("UpdatePatient: conflict circuit breaker triggered")
+			return nil, errors.New("failed conflict resolution")
+		}
+
+		c, conflict, err := s.handlers.Commands.V1.UpdateTask(ctx,
+			taskID, req.Name, req.Description, req.Status, req.Public, req.DueAt, expConsistency)
+		if err != nil {
+			return nil, err
+		}
+		consistency = c
+
+		if conflict == nil {
+			break
+		}
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		// TODO: find a generic approach
+		nameUpdateRequested := req.Name != nil && *req.Name != conflict.Is.Name
+		nameAlreadyUpdated := conflict.Was.Name != conflict.Is.Name
+		if nameUpdateRequested && nameAlreadyUpdated {
+			conflicts["name"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(conflict.Is.Name),
+				wrapperspb.String(*req.Name),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		descrUpdateRequested := req.Description != nil && *req.Description != conflict.Is.Description
+		descrAlreadyUpdated := conflict.Was.Description != conflict.Is.Description
+		if descrUpdateRequested && descrAlreadyUpdated {
+			conflicts["description"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(conflict.Is.Description),
+				wrapperspb.String(*req.Description),
+			)
+			if err != nil {
+				return nil, fmt.Errorf("could not marshall description conflict: %w", err)
+			}
+		}
+
+		dueUpdateRequested := req.DueAt != nil &&
+			(conflict.Is.DueAt == nil || !req.DueAt.AsTime().Round(time.Second).Equal(conflict.Is.DueAt.Round(time.Second)))
+		dueAlreadyUpdated := timeAlreadyUpdated(conflict.Was.DueAt, conflict.Is.DueAt)
+		if dueUpdateRequested && dueAlreadyUpdated {
+			var is proto.Message = nil
+			if conflict.Is.DueAt != nil {
+				is = timestamppb.New(*conflict.Is.DueAt)
+			}
+			conflicts["due_at"], err = hwgrpc.AttributeConflict(
+				is,
+				req.DueAt,
+			)
+			if err != nil {
+				return nil, fmt.Errorf("could not marshall due_at conflict: %w", err)
+			}
+		}
+
+		statusUpdateRequested := req.Status != nil && *req.Status != conflict.Is.Status
+		statusAlreadyUpdated := conflict.Was.Status != conflict.Is.Status
+		if statusUpdateRequested && statusAlreadyUpdated {
+			conflicts["status"], err = hwgrpc.AttributeConflict(
+				wrapperspb.Int32(int32(conflict.Is.Status)),
+				wrapperspb.Int32(int32(*req.Status)),
+			)
+			if err != nil {
+				return nil, fmt.Errorf("could not marshall status conflict: %w", err)
+			}
+		}
+
+		// bool public can never cause a problem
+		// the user expects public = B, and sets it to \neg B
+		// so either that is the case still, or the update will do nothing anyway
+
+		if len(conflicts) != 0 {
+			return &pb.UpdateTaskResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: c.String(),
+			}, nil
+		}
+
+		// no conflict? retry with new consistency
+		expConsistency = &c
 	}
 
 	return &pb.UpdateTaskResponse{
@@ -91,9 +198,55 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 		return nil, err
 	}
 
-	consistency, err := s.handlers.Commands.V1.AssignTask(ctx, taskID, userID)
-	if err != nil {
-		return nil, err
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	var consistency common.ConsistencyToken
+
+	for i := 0; true; i++ {
+		if i > 10 {
+			zlog.Ctx(ctx).Warn().Msg("UpdatePatient: conflict circuit breaker triggered")
+			return nil, errors.New("failed conflict resolution")
+		}
+
+		c, conflict, err := s.handlers.Commands.V1.AssignTask(ctx, taskID, userID, expConsistency)
+		if err != nil {
+			return nil, err
+		}
+		consistency = c
+		if conflict == nil {
+			break
+		}
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		// TODO: find a generic approach
+		userUpdateRequested := req.UserId != conflict.Is.AssignedUser.UUID.String()
+		userAlreadyUpdated := conflict.Was.AssignedUser != conflict.Is.AssignedUser
+		if userUpdateRequested && userAlreadyUpdated {
+			var is proto.Message = nil
+			if conflict.Is.AssignedUser.Valid {
+				is = wrapperspb.String(conflict.Is.AssignedUser.UUID.String())
+			}
+			conflicts["user_id"], err = hwgrpc.AttributeConflict(
+				is,
+				wrapperspb.String(req.UserId),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			return &pb.AssignTaskResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: c.String(),
+			}, nil
+		}
+
+		// no conflict? retry with new consistency
+		expConsistency = &c
 	}
 
 	return &pb.AssignTaskResponse{
@@ -227,6 +380,7 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(
 	ctx context.Context,
 	req *pb.GetTasksByPatientSortedByStatusRequest,
 ) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
+	log := zlog.Ctx(ctx)
 	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, err
@@ -399,10 +553,73 @@ func (s *TaskGrpcService) UpdateSubtask(
 		return nil, err
 	}
 
-	consistency, err := s.handlers.Commands.V1.UpdateSubtask(
-		ctx, taskID, subtaskID, req.Subtask.Name, req.Subtask.Done)
-	if err != nil {
-		return nil, err
+	expConsistency, ok := common.ParseConsistency(req.TaskConsistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "task_consistency")
+	}
+
+	var consistency common.ConsistencyToken
+
+	for i := 0; true; i++ {
+		if i > 10 {
+			zlog.Ctx(ctx).Warn().Msg("UpdateSubtask: conflict circuit breaker triggered")
+			return nil, errors.New("failed conflict resolution")
+		}
+
+		c, conflict, err := s.handlers.Commands.V1.UpdateSubtask(
+			ctx,
+			taskID,
+			subtaskID,
+			req.Subtask.Name,
+			req.Subtask.Done,
+			expConsistency,
+		)
+		if err != nil {
+			return nil, err
+		}
+		consistency = c
+
+		if conflict == nil {
+			break
+		}
+
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		var was models.Subtask
+		if w, ok := conflict.Was.Subtasks[subtaskID]; ok {
+			was = w
+		} else {
+			return nil, errors.New("subtask did not exist at expConsistency")
+		}
+
+		is := conflict.Is.Subtasks[subtaskID] // handler would have failed if non-existent
+
+		// TODO: find a generic approach
+		nameUpdateRequested := req.Subtask.Name != nil && *req.Subtask.Name != is.Name
+		nameAlreadyUpdated := was.Name != is.Name
+		if nameUpdateRequested && nameAlreadyUpdated {
+			conflicts["name"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(is.Name),
+				wrapperspb.String(*req.Subtask.Name),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			return &pb.UpdateSubtaskResponse{
+				Conflict:        &commonpb.Conflict{ConflictingAttributes: conflicts},
+				TaskConsistency: c.String(),
+			}, nil
+		}
+
+		// bool done can never cause a problem
+		// the user expects done = B, and sets it to \neg B
+		// so either that is the case still, or the update will do nothing anyway
+
+		// no conflict? retry with new consistency
+		expConsistency = &c
 	}
 
 	return &pb.UpdateSubtaskResponse{

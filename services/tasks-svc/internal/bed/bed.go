@@ -4,12 +4,15 @@ import (
 	"common"
 	"common/hwerr"
 	"context"
+	commonpb "gen/libs/common/v1"
 	"hwdb"
+	"hwgrpc"
 	"hwlocale"
 	"hwutil"
 
 	"github.com/jackc/pgx/v5/pgconn"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	"tasks-svc/locale"
 	"tasks-svc/repos/bed_repo"
@@ -200,8 +203,6 @@ func (ServiceServer) GetBedsByRoom(
 }
 
 func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
-	bedRepo := bed_repo.New(hwdb.GetDB())
-
 	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -212,7 +213,21 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	consistency, err := bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	// Start TX
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rollback()
+	bedRepo := bed_repo.New(tx)
+
+	// do update
+	result, err := bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
 		ID:     bedID,
 		Name:   req.Name,
 		RoomID: roomId,
@@ -222,9 +237,59 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, err
 	}
 
+	// conflict detection
+	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) { //nolint:gosec
+		// bed is not event sourced yet and has more than one field,
+		// thus we are not able to pinpoint conflicts to a field, we only know *some* update has happened since
+		// for convenience we are filtering out obvious non-conflicts, where the update is the same as the is state,
+		// or the field was not changed
+
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		if req.Name != nil && *req.Name != result.OldName {
+			conflicts["name"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(result.OldName),
+				wrapperspb.String(*req.Name),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if req.RoomId != nil && *req.RoomId != result.OldRoomID.String() {
+			conflicts["room_id"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(result.OldRoomID.String()),
+				wrapperspb.String(*req.RoomId),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			// prevent the update
+			if err := hwdb.Error(ctx, tx.Rollback(ctx)); err != nil {
+				return nil, err
+			}
+
+			// return conflict
+			return &pb.UpdateBedResponse{
+				Conflict: &commonpb.Conflict{
+					ConflictingAttributes: conflicts,
+					HistoryMissing:        true,
+				},
+				Consistency: common.ConsistencyToken(result.OldConsistency).String(), //nolint:gosec
+			}, nil
+		}
+	}
+
+	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateBedResponse{
-		Conflict:    nil,                                           // TODO
-		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
+		Conflict:    nil,
+		Consistency: common.ConsistencyToken(result.Consistency).String(), //nolint:gosec
 	}, nil
 }
 

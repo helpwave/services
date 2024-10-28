@@ -55,11 +55,19 @@ SELECT EXISTS (
 ) ward_exists;
 
 -- name: UpdateWard :one
+WITH old_table AS (
+	SELECT name as old_name, consistency as old_consistency
+	FROM wards
+	WHERE wards.id = @id
+)
 UPDATE wards
 SET	name = coalesce(sqlc.narg('name'), name),
 	consistency = consistency + 1
-WHERE id = @id
-RETURNING consistency;
+WHERE wards.id = @id
+RETURNING
+	consistency,
+	(SELECT old_name FROM old_table),
+	(SELECT old_consistency FROM old_table);
 
 
 -- name: DeleteWard :exec

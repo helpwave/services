@@ -11,6 +11,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -89,9 +91,9 @@ func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient
 
 func TestGetRecentWards(t *testing.T) {
 	userID := uuid.New() // new user for this test, to prevent interference with other tests
-	wardClient := pb.NewWardServiceClient(hwtesting.GetGrpcConn(userID.String()))
-	taskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String()))
-	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
+	wardClient := pb.NewWardServiceClient(hwtesting.GetGrpcConn(userID.String(), ""))
+	taskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String(), ""))
+	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String(), ""))
 	ctx := context.Background()
 
 	wardIds := prepareWards(t, ctx, wardClient, 11)
@@ -114,6 +116,8 @@ func TestGetRecentWards(t *testing.T) {
 				Id:    patientID,
 				BedId: bedId,
 			})
+			hwtesting.WaitForProjectionsToSettle()
+
 			require.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 				Name:      t.Name() + " Patient " + bedSuffix + " Task ",
@@ -386,4 +390,47 @@ func TestGetWardDetails(t *testing.T) {
 	}
 
 	assert.Equal(t, expected, actual)
+}
+
+func TestUpdateWardConflict(t *testing.T) {
+	ctx := context.Background()
+	wardClient := wardServiceClient()
+
+	// prepare
+	wardId, initialConsistency := prepareWard(t, ctx, "")
+
+	name1 := "This came first"
+
+	// update 1
+	update1Res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{
+		Id:          wardId,
+		Name:        &name1,
+		Consistency: &initialConsistency,
+	})
+	require.NoError(t, err)
+	assert.Nil(t, update1Res.Conflict)
+	assert.NotEqual(t, initialConsistency, update1Res.Consistency)
+
+	name2 := "This came second"
+
+	// racing update 2
+	update2Res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{
+		Id:          wardId,
+		Name:        &name2,
+		Consistency: &initialConsistency,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
+	assert.NotNil(t, update2Res.Conflict)
+
+	nameRes := update2Res.Conflict.ConflictingAttributes["name"]
+	assert.NotNil(t, nameRes)
+
+	nameIs := &wrapperspb.StringValue{}
+	require.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	assert.Equal(t, name1, nameIs.Value)
+
+	nameWant := &wrapperspb.StringValue{}
+	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	assert.Equal(t, name2, nameWant.Value) //nolint:testifylint // false positive
 }

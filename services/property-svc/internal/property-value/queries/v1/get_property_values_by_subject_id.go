@@ -8,10 +8,9 @@ import (
 	"hwdb"
 	"hwes"
 	"hwutil"
-	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/rs/zerolog/log"
 
 	"property-svc/internal/property-value/models"
 	vh "property-svc/internal/property-view/handlers"
@@ -87,39 +86,36 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 			if row.SelectOptionID.Valid {
 				// make sure MultiSelectValues is an array
 				if properties[row.Property.ID].Value == nil {
-					properties[row.Property.ID].Value = &models.TypedValue{
-						TextValue:         nil,
-						BoolValue:         nil,
-						NumberValue:       nil,
-						MultiSelectValues: make([]models.SelectValueOption, 0),
-						DateTimeValue:     nil,
-					}
+					properties[row.Property.ID].Value = models.MultiSelectValues(make([]models.SelectValueOption, 0))
 				}
 
 				// add multiselectvalue to array
-				properties[row.Property.ID].Value.MultiSelectValues = append(
-					properties[row.Property.ID].Value.MultiSelectValues, models.SelectValueOption{
-						Id:          row.SelectOptionID.UUID,      // known to be valid by if
-						Name:        *row.SelectOptionName,        // known to be set due to NOT NULL and successful LEFT JOIN
-						Description: *row.SelectOptionDescription, // known to be set due to NOT NULL and successful LEFT JOIN
-					})
+				arr := properties[row.Property.ID].Value.(models.MultiSelectValues) //nolint:forcetypeassert
+				arr = append(arr, models.SelectValueOption{
+					Id:          row.SelectOptionID.UUID,      // known to be valid by if
+					Name:        *row.SelectOptionName,        // known to be set due to NOT NULL and successful LEFT JOIN
+					Description: *row.SelectOptionDescription, // known to be set due to NOT NULL and successful LEFT JOIN
+				})
+				properties[row.Property.ID].Value = arr
 			} else {
 				// basic values can just be set, we expect only one of them to be not null,
 				// but at least one has to due to ifs
-				properties[row.Property.ID].Value = &models.TypedValue{
-					TextValue:         row.TextValue,
-					BoolValue:         row.BoolValue,
-					NumberValue:       row.NumberValue,
-					MultiSelectValues: nil,
-					DateTimeValue: hwutil.MapIf(
-						row.DateTimeValue.Valid,
-						row.DateTimeValue,
-						func(dtV pgtype.Timestamp) time.Time {
-							return dtV.Time
-						}),
-					DateValue: hwutil.MapIf(row.DateValue.Valid, row.DateValue, func(dV pgtype.Date) time.Time {
-						return dV.Time
-					}),
+
+				switch {
+				case row.TextValue != nil:
+					properties[row.Property.ID].Value = models.TextValue(*row.TextValue)
+				case row.BoolValue != nil:
+					properties[row.Property.ID].Value = models.BoolValue(*row.BoolValue)
+				case row.NumberValue != nil:
+					properties[row.Property.ID].Value = models.NumberValue(*row.NumberValue)
+				case row.DateValue.Valid:
+					properties[row.Property.ID].Value = models.DateValue(row.DateValue.Time)
+				case row.DateTimeValue.Valid:
+					properties[row.Property.ID].Value = models.DateTimeValue(row.DateTimeValue.Time)
+				default:
+					log.Warn().Interface("row", row).Msg("row is all nil, one case does not seem to be handled")
+					// if you are debugging the above log line, consider updating the "if" in the beginning
+					continue
 				}
 			}
 		}

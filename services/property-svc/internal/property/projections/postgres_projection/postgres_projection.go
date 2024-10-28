@@ -73,6 +73,11 @@ func (p *Projection) initEventListeners() {
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
+	organizationID := evt.OrganizationID
+	if organizationID == nil {
+		return errors.New("onPropertyCreated event is missing organizationID"), hwutil.PtrTo(esdb.NackActionSkip)
+	}
+
 	var payload propertyEventsV1.PropertyCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
@@ -100,11 +105,12 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 
 	// create query
 	err = p.propertyRepo.CreateProperty(ctx, property_repo.CreatePropertyParams{
-		ID:          propertyID,
-		SubjectType: int32(subjectType),
-		FieldType:   int32(fieldType),
-		Name:        payload.Name,
-		Consistency: int64(evt.GetVersion()), //nolint:gosec
+		ID:             propertyID,
+		SubjectType:    int32(subjectType),
+		FieldType:      int32(fieldType),
+		Name:           payload.Name,
+		Consistency:    int64(evt.GetVersion()), //nolint:gosec
+		OrganizationID: *organizationID,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)

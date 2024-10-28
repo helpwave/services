@@ -2,6 +2,7 @@ package v1
 
 import (
 	"common"
+	"common/auth"
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
@@ -35,10 +36,16 @@ func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHan
 
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
+		organizationID, err := auth.GetOrganizationID(ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
 			ctx,
 			property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
-				ID: uuid.NullUUID{UUID: propertyID, Valid: true},
+				ID:             uuid.NullUUID{UUID: propertyID, Valid: true},
+				OrganizationID: organizationID,
 			})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, 0, err

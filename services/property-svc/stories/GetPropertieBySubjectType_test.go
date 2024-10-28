@@ -4,6 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	pb "gen/services/property_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
+	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
 	"regexp"
@@ -18,9 +21,17 @@ import (
 //   - Create Properties
 //   - Check GetPropertiesBySubjectType
 func TestGetProperties(t *testing.T) {
-	propertyClient := propertyServiceClient()
-
 	ctx := context.Background()
+
+	orgID := uuid.New()
+	authz := spicedb.NewSpiceDBAuthZ()
+	_, err := authz.Create(hwauthz.NewRelationship(
+		commonPerm.User(uuid.MustParse(hwtesting.FakeTokenUser)),
+		"member",
+		commonPerm.Organization(orgID),
+	)).Commit(ctx)
+	require.NoError(t, err)
+	propertyClient := pb.NewPropertyServiceClient(hwtesting.GetGrpcConn("", orgID.String()))
 
 	//
 	// Create new Properties

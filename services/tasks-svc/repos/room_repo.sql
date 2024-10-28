@@ -76,11 +76,21 @@ WHERE rooms.ward_id = @ward_id
 ORDER BY rooms.id ASC, beds.name ASC;
 
 -- name: UpdateRoom :one
+WITH old_table AS (
+	SELECT
+		name as old_name,
+		consistency	as old_consistency
+	FROM rooms
+	WHERE rooms.id = @id
+)
 UPDATE rooms
 SET	name = coalesce(sqlc.narg('name'), name),
 	consistency = consistency + 1
-WHERE id = @id
-RETURNING consistency;
+WHERE rooms.id = @id
+RETURNING
+	consistency,
+	(SELECT old_name FROM old_table),
+	(SELECT old_consistency FROM old_table);
 
 -- name: DeleteRoom :exec
 DELETE FROM rooms WHERE id = @id;

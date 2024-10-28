@@ -11,6 +11,9 @@ type AggregateStore interface {
 	// Load populates the aggregate to the recent version of the persisted events
 	Load(ctx context.Context, aggregate Aggregate) error
 
+	// LoadN populates the aggregate by N-many persisted events
+	LoadN(ctx context.Context, aggregate Aggregate, N uint64) error
+
 	// Save persists all uncommitted events of the aggregate, returns consistency token
 	Save(ctx context.Context, aggregate Aggregate) (common.ConsistencyToken, error)
 

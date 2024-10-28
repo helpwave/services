@@ -1,14 +1,23 @@
 package api
 
 import (
+	"common"
 	"context"
+	"errors"
 	"fmt"
+	commonpb "gen/libs/common/v1"
 	pb "gen/services/property_svc/v1"
 	"hwes"
+	"hwgrpc"
 	"hwutil"
+	"time"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"property-svc/internal/property-value/handlers"
@@ -69,42 +78,141 @@ func NewPropertyValueService(as hwes.AggregateStore, handlers *handlers.Handlers
 	return &PropertyValueGrpcService{as: as, handlers: handlers}
 }
 
+func toTypedValueChange(value pb.IsAttachPropertyValueRequest_Value) (typedValue *models.TypedValueChange) {
+	if value == nil {
+		return &models.TypedValueChange{
+			ValueRemoved: true,
+		}
+	}
+	switch value := value.(type) {
+	case *pb.AttachPropertyValueRequest_TextValue:
+		return &models.TypedValueChange{
+			TextValue: &value.TextValue,
+		}
+	case *pb.AttachPropertyValueRequest_NumberValue:
+		return &models.TypedValueChange{
+			NumberValue: &value.NumberValue,
+		}
+	case *pb.AttachPropertyValueRequest_BoolValue:
+		return &models.TypedValueChange{
+			BoolValue: &value.BoolValue,
+		}
+	case *pb.AttachPropertyValueRequest_DateValue:
+		return &models.TypedValueChange{
+			DateValue: hwutil.PtrTo(value.DateValue.Date.AsTime()),
+		}
+	case *pb.AttachPropertyValueRequest_DateTimeValue:
+		return &models.TypedValueChange{
+			DateTimeValue: hwutil.PtrTo(value.DateTimeValue.AsTime()),
+		}
+	case *pb.AttachPropertyValueRequest_SelectValue:
+		return &models.TypedValueChange{
+			SingleSelectValue: &value.SelectValue,
+		}
+	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
+		msv := value.MultiSelectValue
+		return &models.TypedValueChange{
+			MultiSelectValues: &models.MultiSelectChange{
+				SelectValues:       msv.SelectValues,
+				RemoveSelectValues: msv.RemoveSelectValues,
+			},
+		}
+	default:
+		return nil
+	}
+}
+
 func (s *PropertyValueGrpcService) AttachPropertyValue(
 	ctx context.Context,
 	req *pb.AttachPropertyValueRequest,
 ) (*pb.AttachPropertyValueResponse, error) {
+	log := zlog.Ctx(ctx)
 	propertyValueID := uuid.New()
 
 	propertyID := uuid.MustParse(req.GetPropertyId()) // guarded by validate
 	subjectID := uuid.MustParse(req.GetSubjectId())   // guarded by validate
 
-	var value interface{}
-	switch req.Value.(type) {
-	case *pb.AttachPropertyValueRequest_TextValue:
-		value = req.GetTextValue()
-	case *pb.AttachPropertyValueRequest_NumberValue:
-		value = req.GetNumberValue()
-	case *pb.AttachPropertyValueRequest_BoolValue:
-		value = req.GetBoolValue()
-	case *pb.AttachPropertyValueRequest_DateValue:
-		value = req.GetDateValue().GetDate()
-	case *pb.AttachPropertyValueRequest_DateTimeValue:
-		value = req.GetDateTimeValue()
-	case *pb.AttachPropertyValueRequest_SelectValue:
-		value = req.GetSelectValue()
-	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
-		msv := req.GetMultiSelectValue()
-		value = models.MultiSelectChange{
-			SelectValues:       msv.SelectValues,
-			RemoveSelectValues: msv.RemoveSelectValues,
-		}
-	default:
-		value = nil
+	valueChange := toTypedValueChange(req.Value)
+	if valueChange == nil {
+		log.Error().Type("valueType", req.Value).Msg("req.ValueChange type is not known")
+		return nil, status.Error(codes.Internal, "failed to parse value")
 	}
 
-	consistency, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID)
-	if err != nil {
-		return nil, err
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	var consistency common.ConsistencyToken
+
+	for i := 0; true; i++ {
+		if i > 10 {
+			log.Warn().Msg("AttachPropertyValue: conflict circuit breaker triggered")
+			return nil, errors.New("failed conflict resolution")
+		}
+
+		c, conflict, err := s.handlers.Commands.V1.AttachPropertyValue(
+			ctx,
+			propertyValueID,
+			propertyID,
+			*valueChange,
+			subjectID,
+			expConsistency,
+		)
+		if err != nil {
+			return nil, err
+		}
+		consistency = c
+
+		if conflict == nil {
+			break
+		}
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		// TODO: find a generic approach
+		valueUpdateRequested := valueChange.ConflictPossible(conflict.Was.Value)
+		valueAlreadyUpdated := func() bool {
+			if conflict.Is == nil && conflict.Was == nil {
+				return false
+			}
+			if conflict.Is == nil || conflict.Was == nil {
+				return true
+			}
+			return !conflict.Is.Value.Equals(*conflict.Was.Value)
+		}
+		if valueUpdateRequested && valueAlreadyUpdated() {
+			var is proto.Message
+			if conflict.Is.Value != nil {
+				is = conflict.Is.Value.ToProtoMessage()
+			}
+			var want proto.Message
+			if conflict.Was.Value != nil {
+				var val models.SimpleTypedValue
+				if err := copier.CopyWithOption(&val, conflict.Was.Value, copier.Option{DeepCopy: true}); err != nil {
+					return nil, fmt.Errorf("could not copy was to want: %w", err)
+				}
+				valueChange.Apply(&val)
+				want = val.ToProtoMessage()
+			}
+
+			conflicts["value"], err = hwgrpc.AttributeConflict(
+				is,
+				want,
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			return &pb.AttachPropertyValueResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: consistency.String(),
+			}, nil
+		}
+
+		// no conflict? retry with new consistency
+		expConsistency = &consistency
 	}
 
 	return &pb.AttachPropertyValueResponse{
@@ -137,63 +245,67 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(
 	}
 
 	return &pb.GetAttachedPropertyValuesResponse{
-		Values: hwutil.Map(
-			propertiesWithValues,
+		Values: hwutil.Map(propertiesWithValues,
 			func(pnv models.PropertyAndValue) *pb.GetAttachedPropertyValuesResponse_Value {
 				res := &pb.GetAttachedPropertyValuesResponse_Value{
-					PropertyId:          pnv.PropertyID.String(),
-					FieldType:           pnv.FieldType,
-					Name:                pnv.Name,
-					Description:         hwutil.MapIf(pnv.Description != "", pnv.Description, func(s string) string { return s }),
+					PropertyId: pnv.PropertyID.String(),
+					FieldType:  pnv.FieldType,
+					Name:       pnv.Name,
+					Description: hwutil.MapIf(pnv.Description != "", pnv.Description,
+						func(s string) string { return s }),
 					IsArchived:          pnv.IsArchived,
 					Value:               nil,
 					PropertyConsistency: pnv.PropertyConsistency,
 					ValueConsistency:    pnv.ValueConsistency,
 				}
-				switch {
-				case pnv.Value == nil:
+
+				if pnv.Value == nil {
 					return res
-				case pnv.Value.TextValue != nil:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *pnv.Value.TextValue}
-				case pnv.Value.BoolValue != nil:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pnv.Value.BoolValue}
-				case pnv.Value.NumberValue != nil:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pnv.Value.NumberValue}
-				case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
-					v := pnv.Value.MultiSelectValues[0]
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
-						SelectValue: &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
-							Id:          v.Id.String(),
-							Name:        v.Name,
-							Description: v.Description,
-						},
-					}
-				case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue_{
-						MultiSelectValue: &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
-							SelectValues: hwutil.Map(
-								pnv.Value.MultiSelectValues,
-								func(o models.SelectValueOption) *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption {
-									return &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+				}
+
+				switch val := pnv.Value.(type) {
+				case models.TextValue:
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: string(val)}
+				case models.BoolValue:
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: bool(val)}
+				case models.NumberValue:
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: float64(val)}
+				case models.MultiSelectValues:
+					// TODO: use value encoding
+					if pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT {
+						v := val[0]
+						res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
+							SelectValue: &pb.SelectValueOption{
+								Id:          v.Id.String(),
+								Name:        v.Name,
+								Description: v.Description,
+							},
+						}
+					} else if pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
+						res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
+							MultiSelectValue: &pb.MultiSelectValue{
+								SelectValues: hwutil.Map(val, func(o models.SelectValueOption) *pb.SelectValueOption {
+									return &pb.SelectValueOption{
 										Id:          o.Id.String(),
 										Name:        o.Name,
 										Description: o.Description,
 									}
 								}),
-						},
+							},
+						}
 					}
-				case pnv.Value.DateTimeValue != nil:
+				case models.DateTimeValue:
 					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{
-						DateTimeValue: timestamppb.New(*pnv.Value.DateTimeValue),
+						DateTimeValue: timestamppb.New(time.Time(val)),
 					}
-				case pnv.Value.DateValue != nil:
+				case models.DateValue:
 					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
 						DateValue: &pb.Date{
-							Date: timestamppb.New(*pnv.Value.DateValue),
+							Date: timestamppb.New(time.Time(val)),
 						},
 					}
 				default:
-					log.Error().Any("pnv", pnv).Msg("pnv.Value is in an invalid state!")
+					log.Error().Any("pnv", pnv).Msg("pnv.ValueChange is in an invalid state!")
 				}
 				return res
 			}),

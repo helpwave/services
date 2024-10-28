@@ -172,7 +172,6 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 	if err == nil {
 		event.CommitterUserID = &eventCommitterUserID
 	}
-
 	eventOrganizationID, err := uuid.Parse(md.OrganizationID)
 	if err == nil {
 		event.OrganizationID = &eventOrganizationID
@@ -313,6 +312,9 @@ func (e *Event) GetZerologDict() *zerolog.Event {
 
 	if e.CommitterUserID != nil {
 		dict.Str("committerUserID", e.CommitterUserID.String())
+	}
+	if e.OrganizationID != nil {
+		dict.Str("organizaionID", e.OrganizationID.String())
 	}
 
 	return dict

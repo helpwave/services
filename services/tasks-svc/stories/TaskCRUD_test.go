@@ -203,9 +203,8 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	//
 
 	unassignRes, err := taskClient.UnassignTask(ctx, &pb.UnassignTaskRequest{
-		TaskId:      taskId,
-		UserId:      assignedUser.String(),
-		Consistency: &task.Consistency,
+		TaskId: taskId,
+		UserId: assignedUser.String(),
 	})
 	require.NoError(t, err)
 
@@ -373,7 +372,7 @@ func TestGetAssignedTasks(t *testing.T) {
 	hwtesting.WaitForProjectionsToSettle()
 
 	// client for userid
-	customTaskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String()))
+	customTaskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String(), ""))
 
 	res, err := customTaskClient.GetAssignedTasks(ctx, &pb.GetAssignedTasksRequest{})
 	require.NoError(t, err)

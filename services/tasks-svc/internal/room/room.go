@@ -3,12 +3,15 @@ package room
 import (
 	"common"
 	"context"
+	commonpb "gen/libs/common/v1"
 	"hwdb"
+	"hwgrpc"
 	"hwutil"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/room_repo"
@@ -102,8 +105,6 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 }
 
 func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) (*pb.UpdateRoomResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
-
 	// TODO: Auth
 
 	patientID, err := uuid.Parse(req.GetId())
@@ -111,7 +112,20 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	consistency, err := roomRepo.UpdateRoom(ctx, room_repo.UpdateRoomParams{
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	// Start TX
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rollback()
+	roomRepo := room_repo.New(tx)
+
+	result, err := roomRepo.UpdateRoom(ctx, room_repo.UpdateRoomParams{
 		ID:   patientID,
 		Name: req.Name,
 	})
@@ -120,9 +134,42 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 		return nil, err
 	}
 
+	// conflict detection
+	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) { //nolint:gosec
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		if req.Name != nil && *req.Name != result.OldName {
+			conflicts["name"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(result.OldName),
+				wrapperspb.String(*req.Name),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			// prevent the update
+			if err := hwdb.Error(ctx, tx.Rollback(ctx)); err != nil {
+				return nil, err
+			}
+
+			// return conflict
+			return &pb.UpdateRoomResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: common.ConsistencyToken(result.OldConsistency).String(), //nolint:gosec
+			}, nil
+		}
+	}
+
+	// Commit Update
+	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateRoomResponse{
-		Conflict:    nil,                                           // TODO
-		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
+		Conflict:    nil,
+		Consistency: common.ConsistencyToken(result.Consistency).String(), //nolint:gosec
 	}, nil
 }
 

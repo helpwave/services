@@ -25,10 +25,14 @@ import '../../../google/protobuf/any.pb.dart' as $20;
 class Conflict extends $pb.GeneratedMessage {
   factory Conflict({
     $core.Map<$core.String, AttributeConflict>? conflictingAttributes,
+    $core.bool? historyMissing,
   }) {
     final $result = create();
     if (conflictingAttributes != null) {
       $result.conflictingAttributes.addAll(conflictingAttributes);
+    }
+    if (historyMissing != null) {
+      $result.historyMissing = historyMissing;
     }
     return $result;
   }
@@ -38,6 +42,7 @@ class Conflict extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Conflict', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
     ..m<$core.String, AttributeConflict>(1, _omitFieldNames ? '' : 'conflictingAttributes', entryClassName: 'Conflict.ConflictingAttributesEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: AttributeConflict.create, valueDefaultOrMaker: AttributeConflict.getDefault, packageName: const $pb.PackageName('libs.common.v1'))
+    ..aOB(2, _omitFieldNames ? '' : 'historyMissing')
     ..hasRequiredFields = false
   ;
 
@@ -62,9 +67,23 @@ class Conflict extends $pb.GeneratedMessage {
   static Conflict getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Conflict>(create);
   static Conflict? _defaultInstance;
 
-  /// might be empty, in that case we don't have the history to calculate the conflicting attributes
+  ///  when history_missing is true, this map will contain elements, that might not have been updated since you have seen them last.
+  ///  it is then on you to compare these against your view of the world
+  ///
+  ///  The key is the json-name of the field you tried to change, subkeys are split by dots ('.'), array elements are represented by the resources id:
+  ///  e.g.: for the request: `{"description": "Conflict", "select_data": {"upsert_options": [{"id": "123", "name": "Conflict"}]}}`
+  ///  this might be the conflict: `{"conflicting_attributes": {"description": ..., "select_data.upsert_options.123.name": ...}}`
   @$pb.TagNumber(1)
   $core.Map<$core.String, AttributeConflict> get conflictingAttributes => $_getMap(0);
+
+  @$pb.TagNumber(2)
+  $core.bool get historyMissing => $_getBF(1);
+  @$pb.TagNumber(2)
+  set historyMissing($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasHistoryMissing() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearHistoryMissing() => clearField(2);
 }
 
 class AttributeConflict extends $pb.GeneratedMessage {
@@ -112,6 +131,9 @@ class AttributeConflict extends $pb.GeneratedMessage {
   static AttributeConflict getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AttributeConflict>(create);
   static AttributeConflict? _defaultInstance;
 
+  /// CAUTION: may be missing, if the is underlying value is missing (e.g., unassigned beds)
+  /// Enums are returned as Int32s
+  /// Arrays are encoded as AnyArrays
   @$pb.TagNumber(1)
   $20.Any get is_1 => $_getN(0);
   @$pb.TagNumber(1)
@@ -123,6 +145,9 @@ class AttributeConflict extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $20.Any ensureIs_1() => $_ensure(0);
 
+  /// CAUTION: may be missing, if the requested value is missing (e.g., unassignment of a bed)
+  /// Enums are returned as Int32s
+  /// Arrays are encoded as AnyArrays
   @$pb.TagNumber(2)
   $20.Any get want => $_getN(1);
   @$pb.TagNumber(2)
@@ -133,6 +158,52 @@ class AttributeConflict extends $pb.GeneratedMessage {
   void clearWant() => clearField(2);
   @$pb.TagNumber(2)
   $20.Any ensureWant() => $_ensure(1);
+}
+
+/// there is no native Any-compatible wrapper for arrays,
+/// so here is one
+class AnyArray extends $pb.GeneratedMessage {
+  factory AnyArray({
+    $core.Iterable<$20.Any>? elements,
+  }) {
+    final $result = create();
+    if (elements != null) {
+      $result.elements.addAll(elements);
+    }
+    return $result;
+  }
+  AnyArray._() : super();
+  factory AnyArray.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AnyArray.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AnyArray', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
+    ..pc<$20.Any>(1, _omitFieldNames ? '' : 'elements', $pb.PbFieldType.PM, subBuilder: $20.Any.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AnyArray clone() => AnyArray()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AnyArray copyWith(void Function(AnyArray) updates) => super.copyWith((message) => updates(message as AnyArray)) as AnyArray;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AnyArray create() => AnyArray._();
+  AnyArray createEmptyInstance() => create();
+  static $pb.PbList<AnyArray> createRepeated() => $pb.PbList<AnyArray>();
+  @$core.pragma('dart2js:noInline')
+  static AnyArray getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AnyArray>(create);
+  static AnyArray? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$20.Any> get elements => $_getList(0);
 }
 
 

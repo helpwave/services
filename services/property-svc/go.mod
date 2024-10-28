@@ -8,6 +8,7 @@ replace (
 	hwauthz => ../../libs/hwauthz
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
+	hwgrpc => ../../libs/hwgrpc
 	hwlocale => ../../libs/hwlocale
 	hwtesting => ../../libs/hwtesting
 	hwutil => ../../libs/hwutil
@@ -23,6 +24,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.1
+	github.com/jinzhu/copier v0.3.5
 	github.com/pashagolub/pgxmock/v4 v4.3.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.33.0
@@ -32,6 +34,7 @@ require (
 	hwauthz v0.0.0
 	hwdb v0.0.0
 	hwes v0.0.0
+	hwgrpc v0.0.0-00010101000000-000000000000
 	hwtesting v0.0.0
 	hwutil v0.0.0
 	telemetry v0.0.0

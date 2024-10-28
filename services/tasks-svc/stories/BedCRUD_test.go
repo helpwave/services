@@ -9,6 +9,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -176,4 +178,78 @@ func TestGetBeds(t *testing.T) {
 		})
 		assert.Subset(t, expectedBedIDs, bedIds, "actual bedIDs are not a subset of expected for room %s", roomId)
 	}
+}
+
+func TestUpdateBedConflict(t *testing.T) {
+	ctx := context.Background()
+	bedClient := bedServiceClient()
+
+	// prepare
+	wardId, _ := prepareWard(t, ctx, "")
+	roomId0, _ := prepareRoom(t, ctx, wardId, "0")
+
+	bedId, initialConsistency := prepareBed(t, ctx, roomId0, "")
+
+	name1 := "This came first"
+	roomId1, _ := prepareRoom(t, ctx, wardId, "1")
+
+	// update 1
+	update1Res, err := bedClient.UpdateBed(ctx, &pb.UpdateBedRequest{
+		Id:          bedId,
+		Name:        &name1,
+		RoomId:      &roomId1,
+		Consistency: &initialConsistency,
+	})
+	require.NoError(t, err)
+	assert.Nil(t, update1Res.Conflict)
+	assert.NotEqual(t, initialConsistency, update1Res.Consistency)
+
+	name2 := "This came second"
+	roomId2, _ := prepareRoom(t, ctx, wardId, "2")
+
+	// racing update 2
+	update2Res, err := bedClient.UpdateBed(ctx, &pb.UpdateBedRequest{
+		Id:          bedId,
+		Name:        &name2,
+		RoomId:      &roomId2,
+		Consistency: &initialConsistency,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
+	assert.NotNil(t, update2Res.Conflict)
+
+	nameRes := update2Res.Conflict.ConflictingAttributes["name"]
+	assert.NotNil(t, nameRes)
+
+	nameIs := &wrapperspb.StringValue{}
+	require.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	assert.Equal(t, name1, nameIs.Value)
+
+	nameWant := &wrapperspb.StringValue{}
+	require.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	assert.Equal(t, name2, nameWant.Value) //nolint:testifylint // false positive
+
+	roomRes := update2Res.Conflict.ConflictingAttributes["room_id"]
+	assert.NotNil(t, roomRes)
+
+	roomIs := &wrapperspb.StringValue{}
+	require.NoError(t, roomRes.Is.UnmarshalTo(roomIs))
+	assert.Equal(t, roomId1, roomIs.Value)
+
+	roomWant := &wrapperspb.StringValue{}
+	require.NoError(t, roomRes.Want.UnmarshalTo(roomWant))
+	assert.Equal(t, roomId2, roomWant.Value) //nolint:testifylint // false positive
+
+	// racing update 3
+	update3Res, err := bedClient.UpdateBed(ctx, &pb.UpdateBedRequest{
+		Id:          bedId,
+		Name:        &name2,
+		Consistency: &initialConsistency,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
+	assert.NotNil(t, update2Res.Conflict)
+
+	assert.NotNil(t, update3Res.Conflict.ConflictingAttributes["name"])
+	assert.Nil(t, update3Res.Conflict.ConflictingAttributes["room_id"])
 }

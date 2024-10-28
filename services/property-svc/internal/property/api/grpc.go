@@ -1,12 +1,22 @@
 package api
 
 import (
+	"common"
 	"context"
+	"errors"
+	commonpb "gen/libs/common/v1"
 	pb "gen/services/property_svc/v1"
 	"hwes"
+	"hwgrpc"
 	"hwutil"
+	"slices"
 
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	"property-svc/internal/property/handlers"
 	"property-svc/internal/property/models"
@@ -140,6 +150,11 @@ func (s *PropertyGrpcService) UpdateProperty(
 		return nil, err
 	}
 
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
 	var allowFreetext *bool
 	var removeOptions []string
 	var upsertOptions *[]models.UpdateSelectOption
@@ -174,20 +189,176 @@ func (s *PropertyGrpcService) UpdateProperty(
 		}
 	}
 
-	consistency, err := s.handlers.Commands.V1.UpdateProperty(
-		ctx,
-		propertyID,
-		req.SubjectType,
-		req.Name,
-		req.Description,
-		req.SetId,
-		allowFreetext,
-		upsertOptions,
-		removeOptions,
-		req.IsArchived,
-	)
-	if err != nil {
-		return nil, err
+	var consistency common.ConsistencyToken
+
+	for i := 0; true; i++ {
+		if i > 10 {
+			log.Warn().Msg("UpdatePatient: conflict circuit breaker triggered")
+			return nil, errors.New("failed conflict resolution")
+		}
+
+		c, conflict, err := s.handlers.Commands.V1.UpdateProperty(
+			ctx,
+			propertyID,
+			req.SubjectType,
+			req.Name,
+			req.Description,
+			req.SetId,
+			allowFreetext,
+			upsertOptions,
+			removeOptions,
+			req.IsArchived,
+			expConsistency,
+		)
+		if err != nil {
+			return nil, err
+		}
+		consistency = c
+		if conflict == nil {
+			break
+		}
+
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		// TODO: find a generic approach
+		subjTypeUpdateRequested := req.SubjectType != nil && *req.SubjectType != conflict.Is.SubjectType
+		subjTypeAlreadyUpdated := conflict.Was.SubjectType != conflict.Is.SubjectType
+		if subjTypeUpdateRequested && subjTypeAlreadyUpdated {
+			conflicts["subject_type"], err = hwgrpc.AttributeConflict(
+				wrapperspb.Int32(int32(conflict.Is.SubjectType.Number())),
+				wrapperspb.Int32(int32(req.SubjectType.Number())),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		nameUpdateRequested := req.Name != nil && *req.Name != conflict.Is.Name
+		nameAlreadyUpdated := conflict.Was.Name != conflict.Is.Name
+		if nameUpdateRequested && nameAlreadyUpdated {
+			conflicts["name"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(conflict.Is.Name),
+				wrapperspb.String(*req.Name),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+		descrUpdateRequested := req.Description != nil && *req.Description != conflict.Is.Description
+		descrAlreadyUpdated := conflict.Was.Description != conflict.Is.Description
+		if descrUpdateRequested && descrAlreadyUpdated {
+			conflicts["description"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(conflict.Is.Description),
+				wrapperspb.String(*req.Description),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+		setIdUpdateRequested := req.SetId != nil && *req.SetId != conflict.Is.SetID.UUID.String()
+		setIdAlreadyUpdated := conflict.Was.SetID != conflict.Is.SetID
+		if setIdUpdateRequested && setIdAlreadyUpdated {
+			var is proto.Message
+			if conflict.Is.SetID.Valid {
+				is = wrapperspb.String(conflict.Is.SetID.UUID.String())
+			}
+
+			conflicts["set_id"], err = hwgrpc.AttributeConflict(
+				is,
+				wrapperspb.String(*req.SetId),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		fTDUpdateRequested := req.FieldTypeData != nil && req.GetSelectData() != nil // currently only select data is possible
+		if fTDUpdateRequested {
+			sd := req.GetSelectData()
+
+			// boolean can not cause conflicts
+
+			// removal can not cause conflicts
+
+			// upsert can only cause conflicts if update (not insert)
+
+			// nothing to check in the first place
+			if conflict.Is.FieldTypeData.SelectData == nil || len(conflict.Is.FieldTypeData.SelectData.SelectOptions) == 0 {
+				continue
+			}
+
+			for _, upsertedOption := range sd.UpsertOptions {
+				if upsertedOption.Id == "" {
+					continue
+				}
+
+				optionsWas := conflict.Was.FieldTypeData.SelectData.SelectOptions
+				optionsIs := conflict.Is.FieldTypeData.SelectData.SelectOptions
+
+				searchFn := func(option models.SelectOption) bool {
+					return option.ID.String() == upsertedOption.Id
+				}
+
+				// upsert is update, check if it was updated between WAS and IS
+				wasIx := slices.IndexFunc(optionsWas, searchFn)
+				if wasIx < 0 {
+					msg := "The option '%s' you attempted to update did not exist" +
+						" at the state the provided consistency points to. " +
+						"You likely provided an incorrect consistency token."
+					return nil, status.Errorf(codes.InvalidArgument, msg, upsertedOption.Id)
+				}
+				wasOpt := optionsWas[wasIx]
+
+				isIx := slices.IndexFunc(optionsIs, searchFn)
+				if isIx < 0 {
+					// option was removed since, update will be ignored or cause an error, but will not cause a conflict
+					continue
+				}
+				isOpt := optionsIs[isIx]
+
+				optNameUpdateRequested := upsertedOption.Name != nil && *upsertedOption.Name != isOpt.Name
+				optnameAlreadyUpdated := wasOpt.Name != isOpt.Name
+				if optNameUpdateRequested && optnameAlreadyUpdated {
+					conflicts["select_data.upsert_options."+upsertedOption.Id+".name"], err = hwgrpc.AttributeConflict(
+						wrapperspb.String(isOpt.Name),
+						wrapperspb.String(*upsertedOption.Name),
+					)
+					if err != nil {
+						return nil, err
+					}
+				}
+				optDescUpdateRequested := upsertedOption.Description != nil &&
+					(isOpt.Description == nil || *upsertedOption.Description != *isOpt.Description)
+
+				optDescAlreadyUpdated := func() bool {
+					if wasOpt.Description != nil && isOpt.Description != nil {
+						return *wasOpt.Description != *isOpt.Description
+					}
+
+					return !(wasOpt.Description == nil && isOpt.Description == nil)
+				}
+
+				if optDescUpdateRequested && optDescAlreadyUpdated() {
+					conflicts["select_data.upsert_options."+upsertedOption.Id+".description"], err = hwgrpc.AttributeConflict(
+						wrapperspb.String(*isOpt.Description),
+						wrapperspb.String(*upsertedOption.Description),
+					)
+					if err != nil {
+						return nil, err
+					}
+				}
+			}
+		}
+
+		if len(conflicts) != 0 {
+			return &pb.UpdatePropertyResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: c.String(),
+			}, nil
+		}
+
+		// no conflict? retry with new consistency
+		expConsistency = &c
 	}
 
 	return &pb.UpdatePropertyResponse{

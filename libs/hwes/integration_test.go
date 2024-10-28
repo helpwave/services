@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"hwes"
 	"hwes/test"
 )
@@ -142,13 +143,8 @@ func TestIntegration(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if loadedUserAggregate.User.ID != id {
-		t.Fatal("invalid id")
-	}
-
-	if loadedUserAggregate.User.Username != "testine.test" {
-		t.Fatal("invalid username")
-	}
+	assert.Equal(t, id, loadedUserAggregate.User.ID)
+	assert.Equal(t, "testine.test", loadedUserAggregate.User.Username)
 }
 
 func TestAggregateBase_RegisterEventListener_HandleEvent(t *testing.T) {

@@ -4,12 +4,15 @@ import (
 	"common"
 	"common/auth"
 	"context"
+	commonpb "gen/libs/common/v1"
 	"hwdb"
+	"hwgrpc"
 	"hwutil"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	"tasks-svc/repos/task_template_repo"
 
@@ -150,7 +153,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(
 	}
 
 	// increase consistency of taskTemplate
-	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+	ttResult, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
 		ID: subtask.TaskTemplateID,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
@@ -168,7 +171,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(
 		Msg("taskTemplateSubtask deleted")
 
 	return &pb.DeleteTaskTemplateSubTaskResponse{
-		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
+		TaskTemplateConsistency: common.ConsistencyToken(ttResult.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -185,7 +188,20 @@ func (ServiceServer) UpdateTaskTemplate(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	// Start TX
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rollback()
+
+	// do update
+	result, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
 		Name:        req.Name,
 		Description: req.Description,
 		ID:          id,
@@ -195,9 +211,59 @@ func (ServiceServer) UpdateTaskTemplate(
 		return nil, err
 	}
 
+	// conflict detection
+	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) { //nolint:gosec
+		// task_template is not event sourced yet and has more than one field,
+		// thus we are not able to pinpoint conflicts to a field, we only know *some* update has happened since
+		// for convenience we are filtering out obvious non-conflicts, where the update is the same as the is state,
+		// or the field was not changed
+
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		if req.Name != nil && *req.Name != result.OldName {
+			conflicts["name"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(result.OldName),
+				wrapperspb.String(*req.Name),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if req.Description != nil && *req.Description != result.OldDescription {
+			conflicts["description"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(result.OldDescription),
+				wrapperspb.String(*req.Description),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			// prevent the update
+			if err := hwdb.Error(ctx, tx.Rollback(ctx)); err != nil {
+				return nil, err
+			}
+
+			// return conflict
+			return &pb.UpdateTaskTemplateResponse{
+				Conflict: &commonpb.Conflict{
+					ConflictingAttributes: conflicts,
+					HistoryMissing:        true,
+				},
+				Consistency: common.ConsistencyToken(result.OldConsistency).String(), //nolint:gosec
+			}, nil
+		}
+	}
+
+	// Commit Update
+	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateTaskTemplateResponse{
-		Conflict:    nil,                                           // TODO
-		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
+		Conflict:    nil,
+		Consistency: common.ConsistencyToken(result.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -220,10 +286,15 @@ func (ServiceServer) UpdateTaskTemplateSubTask(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	expConsistency, ok := common.ParseConsistency(req.TaskTemplateConsistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "task_template_consistency")
+	}
+
 	// update subtask and get related taskTemplate
-	taskTemplateID, err := templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
-		Name: req.Name,
+	subTaskResult, err := templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
 		ID:   id,
+		Name: req.Name,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -231,11 +302,42 @@ func (ServiceServer) UpdateTaskTemplateSubTask(
 	}
 
 	// increase consistency of taskTemplate
-	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
-		ID: taskTemplateID,
+	result, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+		ID: subTaskResult.TaskTemplateID,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return nil, err
+	}
+
+	// conflict detection
+	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) { //nolint:gosec
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		if req.Name != nil && *req.Name != subTaskResult.OldName {
+			conflicts["name"], err = hwgrpc.AttributeConflict(
+				wrapperspb.String(subTaskResult.OldName),
+				wrapperspb.String(*req.Name),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			// prevent the updates
+			if err := hwdb.Error(ctx, tx.Rollback(ctx)); err != nil {
+				return nil, err
+			}
+
+			// return conflict
+			return &pb.UpdateTaskTemplateSubTaskResponse{
+				Conflict: &commonpb.Conflict{
+					ConflictingAttributes: conflicts,
+					HistoryMissing:        true,
+				},
+				TaskTemplateConsistency: common.ConsistencyToken(result.OldConsistency).String(), //nolint:gosec
+			}, nil
+		}
 	}
 
 	// commit
@@ -244,8 +346,7 @@ func (ServiceServer) UpdateTaskTemplateSubTask(
 	}
 
 	return &pb.UpdateTaskTemplateSubTaskResponse{
-		Conflict:                nil,                                           // TODO
-		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
+		TaskTemplateConsistency: common.ConsistencyToken(result.Consistency).String(), //nolint:gosec
 	}, nil
 }
 

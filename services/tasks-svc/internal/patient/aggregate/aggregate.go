@@ -1,10 +1,13 @@
 package aggregate
 
 import (
+	"common"
 	"context"
+	"fmt"
 	"hwes"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"tasks-svc/internal/patient/models"
@@ -31,6 +34,36 @@ func LoadPatientAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.U
 		return nil, err
 	}
 	return patientAggregate, nil
+}
+
+func LoadPatientAggregateWithSnapshotAt(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+	pauseAt *common.ConsistencyToken,
+) (*PatientAggregate, *models.Patient, error) {
+	patientAggregate := NewPatientAggregate(id)
+	var snapshot *models.Patient
+
+	if pauseAt != nil {
+		//  load pauseAt+1-many events (version is 0-indexed)
+		if err := as.LoadN(ctx, patientAggregate, uint64(*pauseAt)+1); err != nil {
+			return nil, nil, err
+		}
+
+		var cpy models.Patient
+		if err := copier.CopyWithOption(&cpy, patientAggregate.Patient, copier.Option{DeepCopy: true}); err != nil {
+			return nil, nil, fmt.Errorf("LoadPatientAggregateWithSnapshotAt: could not copy snapshot: %w", err)
+		}
+		snapshot = &cpy
+	}
+
+	// continue loading all other events
+	if err := as.Load(ctx, patientAggregate); err != nil {
+		return nil, nil, err
+	}
+
+	return patientAggregate, snapshot, nil
 }
 
 func (a *PatientAggregate) initEventListeners() {
