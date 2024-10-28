@@ -1,10 +1,10 @@
 package hwutil
 
-func Filter[K any](array []K, condition func(value K) bool) []K {
+func Filter[K any](array []K, condition func(index int, value K) bool) []K {
 	var result []K
 
-	for _, value := range array {
-		if condition(value) {
+	for i, value := range array {
+		if condition(i, value) {
 			result = append(result, value)
 		}
 	}

@@ -252,7 +252,7 @@ func (s *PatientGrpcService) GetPatientList(
 
 	// Scope active to ward
 	if wardID.Valid {
-		active = hwutil.Filter(active, func(patientDetails *models.PatientDetails) bool {
+		active = hwutil.Filter(active, func(_ int, patientDetails *models.PatientDetails) bool {
 			return patientDetails.Room.WardID == wardID.UUID
 		})
 	}
