@@ -2,6 +2,7 @@ package hwgrpc
 
 import (
 	"context"
+	"telemetry"
 	"testing"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
@@ -34,6 +35,7 @@ type RecoverySuite struct {
 }
 
 func TestPanicRecoverInterceptor(t *testing.T) {
+	telemetry.SetupMetrics(context.Background(), nil)
 	s := &RecoverySuite{
 		InterceptorTestSuite: &testpb.InterceptorTestSuite{
 			TestService: &recoveryAssertService{TestServiceServer: &testpb.TestPingService{}},
