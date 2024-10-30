@@ -5,7 +5,7 @@ package libs.technical_events.property_svc.v1;
 import "libs/events/v1/options.proto";
 import "services/property_svc/v1/types.proto";
 
-option go_package = "gen/libs/technical-events/property-svc/v1";
+option go_package = "gen/libs/technical_events/property_svc/v1";
 
 message PropertyCreatedEvent {
   option (libs.events.v1.event_type) = "PROPERTY_CREATED_v1";

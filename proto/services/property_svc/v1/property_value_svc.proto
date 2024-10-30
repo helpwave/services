@@ -6,7 +6,7 @@ import "services/property_svc/v1/types.proto";
 import "google/protobuf/timestamp.proto";
 import "libs/common/v1/conflict.proto";
 
-option go_package = "gen/services/property-svc/v1";
+option go_package = "gen/services/property_svc/v1";
 
 //
 // AttachPropertyValueRequest
