@@ -40,17 +40,17 @@ func LoadPropertyAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.
 }
 
 func (a *PropertyAggregate) initEventListeners() {
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyCreatedEvent{}), a.onPropertyCreated)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyDescriptionUpdatedEvent{}), a.onDescriptionUpdated)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySetIDUpdatedEvent{}), a.onSetIDUpdated)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent{}), a.onSubjectTypeUpdated)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyNameUpdatedEvent{}), a.onNameUpdated)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent{}), a.onFieldTypeDataCreated)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataAllowFreetextUpdatedEvent{}), a.onAllowFreetextUpdated)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent{}), a.onFieldTypeDataSelectOptionsUpserted)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsRemovedEvent{}), a.onFieldTypeDataSelectOptionsRemoved)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyArchivedEvent{}), a.onPropertyArchived)
-	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyRetrievedEvent{}), a.onPropertyRetrieved)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyCreatedEvent{}, nil), a.onPropertyCreated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyDescriptionUpdatedEvent{}, nil), a.onDescriptionUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySetIDUpdatedEvent{}, nil), a.onSetIDUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent{}, nil), a.onSubjectTypeUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyNameUpdatedEvent{}, nil), a.onNameUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent{}, nil), a.onFieldTypeDataCreated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataAllowFreetextUpdatedEvent{}, nil), a.onAllowFreetextUpdated)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent{}, nil), a.onFieldTypeDataSelectOptionsUpserted)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsRemovedEvent{}, nil), a.onFieldTypeDataSelectOptionsRemoved)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyArchivedEvent{}, nil), a.onPropertyArchived)
+	a.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyRetrievedEvent{}, nil), a.onPropertyRetrieved)
 }
 
 // Event handlers

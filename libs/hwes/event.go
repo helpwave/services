@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/runtime/protoimpl"
 	"hwutil"
 	"strings"
 	"telemetry"
@@ -51,11 +52,22 @@ type metadata struct {
 	DataIsProto bool      `json:"data_is_proto"`
 }
 
-func MessageToEventName(protoMessage proto.Message) string {
-	protoEventType := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), pbEventsV1.E_EventType).(string)
-	if protoEventType == "" {
-		panic("protoMessage does not has EventType extension") // TODO: optimize
+// MessageToEventName reflects the passed EventType message extension of the passed message.
+// When the EventType is nil, the current default EventType of proto/libs/events/v1 gets used.
+func MessageToEventName(protoMessage proto.Message, eventType *protoimpl.ExtensionInfo) string {
+	if eventType == nil {
+		eventType = pbEventsV1.E_EventType
 	}
+
+	protoEventType := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), eventType).(string)
+	if protoEventType == "" {
+		panic(fmt.Sprintf(
+			"Cannot reflect eventType of protoMessage. The passed protoMessage '%s' does not has the message extension of '%s'.",
+			protoMessage.ProtoReflect().Descriptor().FullName(),
+			eventType.TypeDescriptor().FullName(),
+		))
+	}
+
 	return protoEventType
 }
 
@@ -110,7 +122,7 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 }
 
 func NewEventFromProto(aggregate Aggregate, message proto.Message, opts ...EventOption) (Event, error) {
-	eventType := MessageToEventName(message)
+	eventType := MessageToEventName(message, nil)
 
 	fmt.Println("==============================")
 	fmt.Println(eventType)

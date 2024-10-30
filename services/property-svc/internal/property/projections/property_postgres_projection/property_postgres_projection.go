@@ -37,17 +37,17 @@ func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projectio
 }
 
 func (p *Projection) initEventListeners() {
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyCreatedEvent{}), p.onPropertyCreated)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyDescriptionUpdatedEvent{}), p.onPropertyDescriptionUpdated)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySetIDUpdatedEvent{}), p.onPropertySetIDUpdated)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent{}), p.onSubjectTypeUpdated)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyNameUpdatedEvent{}), p.onNameUpdated)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyArchivedEvent{}), p.onPropertyArchived)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyRetrievedEvent{}), p.onPropertyRetrieved)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent{}), p.onPropertyFieldTypeDataCreated)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataAllowFreetextUpdatedEvent{}), p.onAllowFreetextUpdated)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsRemovedEvent{}), p.onFieldTypeDataSelectOptionsRemoved)
-	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent{}), p.onFieldTypeDataSelectOptionsUpserted)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyCreatedEvent{}, nil), p.onPropertyCreated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyDescriptionUpdatedEvent{}, nil), p.onPropertyDescriptionUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySetIDUpdatedEvent{}, nil), p.onPropertySetIDUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent{}, nil), p.onSubjectTypeUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyNameUpdatedEvent{}, nil), p.onNameUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyArchivedEvent{}, nil), p.onPropertyArchived)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyRetrievedEvent{}, nil), p.onPropertyRetrieved)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent{}, nil), p.onPropertyFieldTypeDataCreated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataAllowFreetextUpdatedEvent{}, nil), p.onAllowFreetextUpdated)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsRemovedEvent{}, nil), p.onFieldTypeDataSelectOptionsRemoved)
+	p.RegisterEventListener(hwes.MessageToEventName(&pbTechnicalEventsV1.PropertyFieldTypeDataSelectOptionsUpsertedEvent{}, nil), p.onFieldTypeDataSelectOptionsUpserted)
 }
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
