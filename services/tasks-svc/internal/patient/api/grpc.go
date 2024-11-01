@@ -82,11 +82,7 @@ func (s *PatientGrpcService) GetPatient(
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// check permissions
-	user, err := commonPerm.UserFromCtx(ctx)
-	if err != nil {
-		return nil, err
-	}
-
+	user := commonPerm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err

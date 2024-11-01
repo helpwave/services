@@ -147,7 +147,7 @@ func TestGetRecentWards(t *testing.T) {
 		res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{Id: wardID})
 		require.NoError(t, err, "could not update ward %s", wardID)
 		consistencies[wardID] = res.Consistency
-		hwtesting.WaitForProjectionsToSettle()
+		time.Sleep(time.Second) // ordered by time in seconds, thus at least one must elapse
 	}
 
 	hwtesting.WaitForProjectionsToSettle()

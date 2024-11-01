@@ -21,10 +21,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 		patientRepo := patient_repo.New(hwdb.GetDB())
 
 		// gather inputs
-		organizationID, err := auth.GetOrganizationID(ctx)
-		if err != nil {
-			return nil, err
-		}
+		organizationID := auth.MustGetOrganizationID(ctx)
 
 		// do query
 		rows, err := patientRepo.GetAllPatientsWithTasksBedAndRoom(ctx, organizationID)

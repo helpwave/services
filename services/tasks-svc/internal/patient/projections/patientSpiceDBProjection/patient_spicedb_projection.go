@@ -9,6 +9,7 @@ import (
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+
 	"tasks-svc/internal/patient/perm"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"

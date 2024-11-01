@@ -8,8 +8,9 @@ import (
 	"hwdb"
 	"hwes/eventstoredb"
 	"hwes/eventstoredb/projections"
-	"tasks-svc/internal/patient/projections/patientSpiceDBProjection"
 	"time"
+
+	"tasks-svc/internal/patient/projections/patientSpiceDBProjection"
 
 	ph "tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/projections/patientPostgresProjection"
