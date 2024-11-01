@@ -31,7 +31,7 @@ func NewPatientHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 				ReadmitPatient:   commandsV1.NewReadmitPatientCommandHandler(as, authz),
 				UnassignBed:      commandsV1.NewUnassignBedCommandHandler(as, authz),
 				UpdatePatient:    commandsV1.NewUpdatePatientCommandHandler(as, authz),
-				DeletePatient:    commandsV1.NewDeletePatientCommandHandler(as),
+				DeletePatient:    commandsV1.NewDeletePatientCommandHandler(as, authz),
 			},
 		},
 		Queries: &Queries{
