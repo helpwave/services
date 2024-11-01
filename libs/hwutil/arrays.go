@@ -48,6 +48,18 @@ func FlatMap[K any, V any](vs []K, f func(K) *V) []V {
 	return vsm
 }
 
+// FlatMapI is FlatMap, but also provides you with the index of the current element
+func FlatMapI[K any, V any](vs []K, f func(int, K) *V) []V {
+	var vsm []V
+	for i, key := range vs {
+		if vPtr := f(i, key); vPtr != nil {
+			vsm = append(vsm, *vPtr)
+		}
+	}
+
+	return vsm
+}
+
 func MapWithErr[K any, V any](vs []K, f func(K) (V, error)) ([]V, error) {
 	vsm := make([]V, len(vs))
 	for i, v := range vs {
