@@ -13,6 +13,7 @@ import (
 	hwspicedb "hwauthz/spicedb"
 	propertySet "property-svc/internal/property-set/api"
 	psh "property-svc/internal/property-set/handlers"
+	propertySetSpiceDBProjection "property-svc/internal/property-set/projections/spiceDBProjection"
 	propertyValue "property-svc/internal/property-value/api"
 	pvh "property-svc/internal/property-value/handlers"
 	"property-svc/internal/property-value/projections/property_value_postgres_projection"
@@ -22,8 +23,7 @@ import (
 	property "property-svc/internal/property/api"
 	ph "property-svc/internal/property/handlers"
 	propertyPostgresProjection "property-svc/internal/property/projections/postgres_projection"
-	"property-svc/internal/property/projections/propertySetSpiceDBProjection"
-	"property-svc/internal/property/projections/propertySpiceDBProjection"
+	propertySpiceDBProjection "property-svc/internal/property/projections/spiceDBProjection"
 )
 
 const ServiceName = "property-svc"
