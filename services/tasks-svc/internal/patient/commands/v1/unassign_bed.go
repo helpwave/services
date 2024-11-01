@@ -3,10 +3,12 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	bedPerm "tasks-svc/internal/bed/perm"
 	"tasks-svc/internal/patient/perm"
 
