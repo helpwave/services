@@ -25,12 +25,12 @@ func NewPatientHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 	return &Handlers{
 		Commands: &Commands{
 			V1: &commandsV1.PatientCommands{
-				AssignBed:        commandsV1.NewAssignBedCommandHandler(as),
+				AssignBed:        commandsV1.NewAssignBedCommandHandler(as, authz),
 				CreatePatient:    commandsV1.NewCreatePatientCommandHandler(as, authz),
 				DischargePatient: commandsV1.NewDischargePatientCommandHandler(as),
 				ReadmitPatient:   commandsV1.NewReadmitPatientCommandHandler(as),
-				UnassignBed:      commandsV1.NewUnassignBedCommandHandler(as),
-				UpdatePatient:    commandsV1.NewUpdatePatientCommandHandler(as),
+				UnassignBed:      commandsV1.NewUnassignBedCommandHandler(as, authz),
+				UpdatePatient:    commandsV1.NewUpdatePatientCommandHandler(as, authz),
 				DeletePatient:    commandsV1.NewDeletePatientCommandHandler(as),
 			},
 		},

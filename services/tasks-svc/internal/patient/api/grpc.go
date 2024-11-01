@@ -434,8 +434,6 @@ func (s *PatientGrpcService) UpdatePatient(
 	ctx context.Context,
 	req *pb.UpdatePatientRequest,
 ) (*pb.UpdatePatientResponse, error) {
-	// TODO: Auth
-
 	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
