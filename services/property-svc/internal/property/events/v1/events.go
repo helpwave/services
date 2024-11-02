@@ -24,15 +24,19 @@ func NewFieldTypeDataCreatedEvent(ctx context.Context, a hwes.Aggregate, fieldTy
 	protoFieldTypeData := pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_FieldTypeData{}
 
 	if fieldTypeData.SelectData != nil {
-		protoFieldTypeData.SelectData.AllowFreetext = fieldTypeData.SelectData.AllowFreetext
-		protoFieldTypeData.SelectData.SelectOptions = hwutil.Map(fieldTypeData.SelectData.SelectOptions, func(opt models.SelectOption) *pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_SelectOption {
-			return &pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_SelectOption{
-				Id:          opt.ID.String(),
-				Name:        opt.Name,
-				Description: opt.Description,
-				IsCustom:    opt.IsCustom,
-			}
-		})
+		protoSelectData := pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_SelectData{
+			AllowFreetext: fieldTypeData.SelectData.AllowFreetext,
+			SelectOptions: hwutil.Map(fieldTypeData.SelectData.SelectOptions, func(opt models.SelectOption) *pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_SelectOption {
+				return &pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent_SelectOption{
+					Id:          opt.ID.String(),
+					Name:        opt.Name,
+					Description: opt.Description,
+					IsCustom:    opt.IsCustom,
+				}
+			}),
+		}
+
+		protoFieldTypeData.SelectData = &protoSelectData
 	}
 
 	payload := pbTechnicalEventsV1.PropertyFieldTypeDataCreatedEvent{

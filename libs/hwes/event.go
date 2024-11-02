@@ -124,10 +124,6 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 func NewEventFromProto(aggregate Aggregate, message proto.Message, opts ...EventOption) (Event, error) {
 	eventType := MessageToEventName(message, nil)
 
-	fmt.Println("==============================")
-	fmt.Println(eventType)
-	fmt.Println("==============================")
-
 	event, err := NewEvent(aggregate, eventType, opts...)
 	if err != nil {
 		return Event{}, err

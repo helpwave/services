@@ -148,7 +148,7 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 	log := zlog.Ctx(ctx)
 
 	var payload pbTechnicalEventsV1.PropertySubjectTypeUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetProtoData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -176,7 +176,7 @@ func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (error, 
 	log := zlog.Ctx(ctx)
 
 	var payload pbTechnicalEventsV1.PropertyNameUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetProtoData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
