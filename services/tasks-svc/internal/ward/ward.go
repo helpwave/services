@@ -14,6 +14,8 @@ import (
 
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/ward_repo"
+
+	pbEventsV1 "gen/libs/events/v1"
 )
 
 type ServiceServer struct {
@@ -42,6 +44,14 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 		Msg("ward created")
 
 	tracking.AddWardToRecentActivity(ctx, wardID.String())
+
+	if err := common.PublishProtoPubSubMessage(ctx, &pbEventsV1.WardCreatedEvent{
+		Id: wardID.String(),
+	}); err != nil {
+		log.Error().
+			Err(err).
+			Msg("could not publish pubsub message")
+	}
 
 	return &pb.CreateWardResponse{
 		Id:          wardID.String(),

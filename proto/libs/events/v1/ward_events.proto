@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package libs.events.v1;
+
+import "libs/events/v1/options.proto";
+
+option go_package = "gen/libs/events/v1";
+
+message WardCreatedEvent {
+  option (libs.events.v1.topic_name) = "WARD_CREATED_v1";
+  string id = 1;
+}
