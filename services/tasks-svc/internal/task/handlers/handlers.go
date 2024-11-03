@@ -33,7 +33,7 @@ func NewTaskHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 				UpdateSubtask:   commandsV1.NewUpdateSubtaskCommandHandler(as, authz),
 				DeleteSubtask:   commandsV1.NewDeleteSubtaskCommandHandler(as, authz),
 				RemoveTaskDueAt: commandsV1.NewRemoveTaskDueAtCommandHandler(as, authz),
-				DeleteTask:      commandsV1.NewDeleteTaskCommandHandler(as),
+				DeleteTask:      commandsV1.NewDeleteTaskCommandHandler(as, authz),
 			},
 		},
 		Queries: &Queries{
