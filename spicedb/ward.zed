@@ -1,0 +1,12 @@
+definition ward {
+	// wards belong to an organization
+	relation organization: organization;
+
+	// any member of the org can RUD the ward
+	permission get = organization->membership;
+	permission update = organization->membership;
+	permission delete = organization->membership;
+
+	// any member of the org can create a new room
+	permission create_room = organization->membership;
+}

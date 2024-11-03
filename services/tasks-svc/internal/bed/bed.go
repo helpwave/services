@@ -4,9 +4,15 @@ import (
 	"common"
 	"common/hwerr"
 	"context"
+	"fmt"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwlocale"
 	"hwutil"
+
+	"tasks-svc/internal/bed/perm"
+	roomPerm "tasks-svc/internal/room/perm"
 
 	"github.com/jackc/pgx/v5/pgconn"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
@@ -24,21 +30,34 @@ import (
 
 type ServiceServer struct {
 	pb.UnimplementedBedServiceServer
+	authz hwauthz.AuthZ
 }
 
-func NewServiceServer() *ServiceServer {
-	return &ServiceServer{}
+func NewServiceServer(authz hwauthz.AuthZ) *ServiceServer {
+	return &ServiceServer{
+		UnimplementedBedServiceServer: pb.UnimplementedBedServiceServer{},
+		authz:                         authz,
+	}
 }
 
-func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
+func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
+	// parse inputs
 	roomId, err := uuid.Parse(req.GetRoomId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, roomPerm.RoomCanUserCreateBed, roomPerm.Room(roomId))
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
+	}
+
+	// do query
 	bed, err := bedRepo.CreateBed(ctx, bed_repo.CreateBedParams{
 		RoomID: roomId,
 		Name:   req.GetName(),
@@ -68,20 +87,43 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		Str("name", bed.Name).
 		Msg("bed created")
 
+	// update permission graph
+	relationship := hwauthz.NewRelationship(
+		roomPerm.Room(roomId),
+		perm.BedRoom,
+		perm.Bed(bed.ID),
+	)
+	_, err = s.authz.
+		Create(relationship).
+		Commit(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err)
+	}
+
+	// return
 	return &pb.CreateBedResponse{
 		Id:          bed.ID.String(),
 		Consistency: common.ConsistencyToken(bed.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.GetBedResponse, error) {
+func (s ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.GetBedResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
+	// parse inputs
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.BedCanUserGet, perm.Bed(id))
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
+	}
+
+	// do query
 	bed, err := hwdb.Optional(bedRepo.GetBedById)(ctx, id)
 	if bed == nil {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
@@ -91,6 +133,7 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		return nil, err
 	}
 
+	// return
 	return &pb.GetBedResponse{
 		Id:          bed.ID.String(),
 		RoomId:      bed.RoomID.String(),
@@ -137,7 +180,7 @@ func (ServiceServer) GetBedByPatient(
 	}, nil
 }
 
-func (ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
+func (s ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
 	roomID, err := hwutil.ParseNullUUID(req.RoomId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -149,6 +192,19 @@ func (ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb.G
 	if err != nil {
 		return nil, hwdb.Error(ctx, err)
 	}
+
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	checks := hwutil.Map(beds, func(b bed_repo.Bed) hwauthz.PermissionCheck {
+		return hwauthz.NewPermissionCheck(user, perm.BedCanUserGet, perm.Bed(b.ID))
+	})
+	canGet, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	beds = hwutil.Filter(beds, func(i int, _ bed_repo.Bed) bool {
+		return canGet[i]
+	})
 
 	return &pb.GetBedsResponse{
 		Beds: hwutil.Map(beds, func(bed bed_repo.Bed) *pb.GetBedsResponse_Bed {
@@ -162,7 +218,7 @@ func (ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb.G
 	}, nil
 }
 
-func (ServiceServer) GetBedsByRoom(
+func (s ServiceServer) GetBedsByRoom(
 	ctx context.Context,
 	req *pb.GetBedsByRoomRequest,
 ) (*pb.GetBedsByRoomResponse, error) {
@@ -188,6 +244,19 @@ func (ServiceServer) GetBedsByRoom(
 		Beds: []*pb.GetBedsByRoomResponse_Bed{},
 	}
 
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	checks := hwutil.Map(beds, func(b bed_repo.Bed) hwauthz.PermissionCheck {
+		return hwauthz.NewPermissionCheck(user, perm.BedCanUserGet, perm.Bed(b.ID))
+	})
+	canGet, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	beds = hwutil.Filter(beds, func(i int, _ bed_repo.Bed) bool {
+		return canGet[i]
+	})
+
 	for _, bed := range beds {
 		res.Beds = append(res.Beds, &pb.GetBedsByRoomResponse_Bed{
 			Id:          bed.ID.String(),
@@ -199,9 +268,10 @@ func (ServiceServer) GetBedsByRoom(
 	return &res, nil
 }
 
-func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
+func (s ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
+	// parse inputs
 	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -212,6 +282,14 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.BedCanUserUpdate, perm.Bed(bedID))
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
+	}
+
+	// do query
 	consistency, err := bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
 		ID:     bedID,
 		Name:   req.Name,
@@ -222,21 +300,31 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, err
 	}
 
+	// return
 	return &pb.UpdateBedResponse{
 		Conflict:    nil,                                           // TODO
 		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*pb.DeleteBedResponse, error) {
+func (s ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*pb.DeleteBedResponse, error) {
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
+	// parse inputs
 	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.BedCanUserDelete, perm.Bed(bedID))
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
+	}
+
+	// query exists
 	exists, err := bedRepo.ExistsBed(ctx, bedID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -246,6 +334,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		return &pb.DeleteBedResponse{}, err
 	}
 
+	// do delete
 	err = bedRepo.DeleteBed(ctx, bedID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -256,5 +345,8 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		Str("bedID", bedID.String()).
 		Msg("bed deleted")
 
+	// todo: delete from permission graph
+
+	// return
 	return &pb.DeleteBedResponse{}, err
 }

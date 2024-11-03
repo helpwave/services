@@ -6,6 +6,7 @@ import (
 	"errors"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
 
 	"github.com/google/uuid"
@@ -35,8 +36,8 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		setID *string,
 		fieldTypeData *models.FieldTypeData,
 	) (version common.ConsistencyToken, err error) {
-		user := perm.UserFromCtx(ctx)
-		organization := perm.OrganizationFromCtx(ctx)
+		user := commonPerm.UserFromCtx(ctx)
+		organization := commonPerm.OrganizationFromCtx(ctx)
 
 		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreateProperty, organization)
 		if err = authz.Must(ctx, check); err != nil {

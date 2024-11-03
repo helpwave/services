@@ -1,0 +1,9 @@
+definition bed {
+	// beds belong to a room
+	relation room: room;
+
+	// those who can RUD the room, can RUD the bed
+	permission get = room->get;
+	permission update = room->update;
+	permission delete = room->delete;
+}

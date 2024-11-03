@@ -6,3 +6,11 @@ definition property {
 	permission get = organization->membership;
 	permission update = organization->membership;
 }
+
+definition property_set {
+	// sets belong to an organization
+	relation organization: organization;
+
+	// any member of the org can get the set
+	permission get = organization->membership;
+}

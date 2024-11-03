@@ -57,9 +57,9 @@ func Main(version string, ready func()) {
 
 		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore, taskHandlers))
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore, patientHandlers))
-		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer())
-		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
-		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
+		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer(authz))
+		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer(authz))
+		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer(authz))
 		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer())
 
 		if ready != nil {

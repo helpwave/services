@@ -76,6 +76,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotEqual(t, getPatientRes.Consistency, dischargeRes.Consistency)
 
+	hwtesting.WaitForProjectionsToSettle()
+
 	//
 	// get discharged patient
 	//

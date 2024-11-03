@@ -1,10 +1,11 @@
-package spicedb_projection
+package spiceDBProjection
 
 import (
 	"context"
 	"errors"
 	"fmt"
 	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
@@ -25,7 +26,7 @@ type Projection struct {
 }
 
 func NewProjection(es *esdb.Client, serviceName string, authz hwauthz.AuthZ) *Projection {
-	subscriptionGroupName := serviceName + "-spicedb-projection"
+	subscriptionGroupName := serviceName + "-property-spicedb-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
 			es,
@@ -63,9 +64,10 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	organizationID := *evt.OrganizationID
 
 	relationship := hwauthz.NewRelationship(
-		perm.Organization(organizationID),
+		commonPerm.Organization(organizationID),
 		perm.PropertyOrganization,
-		perm.Property(propertyID))
+		perm.Property(propertyID),
+	)
 
 	// add to permission graph
 	_, err = p.authz.

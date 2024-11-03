@@ -1,0 +1,12 @@
+definition room {
+	// room belong to a ward
+	relation ward: ward;
+
+	// those who can RUD the ward, can RUD the room
+	permission get = ward->get;
+	permission update = ward->update;
+	permission delete = ward->delete;
+
+	// those that can update the room, can create new beds in it
+	permission create_bed = update;
+}
