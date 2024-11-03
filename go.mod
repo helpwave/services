@@ -4,6 +4,7 @@ go 1.23.2
 
 replace (
 	common => ./libs/common
+	gen => ../../gen/go
 	hwauthz => ./libs/hwauthz
 	hwlocale => ./libs/hwlocale
 	hwtesting => ./libs/hwtesting

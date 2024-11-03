@@ -7,5 +7,5 @@ import "google/protobuf/descriptor.proto";
 option go_package = "gen/libs/events/v1";
 
 extend google.protobuf.MessageOptions {
-  string topic_name = 2133;
+  string event_type = 2123;
 }

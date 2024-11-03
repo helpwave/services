@@ -7,6 +7,17 @@ import "libs/events/v1/options.proto";
 option go_package = "gen/libs/events/v1";
 
 message WardCreatedEvent {
-  option (libs.events.v1.topic_name) = "WARD_CREATED_v1";
+  option (libs.events.v1.event_type) = "WARD_CREATED_v1";
+  string id = 1;
+}
+
+message WardUpdatedEvent {
+  option (libs.events.v1.event_type) = "WARD_UPDATED_v1";
+  string id = 1;
+  string name = 2;
+}
+
+message WardDeletedEvent {
+  option (libs.events.v1.event_type) = "WARD_DELETED_v1";
   string id = 1;
 }

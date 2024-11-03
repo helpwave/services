@@ -21,3 +21,43 @@ export namespace WardCreatedEvent {
   }
 }
 
+export class WardUpdatedEvent extends jspb.Message {
+  getId(): string;
+  setId(value: string): WardUpdatedEvent;
+
+  getName(): string;
+  setName(value: string): WardUpdatedEvent;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): WardUpdatedEvent.AsObject;
+  static toObject(includeInstance: boolean, msg: WardUpdatedEvent): WardUpdatedEvent.AsObject;
+  static serializeBinaryToWriter(message: WardUpdatedEvent, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): WardUpdatedEvent;
+  static deserializeBinaryFromReader(message: WardUpdatedEvent, reader: jspb.BinaryReader): WardUpdatedEvent;
+}
+
+export namespace WardUpdatedEvent {
+  export type AsObject = {
+    id: string,
+    name: string,
+  }
+}
+
+export class WardDeletedEvent extends jspb.Message {
+  getId(): string;
+  setId(value: string): WardDeletedEvent;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): WardDeletedEvent.AsObject;
+  static toObject(includeInstance: boolean, msg: WardDeletedEvent): WardDeletedEvent.AsObject;
+  static serializeBinaryToWriter(message: WardDeletedEvent, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): WardDeletedEvent;
+  static deserializeBinaryFromReader(message: WardDeletedEvent, reader: jspb.BinaryReader): WardDeletedEvent;
+}
+
+export namespace WardDeletedEvent {
+  export type AsObject = {
+    id: string,
+  }
+}
+
