@@ -39,7 +39,7 @@ func NewTaskHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 		Queries: &Queries{
 			V1: &queriesV1.TaskQueries{
 				GetTaskWithPatientByID:         queriesV1.NewGetTaskWithPatientByIDQueryHandler(authz),
-				GetTasksByPatient:              queriesV1.NewGetTasksByPatientIDQueryHandler(),
+				GetTasksByPatient:              queriesV1.NewGetTasksByPatientIDQueryHandler(authz),
 				GetTasksWithPatientsByAssignee: queriesV1.NewGetTasksWithPatientsByAssigneeQueryHandler(),
 			},
 		},

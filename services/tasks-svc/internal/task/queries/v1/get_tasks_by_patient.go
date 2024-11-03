@@ -3,10 +3,16 @@ package v1
 import (
 	"common"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
+	"hwutil"
 
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
+
+	patientPerm "tasks-svc/internal/patient/perm"
+	"tasks-svc/internal/task/perm"
 
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
@@ -17,8 +23,15 @@ type GetTasksByPatientIDQueryHandler func(
 	patientID uuid.UUID,
 ) ([]*models.TaskWithConsistency, error)
 
-func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
+func NewGetTasksByPatientIDQueryHandler(authz hwauthz.AuthZ) GetTasksByPatientIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error) {
+		// check permissions
+		user := commonPerm.UserFromCtx(ctx)
+		taskCheck := hwauthz.NewPermissionCheck(user, patientPerm.PatientCanUserGet, patientPerm.Patient(patientID))
+		if err := authz.Must(ctx, taskCheck); err != nil {
+			return nil, err
+		}
+
 		taskRepo := task_repo.New(hwdb.GetDB())
 
 		tasksWithSubtasks, err := taskRepo.GetTasksWithSubtasksByPatient(ctx, patientID)
@@ -69,6 +82,19 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 				}
 			}
 		}
+
+		// filter out tasks if permissions are missing
+		checks := hwutil.Map(tasks, func(task *models.TaskWithConsistency) hwauthz.PermissionCheck {
+			return hwauthz.NewPermissionCheck(user, perm.TaskCanUserGet, perm.Task(task.ID))
+		})
+		allowed, err := authz.BulkCheck(ctx, checks)
+		if err != nil {
+			return nil, err
+		}
+
+		tasks = hwutil.Filter(tasks, func(i int, _ *models.TaskWithConsistency) bool {
+			return allowed[i]
+		})
 
 		return tasks, nil
 	}
