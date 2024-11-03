@@ -384,14 +384,30 @@ func (s *PatientGrpcService) GetRecentPatients(
 	}
 	*/
 
-	// get all Patients for valid uuids
-	recentPatients := hwutil.Map(recentPatientIdsStrs, func(id string) *pb.GetRecentPatientsResponse_Patient {
+	recentPatientIds := hwutil.FlatMap(recentPatientIdsStrs, func(id string) *uuid.UUID {
 		parsedUUID, err := uuid.Parse(id)
 		if err != nil {
 			log.Warn().Str("uuid", id).Msg("GetRecentPatientsForUser returned invalid uuid")
 			return nil
 		}
-		patient, err := s.handlers.Queries.V1.GetPatientByID(ctx, parsedUUID)
+		return &parsedUUID
+	})
+
+	user := commonPerm.UserFromCtx(ctx)
+	checks := hwutil.Map(recentPatientIds, func(patientID uuid.UUID) hwauthz.PermissionCheck {
+		return hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
+	})
+	allowed, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	recentPatientIds = hwutil.Filter(recentPatientIds, func(i int, _ uuid.UUID) bool {
+		return allowed[i]
+	})
+
+	// get all Patients for valid uuids
+	recentPatients := hwutil.Map(recentPatientIds, func(id uuid.UUID) *pb.GetRecentPatientsResponse_Patient {
+		patient, err := s.handlers.Queries.V1.GetPatientByID(ctx, id)
 		if err != nil {
 			return nil
 		}

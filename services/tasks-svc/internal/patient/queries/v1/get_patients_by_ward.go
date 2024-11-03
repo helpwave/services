@@ -22,7 +22,7 @@ func NewGetPatientsByWardQueryHandler(authz hwauthz.AuthZ) GetPatientsByWardQuer
 	return func(ctx context.Context, wardID uuid.UUID) ([]*models.PatientWithConsistency, error) {
 		patientRepo := patient_repo.New(hwdb.GetDB())
 
-		// check get-access to ward
+		// ensure get-access to ward
 		user := commonPerm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserGet, wardPerm.Ward(wardID))
 		if err := authz.Must(ctx, check); err != nil {
