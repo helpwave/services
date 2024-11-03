@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"hwauthz"
 	"hwes"
 
 	commandsV1 "tasks-svc/internal/task/commands/v1"
@@ -20,11 +21,11 @@ type Handlers struct {
 	Queries  *Queries
 }
 
-func NewTaskHandlers(as hwes.AggregateStore) *Handlers {
+func NewTaskHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 	return &Handlers{
 		Commands: &Commands{
 			V1: &commandsV1.TaskCommands{
-				CreateTask:      commandsV1.NewCreateTaskCommandHandler(as),
+				CreateTask:      commandsV1.NewCreateTaskCommandHandler(as, authz),
 				UpdateTask:      commandsV1.NewUpdateTaskCommandHandler(as),
 				AssignTask:      commandsV1.NewAssignTaskCommandHandler(as),
 				UnnasignTask:    commandsV1.NewUnassignTaskCommandHandler(as),

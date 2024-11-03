@@ -5,6 +5,7 @@ import (
 	common_test "common/test"
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz/test"
 	hwes_test "hwes/test"
 	"hwutil"
 	"testing"
@@ -20,7 +21,7 @@ import (
 
 func server() (context.Context, pb.TaskServiceClient, func()) {
 	aggregateStore := hwes_test.NewAggregateStore()
-	taskHandlers := handlers.NewTaskHandlers(aggregateStore)
+	taskHandlers := handlers.NewTaskHandlers(aggregateStore, test.NewTrueAuthZ())
 	taskGrpcService := api.NewTaskGrpcService(aggregateStore, taskHandlers)
 
 	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())

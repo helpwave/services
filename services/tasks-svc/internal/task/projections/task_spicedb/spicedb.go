@@ -1,8 +1,19 @@
 package task_spicedb
 
 import (
+	"context"
+	"fmt"
 	"hwauthz"
+	"hwes"
 	"hwes/eventstoredb/projections/custom"
+	"hwutil"
+
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+
+	patientPerm "tasks-svc/internal/patient/perm"
+	taskEventsV1 "tasks-svc/internal/task/events/v1"
+	"tasks-svc/internal/task/perm"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 
@@ -29,5 +40,38 @@ func NewSpiceDBProjection(es *esdb.Client, authz hwauthz.AuthZ, serviceName stri
 }
 
 func (p *Projection) initEventListeners() {
-	// TODO
+	p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
+}
+
+func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload taskEventsV1.TaskCreatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, hwutil.PtrTo(esdb.NackActionPark)
+	}
+
+	taskID, err := uuid.Parse(payload.ID)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionPark)
+	}
+
+	patientID, err := uuid.Parse(payload.PatientID)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionPark)
+	}
+
+	task := perm.Task(taskID)
+	patient := patientPerm.Patient(patientID)
+
+	relationship := hwauthz.NewRelationship(patient, perm.TaskPatient, task)
+
+	_, err = p.authz.Create(relationship).Commit(ctx)
+	if err != nil {
+		return fmt.Errorf("onTaskCreated: could not write spicedb relationship: %w", err),
+			hwutil.PtrTo(esdb.NackActionRetry)
+	}
+
+	return nil, nil
 }

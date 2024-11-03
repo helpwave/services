@@ -1,0 +1,9 @@
+definition task {
+	// tasks belong to a patient
+	relation patient: patient;
+
+	// those who can RUD the patient, can RUD the task
+	permission get = patient->get;
+	permission update = patient->update;
+	permission delete = patient->delete;
+}

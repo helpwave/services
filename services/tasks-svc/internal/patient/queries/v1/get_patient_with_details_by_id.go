@@ -3,6 +3,7 @@ package v1
 import (
 	"common"
 	"context"
+	"hwauthz"
 	"hwdb"
 	"hwes"
 
@@ -15,10 +16,12 @@ import (
 
 type GetPatientDetailsByIDQueryHandler func(ctx context.Context, patientID uuid.UUID) (*models.PatientDetails, error)
 
-func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatientDetailsByIDQueryHandler {
+func NewGetPatientWithDetailsByIDQueryHandler(
+	as hwes.AggregateStore, authz hwauthz.AuthZ,
+) GetPatientDetailsByIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) (*models.PatientDetails, error) {
 		patientRepo := patient_repo.New(hwdb.GetDB())
-		taskHandlers := th.NewTaskHandlers(as)
+		taskHandlers := th.NewTaskHandlers(as, authz)
 
 		patientRes, err := hwdb.Optional(patientRepo.GetPatientWithBedAndRoom)(ctx, patientID)
 		if patientRes == nil {

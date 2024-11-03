@@ -39,3 +39,9 @@ tests:
       - "patient:a#delete@user:charlie"
       - "patient:b#delete@user:charlie"
       - not: "patient:b#delete@user:alice"
+  - name: all members can create new tasks for any patient in their org
+    check:
+      - "patient:a#create_task@user:alice"
+      - "patient:a#create_task@user:charlie"
+      - "patient:b#create_task@user:charlie"
+      - not: "patient:b#create_task@user:alice"
