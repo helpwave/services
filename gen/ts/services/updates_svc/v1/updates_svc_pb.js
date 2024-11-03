@@ -142,7 +142,9 @@ proto.services.updates_svc.v1.EntityEvent.prototype.toObject = function(opt_incl
  */
 proto.services.updates_svc.v1.EntityEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-    entityId: jspb.Message.getFieldWithDefault(msg, 1, "")
+    eventType: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    entityId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    entityType: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -181,7 +183,15 @@ proto.services.updates_svc.v1.EntityEvent.deserializeBinaryFromReader = function
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
+      msg.setEventType(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
       msg.setEntityId(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setEntityType(value);
       break;
     default:
       reader.skipField();
@@ -212,10 +222,24 @@ proto.services.updates_svc.v1.EntityEvent.prototype.serializeBinary = function()
  */
 proto.services.updates_svc.v1.EntityEvent.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getEntityId();
+  f = message.getEventType();
   if (f.length > 0) {
     writer.writeString(
       1,
+      f
+    );
+  }
+  f = message.getEntityId();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = message.getEntityType();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
       f
     );
   }
@@ -223,10 +247,10 @@ proto.services.updates_svc.v1.EntityEvent.serializeBinaryToWriter = function(mes
 
 
 /**
- * optional string entity_id = 1;
+ * optional string event_type = 1;
  * @return {string}
  */
-proto.services.updates_svc.v1.EntityEvent.prototype.getEntityId = function() {
+proto.services.updates_svc.v1.EntityEvent.prototype.getEventType = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -235,8 +259,44 @@ proto.services.updates_svc.v1.EntityEvent.prototype.getEntityId = function() {
  * @param {string} value
  * @return {!proto.services.updates_svc.v1.EntityEvent} returns this
  */
-proto.services.updates_svc.v1.EntityEvent.prototype.setEntityId = function(value) {
+proto.services.updates_svc.v1.EntityEvent.prototype.setEventType = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string entity_id = 2;
+ * @return {string}
+ */
+proto.services.updates_svc.v1.EntityEvent.prototype.getEntityId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.updates_svc.v1.EntityEvent} returns this
+ */
+proto.services.updates_svc.v1.EntityEvent.prototype.setEntityId = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string entity_type = 3;
+ * @return {string}
+ */
+proto.services.updates_svc.v1.EntityEvent.prototype.getEntityType = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.updates_svc.v1.EntityEvent} returns this
+ */
+proto.services.updates_svc.v1.EntityEvent.prototype.setEntityType = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 

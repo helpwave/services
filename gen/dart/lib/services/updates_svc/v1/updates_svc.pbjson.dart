@@ -17,13 +17,16 @@ import 'dart:typed_data' as $typed_data;
 const EntityEvent$json = {
   '1': 'EntityEvent',
   '2': [
-    {'1': 'entity_id', '3': 1, '4': 1, '5': 9, '10': 'entityId'},
+    {'1': 'event_type', '3': 1, '4': 1, '5': 9, '10': 'eventType'},
+    {'1': 'entity_id', '3': 2, '4': 1, '5': 9, '10': 'entityId'},
+    {'1': 'entity_type', '3': 3, '4': 1, '5': 9, '10': 'entityType'},
   ],
 };
 
 /// Descriptor for `EntityEvent`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List entityEventDescriptor = $convert.base64Decode(
-    'CgtFbnRpdHlFdmVudBIbCgllbnRpdHlfaWQYASABKAlSCGVudGl0eUlk');
+    'CgtFbnRpdHlFdmVudBIdCgpldmVudF90eXBlGAEgASgJUglldmVudFR5cGUSGwoJZW50aXR5X2'
+    'lkGAIgASgJUghlbnRpdHlJZBIfCgtlbnRpdHlfdHlwZRgDIAEoCVIKZW50aXR5VHlwZQ==');
 
 @$core.Deprecated('Use domainEventDescriptor instead')
 const DomainEvent$json = {

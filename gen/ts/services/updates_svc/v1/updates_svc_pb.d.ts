@@ -3,8 +3,14 @@ import * as jspb from 'google-protobuf'
 
 
 export class EntityEvent extends jspb.Message {
+  getEventType(): string;
+  setEventType(value: string): EntityEvent;
+
   getEntityId(): string;
   setEntityId(value: string): EntityEvent;
+
+  getEntityType(): string;
+  setEntityType(value: string): EntityEvent;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): EntityEvent.AsObject;
@@ -16,7 +22,9 @@ export class EntityEvent extends jspb.Message {
 
 export namespace EntityEvent {
   export type AsObject = {
+    eventType: string,
     entityId: string,
+    entityType: string,
   }
 }
 

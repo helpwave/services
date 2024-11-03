@@ -17,11 +17,19 @@ import 'package:protobuf/protobuf.dart' as $pb;
 /// An event that gets raised on non-event sourced entities
 class EntityEvent extends $pb.GeneratedMessage {
   factory EntityEvent({
+    $core.String? eventType,
     $core.String? entityId,
+    $core.String? entityType,
   }) {
     final $result = create();
+    if (eventType != null) {
+      $result.eventType = eventType;
+    }
     if (entityId != null) {
       $result.entityId = entityId;
+    }
+    if (entityType != null) {
+      $result.entityType = entityType;
     }
     return $result;
   }
@@ -30,7 +38,9 @@ class EntityEvent extends $pb.GeneratedMessage {
   factory EntityEvent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'EntityEvent', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.updates_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'entityId')
+    ..aOS(1, _omitFieldNames ? '' : 'eventType')
+    ..aOS(2, _omitFieldNames ? '' : 'entityId')
+    ..aOS(3, _omitFieldNames ? '' : 'entityType')
     ..hasRequiredFields = false
   ;
 
@@ -56,13 +66,31 @@ class EntityEvent extends $pb.GeneratedMessage {
   static EntityEvent? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get entityId => $_getSZ(0);
+  $core.String get eventType => $_getSZ(0);
   @$pb.TagNumber(1)
-  set entityId($core.String v) { $_setString(0, v); }
+  set eventType($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasEntityId() => $_has(0);
+  $core.bool hasEventType() => $_has(0);
   @$pb.TagNumber(1)
-  void clearEntityId() => clearField(1);
+  void clearEventType() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get entityId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set entityId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasEntityId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearEntityId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get entityType => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set entityType($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasEntityType() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearEntityType() => clearField(3);
 }
 
 /// An event that gets raised for event sourced entities
