@@ -40,8 +40,8 @@ func NewPatientHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 				GetPatientByBed:            queriesV1.NewGetPatientByBedQueryHandler(authz),
 				GetPatientsByWard:          queriesV1.NewGetPatientsByWardQueryHandler(authz),
 				GetPatientDetailsByID:      queriesV1.NewGetPatientWithDetailsByIDQueryHandler(as, authz),
-				GetAllPatientsWithDetails:  queriesV1.NewGetAllPatientsWithDetailsQueryHandler(),
-				GetPatientAssignmentByWard: queriesV1.NewGetPatientAssignmentByWardQueryHandler(),
+				GetAllPatientsWithDetails:  queriesV1.NewGetAllPatientsWithDetailsQueryHandler(authz),
+				GetPatientAssignmentByWard: queriesV1.NewGetPatientAssignmentByWardQueryHandler(authz),
 			},
 		},
 	}

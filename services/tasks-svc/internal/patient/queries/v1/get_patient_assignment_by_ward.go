@@ -3,8 +3,12 @@ package v1
 import (
 	"common"
 	"context"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwutil"
+
+	wardPerm "tasks-svc/internal/ward/perm"
 
 	"github.com/google/uuid"
 
@@ -17,9 +21,23 @@ type GetPatientAssignmentByWardQueryHandler func(
 	wardID uuid.UUID,
 ) ([]*models.RoomWithBedsWithPatient, error)
 
-func NewGetPatientAssignmentByWardQueryHandler() GetPatientAssignmentByWardQueryHandler {
+func NewGetPatientAssignmentByWardQueryHandler(authz hwauthz.AuthZ) GetPatientAssignmentByWardQueryHandler {
 	return func(ctx context.Context, wardID uuid.UUID) ([]*models.RoomWithBedsWithPatient, error) {
 		roomRepo := room_repo.New(hwdb.GetDB())
+
+		// check permissions
+		//
+		// CAUTION: IMPORTANT!
+		// WE CURRENTLY DON'T HAVE A WAY TO COMMUNICATE "FORBIDDEN" VALUES TO THE API CONSUMERS
+		// ALSO EVERYTHING IS SCOPED TO THE ORG RIGHT NOW
+		// THAT'S WE DO NOT DO ANY FURTHER FILTERING (E.G. ROOMS, BEDS, TASKS) HERE
+		// THIS NEEDS A SECOND LOOK ONCE PERMISSIONS BECOME MORE FLEXIBLE!
+
+		user := commonPerm.UserFromCtx(ctx)
+		taskCheck := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserGet, wardPerm.Ward(wardID))
+		if err := authz.Must(ctx, taskCheck); err != nil {
+			return nil, err
+		}
 
 		rows, err := roomRepo.GetRoomsWithBedsWithPatientsByWard(ctx, wardID)
 		if err := hwdb.Error(ctx, err); err != nil {

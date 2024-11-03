@@ -5,7 +5,12 @@ import (
 	"common/auth"
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
+	"hwutil"
+
+	"tasks-svc/internal/patient/perm"
 
 	"github.com/google/uuid"
 
@@ -16,12 +21,13 @@ import (
 
 type GetAllPatientsWithDetailsQueryHandler func(ctx context.Context) ([]*models.PatientDetails, error)
 
-func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHandler {
+func NewGetAllPatientsWithDetailsQueryHandler(authz hwauthz.AuthZ) GetAllPatientsWithDetailsQueryHandler {
 	return func(ctx context.Context) ([]*models.PatientDetails, error) {
 		patientRepo := patient_repo.New(hwdb.GetDB())
 
 		// gather inputs
 		organizationID := auth.MustGetOrganizationID(ctx)
+		user := commonPerm.UserFromCtx(ctx)
 
 		// do query
 		rows, err := patientRepo.GetAllPatientsWithTasksBedAndRoom(ctx, organizationID)
@@ -113,6 +119,26 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 				}
 			}
 		}
+
+		// filter out patients where user is lacking permissions
+		//
+		// CAUTION: IMPORTANT!
+		// WE CURRENTLY DON'T HAVE A WAY TO COMMUNICATE "FORBIDDEN" VALUES TO THE API CONSUMERS
+		// ALSO EVERYTHING IS SCOPED TO THE ORG RIGHT NOW
+		// THAT'S WE DO NOT DO ANY FURTHER FILTERING (E.G. ROOMS, BEDS, TASKS) HERE
+		// THIS NEEDS A SECOND LOOK ONCE PERMISSIONS BECOME MORE FLEXIBLE!
+
+		checks := hwutil.Map(patientDetails, func(detail *models.PatientDetails) hwauthz.PermissionCheck {
+			return hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(detail.ID))
+		})
+		allowed, err := authz.BulkCheck(ctx, checks)
+		if err != nil {
+			return nil, err
+		}
+
+		patientDetails = hwutil.Filter(patientDetails, func(i int, _ *models.PatientDetails) bool {
+			return allowed[i]
+		})
 
 		return patientDetails, nil
 	}
