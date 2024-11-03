@@ -5,6 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/runtime/protoimpl"
 	"hwutil"
 	"strings"
 	"telemetry"
@@ -13,6 +16,8 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
+
+	pbEventsV1 "gen/libs/events/v1"
 )
 
 type Event struct {
@@ -36,6 +41,7 @@ type Event struct {
 	OrganizationID *uuid.UUID
 	// w3c trace context
 	TraceParent string
+	DataIsProto bool
 }
 
 type metadata struct {
@@ -48,7 +54,27 @@ type metadata struct {
 	TraceParent string `json:"trace_parent"`
 	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is
 	// discouraged.
-	Timestamp time.Time `json:"timestamp"`
+	Timestamp   time.Time `json:"timestamp"`
+	DataIsProto bool      `json:"data_is_proto"`
+}
+
+// MessageToEventName reflects the passed EventType message extension of the passed message.
+// When the EventType is nil, the current default EventType of proto/libs/events/v1 gets used.
+func MessageToEventName(protoMessage proto.Message, eventType *protoimpl.ExtensionInfo) string {
+	if eventType == nil {
+		eventType = pbEventsV1.E_EventType
+	}
+
+	protoEventType := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), eventType).(string)
+	if protoEventType == "" {
+		panic(fmt.Sprintf(
+			"Cannot reflect eventType of protoMessage. The passed protoMessage '%s' does not has the message extension of '%s'.",
+			protoMessage.ProtoReflect().Descriptor().FullName(),
+			eventType.TypeDescriptor().FullName(),
+		))
+	}
+
+	return protoEventType
 }
 
 // EventOption used to apply configurations in hwes.NewEvent()
@@ -78,6 +104,12 @@ func WithData(data interface{}) EventOption {
 	}
 }
 
+func WithProtoMessage(message proto.Message) EventOption {
+	return func(event *Event) error {
+		return event.SetProtoData(message)
+	}
+}
+
 func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event, error) {
 	evt := Event{
 		EventID:         uuid.New(),
@@ -102,6 +134,21 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 	}
 
 	return evt, nil
+}
+
+func NewEventFromProto(aggregate Aggregate, message proto.Message, opts ...EventOption) (Event, error) {
+	eventType := MessageToEventName(message, nil)
+
+	event, err := NewEvent(aggregate, eventType, opts...)
+	if err != nil {
+		return Event{}, err
+	}
+
+	if err := event.SetProtoData(message); err != nil {
+		return Event{}, err
+	}
+
+	return event, nil
 }
 
 // resolveAggregateIDAndTypeFromStreamID extracts the aggregateID and aggregateType of a given streamID
@@ -166,6 +213,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		CommitterUserID: nil,
 		OrganizationID:  nil,
 		TraceParent:     md.TraceParent,
+		DataIsProto:     md.DataIsProto,
 	}
 
 	eventCommitterUserID, err := uuid.Parse(md.CommitterUserID)
@@ -207,6 +255,7 @@ func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{
 		TraceParent: e.TraceParent,
 		Timestamp:   e.Timestamp,
+		DataIsProto: e.DataIsProto,
 	}
 
 	if e.CommitterUserID != nil {
@@ -249,15 +298,38 @@ func (e *Event) SetJsonData(data interface{}) error {
 	if err != nil {
 		return fmt.Errorf("SetJsonData: %w", err)
 	}
+	e.DataIsProto = false
+	e.Data = dataBytes
+	return nil
+}
+
+func (e *Event) SetProtoData(message proto.Message) error {
+	dataBytes, err := protojson.Marshal(message)
+	if err != nil {
+		return fmt.Errorf("SetProtoData: %w", err)
+	}
+	e.DataIsProto = true
 	e.Data = dataBytes
 	return nil
 }
 
 func (e *Event) GetJsonData(data interface{}) error {
+	if e.DataIsProto {
+		return fmt.Errorf("data of this event is marked as proto, use GetProtoData instead")
+	}
+
 	if jsonable, ok := data.(hwutil.JSONAble); ok {
 		return jsonable.FromJSON(e.Data)
 	}
 	return json.Unmarshal(e.Data, data)
+}
+
+func (e *Event) GetProtoData(message proto.Message) error {
+	if !e.DataIsProto {
+		return fmt.Errorf("data of this event is not marked as proto, use GetJsonData instead")
+	}
+
+	return protojson.Unmarshal(e.Data, message)
 }
 
 // SetCommitterFromCtx injects the UserID from the passed context via auth.MustGetUserID().

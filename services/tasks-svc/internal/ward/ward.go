@@ -5,9 +5,11 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+	"hwes/eventstoredb"
 	"hwutil"
 
 	"tasks-svc/internal/ward/perm"
@@ -19,21 +21,27 @@ import (
 
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/ward_repo"
+
+	pbEventsV1 "gen/libs/events/v1"
 )
+
+const wardEntityType = "ward"
 
 type ServiceServer struct {
 	authz hwauthz.AuthZ
+	es    *esdb.Client
 	pb.UnimplementedWardServiceServer
 }
 
-func NewServiceServer(authz hwauthz.AuthZ) *ServiceServer {
+func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 	return &ServiceServer{
 		authz:                          authz,
+		es:                             es,
 		UnimplementedWardServiceServer: pb.UnimplementedWardServiceServer{},
 	}
 }
 
-func (s ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) (*pb.CreateWardResponse, error) {
+func (s *ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) (*pb.CreateWardResponse, error) {
 	log := zlog.Ctx(ctx)
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
@@ -77,6 +85,15 @@ func (s ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest
 	// add to "recently used"
 	tracking.AddWardToRecentActivity(ctx, wardID.String())
 
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, wardEntityType, wardID,
+		&pbEventsV1.WardCreatedEvent{
+			Id: wardID.String(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	// return
 	return &pb.CreateWardResponse{
 		Id:          wardID.String(),
@@ -84,7 +101,7 @@ func (s ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest
 	}, nil
 }
 
-func (s ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
+func (s *ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	// parse input
@@ -118,7 +135,7 @@ func (s ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb
 	}, nil
 }
 
-func (s ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
+func (s *ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	wards, err := wardRepo.GetWards(ctx)
@@ -151,7 +168,7 @@ func (s ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*
 	}, nil
 }
 
-func (s ServiceServer) GetRecentWards(
+func (s *ServiceServer) GetRecentWards(
 	ctx context.Context,
 	_ *pb.GetRecentWardsRequest,
 ) (*pb.GetRecentWardsResponse, error) {
@@ -215,7 +232,7 @@ func (s ServiceServer) GetRecentWards(
 	return &pb.GetRecentWardsResponse{Wards: response}, nil
 }
 
-func (s ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
+func (s *ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	// parse input
@@ -244,6 +261,16 @@ func (s ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest
 	// add to "recently used"
 	tracking.AddWardToRecentActivity(ctx, id.String())
 
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, wardEntityType, id,
+		&pbEventsV1.WardUpdatedEvent{
+			Id:   id.String(),
+			Name: req.GetName(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	// return
 	return &pb.UpdateWardResponse{
 		Conflict:    nil,                                           // TODO
@@ -251,7 +278,7 @@ func (s ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest
 	}, nil
 }
 
-func (s ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
+func (s *ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	// parse input
@@ -289,11 +316,20 @@ func (s ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest
 	// remove from "recently used"
 	tracking.RemoveWardFromRecentActivity(ctx, id.String())
 
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, wardEntityType, id,
+		&pbEventsV1.WardDeletedEvent{
+			Id: id.String(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	// return
 	return &pb.DeleteWardResponse{}, nil
 }
 
-func (s ServiceServer) GetWardOverviews(
+func (s *ServiceServer) GetWardOverviews(
 	ctx context.Context,
 	_ *pb.GetWardOverviewsRequest,
 ) (*pb.GetWardOverviewsResponse, error) {
@@ -338,7 +374,7 @@ func (s ServiceServer) GetWardOverviews(
 	return &pb.GetWardOverviewsResponse{Wards: resWards}, err
 }
 
-func (ServiceServer) GetWardDetails(
+func (s *ServiceServer) GetWardDetails(
 	ctx context.Context,
 	req *pb.GetWardDetailsRequest,
 ) (*pb.GetWardDetailsResponse, error) {

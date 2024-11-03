@@ -17,7 +17,7 @@ replace (
 
 require (
 	common v0.0.0
-	gen v0.0.0-00010101000000-000000000000
+	gen v0.0.0
 	github.com/EventStore/EventStore-Client-Go/v4 v4.1.0
 	github.com/dapr/go-sdk v1.11.0
 	github.com/golang-migrate/migrate/v4 v4.18.1
