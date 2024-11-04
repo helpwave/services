@@ -238,6 +238,7 @@ func TestGetPatientsByWard(t *testing.T) {
 	require.NoError(t, err, "could not create patient")
 
 	patientId1 := createRes1.GetId()
+	hwtesting.WaitForProjectionsToSettle()
 
 	assRes1, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
 		Id:          patientId1,
@@ -245,6 +246,7 @@ func TestGetPatientsByWard(t *testing.T) {
 		Consistency: &createRes1.Consistency,
 	})
 	require.NoError(t, err)
+	hwtesting.WaitForProjectionsToSettle()
 
 	createReq2 := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient 2",
@@ -252,6 +254,8 @@ func TestGetPatientsByWard(t *testing.T) {
 	}
 	createRes2, err := patientClient.CreatePatient(ctx, createReq2)
 	require.NoError(t, err, "could not create patient")
+
+	hwtesting.WaitForProjectionsToSettle()
 
 	patientId2 := createRes2.GetId()
 

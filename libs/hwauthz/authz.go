@@ -6,6 +6,8 @@ import (
 	"context"
 	"fmt"
 
+	zlog "github.com/rs/zerolog/log"
+
 	"go.opentelemetry.io/otel/attribute"
 	"google.golang.org/grpc/codes"
 )
@@ -69,7 +71,7 @@ type Relationship struct {
 	Resource Object
 }
 
-func (r *Relationship) DebugString() string {
+func (r *Relationship) String() string {
 	return fmt.Sprintf(
 		"(sub: '%s:%s', rel: '%s', res: '%s:%s')",
 		r.Subject.Type(),
@@ -142,7 +144,20 @@ func (b *Tx) Delete(relationships ...Relationship) *Tx {
 	return b
 }
 
+func asStringers(arr []Relationship) []fmt.Stringer {
+	n := make([]fmt.Stringer, len(arr))
+	for i, s := range arr {
+		n[i] = &s
+	}
+	return n
+}
+
 func (b *Tx) Commit(ctx context.Context) (ConsistencyToken, error) {
+	zlog.Ctx(ctx).Info().
+		Stringers("writes", asStringers(b.writes)).
+		Stringers("deletes", asStringers(b.deletes)).
+		Msg("writing relationships")
+
 	return b.writer.Write(ctx, b.writes, b.deletes)
 }
 

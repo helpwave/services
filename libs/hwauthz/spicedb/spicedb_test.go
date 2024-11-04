@@ -105,7 +105,7 @@ func TestBulkCheck(t *testing.T) {
 		if i == len(results)-1 {
 			assert.Equal(t, results[len(results)-2], b)
 		} else {
-			assert.Equal(t, i%2 == 0, b, checks[i].DebugString())
+			assert.Equal(t, i%2 == 0, b, checks[i].String())
 		}
 	}
 }
