@@ -22,6 +22,8 @@ const PropertyOrganization hwauthz.Relation = "organization"
 const OrganizationCanUserCreateProperty hwauthz.Permission = "create_property"
 
 const (
-	PropertyCanUserGet    hwauthz.Permission = "get"
-	PropertyCanUserUpdate hwauthz.Permission = "update"
+	PropertyCanUserGet         hwauthz.Permission = "get"
+	PropertyCanUserGetValue    hwauthz.Permission = "get_value"
+	PropertyCanUserUpdate      hwauthz.Permission = "update"
+	PropertyCanUserUpdateValue hwauthz.Permission = "update_value"
 )

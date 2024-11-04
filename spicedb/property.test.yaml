@@ -39,6 +39,20 @@ tests:
       - "property:b#update@user:charlie"
       - not: "property:b#update@user:alice"
 
+# values
+  - name: all members can get any value in their org
+    check:
+      - "property:a#get_value@user:alice"
+      - "property:a#get_value@user:charlie"
+      - "property:b#get_value@user:charlie"
+      - not: "property:b#get_value@user:alice"
+  - name: all members can update any value in their org
+    check:
+      - "property:a#update_value@user:alice"
+      - "property:a#update_value@user:charlie"
+      - "property:b#update_value@user:charlie"
+      - not: "property:b#update_value@user:alice"
+
   # property_sets
   - name: all members can get any set in their org
     check:
