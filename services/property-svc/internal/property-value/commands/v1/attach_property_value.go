@@ -35,7 +35,7 @@ func NewAttachPropertyValueCommandHandler(
 		subjectID uuid.UUID,
 	) (common.ConsistencyToken, error) {
 		user := commonPerm.UserFromCtx(ctx)
-		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGetValue, perm.Property(propertyID))
+		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserUpdateValue, perm.Property(propertyID))
 		if err := authz.Must(ctx, check); err != nil {
 			return 0, err
 		}

@@ -31,7 +31,7 @@ func NewPropertyValueHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Hand
 		Queries: &Queries{
 			V1: &queriesV1.PropertyValueQueries{
 				GetPropertyValueByID:      queriesV1.NewGetPropertyValueByIDQueryHandler(as),
-				GetRelevantPropertyValues: queriesV1.NewGetRelevantPropertyValuesQueryHandler(as),
+				GetRelevantPropertyValues: queriesV1.NewGetRelevantPropertyValuesQueryHandler(as, authz),
 			},
 		},
 	}

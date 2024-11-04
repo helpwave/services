@@ -5,10 +5,14 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwes"
 	"hwutil"
 	"time"
+
+	"property-svc/internal/property/perm"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -24,7 +28,9 @@ type GetRelevantPropertyValuesQueryHandler func(
 	matcher viewModels.PropertyMatchers,
 ) ([]models.PropertyAndValue, error)
 
-func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevantPropertyValuesQueryHandler {
+func NewGetRelevantPropertyValuesQueryHandler(
+	as hwes.AggregateStore, authz hwauthz.AuthZ,
+) GetRelevantPropertyValuesQueryHandler {
 	return func(ctx context.Context, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error) {
 		viewHandlers := vh.NewPropertyViewHandlers(as)
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
@@ -123,6 +129,21 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 				}
 			}
 		}
-		return hwutil.MapValuesPtrToSlice(properties), nil
+		propertySlice := hwutil.MapValuesPtrToSlice(properties)
+
+		// filter out properties where permissions are missing
+		user := commonPerm.UserFromCtx(ctx)
+		checks := hwutil.Map(propertySlice, func(p models.PropertyAndValue) hwauthz.PermissionCheck {
+			return hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGetValue, perm.Property(p.PropertyID))
+		})
+		allowed, err := authz.BulkCheck(ctx, checks)
+		if err != nil {
+			return nil, err
+		}
+		propertySlice = hwutil.Filter(propertySlice, func(i int, _ models.PropertyAndValue) bool {
+			return allowed[i]
+		})
+
+		return propertySlice, nil
 	}
 }
