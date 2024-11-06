@@ -7,6 +7,7 @@ definition ward {
 	permission update = organization->membership;
 	permission delete = organization->membership;
 
-	// any member of the org can create a new room
-	permission create_room = organization->membership;
+	// anyone with update access can create a new room, and publish new task templates
+	permission create_room = update;
+	permission publish_task_template = update;
 }

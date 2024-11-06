@@ -22,8 +22,9 @@ const WardOrganization hwauthz.Relation = "organization"
 const OrganizationCanUserCreateWard hwauthz.Permission = "create_ward"
 
 const (
-	WardCanUserGet        hwauthz.Permission = "get"
-	WardCanUserUpdate     hwauthz.Permission = "update"
-	WardCanUserDelete     hwauthz.Permission = "delete"
-	WardCanUserCreateRoom hwauthz.Permission = "create_room"
+	WardCanUserGet                 hwauthz.Permission = "get"
+	WardCanUserUpdate              hwauthz.Permission = "update"
+	WardCanUserDelete              hwauthz.Permission = "delete"
+	WardCanUserCreateRoom          hwauthz.Permission = "create_room"
+	WardCanUserPublishTaskTemplate hwauthz.Permission = "publish_task_template"
 )

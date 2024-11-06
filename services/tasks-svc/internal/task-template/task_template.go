@@ -4,8 +4,12 @@ import (
 	"common"
 	"common/auth"
 	"context"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwutil"
+
+	wardPerm "tasks-svc/internal/ward/perm"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -19,18 +23,37 @@ import (
 
 type ServiceServer struct {
 	pb.UnimplementedTaskTemplateServiceServer
+	authz hwauthz.AuthZ
 }
 
-func NewServiceServer() *ServiceServer {
-	return &ServiceServer{}
+func NewServiceServer(authz hwauthz.AuthZ) *ServiceServer {
+	return &ServiceServer{
+		UnimplementedTaskTemplateServiceServer: pb.UnimplementedTaskTemplateServiceServer{},
+		authz:                                  authz,
+	}
 }
 
-func (ServiceServer) CreateTaskTemplate(
+func (s ServiceServer) CreateTaskTemplate(
 	ctx context.Context,
 	req *pb.CreateTaskTemplateRequest,
 ) (*pb.CreateTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwdb.GetDB()
+
+	wardID, err := hwutil.ParseNullUUID(req.WardId)
+	if err != nil {
+		return nil, err
+	}
+
+	// check if user is allowed to publish the task template
+	if wardID.Valid {
+		user := commonPerm.UserFromCtx(ctx)
+		check := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserPublishTaskTemplate, wardPerm.Ward(wardID.UUID))
+		if err := s.authz.Must(ctx, check); err != nil {
+			return nil, err
+		}
+	}
+
 	tx, rollback, err := hwdb.BeginTx(db, ctx)
 	if err != nil {
 		return nil, err
@@ -39,11 +62,6 @@ func (ServiceServer) CreateTaskTemplate(
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
 	userID := auth.MustGetUserID(ctx)
-
-	wardID, err := hwutil.ParseNullUUID(req.WardId)
-	if err != nil {
-		return nil, err
-	}
 
 	description := req.GetDescription()
 
