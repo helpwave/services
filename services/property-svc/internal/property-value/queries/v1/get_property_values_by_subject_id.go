@@ -32,7 +32,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 	as hwes.AggregateStore, authz hwauthz.AuthZ,
 ) GetRelevantPropertyValuesQueryHandler {
 	return func(ctx context.Context, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error) {
-		viewHandlers := vh.NewPropertyViewHandlers(as)
+		viewHandlers := vh.NewPropertyViewHandlers(as, authz)
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 
 		subjectID, err := matcher.GetSubjectID()

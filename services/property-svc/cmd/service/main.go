@@ -63,7 +63,7 @@ func Main(version string, ready func()) {
 
 	propertyHandlers := ph.NewPropertyHandlers(aggregateStore, authz)
 	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore, authz)
-	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore)
+	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore, authz)
 	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore, authz)
 
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {

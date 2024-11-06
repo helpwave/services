@@ -6,6 +6,7 @@ import (
 	common_test "common/test"
 	"context"
 	pb "gen/services/property_svc/v1"
+	"hwauthz/test"
 	"hwdb"
 	"hwes"
 	hwes_test "hwes/test"
@@ -31,7 +32,7 @@ import (
 func server() (context.Context, pb.PropertyViewsServiceClient, *hwes_test.AggregateStore, func()) {
 	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
-	propertyViewHandlers := handlers.NewPropertyViewHandlers(aggregateStore)
+	propertyViewHandlers := handlers.NewPropertyViewHandlers(aggregateStore, test.NewTrueAuthZ())
 	grpcService := api.NewPropertyViewService(aggregateStore, propertyViewHandlers)
 
 	ctx := common.Setup("property-svc", "test", common.WithFakeAuthOnly())

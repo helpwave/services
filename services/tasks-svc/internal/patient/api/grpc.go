@@ -528,7 +528,6 @@ func (s *PatientGrpcService) DischargePatient(
 ) (*pb.DischargePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientID, err := uuid.Parse(req.GetId())
-
 	if err != nil {
 		return nil, err
 	}

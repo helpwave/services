@@ -2,6 +2,7 @@ package spicedb
 
 import (
 	"context"
+	"hwauthz/commonPerm"
 	"hwtesting"
 	"os"
 	"os/signal"
@@ -49,19 +50,6 @@ func TestMain(m *testing.M) {
 	os.Exit(exitCode)
 }
 
-type testObject struct {
-	typ hwauthz.ObjectType
-	id  string
-}
-
-func (s testObject) Type() hwauthz.ObjectType {
-	return s.typ
-}
-
-func (s testObject) ID() string {
-	return s.id
-}
-
 func TestBulkCheck(t *testing.T) {
 	ctx := context.Background()
 	client := NewSpiceDBAuthZ()
@@ -74,14 +62,14 @@ func TestBulkCheck(t *testing.T) {
 	tx := hwauthz.NewTx(client, nil, nil)
 
 	for i := range checks {
-		sub := testObject{
-			typ: "user",
-			id:  strconv.Itoa(i),
+		sub := commonPerm.GenericObject{
+			Typ: "user",
+			Id:  strconv.Itoa(i),
 		}
 		relation := hwauthz.Permission("member")
-		resc := testObject{
-			typ: "organization",
-			id:  strconv.Itoa(i),
+		resc := commonPerm.GenericObject{
+			Typ: "organization",
+			Id:  strconv.Itoa(i),
 		}
 		checks[i] = hwauthz.NewPermissionCheck(sub, relation, resc)
 
@@ -117,18 +105,18 @@ func TestLookupResources(t *testing.T) {
 	client := NewSpiceDBAuthZ()
 
 	// preparations
-	sub := testObject{
-		typ: "user",
-		id:  uuid.New().String(),
+	sub := commonPerm.GenericObject{
+		Typ: "user",
+		Id:  uuid.New().String(),
 	}
 	relation := hwauthz.Relation("member")
 
 	// create test relations
 	tx := hwauthz.NewTx(client, nil, nil)
 	for i := range 3 {
-		resc := testObject{
-			typ: "organization",
-			id:  strconv.Itoa(i),
+		resc := commonPerm.GenericObject{
+			Typ: "organization",
+			Id:  strconv.Itoa(i),
 		}
 		relationship := hwauthz.NewRelationship(sub, relation, resc)
 		tx.Create(relationship)
