@@ -4,9 +4,12 @@ import (
 	"common"
 	"context"
 	"fmt"
+	pbEventsV1 "gen/libs/events/v1"
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+	"hwes/eventstoredb"
 	"hwutil"
 
 	"tasks-svc/internal/room/perm"
@@ -23,15 +26,19 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
+var roomEntityType = "room"
+
 type ServiceServer struct {
-	authz hwauthz.AuthZ
 	pb.UnimplementedRoomServiceServer
+	authz hwauthz.AuthZ
+	es    *esdb.Client
 }
 
-func NewServiceServer(authz hwauthz.AuthZ) *ServiceServer {
+func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 	return &ServiceServer{
-		authz:                          authz,
 		UnimplementedRoomServiceServer: pb.UnimplementedRoomServiceServer{},
+		authz:                          authz,
+		es:                             es,
 	}
 }
 
@@ -80,6 +87,15 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 		Commit(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err)
+	}
+
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, roomEntityType, roomID,
+		&pbEventsV1.RoomCreatedEvent{
+			Id: roomID.String(),
+		},
+	); err != nil {
+		return nil, err
 	}
 
 	// return
@@ -166,6 +182,16 @@ func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest
 		return nil, err
 	}
 
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, roomEntityType, roomID,
+		&pbEventsV1.RoomUpdatedEvent{
+			Id:   roomID.String(),
+			Name: req.GetName(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	// return
 	return &pb.UpdateRoomResponse{
 		Conflict:    nil,                                           // TODO
@@ -242,20 +268,20 @@ func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	// parse inputs
-	id, err := uuid.Parse(req.GetId())
+	roomID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	// check permission
 	user := commonPerm.UserFromCtx(ctx)
-	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserDelete, perm.Room(id))
+	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserDelete, perm.Room(roomID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
 
 	// do query
-	err = roomRepo.DeleteRoom(ctx, id)
+	err = roomRepo.DeleteRoom(ctx, roomID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
@@ -264,6 +290,15 @@ func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest
 	// TODO: Handle beds
 
 	// TODO: remove from spice (also beds)
+
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, roomEntityType, roomID,
+		&pbEventsV1.RoomDeletedEvent{
+			Id: roomID.String(),
+		},
+	); err != nil {
+		return nil, err
+	}
 
 	// return
 	return &pb.DeleteRoomResponse{}, nil
