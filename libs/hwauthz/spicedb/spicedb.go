@@ -244,6 +244,12 @@ func (s *SpiceDBAuthZ) Must(ctx context.Context, check hwauthz.PermissionCheck) 
 }
 
 func (s *SpiceDBAuthZ) BulkMust(ctx context.Context, checks ...hwauthz.PermissionCheck) error {
+	if len(checks) == 0 {
+		return nil
+	}
+	if len(checks) == 1 {
+		return s.Must(ctx, checks[0])
+	}
 	results, err := s.BulkCheck(ctx, checks)
 	if err != nil {
 		return err
