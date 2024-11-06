@@ -10,8 +10,8 @@ import (
 
 type TaskTemplate uuid.UUID
 
-func (t TaskTemplate) Type() string { return "task_template" }
-func (t TaskTemplate) ID() string   { return uuid.UUID(t).String() }
+func (t TaskTemplate) Type() hwauthz.ObjectType { return "task_template" }
+func (t TaskTemplate) ID() string               { return uuid.UUID(t).String() }
 
 // Direct Relations
 

@@ -125,18 +125,23 @@ func (s ServiceServer) CreateTaskTemplate(
 	}, nil
 }
 
-func (ServiceServer) DeleteTaskTemplate(
+func (s ServiceServer) DeleteTaskTemplate(
 	ctx context.Context,
 	req *pb.DeleteTaskTemplateRequest,
 ) (*pb.DeleteTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
-	// TODO: Auth
-
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserDelete, perm.TaskTemplate(id))
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
 	}
 
 	err = templateRepo.DeleteTaskTemplate(ctx, id)
@@ -337,11 +342,13 @@ func (s ServiceServer) CreateTaskTemplateSubTask(
 	}, nil
 }
 
-func (ServiceServer) GetAllTaskTemplates(
+func (s ServiceServer) GetAllTaskTemplates(
 	ctx context.Context,
 	req *pb.GetAllTaskTemplatesRequest,
 ) (*pb.GetAllTaskTemplatesResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
+
+	user := commonPerm.UserFromCtx(ctx)
 
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
 	if err != nil {
@@ -365,6 +372,7 @@ func (ServiceServer) GetAllTaskTemplates(
 	}
 
 	templates := make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate, 0)
+	checks := make([]hwauthz.PermissionCheck, 0)
 	templateMap := make(map[uuid.UUID]int)
 
 	for _, row := range rows {
@@ -383,6 +391,8 @@ func (ServiceServer) GetAllTaskTemplates(
 			}
 			templates = append(templates, template)
 			templateMap[row.TaskTemplate.ID] = len(templates) - 1
+			checks = append(checks,
+				hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserGet, perm.TaskTemplate(row.TaskTemplate.ID)))
 		}
 
 		if row.SubTaskName != nil {
@@ -393,6 +403,15 @@ func (ServiceServer) GetAllTaskTemplates(
 			})
 		}
 	}
+
+	// filter out templates where access is missing
+	allowed, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	templates = hwutil.Filter(templates, func(i int, _ *pb.GetAllTaskTemplatesResponse_TaskTemplate) bool {
+		return allowed[i]
+	})
 
 	return &pb.GetAllTaskTemplatesResponse{
 		Templates: templates,

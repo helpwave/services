@@ -10,8 +10,8 @@ import (
 
 type PropertySet uuid.UUID
 
-func (t PropertySet) Type() string { return "property_set" }
-func (t PropertySet) ID() string   { return uuid.UUID(t).String() }
+func (t PropertySet) Type() hwauthz.ObjectType { return "property_set" }
+func (t PropertySet) ID() string               { return uuid.UUID(t).String() }
 
 // Direct Relations
 

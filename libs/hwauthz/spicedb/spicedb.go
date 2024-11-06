@@ -2,8 +2,10 @@ package spicedb
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"hwutil"
+	"io"
 	"telemetry"
 
 	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
@@ -49,7 +51,7 @@ func SetupSpiceDb(endpoint, token string) *authzed.Client {
 // fromObject builds a new v1.ObjectReference from a hwauthz.Object
 func fromObject(object hwauthz.Object) *v1.ObjectReference {
 	return &v1.ObjectReference{
-		ObjectType: object.Type(),
+		ObjectType: string(object.Type()),
 		ObjectId:   object.ID(),
 	}
 }
@@ -252,4 +254,41 @@ func (s *SpiceDBAuthZ) BulkMust(ctx context.Context, checks ...hwauthz.Permissio
 		}
 	}
 	return nil
+}
+
+func (s *SpiceDBAuthZ) LookupResources(
+	ctx context.Context, subject hwauthz.Object, relation hwauthz.Relation, resourceType hwauthz.ObjectType,
+) ([]string, error) {
+	// open stream
+	stream, err := s.client.LookupResources(ctx, &v1.LookupResourcesRequest{
+		Consistency:        nil,
+		ResourceObjectType: string(resourceType),
+		Permission:         string(relation),
+		Subject: &v1.SubjectReference{
+			Object: fromObject(subject),
+		},
+		Context: nil,
+		// TODO: pagination
+		OptionalLimit:  0,
+		OptionalCursor: nil,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("spicedb: could not lookup resources: %w", err)
+	}
+
+	resources := make([]string, 0)
+
+	// collect it until EOF
+	for {
+		res, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			break
+		} else if err != nil {
+			return nil, fmt.Errorf("spicedb: could not lookup resources: %w", err)
+		}
+
+		resources = append(resources, res.GetResourceObjectId())
+	}
+
+	return resources, nil
 }

@@ -48,3 +48,9 @@ func (a *TrueAuthZ) BulkCheck(_ context.Context, checks []hwauthz.PermissionChec
 func (s *TrueAuthZ) BulkMust(_ context.Context, _ ...hwauthz.PermissionCheck) error {
 	return nil
 }
+
+func (s *TrueAuthZ) LookupResources(
+	_ context.Context, _ hwauthz.Object, _ hwauthz.Relation, _ hwauthz.ObjectType,
+) ([]string, error) {
+	return []string{}, nil
+}

@@ -10,8 +10,8 @@ import (
 
 type Ward uuid.UUID
 
-func (t Ward) Type() string { return "ward" }
-func (t Ward) ID() string   { return uuid.UUID(t).String() }
+func (t Ward) Type() hwauthz.ObjectType { return "ward" }
+func (t Ward) ID() string               { return uuid.UUID(t).String() }
 
 // Direct Relations
 

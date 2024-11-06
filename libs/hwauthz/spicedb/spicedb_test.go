@@ -10,6 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
+
 	zlog "github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -48,11 +50,11 @@ func TestMain(m *testing.M) {
 }
 
 type testObject struct {
-	typ string
+	typ hwauthz.ObjectType
 	id  string
 }
 
-func (s testObject) Type() string {
+func (s testObject) Type() hwauthz.ObjectType {
 	return s.typ
 }
 
@@ -108,4 +110,36 @@ func TestBulkCheck(t *testing.T) {
 			assert.Equal(t, i%2 == 0, b, checks[i].String())
 		}
 	}
+}
+
+func TestLookupResources(t *testing.T) {
+	ctx := context.Background()
+	client := NewSpiceDBAuthZ()
+
+	// preparations
+	sub := testObject{
+		typ: "user",
+		id:  uuid.New().String(),
+	}
+	relation := hwauthz.Relation("member")
+
+	// create test relations
+	tx := hwauthz.NewTx(client, nil, nil)
+	for i := range 3 {
+		resc := testObject{
+			typ: "organization",
+			id:  strconv.Itoa(i),
+		}
+		relationship := hwauthz.NewRelationship(sub, relation, resc)
+		tx.Create(relationship)
+	}
+	_, err := tx.Commit(ctx)
+	require.NoError(t, err)
+
+	// LookupResources
+	subjects, err := client.LookupResources(ctx, sub, relation, "organization")
+	require.NoError(t, err)
+
+	// assert
+	assert.ElementsMatch(t, []string{"0", "1", "2"}, subjects)
 }

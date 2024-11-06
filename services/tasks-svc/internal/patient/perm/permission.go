@@ -10,8 +10,8 @@ import (
 
 type Patient uuid.UUID
 
-func (t Patient) Type() string { return "patient" }
-func (t Patient) ID() string   { return uuid.UUID(t).String() }
+func (t Patient) Type() hwauthz.ObjectType { return "patient" }
+func (t Patient) ID() string               { return uuid.UUID(t).String() }
 
 // Direct Relations
 

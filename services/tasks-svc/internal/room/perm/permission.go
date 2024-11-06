@@ -10,8 +10,8 @@ import (
 
 type Room uuid.UUID
 
-func (t Room) Type() string { return "room" }
-func (t Room) ID() string   { return uuid.UUID(t).String() }
+func (t Room) Type() hwauthz.ObjectType { return "room" }
+func (t Room) ID() string               { return uuid.UUID(t).String() }
 
 // Direct Relations
 
