@@ -9,6 +9,8 @@ import (
 	"hwdb"
 	"hwutil"
 
+	"tasks-svc/internal/task-template/perm"
+
 	wardPerm "tasks-svc/internal/ward/perm"
 
 	"github.com/google/uuid"
@@ -40,6 +42,8 @@ func (s ServiceServer) CreateTaskTemplate(
 	log := zlog.Ctx(ctx)
 	db := hwdb.GetDB()
 
+	user := commonPerm.UserFromCtx(ctx)
+
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
 	if err != nil {
 		return nil, err
@@ -47,7 +51,6 @@ func (s ServiceServer) CreateTaskTemplate(
 
 	// check if user is allowed to publish the task template
 	if wardID.Valid {
-		user := commonPerm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserPublishTaskTemplate, wardPerm.Ward(wardID.UUID))
 		if err := s.authz.Must(ctx, check); err != nil {
 			return nil, err
@@ -96,6 +99,18 @@ func (s ServiceServer) CreateTaskTemplate(
 		}
 	}
 
+	// write to permission graph
+	var owner hwauthz.Object = user
+	if wardID.Valid {
+		owner = wardPerm.Ward(wardID.UUID)
+	}
+	_, err = s.authz.
+		Create(hwauthz.NewRelationship(owner, perm.TaskTemplateOwner, perm.TaskTemplate(row.ID))).
+		Commit(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	if err := tx.Commit(ctx); err != nil {
 		return nil, status.Errorf(codes.Internal, "could not commit tx %s", err.Error())
 	}
@@ -137,7 +152,7 @@ func (ServiceServer) DeleteTaskTemplate(
 	return &pb.DeleteTaskTemplateResponse{}, nil
 }
 
-func (ServiceServer) DeleteTaskTemplateSubTask(
+func (s ServiceServer) DeleteTaskTemplateSubTask(
 	ctx context.Context,
 	req *pb.DeleteTaskTemplateSubTaskRequest,
 ) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
@@ -151,8 +166,6 @@ func (ServiceServer) DeleteTaskTemplateSubTask(
 
 	templateRepo := task_template_repo.New(tx)
 
-	// TODO: Auth
-
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -161,6 +174,13 @@ func (ServiceServer) DeleteTaskTemplateSubTask(
 	subtask, err := templateRepo.DeleteSubtask(ctx, id)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
+		return nil, err
+	}
+
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserUpdate, perm.TaskTemplate(subtask.TaskTemplateID))
+	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
 
@@ -187,17 +207,22 @@ func (ServiceServer) DeleteTaskTemplateSubTask(
 	}, nil
 }
 
-func (ServiceServer) UpdateTaskTemplate(
+func (s ServiceServer) UpdateTaskTemplate(
 	ctx context.Context,
 	req *pb.UpdateTaskTemplateRequest,
 ) (*pb.UpdateTaskTemplateResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
-	// TODO: Auth
-
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserUpdate, perm.TaskTemplate(id))
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
 	}
 
 	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
@@ -216,7 +241,7 @@ func (ServiceServer) UpdateTaskTemplate(
 	}, nil
 }
 
-func (ServiceServer) UpdateTaskTemplateSubTask(
+func (s ServiceServer) UpdateTaskTemplateSubTask(
 	ctx context.Context,
 	req *pb.UpdateTaskTemplateSubTaskRequest,
 ) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
@@ -227,8 +252,6 @@ func (ServiceServer) UpdateTaskTemplateSubTask(
 	}
 	defer rollback()
 	templateRepo := task_template_repo.New(tx)
-
-	// TODO: Auth
 
 	id, err := uuid.Parse(req.GetSubtaskId())
 	if err != nil {
@@ -242,6 +265,13 @@ func (ServiceServer) UpdateTaskTemplateSubTask(
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
+		return nil, err
+	}
+
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserUpdate, perm.TaskTemplate(taskTemplateID))
+	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
 
@@ -264,7 +294,7 @@ func (ServiceServer) UpdateTaskTemplateSubTask(
 	}, nil
 }
 
-func (ServiceServer) CreateTaskTemplateSubTask(
+func (s ServiceServer) CreateTaskTemplateSubTask(
 	ctx context.Context,
 	req *pb.CreateTaskTemplateSubTaskRequest,
 ) (*pb.CreateTaskTemplateSubTaskResponse, error) {
@@ -273,6 +303,13 @@ func (ServiceServer) CreateTaskTemplateSubTask(
 
 	taskTemplateID, err := uuid.Parse(req.GetTaskTemplateId())
 	if err != nil {
+		return nil, err
+	}
+
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserUpdate, perm.TaskTemplate(taskTemplateID))
+	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
 
@@ -362,7 +399,7 @@ func (ServiceServer) GetAllTaskTemplates(
 	}, nil
 }
 
-func (ServiceServer) GetTaskTemplate(
+func (s ServiceServer) GetTaskTemplate(
 	ctx context.Context,
 	req *pb.GetTaskTemplateRequest,
 ) (*pb.GetTaskTemplateResponse, error) {
@@ -371,6 +408,13 @@ func (ServiceServer) GetTaskTemplate(
 	taskTemplateID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserGet, perm.TaskTemplate(taskTemplateID))
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
 	}
 
 	rows, err := templateRepo.GetTaskTemplateWithSubtasksByID(ctx, taskTemplateID)
