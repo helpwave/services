@@ -2,7 +2,7 @@ definition patient {
 	// beds belong to an organization
 	relation organization: organization;
 
-	// all members of the organization can RUD the patient
+	// all members of the organization can {G,U,D} the patient
 	permission get = organization->membership;
 	permission update = organization->membership;
 

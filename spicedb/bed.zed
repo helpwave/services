@@ -2,7 +2,7 @@ definition bed {
 	// beds belong to a room
 	relation room: room;
 
-	// those who can RUD the room, can RUD the bed
+	// those who can {G,U,D} the room, can {G,U,D} the bed
 	permission get = room->get;
 	permission update = room->update;
 	permission delete = room->delete;
