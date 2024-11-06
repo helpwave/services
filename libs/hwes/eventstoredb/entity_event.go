@@ -50,8 +50,6 @@ func SaveEntityEvent(
 		return fmt.Errorf("hwes.eventstoredb.SaveEntityEvent: could not convert event to event data: %w", err)
 	}
 
-	// eventsData := []esdb.EventData{eventData}
-
 	if _, err := es.AppendToStream(
 		ctx,
 		aggregate.GetTypeID(),
