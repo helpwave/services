@@ -5,12 +5,13 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
 	"hwes/eventstoredb"
 	"hwutil"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 
 	"tasks-svc/internal/ward/perm"
 

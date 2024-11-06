@@ -4,14 +4,16 @@ import (
 	"common/auth"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"google.golang.org/protobuf/encoding/protojson"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/runtime/protoimpl"
 	"hwutil"
 	"strings"
 	"telemetry"
 	"time"
+
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/runtime/protoimpl"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
@@ -65,7 +67,15 @@ func MessageToEventName(protoMessage proto.Message, eventType *protoimpl.Extensi
 		eventType = pbEventsV1.E_EventType
 	}
 
-	protoEventType := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), eventType).(string)
+	protoEventType, ok := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), eventType).(string)
+	if !ok {
+		panic(fmt.Sprintf(
+			"String type assertion for eventType '%s' on protoMessage '%s' failed.",
+			eventType.TypeDescriptor().FullName(),
+			protoMessage.ProtoReflect().Descriptor().FullName(),
+		))
+	}
+
 	if protoEventType == "" {
 		panic(fmt.Sprintf(
 			"Cannot reflect eventType of protoMessage. The passed protoMessage '%s' does not has the message extension of '%s'.",
@@ -315,7 +325,7 @@ func (e *Event) SetProtoData(message proto.Message) error {
 
 func (e *Event) GetJsonData(data interface{}) error {
 	if e.DataIsProto {
-		return fmt.Errorf("data of this event is marked as proto, use GetProtoData instead")
+		return errors.New("data of this event is marked as proto, use GetProtoData instead")
 	}
 
 	if jsonable, ok := data.(hwutil.JSONAble); ok {
@@ -326,7 +336,7 @@ func (e *Event) GetJsonData(data interface{}) error {
 
 func (e *Event) GetProtoData(message proto.Message) error {
 	if !e.DataIsProto {
-		return fmt.Errorf("data of this event is not marked as proto, use GetJsonData instead")
+		return errors.New("data of this event is not marked as proto, use GetJsonData instead")
 	}
 
 	return protojson.Unmarshal(e.Data, message)

@@ -3,11 +3,12 @@ package eventstoredb
 import (
 	"context"
 	"fmt"
+	"telemetry"
+
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/proto"
 	"hwes"
-	"telemetry"
 )
 
 type EntityAggregate struct {

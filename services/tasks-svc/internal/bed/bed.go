@@ -6,13 +6,14 @@ import (
 	"context"
 	"fmt"
 	pbEventsV1 "gen/libs/events/v1"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
 	"hwes/eventstoredb"
 	"hwlocale"
 	"hwutil"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 
 	"tasks-svc/internal/bed/perm"
 	roomPerm "tasks-svc/internal/room/perm"
