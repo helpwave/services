@@ -4,8 +4,12 @@ import (
 	"common"
 	"common/auth"
 	"context"
+	pbEventsV1 "gen/libs/events/v1"
 	"hwdb"
+	"hwes/eventstoredb"
 	"hwutil"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -17,15 +21,18 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
+const taskTemplateEntityType = "task_template"
+
 type ServiceServer struct {
 	pb.UnimplementedTaskTemplateServiceServer
+	es *esdb.Client
 }
 
-func NewServiceServer() *ServiceServer {
-	return &ServiceServer{}
+func NewServiceServer(es *esdb.Client) *ServiceServer {
+	return &ServiceServer{es: es}
 }
 
-func (ServiceServer) CreateTaskTemplate(
+func (s ServiceServer) CreateTaskTemplate(
 	ctx context.Context,
 	req *pb.CreateTaskTemplateRequest,
 ) (*pb.CreateTaskTemplateResponse, error) {
@@ -45,11 +52,9 @@ func (ServiceServer) CreateTaskTemplate(
 		return nil, err
 	}
 
-	description := req.GetDescription()
-
 	row, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
 		Name:        req.GetName(),
-		Description: description,
+		Description: req.GetDescription(),
 		CreatedBy:   userID,
 		WardID:      wardID,
 	})
@@ -86,13 +91,29 @@ func (ServiceServer) CreateTaskTemplate(
 		Str("taskTemplateID", templateID.String()).
 		Msg("taskTemplate created")
 
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, templateID,
+		&pbEventsV1.TaskTemplateCreatedEvent{
+			Id:          templateID.String(),
+			Name:        req.GetName(),
+			Description: req.GetDescription(),
+			Subtasks: hwutil.Map(req.GetSubtasks(),
+				func(subtask *pb.CreateTaskTemplateRequest_SubTask) *pbEventsV1.TaskTemplateCreatedEvent_SubTask {
+					return &pbEventsV1.TaskTemplateCreatedEvent_SubTask{Name: subtask.GetName()}
+				},
+			),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateTaskTemplateResponse{
 		Id:          templateID.String(),
 		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) DeleteTaskTemplate(
+func (s ServiceServer) DeleteTaskTemplate(
 	ctx context.Context,
 	req *pb.DeleteTaskTemplateRequest,
 ) (*pb.DeleteTaskTemplateResponse, error) {
@@ -116,10 +137,19 @@ func (ServiceServer) DeleteTaskTemplate(
 		Str("taskTemplateID", id.String()).
 		Msg("taskTemplate deleted")
 
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, id,
+		&pbEventsV1.TaskTemplateDeletedEvent{
+			Id: id.String(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	return &pb.DeleteTaskTemplateResponse{}, nil
 }
 
-func (ServiceServer) DeleteTaskTemplateSubTask(
+func (s ServiceServer) DeleteTaskTemplateSubTask(
 	ctx context.Context,
 	req *pb.DeleteTaskTemplateSubTaskRequest,
 ) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
@@ -164,12 +194,22 @@ func (ServiceServer) DeleteTaskTemplateSubTask(
 		Str("taskTemplateID", subtask.TaskTemplateID.String()).
 		Msg("taskTemplateSubtask deleted")
 
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, subtask.TaskTemplateID,
+		&pbEventsV1.TaskTemplateSubTaskDeletedEvent{
+			TaskTemplateId: subtask.TaskTemplateID.String(),
+			SubTaskId:      subtask.ID.String(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	return &pb.DeleteTaskTemplateSubTaskResponse{
 		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) UpdateTaskTemplate(
+func (s ServiceServer) UpdateTaskTemplate(
 	ctx context.Context,
 	req *pb.UpdateTaskTemplateRequest,
 ) (*pb.UpdateTaskTemplateResponse, error) {
@@ -192,13 +232,24 @@ func (ServiceServer) UpdateTaskTemplate(
 		return nil, err
 	}
 
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, id,
+		&pbEventsV1.TaskTemplateUpdatedEvent{
+			Id:          id.String(),
+			Name:        req.GetName(),
+			Description: req.GetDescription(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateTaskTemplateResponse{
 		Conflict:    nil,                                           // TODO
 		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) UpdateTaskTemplateSubTask(
+func (s ServiceServer) UpdateTaskTemplateSubTask(
 	ctx context.Context,
 	req *pb.UpdateTaskTemplateSubTaskRequest,
 ) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
@@ -240,13 +291,24 @@ func (ServiceServer) UpdateTaskTemplateSubTask(
 		return nil, err
 	}
 
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, taskTemplateID,
+		&pbEventsV1.TaskTemplateSubTaskUpdatedEvent{
+			TaskTemplateId: taskTemplateID.String(),
+			SubTaskId:      id.String(),
+			Name:           req.GetName(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateTaskTemplateSubTaskResponse{
 		Conflict:                nil,                                           // TODO
 		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
-func (ServiceServer) CreateTaskTemplateSubTask(
+func (s ServiceServer) CreateTaskTemplateSubTask(
 	ctx context.Context,
 	req *pb.CreateTaskTemplateSubTaskRequest,
 ) (*pb.CreateTaskTemplateSubTaskResponse, error) {
@@ -275,6 +337,17 @@ func (ServiceServer) CreateTaskTemplateSubTask(
 		Str("taskTemplateSubTaskID", subtaskID.String()).
 		Int64("consistencyInt64", consistency).
 		Msg("subtaskID created")
+
+	// emit event
+	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, taskTemplateID,
+		&pbEventsV1.TaskTemplateSubTaskCreatedEvent{
+			TaskTemplateId: taskTemplateID.String(),
+			SubTaskId:      subtaskID.String(),
+			Name:           req.GetName(),
+		},
+	); err != nil {
+		return nil, err
+	}
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
 		Id:                      subtaskID.String(),

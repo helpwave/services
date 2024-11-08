@@ -60,7 +60,7 @@ func Main(version string, ready func()) {
 		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer(authz, eventStore))
 		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer(authz, eventStore))
 		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer(authz, eventStore))
-		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer())
+		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer(eventStore))
 
 		if ready != nil {
 			ready()
