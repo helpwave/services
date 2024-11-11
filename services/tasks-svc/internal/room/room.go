@@ -90,7 +90,7 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err)
 	}
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, roomEntityType, roomID,
 		&pbEventsV1.RoomCreatedEvent{
 			Id: roomID.String(),
@@ -183,7 +183,7 @@ func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest
 		return nil, err
 	}
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, roomEntityType, roomID,
 		&pbEventsV1.RoomUpdatedEvent{
 			Id:   roomID.String(),
@@ -292,7 +292,7 @@ func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest
 
 	// TODO: remove from spice (also beds)
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, roomEntityType, roomID,
 		&pbEventsV1.RoomDeletedEvent{
 			Id: roomID.String(),

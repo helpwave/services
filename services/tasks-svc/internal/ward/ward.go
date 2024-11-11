@@ -86,7 +86,7 @@ func (s *ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardReques
 	// add to "recently used"
 	tracking.AddWardToRecentActivity(ctx, wardID.String())
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, wardEntityType, wardID,
 		&pbEventsV1.WardCreatedEvent{
 			Id: wardID.String(),
@@ -262,7 +262,7 @@ func (s *ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardReques
 	// add to "recently used"
 	tracking.AddWardToRecentActivity(ctx, id.String())
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, wardEntityType, id,
 		&pbEventsV1.WardUpdatedEvent{
 			Id:   id.String(),
@@ -317,7 +317,7 @@ func (s *ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardReques
 	// remove from "recently used"
 	tracking.RemoveWardFromRecentActivity(ctx, id.String())
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, wardEntityType, id,
 		&pbEventsV1.WardDeletedEvent{
 			Id: id.String(),

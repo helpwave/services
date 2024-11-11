@@ -108,7 +108,7 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err)
 	}
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, bedEntityType, bed.ID,
 		&pbEventsV1.BedCreatedEvent{
 			Id: bed.ID.String(),
@@ -317,7 +317,7 @@ func (s ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) 
 		return nil, err
 	}
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, bedEntityType, bedID,
 		&pbEventsV1.BedUpdatedEvent{
 			Id:     bedID.String(),
@@ -375,7 +375,7 @@ func (s ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) 
 
 	// todo: delete from permission graph
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, bedEntityType, bedID,
 		&pbEventsV1.BedDeletedEvent{
 			Id: bedID.String(),

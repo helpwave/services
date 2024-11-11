@@ -19,8 +19,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// requireTrueBool because require. cannot be used in Goroutines and to prevent many if-conditions
-func requireTrueBool(t *testing.T, b bool) {
+// requireTrue because testify/require cannot be used in Goroutines ... and to prevent many if-conditions
+func requireTrue(t *testing.T, b bool) {
 	t.Helper()
 	if b {
 		return
@@ -53,39 +53,41 @@ func TestReceivingEvents(t *testing.T) {
 	go func() {
 		// test receive one event that got emitted after subscribing
 		res, err := stream.Recv()
-		requireTrueBool(t, assert.NoError(t, err))
+		requireTrue(t, assert.NoError(t, err))
 
-		requireTrueBool(t, assert.NotNil(t, res.GetEntityEvent()))
-		requireTrueBool(t, assert.Equal(t, "bed", res.GetEntityEvent().GetEntityType()))
-		requireTrueBool(t, assert.Equal(t, bedId.String(), res.GetEntityEvent().GetEntityId()))
-		requireTrueBool(t, assert.Equal(t, "BED_CREATED_v1", res.GetEntityEvent().GetEventType()))
+		resEntityEvent := res.GetEntityEvent()
+		requireTrue(t, assert.NotNil(t, resEntityEvent))
+		requireTrue(t, assert.Equal(t, "bed", resEntityEvent.GetEntityType()))
+		requireTrue(t, assert.Equal(t, bedId.String(), resEntityEvent.GetEntityId()))
+		requireTrue(t, assert.Equal(t, "BED_CREATED_v1", resEntityEvent.GetEventType()))
 
 		bedId2 := uuid.New()
 
-		// emit event
+		// store event
 		if err := eventstoredb.SaveEntityEvent(ctx, es, "bed", bedId2,
 			&pbEventsV1.BedCreatedEvent{Id: bedId2.String()},
 		); err != nil {
-			requireTrueBool(t, assert.NoError(t, err))
+			requireTrue(t, assert.NoError(t, err))
 		}
 
 		// test receive one event that got emitted before subscribing with previous revision
 
 		req2 := &pb.ReceiveUpdatesRequest{Revision: hwutil.PtrTo(res.Revision)}
 		stream2, err := updatesClient.ReceiveUpdates(ctx, req2)
-		requireTrueBool(t, assert.NoError(t, err))
+		requireTrue(t, assert.NoError(t, err))
 
 		// receive event
 		res2, err := stream2.Recv()
-		requireTrueBool(t, assert.NoError(t, err))
+		requireTrue(t, assert.NoError(t, err))
 
-		requireTrueBool(t, assert.NotNil(t, res2.GetEntityEvent()))
-		requireTrueBool(t, assert.Equal(t, "bed", res2.GetEntityEvent().GetEntityType()))
-		requireTrueBool(t, assert.Equal(t, bedId2.String(), res2.GetEntityEvent().GetEntityId()))
-		requireTrueBool(t, assert.Equal(t, "BED_CREATED_v1", res2.GetEntityEvent().GetEventType()))
+		res2EntityEvent := res2.GetEntityEvent()
+		requireTrue(t, assert.NotNil(t, res2EntityEvent))
+		requireTrue(t, assert.Equal(t, "bed", res2EntityEvent.GetEntityType()))
+		requireTrue(t, assert.Equal(t, bedId2.String(), res2EntityEvent.GetEntityId()))
+		requireTrue(t, assert.Equal(t, "BED_CREATED_v1", res2EntityEvent.GetEventType()))
 	}()
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, es, "bed", bedId,
 		&pbEventsV1.BedCreatedEvent{Id: bedId.String()},
 	); err != nil {

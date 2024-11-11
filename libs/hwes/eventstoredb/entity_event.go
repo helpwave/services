@@ -11,22 +11,25 @@ import (
 	"hwes"
 )
 
-type EntityAggregate struct {
+// Extending entityAggregate to override GetTypeID down below
+type entityAggregate struct {
 	*hwes.AggregateBase
 }
 
-func NewEntityAggregate(entityType string, entityId uuid.UUID) *EntityAggregate {
-	a := &EntityAggregate{}
+func newEntityAggregate(entityType string, entityId uuid.UUID) *entityAggregate {
+	a := &entityAggregate{}
 	a.AggregateBase = hwes.NewAggregateBase(hwes.AggregateType(entityType), entityId)
 	return a
 }
 
-func (a *EntityAggregate) GetTypeID() string {
+// GetTypeID override to prefix the typeID with "entity_"
+func (a *entityAggregate) GetTypeID() string {
 	return fmt.Sprintf("entity_%s-%s", a.GetType(), a.GetID())
 }
 
-// SaveEntityEvent creates a temporary EntityAggregate to create
-// an Event that gets persisted directly to EventStoreDB
+// SaveEntityEvent directly persists events to EventStoreDB
+// You are likely to call this method when you want to store events
+// that are not used for event sourcing.
 func SaveEntityEvent(
 	ctx context.Context,
 	es *esdb.Client,
@@ -38,7 +41,7 @@ func SaveEntityEvent(
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwes.eventstoredb.SaveEntityEvent")
 	defer span.End()
 
-	aggregate := NewEntityAggregate(entityType, entityId)
+	aggregate := newEntityAggregate(entityType, entityId)
 
 	event, err := hwes.NewEventFromProto(aggregate, message, opts...)
 	if err != nil {

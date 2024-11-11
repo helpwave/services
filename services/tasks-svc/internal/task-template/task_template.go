@@ -91,7 +91,7 @@ func (s ServiceServer) CreateTaskTemplate(
 		Str("taskTemplateID", templateID.String()).
 		Msg("taskTemplate created")
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, templateID,
 		&pbEventsV1.TaskTemplateCreatedEvent{
 			Id:          templateID.String(),
@@ -137,7 +137,7 @@ func (s ServiceServer) DeleteTaskTemplate(
 		Str("taskTemplateID", id.String()).
 		Msg("taskTemplate deleted")
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, id,
 		&pbEventsV1.TaskTemplateDeletedEvent{
 			Id: id.String(),
@@ -194,7 +194,7 @@ func (s ServiceServer) DeleteTaskTemplateSubTask(
 		Str("taskTemplateID", subtask.TaskTemplateID.String()).
 		Msg("taskTemplateSubtask deleted")
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, subtask.TaskTemplateID,
 		&pbEventsV1.TaskTemplateSubTaskDeletedEvent{
 			TaskTemplateId: subtask.TaskTemplateID.String(),
@@ -232,7 +232,7 @@ func (s ServiceServer) UpdateTaskTemplate(
 		return nil, err
 	}
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, id,
 		&pbEventsV1.TaskTemplateUpdatedEvent{
 			Id:          id.String(),
@@ -291,7 +291,7 @@ func (s ServiceServer) UpdateTaskTemplateSubTask(
 		return nil, err
 	}
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, taskTemplateID,
 		&pbEventsV1.TaskTemplateSubTaskUpdatedEvent{
 			TaskTemplateId: taskTemplateID.String(),
@@ -338,7 +338,7 @@ func (s ServiceServer) CreateTaskTemplateSubTask(
 		Int64("consistencyInt64", consistency).
 		Msg("subtaskID created")
 
-	// emit event
+	// store event
 	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, taskTemplateID,
 		&pbEventsV1.TaskTemplateSubTaskCreatedEvent{
 			TaskTemplateId: taskTemplateID.String(),

@@ -11,13 +11,11 @@ import (
 	"telemetry"
 	"time"
 
-	"google.golang.org/protobuf/encoding/protojson"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/runtime/protoimpl"
-
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 
 	pbEventsV1 "gen/libs/events/v1"
 )
@@ -60,18 +58,21 @@ type metadata struct {
 	DataIsProto bool      `json:"data_is_proto"`
 }
 
-// MessageToEventName reflects the passed EventType message extension of the passed message.
-// When the EventType is nil, the current default EventType of proto/libs/events/v1 gets used.
-func MessageToEventName(protoMessage proto.Message, eventType *protoimpl.ExtensionInfo) string {
-	if eventType == nil {
-		eventType = pbEventsV1.E_EventType
-	}
+// GetEventTypeOptionOfProtoMessageV1 resolves the expected event_type message option from the passed message.
+// If the passed message does not contain the event_type option, we panic.
+// Suffixed with _v1 to indicate the usage of gen/libs/events/v1
+//
+//	extend google.protobuf.MessageOptions {
+//	  string event_type = 2123;
+//	}
+func GetEventTypeOptionOfProtoMessageV1(protoMessage proto.Message) string {
+	eventTypeOption := pbEventsV1.E_EventType
 
-	protoEventType, ok := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), eventType).(string)
+	protoEventType, ok := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), eventTypeOption).(string)
 	if !ok {
 		panic(fmt.Sprintf(
 			"String type assertion for eventType '%s' on protoMessage '%s' failed.",
-			eventType.TypeDescriptor().FullName(),
+			eventTypeOption.TypeDescriptor().FullName(),
 			protoMessage.ProtoReflect().Descriptor().FullName(),
 		))
 	}
@@ -80,7 +81,7 @@ func MessageToEventName(protoMessage proto.Message, eventType *protoimpl.Extensi
 		panic(fmt.Sprintf(
 			"Cannot reflect eventType of protoMessage. The passed protoMessage '%s' does not has the message extension of '%s'.",
 			protoMessage.ProtoReflect().Descriptor().FullName(),
-			eventType.TypeDescriptor().FullName(),
+			eventTypeOption.TypeDescriptor().FullName(),
 		))
 	}
 
@@ -147,7 +148,7 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 }
 
 func NewEventFromProto(aggregate Aggregate, message proto.Message, opts ...EventOption) (Event, error) {
-	eventType := MessageToEventName(message, nil)
+	eventType := GetEventTypeOptionOfProtoMessageV1(message)
 
 	event, err := NewEvent(aggregate, eventType, opts...)
 	if err != nil {
