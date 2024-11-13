@@ -14,88 +14,9 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-/// An event that gets raised on non-event sourced entities
-class EntityEvent extends $pb.GeneratedMessage {
-  factory EntityEvent({
-    $core.String? eventType,
-    $core.String? entityId,
-    $core.String? entityType,
-  }) {
-    final $result = create();
-    if (eventType != null) {
-      $result.eventType = eventType;
-    }
-    if (entityId != null) {
-      $result.entityId = entityId;
-    }
-    if (entityType != null) {
-      $result.entityType = entityType;
-    }
-    return $result;
-  }
-  EntityEvent._() : super();
-  factory EntityEvent.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory EntityEvent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'EntityEvent', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.updates_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'eventType')
-    ..aOS(2, _omitFieldNames ? '' : 'entityId')
-    ..aOS(3, _omitFieldNames ? '' : 'entityType')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  EntityEvent clone() => EntityEvent()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  EntityEvent copyWith(void Function(EntityEvent) updates) => super.copyWith((message) => updates(message as EntityEvent)) as EntityEvent;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static EntityEvent create() => EntityEvent._();
-  EntityEvent createEmptyInstance() => create();
-  static $pb.PbList<EntityEvent> createRepeated() => $pb.PbList<EntityEvent>();
-  @$core.pragma('dart2js:noInline')
-  static EntityEvent getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<EntityEvent>(create);
-  static EntityEvent? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get eventType => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set eventType($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasEventType() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearEventType() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get entityId => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set entityId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasEntityId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearEntityId() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get entityType => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set entityType($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasEntityType() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearEntityType() => clearField(3);
-}
-
-/// An event that gets raised for event sourced entities
-class DomainEvent extends $pb.GeneratedMessage {
-  factory DomainEvent({
+/// A reduced event from our event store
+class Event extends $pb.GeneratedMessage {
+  factory Event({
     $core.String? eventId,
     $core.String? eventType,
     $core.String? aggregateId,
@@ -116,11 +37,11 @@ class DomainEvent extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  DomainEvent._() : super();
-  factory DomainEvent.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DomainEvent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  Event._() : super();
+  factory Event.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Event.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DomainEvent', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.updates_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Event', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.updates_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'eventId')
     ..aOS(2, _omitFieldNames ? '' : 'eventType')
     ..aOS(3, _omitFieldNames ? '' : 'aggregateId')
@@ -132,22 +53,22 @@ class DomainEvent extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  DomainEvent clone() => DomainEvent()..mergeFromMessage(this);
+  Event clone() => Event()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DomainEvent copyWith(void Function(DomainEvent) updates) => super.copyWith((message) => updates(message as DomainEvent)) as DomainEvent;
+  Event copyWith(void Function(Event) updates) => super.copyWith((message) => updates(message as Event)) as Event;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static DomainEvent create() => DomainEvent._();
-  DomainEvent createEmptyInstance() => create();
-  static $pb.PbList<DomainEvent> createRepeated() => $pb.PbList<DomainEvent>();
+  static Event create() => Event._();
+  Event createEmptyInstance() => create();
+  static $pb.PbList<Event> createRepeated() => $pb.PbList<Event>();
   @$core.pragma('dart2js:noInline')
-  static DomainEvent getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DomainEvent>(create);
-  static DomainEvent? _defaultInstance;
+  static Event getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Event>(create);
+  static Event? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get eventId => $_getSZ(0);
@@ -238,27 +159,17 @@ class ReceiveUpdatesRequest extends $pb.GeneratedMessage {
   void clearRevision() => clearField(1);
 }
 
-enum ReceiveUpdatesResponse_Event {
-  entityEvent, 
-  domainEvent, 
-  notSet
-}
-
 class ReceiveUpdatesResponse extends $pb.GeneratedMessage {
   factory ReceiveUpdatesResponse({
     $fixnum.Int64? revision,
-    EntityEvent? entityEvent,
-    DomainEvent? domainEvent,
+    Event? event,
   }) {
     final $result = create();
     if (revision != null) {
       $result.revision = revision;
     }
-    if (entityEvent != null) {
-      $result.entityEvent = entityEvent;
-    }
-    if (domainEvent != null) {
-      $result.domainEvent = domainEvent;
+    if (event != null) {
+      $result.event = event;
     }
     return $result;
   }
@@ -266,16 +177,9 @@ class ReceiveUpdatesResponse extends $pb.GeneratedMessage {
   factory ReceiveUpdatesResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReceiveUpdatesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static const $core.Map<$core.int, ReceiveUpdatesResponse_Event> _ReceiveUpdatesResponse_EventByTag = {
-    2 : ReceiveUpdatesResponse_Event.entityEvent,
-    3 : ReceiveUpdatesResponse_Event.domainEvent,
-    0 : ReceiveUpdatesResponse_Event.notSet
-  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReceiveUpdatesResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.updates_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [2, 3])
     ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'revision', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..aOM<EntityEvent>(2, _omitFieldNames ? '' : 'entityEvent', subBuilder: EntityEvent.create)
-    ..aOM<DomainEvent>(3, _omitFieldNames ? '' : 'domainEvent', subBuilder: DomainEvent.create)
+    ..aOM<Event>(2, _omitFieldNames ? '' : 'event', subBuilder: Event.create)
     ..hasRequiredFields = false
   ;
 
@@ -300,9 +204,6 @@ class ReceiveUpdatesResponse extends $pb.GeneratedMessage {
   static ReceiveUpdatesResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReceiveUpdatesResponse>(create);
   static ReceiveUpdatesResponse? _defaultInstance;
 
-  ReceiveUpdatesResponse_Event whichEvent() => _ReceiveUpdatesResponse_EventByTag[$_whichOneof(0)]!;
-  void clearEvent() => clearField($_whichOneof(0));
-
   @$pb.TagNumber(1)
   $fixnum.Int64 get revision => $_getI64(0);
   @$pb.TagNumber(1)
@@ -313,26 +214,15 @@ class ReceiveUpdatesResponse extends $pb.GeneratedMessage {
   void clearRevision() => clearField(1);
 
   @$pb.TagNumber(2)
-  EntityEvent get entityEvent => $_getN(1);
+  Event get event => $_getN(1);
   @$pb.TagNumber(2)
-  set entityEvent(EntityEvent v) { setField(2, v); }
+  set event(Event v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasEntityEvent() => $_has(1);
+  $core.bool hasEvent() => $_has(1);
   @$pb.TagNumber(2)
-  void clearEntityEvent() => clearField(2);
+  void clearEvent() => clearField(2);
   @$pb.TagNumber(2)
-  EntityEvent ensureEntityEvent() => $_ensure(1);
-
-  @$pb.TagNumber(3)
-  DomainEvent get domainEvent => $_getN(2);
-  @$pb.TagNumber(3)
-  set domainEvent(DomainEvent v) { setField(3, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasDomainEvent() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearDomainEvent() => clearField(3);
-  @$pb.TagNumber(3)
-  DomainEvent ensureDomainEvent() => $_ensure(2);
+  Event ensureEvent() => $_ensure(1);
 }
 
 

@@ -13,24 +13,9 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use entityEventDescriptor instead')
-const EntityEvent$json = {
-  '1': 'EntityEvent',
-  '2': [
-    {'1': 'event_type', '3': 1, '4': 1, '5': 9, '10': 'eventType'},
-    {'1': 'entity_id', '3': 2, '4': 1, '5': 9, '10': 'entityId'},
-    {'1': 'entity_type', '3': 3, '4': 1, '5': 9, '10': 'entityType'},
-  ],
-};
-
-/// Descriptor for `EntityEvent`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List entityEventDescriptor = $convert.base64Decode(
-    'CgtFbnRpdHlFdmVudBIdCgpldmVudF90eXBlGAEgASgJUglldmVudFR5cGUSGwoJZW50aXR5X2'
-    'lkGAIgASgJUghlbnRpdHlJZBIfCgtlbnRpdHlfdHlwZRgDIAEoCVIKZW50aXR5VHlwZQ==');
-
-@$core.Deprecated('Use domainEventDescriptor instead')
-const DomainEvent$json = {
-  '1': 'DomainEvent',
+@$core.Deprecated('Use eventDescriptor instead')
+const Event$json = {
+  '1': 'Event',
   '2': [
     {'1': 'event_id', '3': 1, '4': 1, '5': 9, '10': 'eventId'},
     {'1': 'event_type', '3': 2, '4': 1, '5': 9, '10': 'eventType'},
@@ -39,11 +24,11 @@ const DomainEvent$json = {
   ],
 };
 
-/// Descriptor for `DomainEvent`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List domainEventDescriptor = $convert.base64Decode(
-    'CgtEb21haW5FdmVudBIZCghldmVudF9pZBgBIAEoCVIHZXZlbnRJZBIdCgpldmVudF90eXBlGA'
-    'IgASgJUglldmVudFR5cGUSIQoMYWdncmVnYXRlX2lkGAMgASgJUgthZ2dyZWdhdGVJZBIlCg5h'
-    'Z2dyZWdhdGVfdHlwZRgEIAEoCVINYWdncmVnYXRlVHlwZQ==');
+/// Descriptor for `Event`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
+    'CgVFdmVudBIZCghldmVudF9pZBgBIAEoCVIHZXZlbnRJZBIdCgpldmVudF90eXBlGAIgASgJUg'
+    'lldmVudFR5cGUSIQoMYWdncmVnYXRlX2lkGAMgASgJUgthZ2dyZWdhdGVJZBIlCg5hZ2dyZWdh'
+    'dGVfdHlwZRgEIAEoCVINYWdncmVnYXRlVHlwZQ==');
 
 @$core.Deprecated('Use receiveUpdatesRequestDescriptor instead')
 const ReceiveUpdatesRequest$json = {
@@ -66,18 +51,12 @@ const ReceiveUpdatesResponse$json = {
   '1': 'ReceiveUpdatesResponse',
   '2': [
     {'1': 'revision', '3': 1, '4': 1, '5': 4, '10': 'revision'},
-    {'1': 'entity_event', '3': 2, '4': 1, '5': 11, '6': '.services.updates_svc.v1.EntityEvent', '9': 0, '10': 'entityEvent'},
-    {'1': 'domain_event', '3': 3, '4': 1, '5': 11, '6': '.services.updates_svc.v1.DomainEvent', '9': 0, '10': 'domainEvent'},
-  ],
-  '8': [
-    {'1': 'event'},
+    {'1': 'event', '3': 2, '4': 1, '5': 11, '6': '.services.updates_svc.v1.Event', '10': 'event'},
   ],
 };
 
 /// Descriptor for `ReceiveUpdatesResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List receiveUpdatesResponseDescriptor = $convert.base64Decode(
-    'ChZSZWNlaXZlVXBkYXRlc1Jlc3BvbnNlEhoKCHJldmlzaW9uGAEgASgEUghyZXZpc2lvbhJJCg'
-    'xlbnRpdHlfZXZlbnQYAiABKAsyJC5zZXJ2aWNlcy51cGRhdGVzX3N2Yy52MS5FbnRpdHlFdmVu'
-    'dEgAUgtlbnRpdHlFdmVudBJJCgxkb21haW5fZXZlbnQYAyABKAsyJC5zZXJ2aWNlcy51cGRhdG'
-    'VzX3N2Yy52MS5Eb21haW5FdmVudEgAUgtkb21haW5FdmVudEIHCgVldmVudA==');
+    'ChZSZWNlaXZlVXBkYXRlc1Jlc3BvbnNlEhoKCHJldmlzaW9uGAEgASgEUghyZXZpc2lvbhI0Cg'
+    'VldmVudBgCIAEoCzIeLnNlcnZpY2VzLnVwZGF0ZXNfc3ZjLnYxLkV2ZW50UgVldmVudA==');
 

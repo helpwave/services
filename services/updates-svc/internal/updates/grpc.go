@@ -122,31 +122,12 @@ func (s *UpdatesGrpcService) ReceiveUpdates(
 
 		res := &pb.ReceiveUpdatesResponse{
 			Revision: *esdbEvent.EventAppeared.Commit,
-		}
-
-		isEntityEvent := strings.HasPrefix(string(event.GetAggregateType()), "entity_")
-
-		if isEntityEvent {
-			entityEvent := &pb.EntityEvent{
-				EventType:  event.EventType,
-				EntityId:   event.GetAggregateID().String(),
-				EntityType: strings.TrimPrefix(string(event.GetAggregateType()), "entity_"),
-			}
-
-			res.Event = &pb.ReceiveUpdatesResponse_EntityEvent{
-				EntityEvent: entityEvent,
-			}
-		} else {
-			domainEvent := &pb.DomainEvent{
+			Event: &pb.Event{
 				EventId:       event.EventID.String(),
 				EventType:     event.EventType,
 				AggregateId:   event.GetAggregateID().String(),
-				AggregateType: string(event.GetAggregateType()),
-			}
-
-			res.Event = &pb.ReceiveUpdatesResponse_DomainEvent{
-				DomainEvent: domainEvent,
-			}
+				AggregateType: strings.TrimPrefix(string(event.GetAggregateType()), "entity_"),
+			},
 		}
 
 		if err := stream.Send(res); err != nil {

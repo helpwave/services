@@ -33,6 +33,10 @@ var file_libs_events_v1_options_proto_extTypes = []protoimpl.ExtensionInfo{
 
 // Extension fields to descriptorpb.MessageOptions.
 var (
+	// We can define our events in Protobuf. The type of an event like "PATIENT_CREATED_v1"
+	// gets resolved via the option event_type.
+	// The field number 2123 is an arbitrary number above 1000 for custom options.
+	//
 	// optional string event_type = 2123;
 	E_EventType = &file_libs_events_v1_options_proto_extTypes[0]
 )

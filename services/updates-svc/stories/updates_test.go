@@ -55,10 +55,10 @@ func TestReceivingEvents(t *testing.T) {
 		res, err := stream.Recv()
 		requireTrue(t, assert.NoError(t, err))
 
-		resEntityEvent := res.GetEntityEvent()
+		resEntityEvent := res.GetEvent()
 		requireTrue(t, assert.NotNil(t, resEntityEvent))
-		requireTrue(t, assert.Equal(t, "bed", resEntityEvent.GetEntityType()))
-		requireTrue(t, assert.Equal(t, bedId.String(), resEntityEvent.GetEntityId()))
+		requireTrue(t, assert.Equal(t, "bed", resEntityEvent.GetAggregateType()))
+		requireTrue(t, assert.Equal(t, bedId.String(), resEntityEvent.GetAggregateId()))
 		requireTrue(t, assert.Equal(t, "BED_CREATED_v1", resEntityEvent.GetEventType()))
 
 		bedId2 := uuid.New()
@@ -80,10 +80,10 @@ func TestReceivingEvents(t *testing.T) {
 		res2, err := stream2.Recv()
 		requireTrue(t, assert.NoError(t, err))
 
-		res2EntityEvent := res2.GetEntityEvent()
+		res2EntityEvent := res2.GetEvent()
 		requireTrue(t, assert.NotNil(t, res2EntityEvent))
-		requireTrue(t, assert.Equal(t, "bed", res2EntityEvent.GetEntityType()))
-		requireTrue(t, assert.Equal(t, bedId2.String(), res2EntityEvent.GetEntityId()))
+		requireTrue(t, assert.Equal(t, "bed", res2EntityEvent.GetAggregateType()))
+		requireTrue(t, assert.Equal(t, bedId2.String(), res2EntityEvent.GetAggregateId()))
 		requireTrue(t, assert.Equal(t, "BED_CREATED_v1", res2EntityEvent.GetEventType()))
 	}()
 
