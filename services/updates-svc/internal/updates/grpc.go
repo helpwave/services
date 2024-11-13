@@ -5,6 +5,7 @@ import (
 	"context"
 	pb "gen/services/updates_svc/v1"
 	"hwes"
+	"hwes/eventstoredb"
 	"strings"
 	"telemetry"
 	"time"
@@ -126,7 +127,7 @@ func (s *UpdatesGrpcService) ReceiveUpdates(
 				EventId:       event.EventID.String(),
 				EventType:     event.EventType,
 				AggregateId:   event.GetAggregateID().String(),
-				AggregateType: strings.TrimPrefix(string(event.GetAggregateType()), "entity_"),
+				AggregateType: strings.TrimPrefix(string(event.GetAggregateType()), eventstoredb.EntityEventPrefix),
 			},
 		}
 

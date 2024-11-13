@@ -6,6 +6,7 @@ import (
 	"context"
 	pbEventsV1 "gen/libs/events/v1"
 	"hwdb"
+	"hwes"
 	"hwes/eventstoredb"
 	"hwutil"
 
@@ -21,7 +22,17 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
-const taskTemplateEntityType = "task_template"
+const TaskTemplateAggregateType = eventstoredb.EntityEventPrefix + "task_template"
+
+type TaskTemplateAggregate struct {
+	*hwes.AggregateBase
+}
+
+func NewTaskTemplateAggregate(id uuid.UUID) *TaskTemplateAggregate {
+	aggregate := &TaskTemplateAggregate{}
+	aggregate.AggregateBase = hwes.NewAggregateBase(TaskTemplateAggregateType, id)
+	return aggregate
+}
 
 type ServiceServer struct {
 	pb.UnimplementedTaskTemplateServiceServer
@@ -92,7 +103,7 @@ func (s ServiceServer) CreateTaskTemplate(
 		Msg("taskTemplate created")
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, templateID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(templateID),
 		&pbEventsV1.TaskTemplateCreatedEvent{
 			Id:          templateID.String(),
 			Name:        req.GetName(),
@@ -138,7 +149,7 @@ func (s ServiceServer) DeleteTaskTemplate(
 		Msg("taskTemplate deleted")
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, id,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(id),
 		&pbEventsV1.TaskTemplateDeletedEvent{
 			Id: id.String(),
 		},
@@ -195,7 +206,7 @@ func (s ServiceServer) DeleteTaskTemplateSubTask(
 		Msg("taskTemplateSubtask deleted")
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, subtask.TaskTemplateID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(subtask.TaskTemplateID),
 		&pbEventsV1.TaskTemplateSubTaskDeletedEvent{
 			TaskTemplateId: subtask.TaskTemplateID.String(),
 			SubTaskId:      subtask.ID.String(),
@@ -233,7 +244,7 @@ func (s ServiceServer) UpdateTaskTemplate(
 	}
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, id,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(id),
 		&pbEventsV1.TaskTemplateUpdatedEvent{
 			Id:          id.String(),
 			Name:        req.GetName(),
@@ -292,7 +303,7 @@ func (s ServiceServer) UpdateTaskTemplateSubTask(
 	}
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, taskTemplateID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(taskTemplateID),
 		&pbEventsV1.TaskTemplateSubTaskUpdatedEvent{
 			TaskTemplateId: taskTemplateID.String(),
 			SubTaskId:      id.String(),
@@ -339,7 +350,7 @@ func (s ServiceServer) CreateTaskTemplateSubTask(
 		Msg("subtaskID created")
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, taskTemplateEntityType, taskTemplateID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(taskTemplateID),
 		&pbEventsV1.TaskTemplateSubTaskCreatedEvent{
 			TaskTemplateId: taskTemplateID.String(),
 			SubTaskId:      subtaskID.String(),

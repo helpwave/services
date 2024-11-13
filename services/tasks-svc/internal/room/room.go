@@ -8,6 +8,7 @@ import (
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+	"hwes"
 	"hwes/eventstoredb"
 	"hwutil"
 
@@ -27,7 +28,17 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
-var roomEntityType = "room"
+const RoomAggregateType = eventstoredb.EntityEventPrefix + "room"
+
+type RoomAggregate struct {
+	*hwes.AggregateBase
+}
+
+func NewRoomAggregate(id uuid.UUID) *RoomAggregate {
+	aggregate := &RoomAggregate{}
+	aggregate.AggregateBase = hwes.NewAggregateBase(RoomAggregateType, id)
+	return aggregate
+}
 
 type ServiceServer struct {
 	pb.UnimplementedRoomServiceServer
@@ -91,7 +102,7 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 	}
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, roomEntityType, roomID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewRoomAggregate(roomID),
 		&pbEventsV1.RoomCreatedEvent{
 			Id: roomID.String(),
 		},
@@ -184,7 +195,7 @@ func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest
 	}
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, roomEntityType, roomID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewRoomAggregate(roomID),
 		&pbEventsV1.RoomUpdatedEvent{
 			Id:   roomID.String(),
 			Name: req.GetName(),
@@ -293,7 +304,7 @@ func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest
 	// TODO: remove from spice (also beds)
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, roomEntityType, roomID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewRoomAggregate(roomID),
 		&pbEventsV1.RoomDeletedEvent{
 			Id: roomID.String(),
 		},

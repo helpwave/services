@@ -8,6 +8,7 @@ import (
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+	"hwes"
 	"hwes/eventstoredb"
 	"hwutil"
 
@@ -26,7 +27,17 @@ import (
 	pbEventsV1 "gen/libs/events/v1"
 )
 
-const wardEntityType = "ward"
+const WardAggregateType = eventstoredb.EntityEventPrefix + "ward"
+
+type WardAggregate struct {
+	*hwes.AggregateBase
+}
+
+func NewWardAggregate(id uuid.UUID) *WardAggregate {
+	aggregate := &WardAggregate{}
+	aggregate.AggregateBase = hwes.NewAggregateBase(WardAggregateType, id)
+	return aggregate
+}
 
 type ServiceServer struct {
 	authz hwauthz.AuthZ
@@ -87,7 +98,7 @@ func (s *ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardReques
 	tracking.AddWardToRecentActivity(ctx, wardID.String())
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, wardEntityType, wardID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewWardAggregate(wardID),
 		&pbEventsV1.WardCreatedEvent{
 			Id: wardID.String(),
 		},
@@ -263,7 +274,7 @@ func (s *ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardReques
 	tracking.AddWardToRecentActivity(ctx, id.String())
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, wardEntityType, id,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewWardAggregate(id),
 		&pbEventsV1.WardUpdatedEvent{
 			Id:   id.String(),
 			Name: req.GetName(),
@@ -318,7 +329,7 @@ func (s *ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardReques
 	tracking.RemoveWardFromRecentActivity(ctx, id.String())
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, wardEntityType, id,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewWardAggregate(id),
 		&pbEventsV1.WardDeletedEvent{
 			Id: id.String(),
 		},

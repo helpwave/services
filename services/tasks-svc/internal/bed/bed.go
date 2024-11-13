@@ -9,6 +9,7 @@ import (
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+	"hwes"
 	"hwes/eventstoredb"
 	"hwlocale"
 	"hwutil"
@@ -32,7 +33,17 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
-var bedEntityType = "bed"
+const BedAggregateType = eventstoredb.EntityEventPrefix + "bed"
+
+type BedAggregate struct {
+	*hwes.AggregateBase
+}
+
+func NewBedAggregate(id uuid.UUID) *BedAggregate {
+	aggregate := &BedAggregate{}
+	aggregate.AggregateBase = hwes.NewAggregateBase(BedAggregateType, id)
+	return aggregate
+}
 
 type ServiceServer struct {
 	pb.UnimplementedBedServiceServer
@@ -109,7 +120,7 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 	}
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, bedEntityType, bed.ID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewBedAggregate(bed.ID),
 		&pbEventsV1.BedCreatedEvent{
 			Id: bed.ID.String(),
 		},
@@ -318,7 +329,7 @@ func (s ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) 
 	}
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, bedEntityType, bedID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewBedAggregate(bedID),
 		&pbEventsV1.BedUpdatedEvent{
 			Id:     bedID.String(),
 			Name:   req.GetName(),
@@ -376,7 +387,7 @@ func (s ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) 
 	// todo: delete from permission graph
 
 	// store event
-	if err := eventstoredb.SaveEntityEvent(ctx, s.es, bedEntityType, bedID,
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewBedAggregate(bedID),
 		&pbEventsV1.BedDeletedEvent{
 			Id: bedID.String(),
 		},
