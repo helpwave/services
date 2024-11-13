@@ -26,23 +26,6 @@ func (q *Queries) AddUserToOrganization(ctx context.Context, arg AddUserToOrgani
 	return err
 }
 
-const changeMembershipAdminStatus = `-- name: ChangeMembershipAdminStatus :exec
-UPDATE memberships
-SET
-	is_admin=TRUE
-WHERE user_id = $1 AND organization_id = $2
-`
-
-type ChangeMembershipAdminStatusParams struct {
-	UserID         uuid.UUID
-	OrganizationID uuid.UUID
-}
-
-func (q *Queries) ChangeMembershipAdminStatus(ctx context.Context, arg ChangeMembershipAdminStatusParams) error {
-	_, err := q.db.Exec(ctx, changeMembershipAdminStatus, arg.UserID, arg.OrganizationID)
-	return err
-}
-
 const createOrganization = `-- name: CreateOrganization :one
 INSERT INTO organizations (id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -55,7 +38,7 @@ type CreateOrganizationParams struct {
 	ShortName       string
 	ContactEmail    string
 	AvatarUrl       *string
-	IsPersonal      *bool
+	IsPersonal      bool
 	CreatedByUserID uuid.UUID
 }
 
@@ -469,6 +452,23 @@ func (q *Queries) IsInOrganizationById(ctx context.Context, arg IsInOrganization
 	var exists bool
 	err := row.Scan(&exists)
 	return exists, err
+}
+
+const makeAdmin = `-- name: MakeAdmin :exec
+UPDATE memberships
+SET
+	is_admin=TRUE
+WHERE user_id = $1 AND organization_id = $2
+`
+
+type MakeAdminParams struct {
+	UserID         uuid.UUID
+	OrganizationID uuid.UUID
+}
+
+func (q *Queries) MakeAdmin(ctx context.Context, arg MakeAdminParams) error {
+	_, err := q.db.Exec(ctx, makeAdmin, arg.UserID, arg.OrganizationID)
+	return err
 }
 
 const removeMember = `-- name: RemoveMember :exec

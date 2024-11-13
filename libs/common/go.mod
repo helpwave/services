@@ -17,8 +17,8 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus v1.0.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
 	github.com/joho/godotenv v1.5.1
-	github.com/nicksnyder/go-i18n/v2 v2.4.1
-	github.com/prometheus/client_golang v1.20.5
+	github.com/nicksnyder/go-i18n/v2 v2.4.0
+	github.com/prometheus/client_golang v1.20.3
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.57.0

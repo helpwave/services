@@ -47,7 +47,7 @@ DELETE FROM organizations WHERE id=$1;
 INSERT INTO memberships (user_id, organization_id)
 VALUES (@user_id, @organization_id);
 
--- name: ChangeMembershipAdminStatus :exec
+-- name: MakeAdmin :exec
 UPDATE memberships
 SET
 	is_admin=TRUE

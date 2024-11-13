@@ -566,10 +566,10 @@ type UpdateOrganizationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id           string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
-	LongName     *string `protobuf:"bytes,2,opt,name=long_name,json=longName,proto3,oneof" json:"long_name,omitempty"`
-	ShortName    *string `protobuf:"bytes,3,opt,name=short_name,json=shortName,proto3,oneof" json:"short_name,omitempty"`
-	ContactEmail *string `protobuf:"bytes,4,opt,name=contact_email,json=contactEmail,proto3,oneof" json:"contact_email,omitempty"`
+	Id           string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                                                         // @gotags: validate:"uuid4"
+	LongName     *string `protobuf:"bytes,2,opt,name=long_name,json=longName,proto3,oneof" json:"long_name,omitempty" validate:"omitempty,gte=4,lte=64"`      // @gotags: validate:"omitempty,gte=4,lte=64"
+	ShortName    *string `protobuf:"bytes,3,opt,name=short_name,json=shortName,proto3,oneof" json:"short_name,omitempty" validate:"omitempty,gte=2,lte=16"`   // @gotags: validate:"omitempty,gte=2,lte=16"
+	ContactEmail *string `protobuf:"bytes,4,opt,name=contact_email,json=contactEmail,proto3,oneof" json:"contact_email,omitempty" validate:"omitempty,email"` // @gotags: validate:"omitempty,email"
 	AvatarUrl    *string `protobuf:"bytes,5,opt,name=avatar_url,json=avatarUrl,proto3,oneof" json:"avatar_url,omitempty"`
 	IsPersonal   *bool   `protobuf:"varint,6,opt,name=is_personal,json=isPersonal,proto3,oneof" json:"is_personal,omitempty"`
 }

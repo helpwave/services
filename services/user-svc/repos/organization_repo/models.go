@@ -28,7 +28,7 @@ type Organization struct {
 	ShortName       string
 	ContactEmail    string
 	AvatarUrl       *string
-	IsPersonal      *bool
+	IsPersonal      bool
 	CreatedByUserID uuid.UUID
 }
 
