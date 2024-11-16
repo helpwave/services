@@ -7,6 +7,13 @@ definition organization {
 	permission leadership = leader
 	permission membership = leader + member
 
+	// all members can get the organization
+	permission get = membership;
+
+	// (only) leaders can update and delete an organization
+	permission update = leadership;
+	permission delete = leadership;
+
 	// (only) leaders can invite and remove members
 	permission invite_member = leadership
 	permission remove_member = leadership
@@ -24,7 +31,7 @@ definition organization {
 	permission create_patient = membership;
 
 	// all members can alter root property rules
-	permission can_user_alter_root_property_rules = membership;
+	permission alter_root_property_rules = membership;
 }
 
 definition organization_invite {

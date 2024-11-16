@@ -3,10 +3,12 @@ package service
 import (
 	"common"
 	pb "gen/services/user_svc/v1"
-	daprd "github.com/dapr/go-sdk/service/grpc"
-	zlog "github.com/rs/zerolog/log"
 	hwspicedb "hwauthz/spicedb"
 	"hwdb"
+
+	daprd "github.com/dapr/go-sdk/service/grpc"
+	zlog "github.com/rs/zerolog/log"
+
 	"user-svc/internal/hwkc"
 	"user-svc/internal/organization"
 	"user-svc/internal/user"

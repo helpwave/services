@@ -3,10 +3,11 @@ package stories
 import (
 	"context"
 	pb "gen/services/user_svc/v1"
-	"github.com/google/uuid"
 	"hwtesting"
 	"hwutil"
 	"testing"
+
+	"github.com/google/uuid"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

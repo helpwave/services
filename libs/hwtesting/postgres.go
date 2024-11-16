@@ -3,11 +3,12 @@ package hwtesting
 import (
 	"context"
 	"fmt"
-	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/wait"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/wait"
 
 	"github.com/golang-migrate/migrate/v4"
 	zlog "github.com/rs/zerolog/log"

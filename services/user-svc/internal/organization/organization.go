@@ -13,6 +13,8 @@ import (
 	"hwlocale"
 	"hwutil"
 
+	"user-svc/internal/organization/perm"
+
 	"user-svc/internal/hwkc"
 	"user-svc/locale"
 	"user-svc/repos/organization_repo"
@@ -85,7 +87,7 @@ func (s ServiceServer) GetOrganization(
 
 	user := commonPerm.UserFromCtx(ctx)
 	organizationPerm := commonPerm.Organization(id)
-	check := hwauthz.NewPermissionCheck(user, "membership", organizationPerm)
+	check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserGet, organizationPerm)
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
@@ -127,15 +129,29 @@ func (s ServiceServer) GetOrganizationsByUser(
 	ctx context.Context,
 	req *pb.GetOrganizationsByUserRequest,
 ) (*pb.GetOrganizationsByUserResponse, error) {
-	userID, err := uuid.Parse(req.UserId)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
+	userID := uuid.MustParse(req.UserId)
 
 	organizations, err := GetOrganizationsByUserId(ctx, userID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
+
+	// filter out orgs which the requesting user is not allowed to see
+	requestingUser := commonPerm.UserFromCtx(ctx)
+	checks := hwutil.Map(organizations, func(o OrganizationWithMembers) hwauthz.PermissionCheck {
+		return hwauthz.NewPermissionCheck(
+			requestingUser,
+			perm.OrganizationCanUserGet,
+			commonPerm.Organization(o.Organization.ID),
+		)
+	})
+	allowed, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	organizations = hwutil.Filter(organizations, func(i int, _ OrganizationWithMembers) bool {
+		return allowed[i]
+	})
 
 	mappedOrganizations := hwutil.Map(organizations,
 		func(obj OrganizationWithMembers) *pb.GetOrganizationsByUserResponse_Organization {
@@ -145,7 +161,7 @@ func (s ServiceServer) GetOrganizationsByUser(
 				ShortName:    obj.Organization.ShortName,
 				ContactEmail: obj.Organization.ContactEmail,
 				AvatarUrl:    obj.Organization.AvatarUrl,
-				IsPersonal:   false,
+				IsPersonal:   obj.Organization.IsPersonal,
 				Members: hwutil.Map(obj.Members,
 					func(membership organization_repo.User) *pb.GetOrganizationsByUserResponse_Organization_Member {
 						return &pb.GetOrganizationsByUserResponse_Organization_Member{
@@ -253,6 +269,13 @@ func (s ServiceServer) UpdateOrganization(
 	ctx context.Context,
 	req *pb.UpdateOrganizationRequest,
 ) (*pb.UpdateOrganizationResponse, error) {
+	userPerm := commonPerm.UserFromCtx(ctx)
+	orgPerm := commonPerm.Organization(uuid.MustParse(req.GetId()))
+	check := hwauthz.NewPermissionCheck(userPerm, perm.OrganizationCanUserUpdate, orgPerm)
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
+	}
+
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.GetId())
@@ -280,6 +303,13 @@ func (s ServiceServer) DeleteOrganization(
 	ctx context.Context,
 	req *pb.DeleteOrganizationRequest,
 ) (*pb.DeleteOrganizationResponse, error) {
+	userPerm := commonPerm.UserFromCtx(ctx)
+	orgPerm := commonPerm.Organization(uuid.MustParse(req.GetId()))
+	check := hwauthz.NewPermissionCheck(userPerm, perm.OrganizationCanUserDelete, orgPerm)
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
+	}
+
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.GetId())
@@ -296,6 +326,8 @@ func (s ServiceServer) DeleteOrganization(
 	if err != nil {
 		return nil, err
 	}
+
+	// TODO: remove from permissions graph
 
 	return &pb.DeleteOrganizationResponse{}, nil
 }
@@ -342,6 +374,13 @@ func (s ServiceServer) RemoveMember(
 	ctx context.Context,
 	req *pb.RemoveMemberRequest,
 ) (*pb.RemoveMemberResponse, error) {
+	userPerm := commonPerm.UserFromCtx(ctx)
+	orgPerm := commonPerm.Organization(uuid.MustParse(req.GetId()))
+	check := hwauthz.NewPermissionCheck(userPerm, perm.OrganizationCanUserRemoveMember, orgPerm)
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
+	}
+
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
@@ -368,6 +407,14 @@ func (s ServiceServer) RemoveMember(
 		return nil, err
 	}
 
+	deletedUser := commonPerm.User(userID)
+	if _, err := s.authz.
+		Delete(hwauthz.NewRelationship(deletedUser, perm.OrganizationMember, orgPerm)).
+		Delete(hwauthz.NewRelationship(deletedUser, perm.OrganizationLeader, orgPerm)).
+		Commit(ctx); err != nil {
+		return nil, err
+	}
+
 	log.Info().
 		Str("userID", userID.String()).
 		Str("organizationID", organizationID.String()).
@@ -380,6 +427,13 @@ func (s ServiceServer) InviteMember(
 	ctx context.Context,
 	req *pb.InviteMemberRequest,
 ) (*pb.InviteMemberResponse, error) {
+	userPerm := commonPerm.UserFromCtx(ctx)
+	orgPerm := commonPerm.Organization(uuid.MustParse(req.GetOrganizationId()))
+	check := hwauthz.NewPermissionCheck(userPerm, perm.OrganizationCanUserInviteMember, orgPerm)
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
+	}
+
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 	invitation := organization_repo.Invitation{}
 
@@ -420,6 +474,8 @@ func (s ServiceServer) InviteMember(
 		if err != nil {
 			return nil, err
 		}
+
+		// TODO: add to graph
 
 		log.Info().
 			Str("email", req.Email). // TODO: Revisited for privacy reasons
@@ -822,7 +878,7 @@ func CreateOrganizationAndAddUser(
 
 	permUser := commonPerm.User(userID)
 	permOrg := commonPerm.Organization(organization.ID)
-	rel := hwauthz.NewRelationship(permUser, "leader", permOrg)
+	rel := hwauthz.NewRelationship(permUser, perm.OrganizationLeader, permOrg)
 	if _, err := authz.Create(rel).Commit(ctx); err != nil {
 		return nil, err
 	}
