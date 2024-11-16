@@ -20,7 +20,7 @@ func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 	return func(ctx context.Context, taskID, subtaskID uuid.UUID) (common.ConsistencyToken, error) {
 		// check permissions
 		user := commonPerm.UserFromCtx(ctx)
-		check := hwauthz.NewPermissionCheck(user, perm.TaskCanUserUpdate, perm.Task(taskID))
+		check := hwauthz.NewPermissionCheck(user, perm.TaskCanUserDeleteSubtask, perm.Task(taskID))
 		if err := authz.Must(ctx, check); err != nil {
 			return 0, err
 		}

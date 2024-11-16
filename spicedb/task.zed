@@ -5,5 +5,11 @@ definition task {
 	// those who can RUD the patient, can RUD the task
 	permission get = patient->get;
 	permission update = patient->update;
+
+	permission update_subtask = update;
+	permission assign = update;
+	permission create_subtask = update;
+	permission delete_subtask = update;
+
 	permission delete = patient->delete;
 }

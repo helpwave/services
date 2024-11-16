@@ -22,7 +22,11 @@ const TaskPatient hwauthz.Relation = "patient"
 const PatientCanUserCreateTask hwauthz.Permission = "create_task"
 
 const (
-	TaskCanUserGet    hwauthz.Permission = "get"
-	TaskCanUserUpdate hwauthz.Permission = "update"
-	TaskCanUserDelete hwauthz.Permission = "delete"
+	TaskCanUserGet           hwauthz.Permission = "get"
+	TaskCanUserUpdate        hwauthz.Permission = "update"
+	TaskCanUserUpdateSubtask hwauthz.Permission = "update_subtask"
+	TaskCanUserAssign        hwauthz.Permission = "assign"
+	TaskCanUserCreateSubtask hwauthz.Permission = "create_subtask"
+	TaskCanUserDeleteSubtask hwauthz.Permission = "delete_subtask"
+	TaskCanUserDelete        hwauthz.Permission = "delete"
 )
