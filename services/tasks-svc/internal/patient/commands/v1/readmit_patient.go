@@ -19,7 +19,7 @@ type ReadmitPatientCommandHandler func(ctx context.Context, patientID uuid.UUID)
 func NewReadmitPatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) ReadmitPatientCommandHandler {
 	return func(ctx context.Context, patientID uuid.UUID) (common.ConsistencyToken, error) {
 		user := commonPerm.UserFromCtx(ctx)
-		check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserUpdate, perm.Patient(patientID))
+		check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserReadmit, perm.Patient(patientID))
 		if err := authz.Must(ctx, check); err != nil {
 			return 0, err
 		}

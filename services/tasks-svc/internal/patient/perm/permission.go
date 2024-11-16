@@ -22,7 +22,10 @@ const PatientOrganization hwauthz.Relation = "organization"
 const OrganizationCanUserCreatePatient hwauthz.Permission = "create_patient"
 
 const (
-	PatientCanUserGet    hwauthz.Permission = "get"
-	PatientCanUserUpdate hwauthz.Permission = "update"
-	PatientCanUserDelete hwauthz.Permission = "delete"
+	PatientCanUserGet       hwauthz.Permission = "get"
+	PatientCanUserUpdate    hwauthz.Permission = "update"
+	PatientCanUserAssignBed hwauthz.Permission = "assign_bed"
+	PatientCanUserDischarge hwauthz.Permission = "discharge"
+	PatientCanUserReadmit   hwauthz.Permission = "readmit"
+	PatientCanUserDelete    hwauthz.Permission = "delete"
 )

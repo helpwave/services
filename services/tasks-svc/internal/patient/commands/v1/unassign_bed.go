@@ -28,7 +28,7 @@ func NewUnassignBedCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) U
 		user := commonPerm.UserFromCtx(ctx)
 		checks := make([]hwauthz.PermissionCheck, 0, 2)
 		checks = append(checks,
-			hwauthz.NewPermissionCheck(user, perm.PatientCanUserUpdate, perm.Patient(patientID)))
+			hwauthz.NewPermissionCheck(user, perm.PatientCanUserAssignBed, perm.Patient(patientID)))
 		if a.Patient.BedID.Valid {
 			checks = append(checks,
 				hwauthz.NewPermissionCheck(user, bedPerm.BedCanUserUpdate, bedPerm.Bed(a.Patient.BedID.UUID)))
