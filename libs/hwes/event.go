@@ -41,6 +41,8 @@ type Event struct {
 	OrganizationID *uuid.UUID
 	// w3c trace context
 	TraceParent string
+	// DataIsProto is a flag to indicate that the payload of the event is a Protobuf
+	// Should get removed when all events are migrated to Protobuf
 	DataIsProto bool
 }
 
