@@ -97,7 +97,7 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 		Create(relationship).
 		Commit(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err)
+		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err)
 	}
 
 	// return

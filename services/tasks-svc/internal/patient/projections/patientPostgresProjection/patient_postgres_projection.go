@@ -1,7 +1,8 @@
-package patient_postgres_projection
+package patientPostgresProjection
 
 import (
 	"context"
+	"errors"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
@@ -61,6 +62,11 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
+	if evt.OrganizationID == nil {
+		return errors.New("onPatientCreated: organizationID missing"), hwutil.PtrTo(esdb.NackActionSkip)
+	}
+	organizationID := *evt.OrganizationID
+
 	err = a.patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
 		ID:                      patientID,
 		HumanReadableIdentifier: payload.HumanReadableIdentifier,
@@ -68,6 +74,7 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 		CreatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
 		UpdatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
 		Consistency:             int64(evt.GetVersion()), //nolint:gosec
+		OrganizationID:          organizationID,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)

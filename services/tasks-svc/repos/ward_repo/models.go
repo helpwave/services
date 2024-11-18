@@ -25,6 +25,7 @@ type Patient struct {
 	UpdatedAt               pgtype.Timestamp
 	IsDischarged            bool
 	Consistency             int64
+	OrganizationID          uuid.UUID
 }
 
 type Room struct {

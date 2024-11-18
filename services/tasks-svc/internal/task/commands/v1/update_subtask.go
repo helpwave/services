@@ -4,7 +4,11 @@ import (
 	"common"
 	"context"
 	"fmt"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
+
+	"tasks-svc/internal/task/perm"
 
 	"github.com/google/uuid"
 
@@ -19,7 +23,7 @@ type UpdateSubtaskCommandHandler func(
 	done *bool,
 ) (common.ConsistencyToken, error)
 
-func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore) UpdateSubtaskCommandHandler {
+func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) UpdateSubtaskCommandHandler {
 	return func(
 		ctx context.Context,
 		taskID,
@@ -27,6 +31,13 @@ func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore) UpdateSubtaskCommand
 		name *string,
 		done *bool,
 	) (common.ConsistencyToken, error) {
+		// check permissions
+		user := commonPerm.UserFromCtx(ctx)
+		check := hwauthz.NewPermissionCheck(user, perm.TaskCanUserUpdateSubtask, perm.Task(taskID))
+		if err := authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
+
 		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
 			return 0, err

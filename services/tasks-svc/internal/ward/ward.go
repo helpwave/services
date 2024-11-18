@@ -71,7 +71,7 @@ func (s ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest
 		Create(relationship).
 		Commit(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err)
+		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err)
 	}
 
 	// add to "recently used"

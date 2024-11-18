@@ -5,7 +5,12 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
+
+	patientPerm "tasks-svc/internal/patient/perm"
+	"tasks-svc/internal/task/perm"
 
 	"github.com/google/uuid"
 
@@ -15,8 +20,15 @@ import (
 
 type GetTaskWithPatientByIDQueryHandler func(ctx context.Context, taskID uuid.UUID) (*models.TaskWithPatient, error)
 
-func NewGetTaskWithPatientByIDQueryHandler() GetTaskWithPatientByIDQueryHandler {
+func NewGetTaskWithPatientByIDQueryHandler(authz hwauthz.AuthZ) GetTaskWithPatientByIDQueryHandler {
 	return func(ctx context.Context, taskID uuid.UUID) (*models.TaskWithPatient, error) {
+		// check task permissions
+		user := commonPerm.UserFromCtx(ctx)
+		taskCheck := hwauthz.NewPermissionCheck(user, perm.TaskCanUserGet, perm.Task(taskID))
+		if err := authz.Must(ctx, taskCheck); err != nil {
+			return nil, err
+		}
+
 		taskRepo := task_repo.New(hwdb.GetDB())
 
 		rows, err := taskRepo.GetTaskWithPatientById(ctx, taskID)
@@ -25,6 +37,16 @@ func NewGetTaskWithPatientByIDQueryHandler() GetTaskWithPatientByIDQueryHandler 
 		}
 		if len(rows) == 0 {
 			return nil, fmt.Errorf("could not find record with ID %s", taskID.String())
+		}
+
+		// check patient permissions
+		patientCheck := hwauthz.NewPermissionCheck(
+			user,
+			patientPerm.PatientCanUserGet,
+			patientPerm.Patient(rows[0].Patient.ID),
+		)
+		if err := authz.Must(ctx, patientCheck); err != nil {
+			return nil, err
 		}
 
 		task := &models.TaskWithPatient{

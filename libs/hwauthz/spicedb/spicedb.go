@@ -240,3 +240,16 @@ func (s *SpiceDBAuthZ) Must(ctx context.Context, check hwauthz.PermissionCheck) 
 	granted, err := s.Check(ctx, check)
 	return hwauthz.Error(ctx, check, granted, err)
 }
+
+func (s *SpiceDBAuthZ) BulkMust(ctx context.Context, checks ...hwauthz.PermissionCheck) error {
+	results, err := s.BulkCheck(ctx, checks)
+	if err != nil {
+		return err
+	}
+	for i, b := range results {
+		if !b {
+			return hwauthz.StatusErrorPermissionDenied(ctx, checks[i])
+		}
+	}
+	return nil
+}

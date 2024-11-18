@@ -10,11 +10,13 @@ import (
 	"hwes/eventstoredb/projections"
 	"time"
 
+	"tasks-svc/internal/patient/projections/patientSpiceDBProjection"
+
 	ph "tasks-svc/internal/patient/handlers"
-	"tasks-svc/internal/patient/projections/patient_postgres_projection"
+	"tasks-svc/internal/patient/projections/patientPostgresProjection"
 	th "tasks-svc/internal/task/handlers"
-	"tasks-svc/internal/task/projections/spicedb"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
+	"tasks-svc/internal/task/projections/task_spicedb"
 	"tasks-svc/internal/tracking"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
@@ -41,22 +43,23 @@ func Main(version string, ready func()) {
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
-	taskHandlers := th.NewTaskHandlers(aggregateStore)
-	patientHandlers := ph.NewPatientHandlers(aggregateStore)
+	taskHandlers := th.NewTaskHandlers(aggregateStore, authz)
+	patientHandlers := ph.NewPatientHandlers(aggregateStore, authz)
 
 	go projections.StartProjections(
 		ctx,
 		common.Shutdown,
-		spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
+		task_spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
 		task_postgres_projection.NewProjection(eventStore, ServiceName),
-		patient_postgres_projection.NewProjection(eventStore, ServiceName),
+		patientPostgresProjection.NewProjection(eventStore, ServiceName),
+		patientSpiceDBProjection.NewProjection(eventStore, authz, ServiceName),
 	)
 
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
 		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore, taskHandlers))
-		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore, patientHandlers))
+		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore, authz, patientHandlers))
 		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer(authz))
 		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer(authz))
 		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer(authz))

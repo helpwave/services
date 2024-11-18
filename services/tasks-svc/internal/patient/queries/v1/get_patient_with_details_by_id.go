@@ -3,8 +3,12 @@ package v1
 import (
 	"common"
 	"context"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwes"
+
+	"tasks-svc/internal/patient/perm"
 
 	"github.com/google/uuid"
 
@@ -15,10 +19,19 @@ import (
 
 type GetPatientDetailsByIDQueryHandler func(ctx context.Context, patientID uuid.UUID) (*models.PatientDetails, error)
 
-func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatientDetailsByIDQueryHandler {
+func NewGetPatientWithDetailsByIDQueryHandler(
+	as hwes.AggregateStore, authz hwauthz.AuthZ,
+) GetPatientDetailsByIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) (*models.PatientDetails, error) {
 		patientRepo := patient_repo.New(hwdb.GetDB())
-		taskHandlers := th.NewTaskHandlers(as)
+		taskHandlers := th.NewTaskHandlers(as, authz)
+
+		// check permissions
+		user := commonPerm.UserFromCtx(ctx)
+		taskCheck := hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
+		if err := authz.Must(ctx, taskCheck); err != nil {
+			return nil, err
+		}
 
 		patientRes, err := hwdb.Optional(patientRepo.GetPatientWithBedAndRoom)(ctx, patientID)
 		if patientRes == nil {

@@ -1,0 +1,17 @@
+definition patient {
+	// beds belong to an organization
+	relation organization: organization;
+
+	// all members of the organization can RUD the patient
+	permission get = organization->membership;
+	permission update = organization->membership;
+
+	permission assign_bed = update;
+	permission discharge = update;
+	permission readmit = update;
+
+	permission delete = organization->membership;
+
+	// those with update permissions can create a new task for the patient
+	permission create_task = update;
+}

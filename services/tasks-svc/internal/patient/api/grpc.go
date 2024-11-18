@@ -5,6 +5,8 @@ import (
 	"common/hwerr"
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwdb/locale"
 	"hwes"
@@ -15,6 +17,10 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	bedPerm "tasks-svc/internal/bed/perm"
+	"tasks-svc/internal/patient/perm"
+	roomPerm "tasks-svc/internal/room/perm"
+
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
@@ -24,11 +30,21 @@ import (
 type PatientGrpcService struct {
 	pb.UnimplementedPatientServiceServer
 	as       hwes.AggregateStore
+	authz    hwauthz.AuthZ
 	handlers *handlers.Handlers
 }
 
-func NewPatientGrpcService(aggregateStore hwes.AggregateStore, handlers *handlers.Handlers) *PatientGrpcService {
-	return &PatientGrpcService{as: aggregateStore, handlers: handlers}
+func NewPatientGrpcService(
+	aggregateStore hwes.AggregateStore,
+	authz hwauthz.AuthZ,
+	handlers *handlers.Handlers,
+) *PatientGrpcService {
+	return &PatientGrpcService{
+		UnimplementedPatientServiceServer: pb.UnimplementedPatientServiceServer{},
+		as:                                aggregateStore,
+		authz:                             authz,
+		handlers:                          handlers,
+	}
 }
 
 func (s *PatientGrpcService) CreatePatient(
@@ -65,6 +81,14 @@ func (s *PatientGrpcService) GetPatient(
 
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
+	}
+
+	// do query
 	patient, err := s.handlers.Queries.V1.GetPatientByID(ctx, patientID)
 	if err != nil {
 		return nil, err
@@ -78,6 +102,12 @@ func (s *PatientGrpcService) GetPatient(
 		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else if result != nil {
+			bedCheck := hwauthz.NewPermissionCheck(user, bedPerm.BedCanUserGet, bedPerm.Bed(result.Bed.ID))
+			roomCheck := hwauthz.NewPermissionCheck(user, roomPerm.RoomCanUserGet, roomPerm.Room(result.Room.ID))
+			if err := s.authz.BulkMust(ctx, bedCheck, roomCheck); err != nil {
+				return nil, err
+			}
+
 			bedRes = &pb.GetPatientResponse_Bed{
 				Id:          result.Bed.ID.String(),
 				Name:        result.Bed.Name,
@@ -354,14 +384,30 @@ func (s *PatientGrpcService) GetRecentPatients(
 	}
 	*/
 
-	// get all Patients for valid uuids
-	recentPatients := hwutil.Map(recentPatientIdsStrs, func(id string) *pb.GetRecentPatientsResponse_Patient {
+	recentPatientIds := hwutil.FlatMap(recentPatientIdsStrs, func(id string) *uuid.UUID {
 		parsedUUID, err := uuid.Parse(id)
 		if err != nil {
 			log.Warn().Str("uuid", id).Msg("GetRecentPatientsForUser returned invalid uuid")
 			return nil
 		}
-		patient, err := s.handlers.Queries.V1.GetPatientByID(ctx, parsedUUID)
+		return &parsedUUID
+	})
+
+	user := commonPerm.UserFromCtx(ctx)
+	checks := hwutil.Map(recentPatientIds, func(patientID uuid.UUID) hwauthz.PermissionCheck {
+		return hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
+	})
+	allowed, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	recentPatientIds = hwutil.Filter(recentPatientIds, func(i int, _ uuid.UUID) bool {
+		return allowed[i]
+	})
+
+	// get all Patients for valid uuids
+	recentPatients := hwutil.Map(recentPatientIds, func(id uuid.UUID) *pb.GetRecentPatientsResponse_Patient {
+		patient, err := s.handlers.Queries.V1.GetPatientByID(ctx, id)
 		if err != nil {
 			return nil
 		}
@@ -404,8 +450,6 @@ func (s *PatientGrpcService) UpdatePatient(
 	ctx context.Context,
 	req *pb.UpdatePatientRequest,
 ) (*pb.UpdatePatientResponse, error) {
-	// TODO: Auth
-
 	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err

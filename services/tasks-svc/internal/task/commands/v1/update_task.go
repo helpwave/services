@@ -4,7 +4,11 @@ import (
 	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
+
+	"tasks-svc/internal/task/perm"
 
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -22,7 +26,7 @@ type UpdateTaskCommandHandler func(
 	dueAt *timestamppb.Timestamp,
 ) (common.ConsistencyToken, error)
 
-func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandler {
+func NewUpdateTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) UpdateTaskCommandHandler {
 	return func(
 		ctx context.Context,
 		taskID uuid.UUID,
@@ -32,6 +36,13 @@ func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandle
 		public *bool,
 		dueAt *timestamppb.Timestamp,
 	) (common.ConsistencyToken, error) {
+		// check permissions
+		user := commonPerm.UserFromCtx(ctx)
+		check := hwauthz.NewPermissionCheck(user, perm.TaskCanUserUpdate, perm.Task(taskID))
+		if err := authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
+
 		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
 			return 0, err
