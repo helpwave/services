@@ -9,6 +9,7 @@ definition organization {
 
 	// all members can get the organization
 	permission get = membership;
+	permission get_members = get;
 
 	// (only) leaders can update and delete an organization
 	permission update = leadership;

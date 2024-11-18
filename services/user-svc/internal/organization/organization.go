@@ -602,27 +602,12 @@ func (s ServiceServer) GetMembersByOrganization(
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	userID := auth.MustGetUserID(ctx)
-
-	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	// check permission
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(
+		user, perm.OrganizationCanUserGetMembers, commonPerm.Organization(organizationID))
+	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
-	} else if !doesOrganizationExist {
-		return &pb.GetMembersByOrganizationResponse{}, nil
-	}
-
-	hasAccess, err := organizationRepo.IsInOrganizationById(ctx, organization_repo.IsInOrganizationByIdParams{
-		Organizationid: organizationID,
-		Userid:         userID,
-	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
-	if !hasAccess {
-		return nil, status.Error(codes.Unauthenticated, "Not a member of this organization")
 	}
 
 	members, err := organizationRepo.GetMembersByOrganization(ctx, organizationID)
