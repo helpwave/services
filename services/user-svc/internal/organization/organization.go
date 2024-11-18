@@ -131,27 +131,10 @@ func (s ServiceServer) GetOrganizationsByUser(
 ) (*pb.GetOrganizationsByUserResponse, error) {
 	userID := uuid.MustParse(req.UserId)
 
-	organizations, err := GetOrganizationsByUserId(ctx, userID)
+	organizations, err := GetOrganizationsByUserId(ctx, userID, s.authz)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-
-	// filter out orgs which the requesting user is not allowed to see
-	requestingUser := commonPerm.UserFromCtx(ctx)
-	checks := hwutil.Map(organizations, func(o OrganizationWithMembers) hwauthz.PermissionCheck {
-		return hwauthz.NewPermissionCheck(
-			requestingUser,
-			perm.OrganizationCanUserGet,
-			commonPerm.Organization(o.Organization.ID),
-		)
-	})
-	allowed, err := s.authz.BulkCheck(ctx, checks)
-	if err != nil {
-		return nil, err
-	}
-	organizations = hwutil.Filter(organizations, func(i int, _ OrganizationWithMembers) bool {
-		return allowed[i]
-	})
 
 	mappedOrganizations := hwutil.Map(organizations,
 		func(obj OrganizationWithMembers) *pb.GetOrganizationsByUserResponse_Organization {
@@ -184,7 +167,7 @@ type OrganizationWithMembers struct {
 	Members      []organization_repo.User
 }
 
-func GetOrganizationsByUserId(ctx context.Context, userId uuid.UUID) ([]OrganizationWithMembers, error) {
+func GetOrganizationsByUserId(ctx context.Context, userId uuid.UUID, authz hwauthz.AuthZ) ([]OrganizationWithMembers, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	rows, err := organizationRepo.GetOrganizationsWithMembersByUser(ctx, userId)
@@ -223,7 +206,25 @@ func GetOrganizationsByUserId(ctx context.Context, userId uuid.UUID) ([]Organiza
 				Members:      members,
 			}
 			return val
-		})
+		},
+	)
+
+	// filter out orgs which the requesting user is not allowed to see
+	requestingUser := commonPerm.UserFromCtx(ctx)
+	checks := hwutil.Map(organizationsResponse, func(o OrganizationWithMembers) hwauthz.PermissionCheck {
+		return hwauthz.NewPermissionCheck(
+			requestingUser,
+			perm.OrganizationCanUserGet,
+			commonPerm.Organization(o.Organization.ID),
+		)
+	})
+	allowed, err := authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	organizationsResponse = hwutil.Filter(organizationsResponse, func(i int, _ OrganizationWithMembers) bool {
+		return allowed[i]
+	})
 
 	return organizationsResponse, nil
 }
@@ -234,7 +235,7 @@ func (s ServiceServer) GetOrganizationsForUser(
 ) (*pb.GetOrganizationsForUserResponse, error) {
 	userID := auth.MustGetUserID(ctx)
 
-	organizations, err := GetOrganizationsByUserId(ctx, userID)
+	organizations, err := GetOrganizationsByUserId(ctx, userID, s.authz)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
