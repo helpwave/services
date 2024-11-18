@@ -46,7 +46,8 @@ type Relation string
 // See https://authzed.com/docs/spicedb/concepts/schema#permissions
 type Permission Relation
 
-// TODO: document
+// ObjectType is a string alias for the
+// Type of Object definitions, (e.g., "user")
 type ObjectType string
 
 // An Object must relate to an
