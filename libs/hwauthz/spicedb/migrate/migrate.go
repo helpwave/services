@@ -69,7 +69,7 @@ func GetCurrentVersion(ctx context.Context, client *authzed.Client) int {
 
 	// if more relations exist, the version is not clear, user must fix it
 	_, err = stream.Recv()
-	if errors.Is(err, io.EOF) {
+	if !errors.Is(err, io.EOF) {
 		panic("more than one version relation exist")
 	}
 	return i
