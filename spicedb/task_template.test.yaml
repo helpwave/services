@@ -26,7 +26,7 @@ relationships:
   - "task_template:b#owner@user:bob"
 
 tests:
-  - name: If the owner is a user, only the owner of a template can RUD it
+  - name: If the owner is a user, only the owner of a template can {G,U,D} it
     validate:
       - relation: "task_template:b#get"
         exhaustive:

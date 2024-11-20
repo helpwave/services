@@ -186,6 +186,8 @@ type AuthZ interface {
 	// Also see Must and BulkCheck
 	BulkMust(ctx context.Context, checks ...PermissionCheck) error
 	// LookupResources yields all resource ids, where (subject, relation, resourceType:resource) is a valid relation
+	// Useful, where the set of accessible resources is much smaller than the query results.
+	// Use this to first lookup permitted resources, and then restrict your database query to them.
 	LookupResources(ctx context.Context, subject Object, relation Relation, resourceType ObjectType) ([]string, error)
 }
 
