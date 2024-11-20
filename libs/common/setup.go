@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 	"crypto/tls"
+	daprPb "github.com/dapr/dapr/pkg/proto/runtime/v1"
 	"hwutil"
 	"net/http"
 	"os"
@@ -82,7 +83,9 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 	contextCancel = cancel
 
 	// Collect options
-	options := SetupOptions{}
+	options := SetupOptions{
+		unauthenticatedMethods: []string{daprPb.AppCallbackHealthCheck_HealthCheck_FullMethodName},
+	}
 	for _, opt := range opts {
 		opt(&options)
 	}
