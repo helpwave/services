@@ -471,8 +471,6 @@ func (s *PatientGrpcService) UpdatePatient(
 func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*pb.AssignBedResponse, error) {
 	log := zlog.Ctx(ctx)
 
-	// TODO: Auth
-
 	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
@@ -504,8 +502,6 @@ func (s *PatientGrpcService) UnassignBed(
 ) (*pb.UnassignBedResponse, error) {
 	log := zlog.Ctx(ctx)
 
-	// TODO: Auth
-
 	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
@@ -532,7 +528,6 @@ func (s *PatientGrpcService) DischargePatient(
 ) (*pb.DischargePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientID, err := uuid.Parse(req.GetId())
-	// TODO: Auth
 	if err != nil {
 		return nil, err
 	}

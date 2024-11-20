@@ -2,6 +2,7 @@ package spicedb
 
 import (
 	"context"
+	"hwauthz/commonPerm"
 	"hwtesting"
 	"os"
 	"os/signal"
@@ -9,6 +10,8 @@ import (
 	"telemetry"
 	"testing"
 	"time"
+
+	"github.com/google/uuid"
 
 	zlog "github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
@@ -47,19 +50,6 @@ func TestMain(m *testing.M) {
 	os.Exit(exitCode)
 }
 
-type testObject struct {
-	typ string
-	id  string
-}
-
-func (s testObject) Type() string {
-	return s.typ
-}
-
-func (s testObject) ID() string {
-	return s.id
-}
-
 func TestBulkCheck(t *testing.T) {
 	ctx := context.Background()
 	client := NewSpiceDBAuthZ()
@@ -72,14 +62,14 @@ func TestBulkCheck(t *testing.T) {
 	tx := hwauthz.NewTx(client, nil, nil)
 
 	for i := range checks {
-		sub := testObject{
-			typ: "user",
-			id:  strconv.Itoa(i),
+		sub := commonPerm.GenericObject{
+			Typ: "user",
+			Id:  strconv.Itoa(i),
 		}
 		relation := hwauthz.Permission("member")
-		resc := testObject{
-			typ: "organization",
-			id:  strconv.Itoa(i),
+		resc := commonPerm.GenericObject{
+			Typ: "organization",
+			Id:  strconv.Itoa(i),
 		}
 		checks[i] = hwauthz.NewPermissionCheck(sub, relation, resc)
 
@@ -108,4 +98,36 @@ func TestBulkCheck(t *testing.T) {
 			assert.Equal(t, i%2 == 0, b, checks[i].String())
 		}
 	}
+}
+
+func TestLookupResources(t *testing.T) {
+	ctx := context.Background()
+	client := NewSpiceDBAuthZ()
+
+	// preparations
+	sub := commonPerm.GenericObject{
+		Typ: "user",
+		Id:  uuid.New().String(),
+	}
+	relation := hwauthz.Relation("member")
+
+	// create test relations
+	tx := hwauthz.NewTx(client, nil, nil)
+	for i := range 3 {
+		resc := commonPerm.GenericObject{
+			Typ: "organization",
+			Id:  strconv.Itoa(i),
+		}
+		relationship := hwauthz.NewRelationship(sub, relation, resc)
+		tx.Create(relationship)
+	}
+	_, err := tx.Commit(ctx)
+	require.NoError(t, err)
+
+	// LookupResources
+	subjects, err := client.LookupResources(ctx, sub, relation, "organization")
+	require.NoError(t, err)
+
+	// assert
+	assert.ElementsMatch(t, []string{"0", "1", "2"}, subjects)
 }

@@ -39,3 +39,15 @@ tests:
       - "ward:a#delete@user:charlie"
       - "ward:b#delete@user:charlie"
       - not: "ward:b#delete@user:alice"
+  - name: all members can create new rooms in any ward in their org
+    check:
+      - "ward:a#create_room@user:alice"
+      - "ward:a#create_room@user:charlie"
+      - "ward:b#create_room@user:charlie"
+      - not: "ward:b#create_room@user:alice"
+  - name: all members can publish new task templates in any ward in their org
+    check:
+      - "ward:a#publish_task_template@user:alice"
+      - "ward:a#publish_task_template@user:charlie"
+      - "ward:b#publish_task_template@user:charlie"
+      - not: "ward:b#publish_task_template@user:alice"

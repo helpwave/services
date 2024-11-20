@@ -3,8 +3,12 @@ package models
 import (
 	"context"
 	"errors"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwutil"
+
+	"property-svc/internal/property-view/perm"
 
 	"github.com/google/uuid"
 
@@ -132,4 +136,28 @@ func PatientPropertyMatchersFromMap(m map[string]interface{}) (PatientPropertyMa
 	}
 
 	return matcher, true
+}
+
+func (m PatientPropertyMatchers) UserMustBeAllowedToUpdateRule(ctx context.Context, authz hwauthz.AuthZ) error {
+	user := commonPerm.UserFromCtx(ctx)
+
+	checks := make([]hwauthz.PermissionCheck, 0)
+
+	if m.PatientID.Valid {
+		checks = append(checks,
+			hwauthz.NewPermissionCheck(user, perm.PatientCanUserUpdate, perm.Patient(m.PatientID.UUID)))
+	}
+
+	if m.WardID.Valid {
+		checks = append(checks,
+			hwauthz.NewPermissionCheck(user, perm.WardCanUserUpdate, perm.Ward(m.WardID.UUID)))
+	}
+
+	if len(checks) == 0 {
+		org := commonPerm.OrganizationFromCtx(ctx)
+		checks = append(checks,
+			hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserAlterRootPropertyRules, org))
+	}
+
+	return authz.BulkMust(ctx, checks...)
 }

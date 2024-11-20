@@ -10,8 +10,8 @@ import (
 
 type Bed uuid.UUID
 
-func (t Bed) Type() string { return "bed" }
-func (t Bed) ID() string   { return uuid.UUID(t).String() }
+func (t Bed) Type() hwauthz.ObjectType { return "bed" }
+func (t Bed) ID() string               { return uuid.UUID(t).String() }
 
 // Direct Relations
 

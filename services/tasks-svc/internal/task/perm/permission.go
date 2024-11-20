@@ -10,8 +10,8 @@ import (
 
 type Task uuid.UUID
 
-func (t Task) Type() string { return "task" }
-func (t Task) ID() string   { return uuid.UUID(t).String() }
+func (t Task) Type() hwauthz.ObjectType { return "task" }
+func (t Task) ID() string               { return uuid.UUID(t).String() }
 
 // Direct Relations
 

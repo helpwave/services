@@ -46,12 +46,16 @@ type Relation string
 // See https://authzed.com/docs/spicedb/concepts/schema#permissions
 type Permission Relation
 
+// ObjectType is a string alias for the
+// Type of Object definitions, (e.g., "user")
+type ObjectType string
+
 // An Object must relate to an
 // [Object Definition](https://authzed.com/docs/spicedb/concepts/schema#object-type-definitions) in the spicedb schema.
 // We use this to build a v1.ObjectReference used for a Relationship
 type Object interface {
 	// Type of the Object definition, (e.g., "user")
-	Type() string
+	Type() ObjectType
 	// ID is a globally unique and stable identifier, likely a UUID
 	ID() string
 }
@@ -84,10 +88,10 @@ func (r *Relationship) String() string {
 
 func (r *Relationship) SpanAttributeKeyValue() []attribute.KeyValue {
 	return []attribute.KeyValue{
-		attribute.String("hwauthz.resource.type", r.Resource.Type()),
+		attribute.String("hwauthz.resource.type", string(r.Resource.Type())),
 		attribute.String("hwauthz.resource.id", r.Resource.ID()),
 		attribute.String("hwauthz.relation", string(r.Relation)),
-		attribute.String("hwauthz.subject.type", r.Subject.Type()),
+		attribute.String("hwauthz.subject.type", string(r.Subject.Type())),
 		attribute.String("hwauthz.subject.id", r.Subject.ID()),
 	}
 }
@@ -181,6 +185,10 @@ type AuthZ interface {
 	// BulkMust performs many checks and errors if any one fails.
 	// Also see Must and BulkCheck
 	BulkMust(ctx context.Context, checks ...PermissionCheck) error
+	// LookupResources yields all resource ids, where (subject, relation, resourceType:resource) is a valid relation
+	// Useful, where the set of accessible resources is much smaller than the query results.
+	// Use this to first lookup permitted resources, and then restrict your database query to them.
+	LookupResources(ctx context.Context, subject Object, relation Relation, resourceType ObjectType) ([]string, error)
 }
 
 // Error returns err, if not nil or StatusErrorPermissionDenied, if permissionGranted is false

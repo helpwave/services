@@ -22,6 +22,9 @@ definition organization {
 
 	// all members can create new patients
 	permission create_patient = membership;
+
+	// all members can alter root property rules
+	permission can_user_alter_root_property_rules = membership;
 }
 
 definition organization_invite {
