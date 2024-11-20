@@ -8,8 +8,9 @@ import (
 	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
-	"property-svc/internal/property-view/perm"
 	"testing"
+
+	"property-svc/internal/property-view/perm"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"

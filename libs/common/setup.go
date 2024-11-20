@@ -3,13 +3,14 @@ package common
 import (
 	"context"
 	"crypto/tls"
-	daprPb "github.com/dapr/dapr/pkg/proto/runtime/v1"
 	"hwutil"
 	"net/http"
 	"os"
 	"strings"
 	"telemetry"
 	"time"
+
+	daprPb "github.com/dapr/dapr/pkg/proto/runtime/v1"
 
 	"common/auth"
 
