@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strconvAppCallbackHealthCheck_HealthCheck_FullMethodName"
+	"strconv"
 	"strings"
 
 	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
