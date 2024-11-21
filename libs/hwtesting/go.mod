@@ -17,11 +17,10 @@ require (
 	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b
 	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/rs/zerolog v1.33.0
-	github.com/stillya/testcontainers-keycloak v0.3.1
 	github.com/testcontainers/testcontainers-go v0.33.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.33.0
-	google.golang.org/grpc v1.66.1
+	google.golang.org/grpc v1.68.0
 	hwauthz v0.0.0
 	hwutil v0.0.0
 )

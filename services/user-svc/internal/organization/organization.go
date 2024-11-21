@@ -167,7 +167,9 @@ type OrganizationWithMembers struct {
 	Members      []organization_repo.User
 }
 
-func GetOrganizationsByUserId(ctx context.Context, userId uuid.UUID, authz hwauthz.AuthZ) ([]OrganizationWithMembers, error) {
+func GetOrganizationsByUserId(
+	ctx context.Context, userId uuid.UUID, authz hwauthz.AuthZ,
+) ([]OrganizationWithMembers, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	rows, err := organizationRepo.GetOrganizationsWithMembersByUser(ctx, userId)
