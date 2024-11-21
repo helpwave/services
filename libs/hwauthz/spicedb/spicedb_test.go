@@ -2,7 +2,6 @@ package spicedb
 
 import (
 	"context"
-	"hwauthz/commonPerm"
 	"hwtesting"
 	"os"
 	"os/signal"
@@ -10,6 +9,8 @@ import (
 	"telemetry"
 	"testing"
 	"time"
+
+	"hwauthz/commonPerm"
 
 	"github.com/google/uuid"
 
