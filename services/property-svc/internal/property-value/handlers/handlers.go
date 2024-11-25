@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"hwauthz"
 	"hwes"
 
 	commandsV1 "property-svc/internal/property-value/commands/v1"
@@ -20,17 +21,17 @@ type Handlers struct {
 	Queries  *Queries
 }
 
-func NewPropertyValueHandlers(as hwes.AggregateStore) *Handlers {
+func NewPropertyValueHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 	return &Handlers{
 		Commands: &Commands{
 			V1: &commandsV1.PropertyValueCommands{
-				AttachPropertyValue: commandsV1.NewAttachPropertyValueCommandHandler(as),
+				AttachPropertyValue: commandsV1.NewAttachPropertyValueCommandHandler(as, authz),
 			},
 		},
 		Queries: &Queries{
 			V1: &queriesV1.PropertyValueQueries{
 				GetPropertyValueByID:      queriesV1.NewGetPropertyValueByIDQueryHandler(as),
-				GetRelevantPropertyValues: queriesV1.NewGetRelevantPropertyValuesQueryHandler(as),
+				GetRelevantPropertyValues: queriesV1.NewGetRelevantPropertyValuesQueryHandler(as, authz),
 			},
 		},
 	}

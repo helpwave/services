@@ -37,10 +37,20 @@ func (a *TrueAuthZ) Must(ctx context.Context, check hwauthz.PermissionCheck) err
 	return nil
 }
 
-func BulkCheck(_ context.Context, checks []hwauthz.PermissionCheck) ([]bool, error) {
+func (a *TrueAuthZ) BulkCheck(_ context.Context, checks []hwauthz.PermissionCheck) ([]bool, error) {
 	bs := make([]bool, len(checks))
 	for i := range bs {
 		bs[i] = true
 	}
 	return bs, nil
+}
+
+func (s *TrueAuthZ) BulkMust(_ context.Context, _ ...hwauthz.PermissionCheck) error {
+	return nil
+}
+
+func (s *TrueAuthZ) LookupResources(
+	_ context.Context, _ hwauthz.Object, _ hwauthz.Relation, _ hwauthz.ObjectType,
+) ([]string, error) {
+	return []string{}, nil
 }

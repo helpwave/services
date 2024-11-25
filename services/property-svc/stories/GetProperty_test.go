@@ -3,9 +3,14 @@ package stories
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
+	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
 	"testing"
+
+	"property-svc/internal/property-view/perm"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -19,12 +24,26 @@ import (
 //   - Add to always include list for ward and subjectid (matcher too precise)
 //     After each step: GetProperty and check AlwaysIncludedForViewSource for wardid
 func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
+	ctx := context.Background()
 	wardID := uuid.New()
+	patientID := uuid.New()
+	taskID := uuid.New()
+
+	// give new user appropriate permissions
+	authz := spicedb.NewSpiceDBAuthZ()
+	patient := commonPerm.GenericObject{Id: patientID.String(), Typ: "patient"}
+	task := commonPerm.GenericObject{Id: taskID.String(), Typ: "task"}
+	org := commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
+
+	_, err := authz.
+		Create(hwauthz.NewRelationship(org, "organization", perm.Ward(wardID))).
+		Create(hwauthz.NewRelationship(org, "organization", patient)).
+		Create(hwauthz.NewRelationship(patient, "patient", task)).
+		Commit(ctx)
+	require.NoError(t, err)
 
 	propertyClient := propertyServiceClient()
 	propertyViewClient := propertyViewServiceClient()
-
-	ctx := context.Background()
 
 	//
 	// Create new Property
@@ -139,7 +158,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: hwutil.PtrTo(wardID.String()),
-				TaskId: hwutil.PtrTo(propertyID.String()),
+				TaskId: hwutil.PtrTo(taskID.String()),
 			},
 		},
 	})

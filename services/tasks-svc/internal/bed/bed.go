@@ -17,6 +17,7 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 
 	"tasks-svc/internal/bed/perm"
+	patientPerm "tasks-svc/internal/patient/perm"
 	roomPerm "tasks-svc/internal/room/perm"
 
 	"github.com/jackc/pgx/v5/pgconn"
@@ -116,7 +117,7 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 		Create(relationship).
 		Commit(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err)
+		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err)
 	}
 
 	// store event
@@ -170,13 +171,11 @@ func (s ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.G
 	}, nil
 }
 
-func (ServiceServer) GetBedByPatient(
+func (s ServiceServer) GetBedByPatient(
 	ctx context.Context,
 	req *pb.GetBedByPatientRequest,
 ) (*pb.GetBedByPatientResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
-
-	// TODO: Auth
 
 	patientId, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
@@ -186,6 +185,22 @@ func (ServiceServer) GetBedByPatient(
 	result, err := hwdb.Optional(bedRepo.GetBedWithRoomByPatient)(ctx, patientId)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
+		return nil, err
+	}
+
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	checks := make([]hwauthz.PermissionCheck, 0)
+	checks = append(checks,
+		hwauthz.NewPermissionCheck(user, patientPerm.PatientCanUserGet, patientPerm.Patient(patientId)))
+
+	if result != nil {
+		checks = append(checks,
+			hwauthz.NewPermissionCheck(user, perm.BedCanUserGet, perm.Bed(result.BedID)),
+			hwauthz.NewPermissionCheck(user, roomPerm.RoomCanUserGet, roomPerm.Room(result.RoomID)),
+		)
+	}
+	if err := s.authz.BulkMust(ctx, checks...); err != nil {
 		return nil, err
 	}
 

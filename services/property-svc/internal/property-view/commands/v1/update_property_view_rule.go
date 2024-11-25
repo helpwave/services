@@ -3,6 +3,7 @@ package v1
 import (
 	"common"
 	"context"
+	"hwauthz"
 	"hwes"
 
 	"github.com/google/uuid"
@@ -20,7 +21,9 @@ type UpdatePropertyViewRuleCommandHandler func(
 	removeFromDontAlwaysInclude []uuid.UUID,
 ) (common.ConsistencyToken, error)
 
-func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePropertyViewRuleCommandHandler {
+func NewUpdatePropertyViewRuleCommandHandler(
+	as hwes.AggregateStore, authz hwauthz.AuthZ,
+) UpdatePropertyViewRuleCommandHandler {
 	return func(
 		ctx context.Context,
 		matchers models.PropertyMatchers,
@@ -29,6 +32,11 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 		appendToDontAlwaysInclude,
 		removeFromDontAlwaysInclude []uuid.UUID,
 	) (common.ConsistencyToken, error) {
+		// check permissions
+		if err := matchers.UserMustBeAllowedToUpdateRule(ctx, authz); err != nil {
+			return 0, err
+		}
+
 		ruleID, err := matchers.FindExactRuleID(ctx)
 		if err != nil {
 			return 0, err

@@ -74,12 +74,12 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		Create(relationship).
 		Commit(ctx)
 	if err != nil {
-		return fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err),
+		return fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err),
 			hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
 	log.Debug().
-		Str("relationship", relationship.DebugString()).
+		Str("relationship", relationship.String()).
 		Msg("spice relationship created")
 
 	return nil, nil

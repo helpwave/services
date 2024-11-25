@@ -1,0 +1,15 @@
+definition task {
+	// tasks belong to a patient
+	relation patient: patient;
+
+	// those who can {G,U,D} the patient, can {G,U,D} the task
+	permission get = patient->get;
+	permission update = patient->update;
+
+	permission update_subtask = update;
+	permission assign = update;
+	permission create_subtask = update;
+	permission delete_subtask = update;
+
+	permission delete = patient->delete;
+}

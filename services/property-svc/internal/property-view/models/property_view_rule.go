@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"hwauthz"
 	"hwutil"
 
 	"github.com/google/uuid"
@@ -30,6 +31,8 @@ type PropertyMatchers interface {
 	// GetType returns the respective type identifier of the property matcher
 	// should be used to identify the matcher when converting it from a map to the respective type
 	GetType() string
+
+	UserMustBeAllowedToUpdateRule(ctx context.Context, authz hwauthz.AuthZ) error
 }
 
 type PropertyViewRule struct {

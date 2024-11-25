@@ -13,6 +13,8 @@ import (
 	"hwutil"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	roomPerm "tasks-svc/internal/room/perm"
+	ttPerm "tasks-svc/internal/task-template/perm"
 
 	"tasks-svc/internal/ward/perm"
 
@@ -91,7 +93,7 @@ func (s *ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardReques
 		Create(relationship).
 		Commit(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err)
+		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err)
 	}
 
 	// add to "recently used"
@@ -397,6 +399,13 @@ func (s *ServiceServer) GetWardDetails(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	// permission check
+	user := commonPerm.UserFromCtx(ctx)
+	wardCheck := hwauthz.NewPermissionCheck(user, perm.WardCanUserGet, perm.Ward(wardID))
+	if err := s.authz.Must(ctx, wardCheck); err != nil {
+		return nil, err
+	}
+
 	rows, err := wardRepo.GetWardByIdWithRoomsBedsAndTaskTemplates(ctx, wardID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -406,6 +415,7 @@ func (s *ServiceServer) GetWardDetails(
 	}
 
 	rooms := make([]*pb.GetWardDetailsResponse_Room, 0)
+	roomChecks := make([]hwauthz.PermissionCheck, 0)
 	roomsIndexMap := make(map[uuid.UUID]int)
 	bedSet := make(map[uuid.UUID]bool)
 
@@ -425,6 +435,8 @@ func (s *ServiceServer) GetWardDetails(
 			}
 			rooms = append(rooms, room)
 			roomsIndexMap[row.RoomID.UUID] = len(rooms) - 1
+			roomChecks = append(roomChecks,
+				hwauthz.NewPermissionCheck(user, roomPerm.RoomCanUserGet, roomPerm.Room(row.RoomID.UUID)))
 		}
 
 		if !row.BedID.Valid {
@@ -438,14 +450,19 @@ func (s *ServiceServer) GetWardDetails(
 			}
 			room.Beds = append(room.Beds, bed)
 			bedSet[row.BedID.UUID] = true
+
+			// permission to beds is currently transitively granted by having access to the room
+			// thus no check is needed
 		}
 	}
 
 	// we could process both in one iteration,
 	// but I suspect the deep branching required will result in slower performance
+	// (and uglier code)
 	// (bmn)
 
 	taskTemplates := make([]*pb.GetWardDetailsResponse_TaskTemplate, 0)
+	ttChecks := make([]hwauthz.PermissionCheck, 0)
 	ttIndexMap := make(map[uuid.UUID]int)
 	stSet := make(map[uuid.UUID]bool)
 
@@ -465,6 +482,11 @@ func (s *ServiceServer) GetWardDetails(
 			}
 			taskTemplates = append(taskTemplates, taskTemplate)
 			ttIndexMap[row.TaskTemplateID.UUID] = len(taskTemplates) - 1
+			ttChecks = append(ttChecks, hwauthz.NewPermissionCheck(
+				user,
+				ttPerm.TaskTemplateCanUserGet,
+				ttPerm.TaskTemplate(row.TaskTemplateID.UUID),
+			))
 		}
 
 		if !row.TaskTemplateSubtaskID.Valid {
@@ -479,6 +501,18 @@ func (s *ServiceServer) GetWardDetails(
 			stSet[row.TaskTemplateSubtaskID.UUID] = true
 		}
 	}
+
+	// do checks and filter out items where permissions are missing
+	allowed, err := s.authz.BulkCheck(ctx, append(roomChecks, ttChecks...))
+	if err != nil {
+		return nil, err
+	}
+	rooms = hwutil.Filter(rooms, func(i int, _ *pb.GetWardDetailsResponse_Room) bool {
+		return allowed[i]
+	})
+	taskTemplates = hwutil.Filter(taskTemplates, func(i int, _ *pb.GetWardDetailsResponse_TaskTemplate) bool {
+		return allowed[len(roomChecks)+i]
+	})
 
 	ward := &pb.GetWardDetailsResponse{
 		Id:            rows[0].WardID.String(),

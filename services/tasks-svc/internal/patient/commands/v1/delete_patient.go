@@ -3,7 +3,11 @@ package v1
 import (
 	"common"
 	"context"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
+
+	"tasks-svc/internal/patient/perm"
 
 	"github.com/google/uuid"
 
@@ -12,8 +16,14 @@ import (
 
 type DeletePatientCommandHandler func(ctx context.Context, patientID uuid.UUID) (common.ConsistencyToken, error)
 
-func NewDeletePatientCommandHandler(as hwes.AggregateStore) DeletePatientCommandHandler {
+func NewDeletePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) DeletePatientCommandHandler {
 	return func(ctx context.Context, patientID uuid.UUID) (common.ConsistencyToken, error) {
+		user := commonPerm.UserFromCtx(ctx)
+		check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserDelete, perm.Patient(patientID))
+		if err := authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
+
 		patientAggregate, err := aggregate.LoadPatientAggregate(ctx, as, patientID)
 		if err != nil {
 			return 0, err

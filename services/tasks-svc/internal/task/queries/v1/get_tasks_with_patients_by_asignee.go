@@ -4,7 +4,13 @@ import (
 	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
+	"hwutil"
+
+	patientPerm "tasks-svc/internal/patient/perm"
+	"tasks-svc/internal/task/perm"
 
 	"github.com/google/uuid"
 
@@ -17,9 +23,11 @@ type GetTasksWithPatientsByAssigneeQueryHandler func(
 	assigneeID uuid.UUID,
 ) ([]*models.TaskWithPatient, error)
 
-func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssigneeQueryHandler {
+func NewGetTasksWithPatientsByAssigneeQueryHandler(authz hwauthz.AuthZ) GetTasksWithPatientsByAssigneeQueryHandler {
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {
 		taskRepo := task_repo.New(hwdb.GetDB())
+
+		user := commonPerm.UserFromCtx(ctx)
 
 		rows, err := taskRepo.GetTasksWithPatientByAssignee(ctx, uuid.NullUUID{
 			UUID:  assigneeID,
@@ -30,6 +38,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 		}
 
 		tasks := make([]*models.TaskWithPatient, 0)
+		checks := make([]hwauthz.PermissionCheck, 0)
 		tasksMap := make(map[uuid.UUID]int)
 
 		for _, row := range rows {
@@ -70,6 +79,10 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 				}
 
 				tasks = append(tasks, task)
+				checks = append(checks,
+					hwauthz.NewPermissionCheck(user, perm.TaskCanUserGet, perm.Task(row.Task.ID)),
+					hwauthz.NewPermissionCheck(user, patientPerm.PatientCanUserGet, patientPerm.Patient(row.Patient.ID)),
+				)
 				tasksMap[row.Task.ID] = len(tasks) - 1
 			}
 
@@ -82,6 +95,16 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 				}
 			}
 		}
+
+		allowed, err := authz.BulkCheck(ctx, checks)
+		if err != nil {
+			return nil, err
+		}
+
+		tasks = hwutil.Filter(tasks, func(i int, _ *models.TaskWithPatient) bool {
+			// each task has two checks
+			return allowed[2*i] && allowed[2*i+1]
+		})
 
 		return tasks, nil
 	}

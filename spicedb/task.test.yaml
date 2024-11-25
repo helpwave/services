@@ -1,0 +1,45 @@
+
+relationships:
+  # Alice leads the A organization
+  - "organization:a#leader@user:alice"
+  # Bob leads the B organization
+  - "organization:b#leader@user:bob"
+  # Bob is also, explicitly, a member of the B organization
+  - "organization:b#member@user:bob"
+  # Charlie is a common member
+  - "organization:a#member@user:charlie"
+  - "organization:b#member@user:charlie"
+  # Clara is a common member, and leader of the A organization
+  - "organization:a#leader@user:clara"
+  - "organization:a#member@user:clara"
+  - "organization:b#member@user:clara"
+  # Oscar is only a member of one organization (A organization)
+  - "organization:a#member@user:oscar"
+
+  # patient A belongs to org A, and B to B
+  - "patient:a#organization@organization:a"
+  - "patient:b#organization@organization:b"
+
+  # task A belongs to patient A, and B to B
+  - "task:a#patient@patient:a"
+  - "task:b#patient@patient:b"
+
+tests:
+  - name: all members can get any task in their org (by transitivity)
+    check:
+      - "task:a#get@user:alice"
+      - "task:a#get@user:charlie"
+      - "task:b#get@user:charlie"
+      - not: "bed:b#get@user:alice"
+  - name: all members can update any task in their org  (by transitivity)
+    check:
+      - "task:a#update@user:alice"
+      - "task:a#update@user:charlie"
+      - "task:b#update@user:charlie"
+      - not: "bed:b#update@user:alice"
+  - name: all members can delete any task in their org  (by transitivity)
+    check:
+      - "task:a#delete@user:alice"
+      - "task:a#delete@user:charlie"
+      - "task:b#delete@user:charlie"
+      - not: "task:b#delete@user:alice"

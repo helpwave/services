@@ -98,7 +98,7 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 		Create(relationship).
 		Commit(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.DebugString(), err)
+		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err)
 	}
 
 	// store event
@@ -325,6 +325,16 @@ func (s ServiceServer) GetRoomOverviewsByWard(
 	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	// CAUTION: IMPORTANT
+	// CURRENTLY THIS CHECK IMPLIES ACCESS TO ALL OTHER RESOURCES, SO NO FILTERING IS NEEDED
+	// THIS MAY CHANGE IN THE FUTURE!
+
+	user := commonPerm.UserFromCtx(ctx)
+	check := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserGet, wardPerm.Ward(wardID))
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
 	}
 
 	rows, err := roomRepo.GetRoomsWithBedsAndPatientsAndTasksCountByWard(ctx,
