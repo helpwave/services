@@ -17,14 +17,16 @@ replace (
 
 require (
 	common v0.0.0
-	gen v0.0.0-00010101000000-000000000000
+	gen v0.0.0
 	github.com/EventStore/EventStore-Client-Go/v4 v4.2.0
 	github.com/dapr/go-sdk v1.11.0
 	github.com/golang-migrate/migrate/v4 v4.18.1
+	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
 	hwes v0.0.0
 	hwtesting v0.0.0
+	hwutil v0.0.0
 	telemetry v0.0.0
 )
 
@@ -61,7 +63,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.23.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus v1.0.1 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0 // indirect
@@ -133,5 +134,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	hwauthz v0.0.0 // indirect
 	hwlocale v0.0.0 // indirect
-	hwutil v0.0.0 // indirect
 )

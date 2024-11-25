@@ -4,15 +4,30 @@ import (
 	"common/auth"
 	"context"
 	"errors"
+	pbEventsV1 "gen/libs/events/v1"
 	pb "gen/services/updates_svc/v1"
+	"hwes"
+	"hwes/eventstoredb"
+	"hwutil"
 	"io"
 	"testing"
 	"time"
+
+	"github.com/google/uuid"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/stretchr/testify/assert"
 )
+
+// requireTrue because testify/require cannot be used in Goroutines ... and to prevent many if-conditions
+func requireTrue(t *testing.T, b bool) {
+	t.Helper()
+	if b {
+		return
+	}
+	t.Fail()
+}
 
 func TestOpenAndClosingReceiveUpdatesStream(t *testing.T) {
 	ctx := context.Background()
@@ -22,6 +37,67 @@ func TestOpenAndClosingReceiveUpdatesStream(t *testing.T) {
 	stream, err := updatesClient.ReceiveUpdates(ctx, req)
 	assert.NoError(t, err)
 	assert.NoError(t, stream.CloseSend())
+}
+
+func TestReceivingEvents(t *testing.T) {
+	ctx := context.Background()
+	es := eventstoredb.SetupEventStoreByEnv()
+
+	updatesClient := updatesServiceClient()
+
+	bedId := uuid.New()
+	bedType := "bed"
+
+	bedAggregate := hwes.NewAggregateBase(eventstoredb.EntityEventPrefix+"bed", bedId)
+
+	req := &pb.ReceiveUpdatesRequest{}
+	stream, err := updatesClient.ReceiveUpdates(ctx, req)
+	require.NoError(t, err)
+
+	go func() {
+		// test receive one event that got emitted after subscribing
+		res, err := stream.Recv()
+		requireTrue(t, assert.NoError(t, err))
+
+		resEntityEvent := res.GetEvent()
+		requireTrue(t, assert.NotNil(t, resEntityEvent))
+		requireTrue(t, assert.Equal(t, bedType, resEntityEvent.GetAggregateType()))
+		requireTrue(t, assert.Equal(t, bedId.String(), resEntityEvent.GetAggregateId()))
+		requireTrue(t, assert.Equal(t, "BED_CREATED_v1", resEntityEvent.GetEventType()))
+
+		bedId2 := uuid.New()
+		bed2Aggregate := hwes.NewAggregateBase(eventstoredb.EntityEventPrefix+"bed", bedId2)
+
+		// store event
+		if err := eventstoredb.SaveEntityEventForAggregate(ctx, es, bed2Aggregate,
+			&pbEventsV1.BedCreatedEvent{Id: bedId2.String()},
+		); err != nil {
+			requireTrue(t, assert.NoError(t, err))
+		}
+
+		// test receive one event that got emitted before subscribing with previous revision
+
+		req2 := &pb.ReceiveUpdatesRequest{Revision: hwutil.PtrTo(res.Revision)}
+		stream2, err := updatesClient.ReceiveUpdates(ctx, req2)
+		requireTrue(t, assert.NoError(t, err))
+
+		// receive event
+		res2, err := stream2.Recv()
+		requireTrue(t, assert.NoError(t, err))
+
+		res2EntityEvent := res2.GetEvent()
+		requireTrue(t, assert.NotNil(t, res2EntityEvent))
+		requireTrue(t, assert.Equal(t, bedType, res2EntityEvent.GetAggregateType()))
+		requireTrue(t, assert.Equal(t, bedId2.String(), res2EntityEvent.GetAggregateId()))
+		requireTrue(t, assert.Equal(t, "BED_CREATED_v1", res2EntityEvent.GetEventType()))
+	}()
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, es, bedAggregate,
+		&pbEventsV1.BedCreatedEvent{Id: bedId.String()},
+	); err != nil {
+		require.NoError(t, err)
+	}
 }
 
 func TestAutoClosingWhenTokenExpiresReceiveUpdateStream(t *testing.T) {
