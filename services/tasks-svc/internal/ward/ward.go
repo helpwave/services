@@ -334,9 +334,9 @@ func (s *ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardReques
 	tracking.RemoveWardFromRecentActivity(ctx, wardID.String())
 
 	// store event
-	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewWardAggregate(id),
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewWardAggregate(wardID),
 		&pbEventsV1.WardDeletedEvent{
-			Id: id.String(),
+			Id: wardID.String(),
 		},
 	); err != nil {
 		return nil, err

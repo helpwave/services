@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	pb "gen/services/user_svc/v1"
-	"hwauthz/commonPerm"
 	"hwdb"
 	"hwlocale"
 	"hwutil"
