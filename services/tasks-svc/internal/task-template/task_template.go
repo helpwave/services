@@ -5,11 +5,15 @@ import (
 	"common/auth"
 	"context"
 	"fmt"
+	pbEventsV1 "gen/libs/events/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+	"hwes"
+	"hwes/eventstoredb"
 	"hwutil"
 
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"tasks-svc/internal/task-template/perm"
 
 	wardPerm "tasks-svc/internal/ward/perm"
@@ -24,14 +28,28 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
+const TaskTemplateAggregateType = eventstoredb.EntityEventPrefix + "task_template"
+
+type TaskTemplateAggregate struct {
+	*hwes.AggregateBase
+}
+
+func NewTaskTemplateAggregate(id uuid.UUID) *TaskTemplateAggregate {
+	aggregate := &TaskTemplateAggregate{}
+	aggregate.AggregateBase = hwes.NewAggregateBase(TaskTemplateAggregateType, id)
+	return aggregate
+}
+
 type ServiceServer struct {
 	pb.UnimplementedTaskTemplateServiceServer
+	es    *esdb.Client
 	authz hwauthz.AuthZ
 }
 
-func NewServiceServer(authz hwauthz.AuthZ) *ServiceServer {
+func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 	return &ServiceServer{
 		UnimplementedTaskTemplateServiceServer: pb.UnimplementedTaskTemplateServiceServer{},
+		es:                                     es,
 		authz:                                  authz,
 	}
 }
@@ -67,11 +85,9 @@ func (s ServiceServer) CreateTaskTemplate(
 
 	userID := auth.MustGetUserID(ctx)
 
-	description := req.GetDescription()
-
 	row, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
 		Name:        req.GetName(),
-		Description: description,
+		Description: req.GetDescription(),
 		CreatedBy:   userID,
 		WardID:      wardID,
 	})
@@ -120,6 +136,22 @@ func (s ServiceServer) CreateTaskTemplate(
 		Str("taskTemplateID", templateID.String()).
 		Msg("taskTemplate created")
 
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(templateID),
+		&pbEventsV1.TaskTemplateCreatedEvent{
+			Id:          templateID.String(),
+			Name:        req.GetName(),
+			Description: req.GetDescription(),
+			Subtasks: hwutil.Map(req.GetSubtasks(),
+				func(subtask *pb.CreateTaskTemplateRequest_SubTask) *pbEventsV1.TaskTemplateCreatedEvent_SubTask {
+					return &pbEventsV1.TaskTemplateCreatedEvent_SubTask{Name: subtask.GetName()}
+				},
+			),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateTaskTemplateResponse{
 		Id:          templateID.String(),
 		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
@@ -159,6 +191,15 @@ func (s ServiceServer) DeleteTaskTemplate(
 	log.Info().
 		Str("taskTemplateID", id.String()).
 		Msg("taskTemplate deleted")
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(id),
+		&pbEventsV1.TaskTemplateDeletedEvent{
+			Id: id.String(),
+		},
+	); err != nil {
+		return nil, err
+	}
 
 	return &pb.DeleteTaskTemplateResponse{}, nil
 }
@@ -213,6 +254,16 @@ func (s ServiceServer) DeleteTaskTemplateSubTask(
 		Str("taskTemplateID", subtask.TaskTemplateID.String()).
 		Msg("taskTemplateSubtask deleted")
 
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(subtask.TaskTemplateID),
+		&pbEventsV1.TaskTemplateSubTaskDeletedEvent{
+			TaskTemplateId: subtask.TaskTemplateID.String(),
+			SubTaskId:      subtask.ID.String(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	return &pb.DeleteTaskTemplateSubTaskResponse{
 		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
@@ -243,6 +294,17 @@ func (s ServiceServer) UpdateTaskTemplate(
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
+		return nil, err
+	}
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(id),
+		&pbEventsV1.TaskTemplateUpdatedEvent{
+			Id:          id.String(),
+			Name:        req.GetName(),
+			Description: req.GetDescription(),
+		},
+	); err != nil {
 		return nil, err
 	}
 
@@ -299,6 +361,17 @@ func (s ServiceServer) UpdateTaskTemplateSubTask(
 		return nil, err
 	}
 
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(taskTemplateID),
+		&pbEventsV1.TaskTemplateSubTaskUpdatedEvent{
+			TaskTemplateId: taskTemplateID.String(),
+			SubTaskId:      id.String(),
+			Name:           req.GetName(),
+		},
+	); err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateTaskTemplateSubTaskResponse{
 		Conflict:                nil,                                           // TODO
 		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
@@ -341,6 +414,17 @@ func (s ServiceServer) CreateTaskTemplateSubTask(
 		Str("taskTemplateSubTaskID", subtaskID.String()).
 		Int64("consistencyInt64", consistency).
 		Msg("subtaskID created")
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewTaskTemplateAggregate(taskTemplateID),
+		&pbEventsV1.TaskTemplateSubTaskCreatedEvent{
+			TaskTemplateId: taskTemplateID.String(),
+			SubTaskId:      subtaskID.String(),
+			Name:           req.GetName(),
+		},
+	); err != nil {
+		return nil, err
+	}
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
 		Id:                      subtaskID.String(),

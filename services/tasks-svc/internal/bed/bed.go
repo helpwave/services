@@ -5,11 +5,16 @@ import (
 	"common/hwerr"
 	"context"
 	"fmt"
+	pbEventsV1 "gen/libs/events/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+	"hwes"
+	"hwes/eventstoredb"
 	"hwlocale"
 	"hwutil"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 
 	"tasks-svc/internal/bed/perm"
 	patientPerm "tasks-svc/internal/patient/perm"
@@ -29,15 +34,29 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
+const BedAggregateType = eventstoredb.EntityEventPrefix + "bed"
+
+type BedAggregate struct {
+	*hwes.AggregateBase
+}
+
+func NewBedAggregate(id uuid.UUID) *BedAggregate {
+	aggregate := &BedAggregate{}
+	aggregate.AggregateBase = hwes.NewAggregateBase(BedAggregateType, id)
+	return aggregate
+}
+
 type ServiceServer struct {
 	pb.UnimplementedBedServiceServer
 	authz hwauthz.AuthZ
+	es    *esdb.Client
 }
 
-func NewServiceServer(authz hwauthz.AuthZ) *ServiceServer {
+func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 	return &ServiceServer{
 		UnimplementedBedServiceServer: pb.UnimplementedBedServiceServer{},
 		authz:                         authz,
+		es:                            es,
 	}
 }
 
@@ -99,6 +118,15 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 		Commit(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err)
+	}
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewBedAggregate(bed.ID),
+		&pbEventsV1.BedCreatedEvent{
+			Id: bed.ID.String(),
+		},
+	); err != nil {
+		return nil, err
 	}
 
 	// return
@@ -292,7 +320,7 @@ func (s ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	roomId, err := hwutil.ParseNullUUID(req.RoomId)
+	roomID, err := hwutil.ParseNullUUID(req.RoomId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -308,10 +336,21 @@ func (s ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) 
 	consistency, err := bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
 		ID:     bedID,
 		Name:   req.Name,
-		RoomID: roomId,
+		RoomID: roomID,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
+		return nil, err
+	}
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewBedAggregate(bedID),
+		&pbEventsV1.BedUpdatedEvent{
+			Id:     bedID.String(),
+			Name:   req.GetName(),
+			RoomId: hwutil.NullUUIDToStringPtr(roomID),
+		},
+	); err != nil {
 		return nil, err
 	}
 
@@ -364,6 +403,15 @@ func (s ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) 
 	log.Info().
 		Str("bedID", bedID.String()).
 		Msg("bed deleted")
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewBedAggregate(bedID),
+		&pbEventsV1.BedDeletedEvent{
+			Id: bedID.String(),
+		},
+	); err != nil {
+		return nil, err
+	}
 
 	// return
 	return &pb.DeleteBedResponse{}, err

@@ -5,6 +5,8 @@ import (
 	"context"
 	pb "gen/services/updates_svc/v1"
 	"hwes"
+	"hwes/eventstoredb"
+	"strings"
 	"telemetry"
 	"time"
 
@@ -119,17 +121,13 @@ func (s *UpdatesGrpcService) ReceiveUpdates(
 			continue
 		}
 
-		domainEvent := &pb.DomainEvent{
-			EventId:       event.EventID.String(),
-			EventType:     event.EventType,
-			AggregateId:   event.AggregateID.String(),
-			AggregateType: string(event.AggregateType),
-		}
-
 		res := &pb.ReceiveUpdatesResponse{
 			Revision: *esdbEvent.EventAppeared.Commit,
-			Event: &pb.ReceiveUpdatesResponse_DomainEvent{
-				DomainEvent: domainEvent,
+			Event: &pb.Event{
+				EventId:       event.EventID.String(),
+				EventType:     event.EventType,
+				AggregateId:   event.GetAggregateID().String(),
+				AggregateType: strings.TrimPrefix(string(event.GetAggregateType()), eventstoredb.EntityEventPrefix),
 			},
 		}
 

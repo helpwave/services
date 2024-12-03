@@ -4,10 +4,15 @@ import (
 	"common"
 	"context"
 	"fmt"
+	pbEventsV1 "gen/libs/events/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+	"hwes"
+	"hwes/eventstoredb"
 	"hwutil"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 
 	"tasks-svc/internal/room/perm"
 	wardPerm "tasks-svc/internal/ward/perm"
@@ -23,15 +28,29 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
-type ServiceServer struct {
-	authz hwauthz.AuthZ
-	pb.UnimplementedRoomServiceServer
+const RoomAggregateType = eventstoredb.EntityEventPrefix + "room"
+
+type RoomAggregate struct {
+	*hwes.AggregateBase
 }
 
-func NewServiceServer(authz hwauthz.AuthZ) *ServiceServer {
+func NewRoomAggregate(id uuid.UUID) *RoomAggregate {
+	aggregate := &RoomAggregate{}
+	aggregate.AggregateBase = hwes.NewAggregateBase(RoomAggregateType, id)
+	return aggregate
+}
+
+type ServiceServer struct {
+	pb.UnimplementedRoomServiceServer
+	authz hwauthz.AuthZ
+	es    *esdb.Client
+}
+
+func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 	return &ServiceServer{
-		authz:                          authz,
 		UnimplementedRoomServiceServer: pb.UnimplementedRoomServiceServer{},
+		authz:                          authz,
+		es:                             es,
 	}
 }
 
@@ -80,6 +99,15 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 		Commit(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err)
+	}
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewRoomAggregate(roomID),
+		&pbEventsV1.RoomCreatedEvent{
+			Id: roomID.String(),
+		},
+	); err != nil {
+		return nil, err
 	}
 
 	// return
@@ -163,6 +191,16 @@ func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
+		return nil, err
+	}
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewRoomAggregate(roomID),
+		&pbEventsV1.RoomUpdatedEvent{
+			Id:   roomID.String(),
+			Name: req.GetName(),
+		},
+	); err != nil {
 		return nil, err
 	}
 
@@ -264,6 +302,15 @@ func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest
 	// remove from permission graph
 	if err := s.authz.DeleteObject(ctx, perm.Room(roomID)); err != nil {
 		return nil, fmt.Errorf("could not delete room from spicedb: %w", err)
+	}
+
+	// store event
+	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewRoomAggregate(roomID),
+		&pbEventsV1.RoomDeletedEvent{
+			Id: roomID.String(),
+		},
+	); err != nil {
+		return nil, err
 	}
 
 	// return
