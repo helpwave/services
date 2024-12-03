@@ -298,3 +298,45 @@ func (s *SpiceDBAuthZ) LookupResources(
 
 	return resources, nil
 }
+
+func (s *SpiceDBAuthZ) deleteDirectRelationships(ctx context.Context, object hwauthz.Object, isSubject bool) error {
+	var filter *v1.RelationshipFilter
+	if isSubject {
+		filter = &v1.RelationshipFilter{
+			OptionalSubjectFilter: &v1.SubjectFilter{
+				SubjectType:       string(object.Type()),
+				OptionalSubjectId: object.ID(),
+			},
+		}
+	} else {
+		filter = &v1.RelationshipFilter{
+			ResourceType:       string(object.Type()),
+			OptionalResourceId: object.ID(),
+		}
+	}
+
+	_, err := s.client.DeleteRelationships(ctx, &v1.DeleteRelationshipsRequest{
+		RelationshipFilter: filter,
+	})
+	if err != nil {
+		return fmt.Errorf("spicedb: could not delete resources: %w", err)
+	}
+
+	return nil
+}
+
+func (s *SpiceDBAuthZ) DeleteObject(ctx context.Context, object hwauthz.Object) error {
+	// delete all direct relationships where object is resource
+	err := s.deleteDirectRelationships(ctx, object, false)
+	if err != nil {
+		return fmt.Errorf("could not lookup related subjects: %w", err)
+	}
+
+	// delete all direct relationships where object is subject
+	err = s.deleteDirectRelationships(ctx, object, true)
+	if err != nil {
+		return fmt.Errorf("could not lookup related resources: %w", err)
+	}
+
+	return nil
+}
