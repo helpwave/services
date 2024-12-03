@@ -242,28 +242,29 @@ func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	// parse inputs
-	id, err := uuid.Parse(req.GetId())
+	roomID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	// check permission
 	user := commonPerm.UserFromCtx(ctx)
-	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserDelete, perm.Room(id))
+	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserDelete, perm.Room(roomID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
 
 	// do query
-	err = roomRepo.DeleteRoom(ctx, id)
+	err = roomRepo.DeleteRoom(ctx, roomID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
 
-	// TODO: Handle beds
-
-	// TODO: remove from spice (also beds)
+	// remove from permission graph
+	if err := s.authz.DeleteObject(ctx, perm.Room(roomID)); err != nil {
+		return nil, fmt.Errorf("could not delete room from spicedb: %w", err)
+	}
 
 	// return
 	return &pb.DeleteRoomResponse{}, nil

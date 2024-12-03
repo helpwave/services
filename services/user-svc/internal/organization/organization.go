@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	pb "gen/services/user_svc/v1"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwlocale"
 	"hwutil"
@@ -278,6 +279,12 @@ func (s ServiceServer) DeleteOrganization(
 	if err != nil {
 		return nil, err
 	}
+
+	// TODO: uncomment in #888
+	// // delete from permission graph
+	// if err := s.authz.DeleteObject(ctx, commonPerm.Organization(organizationID)); err != nil {
+	// 	 return nil, fmt.Errorf("could not delete organization from spicedb: %w", err)
+	// }
 
 	return &pb.DeleteOrganizationResponse{}, nil
 }

@@ -4,6 +4,7 @@ import (
 	"common"
 	"common/auth"
 	"context"
+	"fmt"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
@@ -148,6 +149,11 @@ func (s ServiceServer) DeleteTaskTemplate(
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
+	}
+
+	// delete from permission graph
+	if err := s.authz.DeleteObject(ctx, perm.TaskTemplate(id)); err != nil {
+		return nil, fmt.Errorf("could not delete template from spicedb: %w", err)
 	}
 
 	log.Info().

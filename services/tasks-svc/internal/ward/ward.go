@@ -258,20 +258,20 @@ func (s ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	// parse input
-	id, err := uuid.Parse(req.GetId())
+	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	// check permissions
 	user := commonPerm.UserFromCtx(ctx)
-	check := hwauthz.NewPermissionCheck(user, perm.WardCanUserDelete, perm.Ward(id))
+	check := hwauthz.NewPermissionCheck(user, perm.WardCanUserDelete, perm.Ward(wardID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
 
 	// check if exists
-	exists, err := wardRepo.ExistsWard(ctx, id)
+	exists, err := wardRepo.ExistsWard(ctx, wardID)
 	if !exists {
 		return nil, nil
 	}
@@ -281,16 +281,19 @@ func (s ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest
 	}
 
 	// do query
-	err = wardRepo.DeleteWard(ctx, id)
+	err = wardRepo.DeleteWard(ctx, wardID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
 
-	// TODO: remove from spice (also rooms and beds)
+	// delete from permission graph
+	if err := s.authz.DeleteObject(ctx, perm.Ward(wardID)); err != nil {
+		return nil, fmt.Errorf("could not delete ward from spicedb: %w", err)
+	}
 
 	// remove from "recently used"
-	tracking.RemoveWardFromRecentActivity(ctx, id.String())
+	tracking.RemoveWardFromRecentActivity(ctx, wardID.String())
 
 	// return
 	return &pb.DeleteWardResponse{}, nil
