@@ -1,11 +1,7 @@
 package user
 
 import (
-	"common"
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
-	"fmt"
 	events "gen/libs/events/v1"
 	pb "gen/services/user_svc/v1"
 	"hwdb"
@@ -31,53 +27,6 @@ type ServiceServer struct {
 
 func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
-}
-
-func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
-	log := zlog.Ctx(ctx)
-	userRepo := user_repo.New(hwdb.GetDB())
-
-	userID, err := uuid.Parse(req.GetId())
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	var createdUser user_repo.User
-	result, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
-	err = hwdb.Error(ctx, err)
-	switch {
-	case err != nil:
-		return nil, err
-	case result != nil:
-		return nil, status.Error(codes.InvalidArgument, "user already exists")
-	default:
-		hash := sha256.Sum256([]byte(userID.String()))
-		avatarUrl := fmt.Sprintf("%s%s", "https://source.boringavatars.com/marble/128/", hex.EncodeToString(hash[:]))
-
-		createdUser, err = userRepo.CreateUser(ctx, user_repo.CreateUserParams{
-			ID:        userID,
-			Email:     req.Email,
-			Nickname:  req.Nickname,
-			Name:      req.Name,
-			AvatarUrl: &avatarUrl,
-		})
-		err = hwdb.Error(ctx, err)
-		if err != nil {
-			return nil, err
-		}
-
-		userCreatedEvent := &events.UserCreatedEvent{
-			Id:       createdUser.ID.String(),
-			Email:    createdUser.Email,
-			Nickname: createdUser.Nickname,
-			Name:     createdUser.Name,
-		}
-		daprClient := common.MustNewDaprGRPCClient()
-		if err := common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", userCreatedEvent); err != nil {
-			log.Error().Err(err).Msg("could not publish message")
-		}
-	}
-	return &pb.CreateUserResponse{Id: createdUser.ID.String()}, nil
 }
 
 func (s ServiceServer) ReadPublicProfile(
