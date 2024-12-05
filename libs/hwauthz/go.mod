@@ -12,7 +12,7 @@ replace (
 
 require (
 	common v0.0.0
-	github.com/authzed/authzed-go v0.16.0
+	github.com/authzed/authzed-go v1.1.1
 	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b
 	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.33.0

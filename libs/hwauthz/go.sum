@@ -18,6 +18,8 @@ github.com/Microsoft/go-winio v0.6.2 h1:F2VQgta7ecxGYO8k3ZZz3RS8fVIXVxONVUPlNERo
 github.com/Microsoft/go-winio v0.6.2/go.mod h1:yd8OoFMLzJbo9gZq8j5qaps8bJ9aShtEA8Ipt1oGCvU=
 github.com/authzed/authzed-go v0.16.0 h1:QzIduF472qZcHeEraNPSpnLFFV25ZQv6u7oDufvBf3o=
 github.com/authzed/authzed-go v0.16.0/go.mod h1:Cx1DQKMX38u2fFVLZiGUuZnbTo2J7LCZEXmVak+TMak=
+github.com/authzed/authzed-go v1.1.1 h1:grE9+P4tMezZ6uX13upUk5yxgHHY9NZJKDIvymO0igY=
+github.com/authzed/authzed-go v1.1.1/go.mod h1:YPOLEX/XGtSGfq4HsG7iBjWnnATxN4qu0IDF/vOBQwQ=
 github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b h1:wbh8IK+aMLTCey9sZasO7b6BWLAJnHHvb79fvWCXwxw=
 github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b/go.mod h1:s3qC7V7XIbiNWERv7Lfljy/Lx25/V1Qlexb0WJuA8uQ=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
