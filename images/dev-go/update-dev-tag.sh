@@ -5,7 +5,7 @@ set -e
 
 # update this value, when you update the Dockerfile
 # renovate: dev-tag
-TAG='15'
+TAG='16'
 
 # go to repo root
 cd $(git rev-parse --show-toplevel)
