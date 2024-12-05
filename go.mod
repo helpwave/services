@@ -4,6 +4,7 @@ go 1.23
 
 replace (
 	common => ./libs/common
+	hooks => ./spicedb/migrations
 	hwauthz => ./libs/hwauthz
 	hwlocale => ./libs/hwlocale
 	hwtesting => ./libs/hwtesting
@@ -13,10 +14,11 @@ replace (
 
 require (
 	github.com/alecthomas/kong v0.9.0
-	github.com/authzed/authzed-go v0.16.0
+	github.com/authzed/authzed-go v1.1.1
 	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b
 	google.golang.org/grpc v1.68.0
 	gopkg.in/yaml.v3 v3.0.1
+	hooks v0.0.0
 	hwauthz v0.0.0
 )
 
@@ -32,7 +34,6 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
-	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/samber/lo v1.47.0 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	golang.org/x/net v0.31.0 // indirect
