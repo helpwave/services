@@ -60,8 +60,11 @@ func (a *PropertyValueAggregate) onPropertyValueCreated(evt hwes.Event) error {
 	}
 
 	a.PropertyValue.PropertyID = propertyID
-	a.PropertyValue.Value = payload.Value
 	a.PropertyValue.SubjectID = subjectID
+
+	value := &models.SimpleTypedValue{}
+	payload.Change.Apply(value)
+	a.PropertyValue.Value = value
 
 	return nil
 }
@@ -72,7 +75,12 @@ func (a *PropertyValueAggregate) onPropertyValueUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	a.PropertyValue.Value = payload.Value
+	if payload.Change.ValueRemoved {
+		a.PropertyValue.Value = nil
+		return nil
+	}
+
+	payload.Change.Apply(a.PropertyValue.Value)
 
 	return nil
 }

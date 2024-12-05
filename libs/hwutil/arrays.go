@@ -193,3 +193,46 @@ func OrEmptySlice[T any](as []T) []T {
 
 	return make([]T, 0)
 }
+
+func Without[T comparable](original, itemsToRemove []T) []T {
+	// Create a map for quick lookup of items to remove
+	toRemove := make(map[T]bool)
+	for _, item := range itemsToRemove {
+		toRemove[item] = true
+	}
+
+	var result []T
+	for _, item := range original {
+		if _, exists := toRemove[item]; !exists {
+			result = append(result, item)
+		}
+	}
+
+	return result
+}
+
+// SameItems yields true, iff a and b have the same elements (order may vary!)
+func SameItems[T comparable](a, b []T) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	A := make(map[T]bool)
+	for _, item := range a {
+		A[item] = true
+	}
+
+	B := make(map[T]bool)
+	for _, item := range b {
+		B[item] = true
+	}
+
+	// Compare the maps
+	for key, in := range A {
+		if B[key] != in {
+			return false
+		}
+	}
+
+	return true
+}
