@@ -349,29 +349,6 @@ final $typed_data.Uint8List getMembersByOrganizationResponseDescriptor = $conver
     'lsGAIgASgJUgVlbWFpbBIaCghuaWNrbmFtZRgDIAEoCVIIbmlja25hbWUSIgoKYXZhdGFyX3Vy'
     'bBgEIAEoCUgAUglhdmF0YXJVcmyIAQFCDQoLX2F2YXRhcl91cmw=');
 
-@$core.Deprecated('Use addMemberRequestDescriptor instead')
-const AddMemberRequest$json = {
-  '1': 'AddMemberRequest',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'user_id', '3': 2, '4': 1, '5': 9, '10': 'userId'},
-  ],
-};
-
-/// Descriptor for `AddMemberRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List addMemberRequestDescriptor = $convert.base64Decode(
-    'ChBBZGRNZW1iZXJSZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZBIXCgd1c2VyX2lkGAIgASgJUgZ1c2'
-    'VySWQ=');
-
-@$core.Deprecated('Use addMemberResponseDescriptor instead')
-const AddMemberResponse$json = {
-  '1': 'AddMemberResponse',
-};
-
-/// Descriptor for `AddMemberResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List addMemberResponseDescriptor = $convert.base64Decode(
-    'ChFBZGRNZW1iZXJSZXNwb25zZQ==');
-
 @$core.Deprecated('Use removeMemberRequestDescriptor instead')
 const RemoveMemberRequest$json = {
   '1': 'RemoveMemberRequest',

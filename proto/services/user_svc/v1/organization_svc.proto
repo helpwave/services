@@ -151,18 +151,6 @@ message GetMembersByOrganizationResponse {
   }
 }
 
-
-//
-// AddMember
-//
-
-message AddMemberRequest {
-  string id = 1; // @gotags: validate:"uuid4"
-  string user_id = 2; // @gotags: validate:"uuid4"
-}
-
-message AddMemberResponse {}
-
 //
 // RemoveMember
 //
@@ -288,7 +276,6 @@ service OrganizationService {
   rpc UpdateOrganization (UpdateOrganizationRequest) returns (UpdateOrganizationResponse) {}
   rpc DeleteOrganization (DeleteOrganizationRequest) returns (DeleteOrganizationResponse) {}
   rpc GetMembersByOrganization (GetMembersByOrganizationRequest) returns (GetMembersByOrganizationResponse) {}
-  rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
   rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
   rpc GetInvitationsByOrganization(GetInvitationsByOrganizationRequest) returns (GetInvitationsByOrganizationResponse) {}

@@ -335,44 +335,6 @@ func (s ServiceServer) DeleteOrganization(
 	return &pb.DeleteOrganizationResponse{}, nil
 }
 
-func (s ServiceServer) AddMember(
-	ctx context.Context,
-	req *pb.AddMemberRequest,
-) (*pb.AddMemberResponse, error) {
-	log := zlog.Ctx(ctx)
-	organizationRepo := organization_repo.New(hwdb.GetDB())
-
-	userID, err := uuid.Parse(req.UserId)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	organizationID, err := uuid.Parse(req.GetId())
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	if err := s.kc.AddUserToOrganization(ctx, userID, organizationID); err != nil {
-		return nil, err
-	}
-
-	err = organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
-		UserID:         userID,
-		OrganizationID: organizationID,
-	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
-	log.Info().
-		Str("userID", userID.String()).
-		Str("organizationID", organizationID.String()).
-		Msg("user added to organization")
-
-	return &pb.AddMemberResponse{}, nil
-}
-
 func (s ServiceServer) RemoveMember(
 	ctx context.Context,
 	req *pb.RemoveMemberRequest,

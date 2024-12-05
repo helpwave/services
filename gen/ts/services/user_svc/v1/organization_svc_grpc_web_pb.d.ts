@@ -57,13 +57,6 @@ export class OrganizationServiceClient {
                response: services_user_svc_v1_organization_svc_pb.GetMembersByOrganizationResponse) => void
   ): grpcWeb.ClientReadableStream<services_user_svc_v1_organization_svc_pb.GetMembersByOrganizationResponse>;
 
-  addMember(
-    request: services_user_svc_v1_organization_svc_pb.AddMemberRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_user_svc_v1_organization_svc_pb.AddMemberResponse) => void
-  ): grpcWeb.ClientReadableStream<services_user_svc_v1_organization_svc_pb.AddMemberResponse>;
-
   removeMember(
     request: services_user_svc_v1_organization_svc_pb.RemoveMemberRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -161,11 +154,6 @@ export class OrganizationServicePromiseClient {
     request: services_user_svc_v1_organization_svc_pb.GetMembersByOrganizationRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_user_svc_v1_organization_svc_pb.GetMembersByOrganizationResponse>;
-
-  addMember(
-    request: services_user_svc_v1_organization_svc_pb.AddMemberRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_user_svc_v1_organization_svc_pb.AddMemberResponse>;
 
   removeMember(
     request: services_user_svc_v1_organization_svc_pb.RemoveMemberRequest,
