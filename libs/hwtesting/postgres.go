@@ -5,6 +5,10 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/wait"
 
 	"github.com/golang-migrate/migrate/v4"
 	zlog "github.com/rs/zerolog/log"
@@ -22,6 +26,7 @@ const (
 func startPostgres(ctx context.Context) (endpoint string, teardown func()) {
 	container, err := postgres.Run(ctx,
 		ImagePostgres,
+		testcontainers.WithWaitStrategyAndDeadline(time.Second*10, wait.ForExposedPort()),
 		postgres.WithDatabase(PostgresDb),
 		postgres.WithUsername(PostgresUser),
 		postgres.WithPassword(PostgresPassword),

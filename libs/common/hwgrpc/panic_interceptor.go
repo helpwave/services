@@ -2,6 +2,8 @@ package hwgrpc
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"runtime/debug"
 	"telemetry"
 
@@ -27,6 +29,8 @@ func recoveryHandlerFn() recovery.RecoveryHandlerFuncContext {
 			Any("recovered", recovered).
 			Str("stack", string(debug.Stack())).
 			Msg("recovered a panic")
+
+		_, _ = fmt.Fprintln(os.Stderr, string(debug.Stack()))
 
 		panicsRecovered.Counter().Inc()
 

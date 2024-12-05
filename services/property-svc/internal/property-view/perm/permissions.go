@@ -25,7 +25,7 @@ func (t Patient) ID() string               { return uuid.UUID(t).String() }
 
 // Permissions
 
-const OrganizationCanUserAlterRootPropertyRules hwauthz.Permission = "can_user_alter_root_property_rules"
+const OrganizationCanUserAlterRootPropertyRules hwauthz.Permission = "alter_root_property_rules"
 
 const (
 	WardCanUserUpdate    hwauthz.Permission = "update"

@@ -68,7 +68,7 @@ CREATE TABLE public.organizations (
     short_name text NOT NULL,
     contact_email text NOT NULL,
     avatar_url text,
-    is_personal boolean DEFAULT false,
+    is_personal boolean DEFAULT false NOT NULL,
     created_by_user_id uuid NOT NULL
 );
 
