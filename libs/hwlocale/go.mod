@@ -8,7 +8,7 @@ require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/nicksnyder/go-i18n/v2 v2.4.1
 	github.com/rs/zerolog v1.33.0
-	golang.org/x/text v0.20.0
+	golang.org/x/text v0.21.0
 	hwutil v0.0.0
 )
 

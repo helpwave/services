@@ -15,7 +15,7 @@ require (
 	github.com/alecthomas/kong v0.9.0
 	github.com/authzed/authzed-go v0.16.0
 	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b
-	google.golang.org/grpc v1.68.0
+	google.golang.org/grpc v1.68.1
 	gopkg.in/yaml.v3 v3.0.1
 	hwauthz v0.0.0
 )
