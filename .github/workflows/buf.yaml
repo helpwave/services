@@ -14,7 +14,7 @@ env:
   # renovate: datasource=docker depName=golang versioning=docker
   GO_VERSION: '1.23'
   # renovate: datasource=github-releases depName=bufbuild/buf
-  BUF_CLI_VERSION: '1.45.0'
+  BUF_CLI_VERSION: '1.47.2'
   # renovate: datasource=github-releases depName=favadi/protoc-go-inject-tag
   PROTOC_GO_INJECT_TAG_VERSION: '1.4.0'
 
