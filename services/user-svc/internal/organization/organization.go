@@ -279,6 +279,12 @@ func (s ServiceServer) DeleteOrganization(
 		return nil, err
 	}
 
+	// TODO: uncomment in #888
+	// // delete from permission graph
+	// if err := s.authz.DeleteObject(ctx, commonPerm.Organization(organizationID)); err != nil {
+	// 	 return nil, fmt.Errorf("could not delete organization from spicedb: %w", err)
+	// }
+
 	return &pb.DeleteOrganizationResponse{}, nil
 }
 

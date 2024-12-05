@@ -395,11 +395,14 @@ func (s ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) 
 		return nil, err
 	}
 
+	// delete from permission graph
+	if err := s.authz.DeleteObject(ctx, perm.Bed(bedID)); err != nil {
+		return nil, fmt.Errorf("could not delete bed from spicedb: %w", err)
+	}
+
 	log.Info().
 		Str("bedID", bedID.String()).
 		Msg("bed deleted")
-
-	// todo: delete from permission graph
 
 	// store event
 	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewBedAggregate(bedID),

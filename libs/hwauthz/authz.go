@@ -170,7 +170,7 @@ func (b *Tx) Commit(ctx context.Context) (ConsistencyToken, error) {
 type AuthZ interface {
 	// Create adds one or many Relationship Tuples to the Permissions Graph
 	Create(relationships ...Relationship) *Tx
-	// Delete removes one or many Relationship Tuples to the Permissions Graph
+	// Delete removes one or many Relationship Tuples to the Permissions Graph, also see DeleteObject
 	Delete(relationships ...Relationship) *Tx
 	// Check queries the Permission Graph for the existence of a PermissionCheck (i.e., a Relationship)
 	// We do not support the use of ConsistencyToken yet
@@ -189,6 +189,8 @@ type AuthZ interface {
 	// Useful, where the set of accessible resources is much smaller than the query results.
 	// Use this to first lookup permitted resources, and then restrict your database query to them.
 	LookupResources(ctx context.Context, subject Object, relation Relation, resourceType ObjectType) ([]string, error)
+	// DeleteObject deletes any direct relationships to this object from the permission graph
+	DeleteObject(ctx context.Context, object Object) error
 }
 
 // Error returns err, if not nil or StatusErrorPermissionDenied, if permissionGranted is false

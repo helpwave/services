@@ -299,9 +299,10 @@ func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest
 		return nil, err
 	}
 
-	// TODO: Handle beds
-
-	// TODO: remove from spice (also beds)
+	// remove from permission graph
+	if err := s.authz.DeleteObject(ctx, perm.Room(roomID)); err != nil {
+		return nil, fmt.Errorf("could not delete room from spicedb: %w", err)
+	}
 
 	// store event
 	if err := eventstoredb.SaveEntityEventForAggregate(ctx, s.es, NewRoomAggregate(roomID),

@@ -54,3 +54,7 @@ func (s *TrueAuthZ) LookupResources(
 ) ([]string, error) {
 	return []string{}, nil
 }
+
+func (s *TrueAuthZ) DeleteObject(_ context.Context, _ hwauthz.Object) error {
+	return nil
+}
