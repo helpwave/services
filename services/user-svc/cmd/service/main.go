@@ -18,7 +18,6 @@ const ServiceName = "user-svc"
 
 func Main(version string, ready func()) {
 	ctx := common.Setup(ServiceName, version, common.WithAuth(),
-		common.WithUnauthenticatedMethod(pb.UserService_CreateUser_FullMethodName),
 		common.WithNonOrganizationMethod(pb.OrganizationService_CreatePersonalOrganization_FullMethodName),
 	)
 
@@ -36,7 +35,7 @@ func Main(version string, ready func()) {
 		grpcServer := server.GrpcServer()
 
 		common.MustAddTopicEventHandler(server, user.UserUpdatedEventSubscription, user.HandleUserUpdatedEvent)
-		pb.RegisterUserServiceServer(grpcServer, user.NewServiceServer())
+		pb.RegisterUserServiceServer(grpcServer, user.NewServiceServer(authz))
 
 		pb.RegisterOrganizationServiceServer(grpcServer, organization.NewServiceServer(kc, authz))
 

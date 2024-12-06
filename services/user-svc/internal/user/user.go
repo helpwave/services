@@ -4,7 +4,10 @@ import (
 	"context"
 	events "gen/libs/events/v1"
 	pb "gen/services/user_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
+	"user-svc/internal/user/perm"
 
 	"user-svc/repos/user_repo"
 
@@ -23,10 +26,14 @@ var UserUpdatedEventSubscription = &daprcmn.Subscription{
 
 type ServiceServer struct {
 	pb.UnimplementedUserServiceServer
+	authz hwauthz.AuthZ
 }
 
-func NewServiceServer() *ServiceServer {
-	return &ServiceServer{}
+func NewServiceServer(authz hwauthz.AuthZ) *ServiceServer {
+	return &ServiceServer{
+		UnimplementedUserServiceServer: pb.UnimplementedUserServiceServer{},
+		authz:                          authz,
+	}
 }
 
 func (s ServiceServer) ReadPublicProfile(
@@ -38,6 +45,14 @@ func (s ServiceServer) ReadPublicProfile(
 	userID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// check permissions
+	reqestingUser := commonPerm.UserFromCtx(ctx)
+	requestedUser := commonPerm.User(userID)
+	check := hwauthz.NewPermissionCheck(reqestingUser, perm.UserCanUserGetPublicProfile, requestedUser)
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
 	}
 
 	user, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
