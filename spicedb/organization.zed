@@ -36,11 +36,18 @@ definition organization {
 }
 
 definition organization_invite {
-	relation user: user
+	// When an email becomes the target of an invite, there are two possible states:
+	// - either the email is currently used by an existing user or
+	// - it is not
+	// In the former, we target that user directly, this prevents issues in case
+	// the user changes their email-address while an invite is pending and other nastiness.
+	// If we can't do that, we assign permissions to the invite to the email directly.
+	// (We actually store a hash of the email instead for both compliance and technical reasons)
+	relation invitee: user | email
 	relation organization: organization
 
-	permission view = user + organization->leadership
-	permission accept = user
-	permission deny = user
+	permission view = invitee + organization->leadership
+	permission accept = invitee
+	permission deny = invitee
 	permission cancel = organization->leadership
 }

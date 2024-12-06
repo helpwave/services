@@ -611,6 +611,23 @@ func (s ServiceServer) AcceptInvitation(
 		return nil, err
 	}
 
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	email := perm.Email(claims.Email)
+	invite := perm.Invite(invitationId)
+
+	checks := []hwauthz.PermissionCheck{
+		hwauthz.NewPermissionCheck(user, perm.InviteAccept, invite),  // either the user as access
+		hwauthz.NewPermissionCheck(email, perm.InviteAccept, invite), // or their email might have it
+	}
+	bools, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	if !hwutil.Contains(bools, true) {
+		return nil, hwauthz.StatusErrorPermissionDenied(ctx, checks[0])
+	}
+
 	// Check if invite exists
 	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
 		ID:    uuid.NullUUID{UUID: invitationId, Valid: true},
@@ -666,6 +683,23 @@ func (s ServiceServer) DeclineInvitation(
 		return nil, err
 	}
 
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	email := perm.Email(claims.Email)
+	invite := perm.Invite(invitationId)
+
+	checks := []hwauthz.PermissionCheck{
+		hwauthz.NewPermissionCheck(user, perm.InviteDeny, invite),  // either the user as access
+		hwauthz.NewPermissionCheck(email, perm.InviteDeny, invite), // or their email might have it
+	}
+	bools, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	if !hwutil.Contains(bools, true) {
+		return nil, hwauthz.StatusErrorPermissionDenied(ctx, checks[0])
+	}
+
 	// Check if invite exists
 	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
 		ID:    uuid.NullUUID{UUID: invitationId, Valid: true},
@@ -709,6 +743,15 @@ func (s ServiceServer) RevokeInvitation(
 	invitationId, err := uuid.Parse(req.InvitationId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// check permissions
+	user := commonPerm.UserFromCtx(ctx)
+	invite := perm.Invite(invitationId)
+
+	check := hwauthz.NewPermissionCheck(user, perm.InviteCancel, invite)
+	if err := s.authz.Must(ctx, check); err != nil {
+		return nil, err
 	}
 
 	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{

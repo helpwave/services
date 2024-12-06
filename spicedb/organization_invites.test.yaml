@@ -11,30 +11,43 @@ relationships:
   - "organization:b#member@user:charlie"
 
   # User eve is invited to the a_organization
-  - "organization_invite:1#user@user:eve"
+  - "organization_invite:1#invitee@user:eve"
   - "organization_invite:1#organization@organization:a"
 
-  # Unrelated invite
-  - "organization_invite:2#user@user:dome"
+  # Email test@example.com is invited to the a_organization (irl they are hashed)
+  - "organization_invite:2#invitee@email:test_at_example_com"
   - "organization_invite:2#organization@organization:a"
 
+  # Unrelated invite
+  - "organization_invite:3#invitee@user:dome"
+  - "organization_invite:3#organization@organization:a"
+
 tests:
+  # Invite 1
   - name: Only Eve (user) and Alice (leader) can view the invite
     validate:
       - relation: "organization_invite:1#view"
         exhaustive:
-          - "[user:eve] is <organization_invite:1#user>"
+          - "[user:eve] is <organization_invite:1#invitee>"
           - "[user:alice] is <organization:a#leader>"
   - name: Only Eve (user) can accept and deny the invite
     validate:
       - relation: "organization_invite:1#accept"
         exhaustive:
-          - "[user:eve] is <organization_invite:1#user>"
+          - "[user:eve] is <organization_invite:1#invitee>"
       - relation: "organization_invite:1#deny"
         exhaustive:
-          - "[user:eve] is <organization_invite:1#user>"
+          - "[user:eve] is <organization_invite:1#invitee>"
   - name: Only Alice (lead) can cancel the invite
     validate:
       - relation: "organization_invite:1#cancel"
         exhaustive:
+          - "[user:alice] is <organization:a#leader>"
+
+  # Invite 2
+  - name: Email ... and Alice (leader) can read the invite
+    validate:
+      - relation: "organization_invite:2#view"
+        exhaustive:
+          - "[email:test_at_example_com] is <organization_invite:2#invitee>"
           - "[user:alice] is <organization:a#leader>"

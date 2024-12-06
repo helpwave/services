@@ -11,3 +11,5 @@ definition user {
 	// any user with a shared organization membership can get this user's public profile
 	permission get_public_profile = organization->membership;
 }
+
+definition email {}
