@@ -64,7 +64,7 @@ RUN wget -q https://github.com/golang-migrate/migrate/releases/download/v$MIGRAT
 # get daprd
 RUN wget -q https://github.com/dapr/dapr/releases/download/v$DAPR_VERSION/daprd_linux_amd64.tar.gz -O - | tar -xzvf - daprd
 
-FROM alpine:3.20.3 AS production
+FROM alpine:3.21.0 AS production
 
 RUN apk update && apk add postgresql-client --no-cache
 
