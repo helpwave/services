@@ -709,7 +709,14 @@ func (s ServiceServer) AcceptInvitation(
 	userID := auth.MustGetUserID(ctx)
 
 	// Add user to organization
-	if err := AddUserToOrganization(ctx, s.authz, s.kc, userID, currentInvitation.OrganizationID); err != nil {
+	if err := AddUserToOrganization(
+		ctx,
+		hwdb.GetDB(),
+		s.authz,
+		s.kc,
+		userID,
+		currentInvitation.OrganizationID,
+	); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -881,27 +888,15 @@ func CreateOrganizationAndAddUser(
 		return nil, err
 	}
 
-	// add user to kc org
-	if err := kc.AddUserToOrganization(ctx, userID, organizationID); err != nil {
-		return nil, err
-	}
-
-	// add user to db org
-	err = organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
-		UserID:         userID,
-		OrganizationID: organization.ID,
-	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
-	// add to permission graph
-	permUser := commonPerm.User(userID)
-	permOrg := commonPerm.Organization(organization.ID)
-	rel := hwauthz.NewRelationship(permUser, perm.OrganizationLeader, permOrg)
-	backRel := hwauthz.NewRelationship(permOrg, userPerm.UserOrganization, permUser)
-	if _, err := authz.Create(rel).Create(backRel).Commit(ctx); err != nil {
+	// add user to org
+	if err := AddUserToOrganization(
+		ctx,
+		tx,
+		authz,
+		kc,
+		userID,
+		organizationID,
+	); err != nil {
 		return nil, err
 	}
 
@@ -913,23 +908,25 @@ func CreateOrganizationAndAddUser(
 	return &organization, nil
 }
 
-func AddUserToOrganization(ctx context.Context, authz hwauthz.AuthZ, kc hwkc.IClient, userID uuid.UUID, organizationID uuid.UUID) error {
+func AddUserToOrganization(ctx context.Context, tx hwdb.DBTX, authz hwauthz.AuthZ, kc hwkc.IClient, userID uuid.UUID, organizationID uuid.UUID) error {
 	log := zlog.Ctx(ctx)
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(tx)
 
+	// add user to org in kc
 	if err := kc.AddUserToOrganization(ctx, userID, organizationID); err != nil {
 		return err
 	}
 
+	// add user to org in db
 	err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
 		UserID:         userID,
 		OrganizationID: organizationID,
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return err
 	}
 
+	// add user to org in spice
 	permUser := commonPerm.User(userID)
 	permOrg := commonPerm.Organization(organizationID)
 	rel := hwauthz.NewRelationship(permUser, perm.OrganizationLeader, permOrg)
