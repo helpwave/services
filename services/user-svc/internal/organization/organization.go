@@ -709,7 +709,7 @@ func (s ServiceServer) AcceptInvitation(
 	userID := auth.MustGetUserID(ctx)
 
 	// Add user to organization
-	if err := AddUserToOrganization(ctx, s.kc, userID, currentInvitation.OrganizationID); err != nil {
+	if err := AddUserToOrganization(ctx, s.authz, s.kc, userID, currentInvitation.OrganizationID); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -933,26 +933,34 @@ func CreateOrganizationAndAddUser(
 	return &organization, nil
 }
 
-func AddUserToOrganization(ctx context.Context, kc hwkc.IClient, userId uuid.UUID, organizationId uuid.UUID) error {
+func AddUserToOrganization(ctx context.Context, authz hwauthz.AuthZ, kc hwkc.IClient, userID uuid.UUID, organizationID uuid.UUID) error {
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
-	if err := kc.AddUserToOrganization(ctx, userId, organizationId); err != nil {
+	if err := kc.AddUserToOrganization(ctx, userID, organizationID); err != nil {
 		return err
 	}
 
 	err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
-		UserID:         userId,
-		OrganizationID: organizationId,
+		UserID:         userID,
+		OrganizationID: organizationID,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err
 	}
 
+	permUser := commonPerm.User(userID)
+	permOrg := commonPerm.Organization(organizationID)
+	rel := hwauthz.NewRelationship(permUser, perm.OrganizationLeader, permOrg)
+	backRel := hwauthz.NewRelationship(permOrg, userPerm.UserOrganization, permUser)
+	if _, err := authz.Create(rel).Create(backRel).Commit(ctx); err != nil {
+		return err
+	}
+
 	log.Info().
-		Str("organizationID", organizationId.String()).
-		Str("userID", userId.String()).
+		Str("organizationID", organizationID.String()).
+		Str("userID", userID.String()).
 		Msg("added user to organization")
 
 	// TODO: Dispatch UserJoinedOrganizationEvent
