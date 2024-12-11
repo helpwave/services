@@ -391,9 +391,15 @@ func (q *Queries) GetOrganizationsWithMembersByUser(ctx context.Context, userID 
 }
 
 const inviteMember = `-- name: InviteMember :one
-INSERT INTO invitations (email, organization_id, state)
-VALUES ($1, $2, $3)
-RETURNING id, email, organization_id, state
+WITH inserted_invitation AS (
+	INSERT INTO invitations (email, organization_id, state)
+	VALUES ($1, $2, $3) RETURNING id
+)
+SELECT
+	inserted_invitation.id AS invitation_id,
+	users.id AS user_id
+FROM inserted_invitation
+LEFT JOIN users ON users.email = $1
 `
 
 type InviteMemberParams struct {
@@ -402,15 +408,15 @@ type InviteMemberParams struct {
 	State          int32
 }
 
-func (q *Queries) InviteMember(ctx context.Context, arg InviteMemberParams) (Invitation, error) {
+type InviteMemberRow struct {
+	InvitationID uuid.UUID
+	UserID       uuid.NullUUID
+}
+
+func (q *Queries) InviteMember(ctx context.Context, arg InviteMemberParams) (InviteMemberRow, error) {
 	row := q.db.QueryRow(ctx, inviteMember, arg.Email, arg.OrganizationID, arg.State)
-	var i Invitation
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.OrganizationID,
-		&i.State,
-	)
+	var i InviteMemberRow
+	err := row.Scan(&i.InvitationID, &i.UserID)
 	return i, err
 }
 

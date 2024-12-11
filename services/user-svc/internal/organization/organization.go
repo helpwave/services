@@ -14,6 +14,7 @@ import (
 	"hwutil"
 
 	"user-svc/internal/organization/perm"
+	userPerm "user-svc/internal/user/perm"
 
 	"user-svc/internal/hwkc"
 	"user-svc/locale"
@@ -339,9 +340,9 @@ func (s ServiceServer) RemoveMember(
 	ctx context.Context,
 	req *pb.RemoveMemberRequest,
 ) (*pb.RemoveMemberResponse, error) {
-	userPerm := commonPerm.UserFromCtx(ctx)
-	orgPerm := commonPerm.Organization(uuid.MustParse(req.GetId()))
-	check := hwauthz.NewPermissionCheck(userPerm, perm.OrganizationCanUserRemoveMember, orgPerm)
+	permUser := commonPerm.UserFromCtx(ctx)
+	permOrg := commonPerm.Organization(uuid.MustParse(req.GetId()))
+	check := hwauthz.NewPermissionCheck(permUser, perm.OrganizationCanUserRemoveMember, permOrg)
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
@@ -374,8 +375,9 @@ func (s ServiceServer) RemoveMember(
 
 	deletedUser := commonPerm.User(userID)
 	if _, err := s.authz.
-		Delete(hwauthz.NewRelationship(deletedUser, perm.OrganizationMember, orgPerm)).
-		Delete(hwauthz.NewRelationship(deletedUser, perm.OrganizationLeader, orgPerm)).
+		Delete(hwauthz.NewRelationship(deletedUser, perm.OrganizationMember, permOrg)).
+		Delete(hwauthz.NewRelationship(deletedUser, perm.OrganizationLeader, permOrg)).
+		Delete(hwauthz.NewRelationship(permOrg, userPerm.UserOrganization, deletedUser)).
 		Commit(ctx); err != nil {
 		return nil, err
 	}
@@ -392,15 +394,15 @@ func (s ServiceServer) InviteMember(
 	ctx context.Context,
 	req *pb.InviteMemberRequest,
 ) (*pb.InviteMemberResponse, error) {
-	userPerm := commonPerm.UserFromCtx(ctx)
-	orgPerm := commonPerm.Organization(uuid.MustParse(req.GetOrganizationId()))
-	check := hwauthz.NewPermissionCheck(userPerm, perm.OrganizationCanUserInviteMember, orgPerm)
+	permUser := commonPerm.UserFromCtx(ctx)
+	permOrg := commonPerm.Organization(uuid.MustParse(req.GetOrganizationId()))
+	check := hwauthz.NewPermissionCheck(permUser, perm.OrganizationCanUserInviteMember, permOrg)
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
 
 	organizationRepo := organization_repo.New(hwdb.GetDB())
-	invitation := organization_repo.Invitation{}
+	invitation := organization_repo.InviteMemberRow{}
 
 	log := zlog.Ctx(ctx)
 
@@ -409,6 +411,7 @@ func (s ServiceServer) InviteMember(
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	// first: sanity checks
 	conditions, err := organizationRepo.GetInvitationConditions(ctx, organization_repo.GetInvitationConditionsParams{
 		OrganizationID: organizationId,
 		Email:          req.Email,
@@ -440,7 +443,21 @@ func (s ServiceServer) InviteMember(
 			return nil, err
 		}
 
-		// TODO: add to graph
+		// add to permission graph
+
+		// subject is the email, unless we currently have a user assigned to it, then it's the user
+		// for more info in this read the comment in the core spicedb schema file
+		var subj hwauthz.Object = perm.Email(req.Email)
+		if invitation.UserID.Valid {
+			subj = commonPerm.User(invitation.UserID.UUID)
+		}
+		org := commonPerm.Organization(organizationId)
+		resc := perm.Invite(invitation.InvitationID)
+		if _, err := s.authz.
+			Create(hwauthz.NewRelationship(subj, perm.InviteInvitee, resc)).
+			Create(hwauthz.NewRelationship(org, perm.InviteOrganization, resc)).Commit(ctx); err != nil {
+			return nil, err
+		}
 
 		log.Info().
 			Str("email", req.Email). // TODO: Revisited for privacy reasons
@@ -449,7 +466,7 @@ func (s ServiceServer) InviteMember(
 	}
 
 	return &pb.InviteMemberResponse{
-		Id: invitation.ID.String(),
+		Id: invitation.InvitationID.String(),
 	}, nil
 }
 
@@ -903,7 +920,8 @@ func CreateOrganizationAndAddUser(
 	permUser := commonPerm.User(userID)
 	permOrg := commonPerm.Organization(organization.ID)
 	rel := hwauthz.NewRelationship(permUser, perm.OrganizationLeader, permOrg)
-	if _, err := authz.Create(rel).Commit(ctx); err != nil {
+	backRel := hwauthz.NewRelationship(permOrg, userPerm.UserOrganization, permUser)
+	if _, err := authz.Create(rel).Create(backRel).Commit(ctx); err != nil {
 		return nil, err
 	}
 

@@ -1,5 +1,9 @@
 package perm
 
+// Direct Relations
+
+const UserOrganization = "organization"
+
 // Permissions
 
 const (

@@ -57,9 +57,15 @@ WHERE user_id = $1 AND organization_id = $2;
 DELETE FROM memberships WHERE user_id=$1 AND organization_id=$2;
 
 -- name: InviteMember :one
-INSERT INTO invitations (email, organization_id, state)
-VALUES (@email, @organization_id, @state)
-RETURNING *;
+WITH inserted_invitation AS (
+	INSERT INTO invitations (email, organization_id, state)
+	VALUES (@email, @organization_id, @state) RETURNING id
+)
+SELECT
+	inserted_invitation.id AS invitation_id,
+	users.id AS user_id
+FROM inserted_invitation
+LEFT JOIN users ON users.email = @email;
 
 -- name: GetInvitations :many
 SELECT *
