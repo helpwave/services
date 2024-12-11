@@ -8,7 +8,7 @@ require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/nicksnyder/go-i18n/v2 v2.4.1
 	github.com/rs/zerolog v1.33.0
-	golang.org/x/text v0.20.0
+	golang.org/x/text v0.21.0
 	hwutil v0.0.0
 )
 
@@ -21,7 +21,7 @@ require (
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
-	golang.org/x/crypto v0.29.0 // indirect
-	golang.org/x/net v0.31.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
+	golang.org/x/crypto v0.30.0 // indirect
+	golang.org/x/net v0.32.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
 )

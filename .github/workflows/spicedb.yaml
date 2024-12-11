@@ -2,7 +2,7 @@ name: spicedb
 
 env:
   # renovate: datasource=github-releases depName=authzed/zed
-  ZED_VERSION: '0.21.5'
+  ZED_VERSION: '0.23.0'
 
 on:
   pull_request:

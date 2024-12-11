@@ -2,46 +2,28 @@ import * as jspb from 'google-protobuf'
 
 
 
-export class EntityEvent extends jspb.Message {
-  getEntityId(): string;
-  setEntityId(value: string): EntityEvent;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): EntityEvent.AsObject;
-  static toObject(includeInstance: boolean, msg: EntityEvent): EntityEvent.AsObject;
-  static serializeBinaryToWriter(message: EntityEvent, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): EntityEvent;
-  static deserializeBinaryFromReader(message: EntityEvent, reader: jspb.BinaryReader): EntityEvent;
-}
-
-export namespace EntityEvent {
-  export type AsObject = {
-    entityId: string,
-  }
-}
-
-export class DomainEvent extends jspb.Message {
+export class Event extends jspb.Message {
   getEventId(): string;
-  setEventId(value: string): DomainEvent;
+  setEventId(value: string): Event;
 
   getEventType(): string;
-  setEventType(value: string): DomainEvent;
+  setEventType(value: string): Event;
 
   getAggregateId(): string;
-  setAggregateId(value: string): DomainEvent;
+  setAggregateId(value: string): Event;
 
   getAggregateType(): string;
-  setAggregateType(value: string): DomainEvent;
+  setAggregateType(value: string): Event;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): DomainEvent.AsObject;
-  static toObject(includeInstance: boolean, msg: DomainEvent): DomainEvent.AsObject;
-  static serializeBinaryToWriter(message: DomainEvent, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): DomainEvent;
-  static deserializeBinaryFromReader(message: DomainEvent, reader: jspb.BinaryReader): DomainEvent;
+  toObject(includeInstance?: boolean): Event.AsObject;
+  static toObject(includeInstance: boolean, msg: Event): Event.AsObject;
+  static serializeBinaryToWriter(message: Event, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Event;
+  static deserializeBinaryFromReader(message: Event, reader: jspb.BinaryReader): Event;
 }
 
-export namespace DomainEvent {
+export namespace Event {
   export type AsObject = {
     eventId: string,
     eventType: string,
@@ -79,17 +61,10 @@ export class ReceiveUpdatesResponse extends jspb.Message {
   getRevision(): number;
   setRevision(value: number): ReceiveUpdatesResponse;
 
-  getEntityEvent(): EntityEvent | undefined;
-  setEntityEvent(value?: EntityEvent): ReceiveUpdatesResponse;
-  hasEntityEvent(): boolean;
-  clearEntityEvent(): ReceiveUpdatesResponse;
-
-  getDomainEvent(): DomainEvent | undefined;
-  setDomainEvent(value?: DomainEvent): ReceiveUpdatesResponse;
-  hasDomainEvent(): boolean;
-  clearDomainEvent(): ReceiveUpdatesResponse;
-
-  getEventCase(): ReceiveUpdatesResponse.EventCase;
+  getEvent(): Event | undefined;
+  setEvent(value?: Event): ReceiveUpdatesResponse;
+  hasEvent(): boolean;
+  clearEvent(): ReceiveUpdatesResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ReceiveUpdatesResponse.AsObject;
@@ -102,14 +77,7 @@ export class ReceiveUpdatesResponse extends jspb.Message {
 export namespace ReceiveUpdatesResponse {
   export type AsObject = {
     revision: number,
-    entityEvent?: EntityEvent.AsObject,
-    domainEvent?: DomainEvent.AsObject,
-  }
-
-  export enum EventCase { 
-    EVENT_NOT_SET = 0,
-    ENTITY_EVENT = 2,
-    DOMAIN_EVENT = 3,
+    event?: Event.AsObject,
   }
 }
 

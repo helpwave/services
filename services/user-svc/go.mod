@@ -23,9 +23,9 @@ require (
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/nicksnyder/go-i18n/v2 v2.4.1
 	github.com/rs/zerolog v1.33.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	golang.org/x/oauth2 v0.24.0
-	google.golang.org/grpc v1.68.0
+	google.golang.org/grpc v1.68.1
 	google.golang.org/protobuf v1.35.2
 	hwauthz v0.0.0
 	hwdb v0.0.0
@@ -40,7 +40,7 @@ require (
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c // indirect
 	github.com/Mariscal6/testcontainers-spicedb-go v0.1.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/authzed/authzed-go v0.16.0 // indirect
+	github.com/authzed/authzed-go v1.1.1 // indirect
 	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
@@ -109,9 +109,9 @@ require (
 	github.com/shirou/gopsutil/v3 v3.23.12 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/testcontainers/testcontainers-go v0.33.0 // indirect
-	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0 // indirect
-	github.com/testcontainers/testcontainers-go/modules/redis v0.33.0 // indirect
+	github.com/testcontainers/testcontainers-go v0.34.0 // indirect
+	github.com/testcontainers/testcontainers-go/modules/postgres v0.34.0 // indirect
+	github.com/testcontainers/testcontainers-go/modules/redis v0.34.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0 // indirect
@@ -128,11 +128,11 @@ require (
 	go.opentelemetry.io/otel/trace v1.32.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.3.1 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
-	golang.org/x/crypto v0.29.0 // indirect
-	golang.org/x/net v0.31.0 // indirect
-	golang.org/x/sync v0.9.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
-	golang.org/x/text v0.20.0 // indirect
+	golang.org/x/crypto v0.30.0 // indirect
+	golang.org/x/net v0.32.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20241104194629-dd2ea8efbc28 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241104194629-dd2ea8efbc28 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect

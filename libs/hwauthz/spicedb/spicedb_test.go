@@ -132,3 +132,51 @@ func TestLookupResources(t *testing.T) {
 	// assert
 	assert.ElementsMatch(t, []string{"0", "1", "2"}, subjects)
 }
+
+func TestDeleteObject(t *testing.T) {
+	// client
+	ctx := context.Background()
+	client := NewSpiceDBAuthZ()
+
+	// setup permission graph
+	ward := commonPerm.GenericObject{
+		Typ: "ward",
+		Id:  uuid.New().String(),
+	}
+
+	org := commonPerm.GenericObject{
+		Typ: "organization",
+		Id:  uuid.New().String(),
+	}
+	// the ward, which we will delete, is the (direct) resource of this relationship
+	orgRelation := hwauthz.Relation("organization")
+	resourceRelationship := hwauthz.NewRelationship(org, orgRelation, ward)
+	tx := client.Create(resourceRelationship)
+
+	room := commonPerm.GenericObject{
+		Typ: "room",
+		Id:  uuid.New().String(),
+	}
+
+	// the ward is the (direct) subject of this relationship
+	roomRelation := hwauthz.Relation("ward")
+	subjectRelationship := hwauthz.NewRelationship(ward, roomRelation, room)
+	tx = tx.Create(subjectRelationship)
+
+	_, err := tx.Commit(ctx)
+	require.NoError(t, err)
+
+	// they exist before
+	exists, err := client.BulkCheck(ctx, []hwauthz.PermissionCheck{subjectRelationship, resourceRelationship})
+	require.NoError(t, err)
+	require.Equal(t, []bool{true, true}, exists)
+
+	// delete ward
+	err = client.DeleteObject(ctx, ward)
+	require.NoError(t, err)
+
+	// check relationships
+	exists, err = client.BulkCheck(ctx, []hwauthz.PermissionCheck{subjectRelationship, resourceRelationship})
+	require.NoError(t, err)
+	require.Equal(t, []bool{false, false}, exists)
+}

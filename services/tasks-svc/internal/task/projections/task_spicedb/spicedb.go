@@ -41,6 +41,7 @@ func NewSpiceDBProjection(es *esdb.Client, authz hwauthz.AuthZ, serviceName stri
 
 func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
+	p.RegisterEventListener(taskEventsV1.TaskDeleted, p.onTaskDeleted)
 }
 
 func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
@@ -73,5 +74,12 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 			hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
+	return nil, nil
+}
+
+func (p *Projection) onTaskDeleted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	if err := p.authz.DeleteObject(ctx, perm.Task(evt.AggregateID)); err != nil {
+		return fmt.Errorf("could not delete task from spicedb: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
+	}
 	return nil, nil
 }
