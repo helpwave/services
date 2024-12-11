@@ -464,7 +464,6 @@ func (s ServiceServer) GetInvitationsByOrganization(
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	userID := auth.MustGetUserID(ctx)
 	claims, err := auth.GetAuthClaims(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

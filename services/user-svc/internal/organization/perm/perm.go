@@ -2,8 +2,9 @@ package perm
 
 import (
 	"crypto/sha256"
-	"github.com/google/uuid"
 	"hwauthz"
+
+	"github.com/google/uuid"
 )
 
 // Types

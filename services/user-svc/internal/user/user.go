@@ -7,6 +7,7 @@ import (
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+
 	"user-svc/internal/user/perm"
 
 	"user-svc/repos/user_repo"

@@ -2,6 +2,7 @@ package migrations
 
 import (
 	"context"
+
 	"github.com/authzed/authzed-go/v1"
 )
 
