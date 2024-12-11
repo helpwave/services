@@ -394,6 +394,10 @@ func (s ServiceServer) InviteMember(
 	ctx context.Context,
 	req *pb.InviteMemberRequest,
 ) (*pb.InviteMemberResponse, error) {
+	log := zlog.Ctx(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
+
+	// check permissions
 	permUser := commonPerm.UserFromCtx(ctx)
 	permOrg := commonPerm.Organization(uuid.MustParse(req.GetOrganizationId()))
 	check := hwauthz.NewPermissionCheck(permUser, perm.OrganizationCanUserInviteMember, permOrg)
@@ -401,17 +405,12 @@ func (s ServiceServer) InviteMember(
 		return nil, err
 	}
 
-	organizationRepo := organization_repo.New(hwdb.GetDB())
-	invitation := organization_repo.InviteMemberRow{}
-
-	log := zlog.Ctx(ctx)
-
 	organizationId, err := uuid.Parse(req.OrganizationId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	// first: sanity checks
+	// sanity checks
 	conditions, err := organizationRepo.GetInvitationConditions(ctx, organization_repo.GetInvitationConditionsParams{
 		OrganizationID: organizationId,
 		Email:          req.Email,
@@ -433,37 +432,39 @@ func (s ServiceServer) InviteMember(
 	case conditions.DoesInvitationExist:
 		return nil, status.Error(codes.InvalidArgument, "user already invited")
 	default:
-		invitation, err = organizationRepo.InviteMember(ctx, organization_repo.InviteMemberParams{
-			Email:          req.Email,
-			OrganizationID: organizationId,
-			State:          int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()),
-		})
-		err = hwdb.Error(ctx, err)
-		if err != nil {
-			return nil, err
-		}
-
-		// add to permission graph
-
-		// subject is the email, unless we currently have a user assigned to it, then it's the user
-		// for more info in this read the comment in the core spicedb schema file
-		var subj hwauthz.Object = perm.Email(req.Email)
-		if invitation.UserID.Valid {
-			subj = commonPerm.User(invitation.UserID.UUID)
-		}
-		org := commonPerm.Organization(organizationId)
-		resc := perm.Invite(invitation.InvitationID)
-		if _, err := s.authz.
-			Create(hwauthz.NewRelationship(subj, perm.InviteInvitee, resc)).
-			Create(hwauthz.NewRelationship(org, perm.InviteOrganization, resc)).Commit(ctx); err != nil {
-			return nil, err
-		}
-
-		log.Info().
-			Str("email", req.Email). // TODO: Revisited for privacy reasons
-			Str("organizationID", organizationId.String()).
-			Msg("user invited to organization")
 	}
+
+	// do invite
+	invitation, err := organizationRepo.InviteMember(ctx, organization_repo.InviteMemberParams{
+		Email:          req.Email,
+		OrganizationID: organizationId,
+		State:          int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()),
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
+	}
+
+	// add to permission graph
+
+	// subject is the email, unless we currently have a user assigned to it, then it's the user
+	// for more info in this read the comment in the core spicedb schema file
+	var subj hwauthz.Object = perm.Email(req.Email)
+	if invitation.UserID.Valid {
+		subj = commonPerm.User(invitation.UserID.UUID)
+	}
+	org := commonPerm.Organization(organizationId)
+	resc := perm.Invite(invitation.InvitationID)
+	if _, err := s.authz.
+		Create(hwauthz.NewRelationship(subj, perm.InviteInvitee, resc)).
+		Create(hwauthz.NewRelationship(org, perm.InviteOrganization, resc)).Commit(ctx); err != nil {
+		return nil, err
+	}
+
+	log.Info().
+		Str("email", req.Email). // TODO: privacy issues?
+		Str("organizationID", organizationId.String()).
+		Msg("user invited to organization")
 
 	return &pb.InviteMemberResponse{
 		Id: invitation.InvitationID.String(),
