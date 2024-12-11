@@ -307,9 +307,9 @@ func (s ServiceServer) DeleteOrganization(
 	ctx context.Context,
 	req *pb.DeleteOrganizationRequest,
 ) (*pb.DeleteOrganizationResponse, error) {
-	userPerm := commonPerm.UserFromCtx(ctx)
-	orgPerm := commonPerm.Organization(uuid.MustParse(req.GetId()))
-	check := hwauthz.NewPermissionCheck(userPerm, perm.OrganizationCanUserDelete, orgPerm)
+	permUser := commonPerm.UserFromCtx(ctx)
+	permOrg := commonPerm.Organization(uuid.MustParse(req.GetId()))
+	check := hwauthz.NewPermissionCheck(permUser, perm.OrganizationCanUserDelete, permOrg)
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
@@ -321,17 +321,20 @@ func (s ServiceServer) DeleteOrganization(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	// delete from kc
 	if err := s.kc.DeleteOrganization(ctx, organizationID); err != nil {
 		return nil, err
 	}
 
+	// delete from db
 	err = organizationRepo.DeleteOrganization(ctx, organizationID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
 
-	// TODO: remove from permissions graph
+	// delete from permissions graph
+	// TODO:
 
 	return &pb.DeleteOrganizationResponse{}, nil
 }
