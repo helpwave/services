@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package libs.events.v1;
+
+import "libs/events/v1/options.proto";
+
+option go_package = "gen/libs/events/v1";
+
+message TaskTemplateCreatedEvent {
+  message SubTask {
+    string name = 1;
+  }
+
+  option (libs.events.v1.event_type) = "TASK_TEMPLATED_CREATED_v1";
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated SubTask subtasks = 4;
+}
+
+message TaskTemplateUpdatedEvent {
+  option (libs.events.v1.event_type) = "TASK_TEMPLATE_UPDATED_v1";
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message TaskTemplateDeletedEvent {
+  option (libs.events.v1.event_type) = "TASK_TEMPLATE_DELETED_v1";
+  string id = 1;
+}
+
+message TaskTemplateSubTaskCreatedEvent {
+  option (libs.events.v1.event_type) = "TASK_TEMPLATE_SUB_TASK_CREATED_v1";
+  string task_template_id = 1;
+  string sub_task_id = 2;
+  string name = 3;
+}
+
+message TaskTemplateSubTaskUpdatedEvent {
+  option (libs.events.v1.event_type) = "TASK_TEMPLATE_SUB_TASK_UPDATED_v1";
+  string task_template_id = 1;
+  string sub_task_id = 2;
+  string name = 3;
+}
+
+message TaskTemplateSubTaskDeletedEvent {
+  option (libs.events.v1.event_type) = "TASK_TEMPLATE_SUB_TASK_DELETED_v1";
+  string task_template_id = 1;
+  string sub_task_id = 2;
+}

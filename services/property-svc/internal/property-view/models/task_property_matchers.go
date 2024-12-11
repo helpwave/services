@@ -3,8 +3,12 @@ package models
 import (
 	"context"
 	"errors"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwutil"
+
+	"property-svc/internal/property-view/perm"
 
 	"property-svc/repos/task_views_repo"
 
@@ -131,4 +135,28 @@ func TaskPropertyMatchersFromMap(m map[string]interface{}) (TaskPropertyMatchers
 	}
 
 	return matcher, true
+}
+
+func (m TaskPropertyMatchers) UserMustBeAllowedToUpdateRule(ctx context.Context, authz hwauthz.AuthZ) error {
+	user := commonPerm.UserFromCtx(ctx)
+
+	checks := make([]hwauthz.PermissionCheck, 0)
+
+	if m.TaskID.Valid {
+		checks = append(checks,
+			hwauthz.NewPermissionCheck(user, perm.TaskCanUserUpdate, perm.Task(m.TaskID.UUID)))
+	}
+
+	if m.WardID.Valid {
+		checks = append(checks,
+			hwauthz.NewPermissionCheck(user, perm.WardCanUserUpdate, perm.Ward(m.WardID.UUID)))
+	}
+
+	if len(checks) == 0 {
+		org := commonPerm.OrganizationFromCtx(ctx)
+		checks = append(checks,
+			hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserAlterRootPropertyRules, org))
+	}
+
+	return authz.BulkMust(ctx, checks...)
 }

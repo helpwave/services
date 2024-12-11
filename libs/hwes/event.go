@@ -4,6 +4,7 @@ import (
 	"common/auth"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"hwutil"
 	"strings"
@@ -13,6 +14,10 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+
+	pbEventsV1 "gen/libs/events/v1"
 )
 
 type Event struct {
@@ -36,6 +41,9 @@ type Event struct {
 	OrganizationID *uuid.UUID
 	// w3c trace context
 	TraceParent string
+	// DataIsProto is a flag to indicate that the payload of the event is a Protobuf
+	// Should get removed when all events are migrated to Protobuf
+	DataIsProto bool
 }
 
 type metadata struct {
@@ -48,7 +56,38 @@ type metadata struct {
 	TraceParent string `json:"trace_parent"`
 	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is
 	// discouraged.
-	Timestamp time.Time `json:"timestamp"`
+	Timestamp   time.Time `json:"timestamp"`
+	DataIsProto bool      `json:"data_is_proto"`
+}
+
+// GetEventTypeOptionOfProtoMessageV1 resolves the expected event_type message option from the passed message.
+// If the passed message does not contain the event_type option, we panic.
+// Suffixed with _v1 to indicate the usage of gen/libs/events/v1
+//
+//	extend google.protobuf.MessageOptions {
+//	  string event_type = 2123;
+//	}
+func GetEventTypeOptionOfProtoMessageV1(protoMessage proto.Message) string {
+	eventTypeOption := pbEventsV1.E_EventType
+
+	protoEventType, ok := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), eventTypeOption).(string)
+	if !ok {
+		panic(fmt.Sprintf(
+			"String type assertion for eventType '%s' on protoMessage '%s' failed.",
+			eventTypeOption.TypeDescriptor().FullName(),
+			protoMessage.ProtoReflect().Descriptor().FullName(),
+		))
+	}
+
+	if protoEventType == "" {
+		panic(fmt.Sprintf(
+			"Cannot reflect eventType of protoMessage. The passed protoMessage '%s' does not has the message extension of '%s'.",
+			protoMessage.ProtoReflect().Descriptor().FullName(),
+			eventTypeOption.TypeDescriptor().FullName(),
+		))
+	}
+
+	return protoEventType
 }
 
 // EventOption used to apply configurations in hwes.NewEvent()
@@ -78,6 +117,12 @@ func WithData(data interface{}) EventOption {
 	}
 }
 
+func WithProtoMessage(message proto.Message) EventOption {
+	return func(event *Event) error {
+		return event.SetProtoData(message)
+	}
+}
+
 func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event, error) {
 	evt := Event{
 		EventID:         uuid.New(),
@@ -102,6 +147,21 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 	}
 
 	return evt, nil
+}
+
+func NewEventFromProto(aggregate Aggregate, message proto.Message, opts ...EventOption) (Event, error) {
+	eventType := GetEventTypeOptionOfProtoMessageV1(message)
+
+	event, err := NewEvent(aggregate, eventType, opts...)
+	if err != nil {
+		return Event{}, err
+	}
+
+	if err := event.SetProtoData(message); err != nil {
+		return Event{}, err
+	}
+
+	return event, nil
 }
 
 // resolveAggregateIDAndTypeFromStreamID extracts the aggregateID and aggregateType of a given streamID
@@ -166,6 +226,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		CommitterUserID: nil,
 		OrganizationID:  nil,
 		TraceParent:     md.TraceParent,
+		DataIsProto:     md.DataIsProto,
 	}
 
 	eventCommitterUserID, err := uuid.Parse(md.CommitterUserID)
@@ -174,7 +235,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 	}
 
 	eventOrganizationID, err := uuid.Parse(md.OrganizationID)
-	if err != nil {
+	if err == nil {
 		event.OrganizationID = &eventOrganizationID
 	}
 
@@ -207,6 +268,7 @@ func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{
 		TraceParent: e.TraceParent,
 		Timestamp:   e.Timestamp,
+		DataIsProto: e.DataIsProto,
 	}
 
 	if e.CommitterUserID != nil {
@@ -249,45 +311,63 @@ func (e *Event) SetJsonData(data interface{}) error {
 	if err != nil {
 		return fmt.Errorf("SetJsonData: %w", err)
 	}
+	e.DataIsProto = false
+	e.Data = dataBytes
+	return nil
+}
+
+func (e *Event) SetProtoData(message proto.Message) error {
+	dataBytes, err := protojson.Marshal(message)
+	if err != nil {
+		return fmt.Errorf("SetProtoData: %w", err)
+	}
+	e.DataIsProto = true
 	e.Data = dataBytes
 	return nil
 }
 
 func (e *Event) GetJsonData(data interface{}) error {
+	if e.DataIsProto {
+		return errors.New("data of this event is marked as proto, use GetProtoData instead")
+	}
+
 	if jsonable, ok := data.(hwutil.JSONAble); ok {
 		return jsonable.FromJSON(e.Data)
 	}
 	return json.Unmarshal(e.Data, data)
 }
 
-// SetCommitterFromCtx injects the UserID from the passed context via common.GetUserID().
+func (e *Event) GetProtoData(message proto.Message) error {
+	if !e.DataIsProto {
+		return errors.New("data of this event is not marked as proto, use GetJsonData instead")
+	}
+
+	return protojson.Unmarshal(e.Data, message)
+}
+
+// SetCommitterFromCtx injects the UserID from the passed context via auth.MustGetUserID().
 func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
+	userID := auth.MaybeGetUserID(ctx)
+	if userID == nil {
 		// don't set a user, if no user is available
-		return nil //nolint:nilerr
+		return nil
 	}
 
-	e.CommitterUserID = &userID
-
-	// Just to make sure we are actually dealing with a valid UUID
-	if _, err := uuid.Parse(e.CommitterUserID.String()); err != nil {
-		return fmt.Errorf("SetCommitterFromCtx: cant parse comitter uid: %w", err)
-	}
+	e.CommitterUserID = userID
 
 	telemetry.SetSpanStr(ctx, "committerUserID", e.CommitterUserID.String())
 	return nil
 }
 
-// SetOrganizationFromCtx injects the OrganizationID from the passed context via common.GetOrganizationID().
+// SetOrganizationFromCtx injects the OrganizationID from the passed context via common.MustGetOrganizationID().
 func (e *Event) SetOrganizationFromCtx(ctx context.Context) error {
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
+	organizationID := auth.MaybeGetOrganizationID(ctx)
+	if organizationID == nil {
 		// don't set an org, if no org is available
-		return nil //nolint:nilerr
+		return nil
 	}
 
-	e.OrganizationID = &organizationID
+	e.OrganizationID = organizationID
 
 	if _, err := uuid.Parse(e.OrganizationID.String()); err != nil {
 		return fmt.Errorf("SetOrganizationFromCtx: cant parse organization uid: %w", err)

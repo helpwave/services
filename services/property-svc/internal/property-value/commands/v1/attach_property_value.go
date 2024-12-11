@@ -3,8 +3,12 @@ package v1
 import (
 	"common"
 	"context"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwdb"
 	"hwes"
+
+	"property-svc/internal/property/perm"
 
 	"github.com/google/uuid"
 
@@ -20,7 +24,9 @@ type AttachPropertyValueCommandHandler func(
 	subjectID uuid.UUID,
 ) (common.ConsistencyToken, error)
 
-func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachPropertyValueCommandHandler {
+func NewAttachPropertyValueCommandHandler(
+	as hwes.AggregateStore, authz hwauthz.AuthZ,
+) AttachPropertyValueCommandHandler {
 	return func(
 		ctx context.Context,
 		propertyValueID uuid.UUID,
@@ -28,6 +34,12 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 		value interface{},
 		subjectID uuid.UUID,
 	) (common.ConsistencyToken, error) {
+		user := commonPerm.UserFromCtx(ctx)
+		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserUpdateValue, perm.Property(propertyID))
+		if err := authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
+
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 

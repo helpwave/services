@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"hwauthz"
 	"hwes"
 
 	commandsV1 "property-svc/internal/property-view/commands/v1"
@@ -20,11 +21,11 @@ type Handlers struct {
 	Queries  *Queries
 }
 
-func NewPropertyViewHandlers(as hwes.AggregateStore) *Handlers {
+func NewPropertyViewHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 	return &Handlers{
 		Commands: &Commands{
 			V1: &commandsV1.PropertyViewCommands{
-				UpdatePropertyViewRule: commandsV1.NewUpdatePropertyViewRuleCommandHandler(as),
+				UpdatePropertyViewRule: commandsV1.NewUpdatePropertyViewRuleCommandHandler(as, authz),
 			},
 		},
 		Queries: &Queries{

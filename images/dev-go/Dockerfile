@@ -33,7 +33,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 # install buf
 #  https://buf.build/
 # renovate: datasource=github-releases depName=bufbuild/buf
-ENV BUF_VERSION=1.45.0
+ENV BUF_VERSION=1.47.2
 RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
 
@@ -48,7 +48,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
 # install zed, CLI for SpiceDB
 #  https://github.com/authzed/zed
 # renovate: datasource=github-releases depName=authzed/zed
-ENV ZED_VERSION=0.21.5
+ENV ZED_VERSION=0.23.0
 RUN wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${ZED_VERSION}_linux_amd64.deb -O zed.deb \
     && apt install -y ./zed.deb \
     && rm zed.deb
@@ -105,7 +105,7 @@ RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate
 # install grpcurl
 #  https://github.com/fullstorydev/grpcurl
 # renovate: datasource=github-releases depName=fullstorydev/grpcurl
-ENV GRPCURL_VERSION=1.9.1
+ENV GRPCURL_VERSION=1.9.2
 RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION} \
 	&& go clean -modcache
 
@@ -135,7 +135,7 @@ RUN go install mvdan.cc/gofumpt@v${GOFUMPT_VERSION} \
 # install golangci-lint, the linter we also use in the CI
 #  https://golangci-lint.run/
 # renovate: datasource=github-releases depName=golangci/golangci-lint
-ENV GOLANGCI_LINT_VERSION=1.61.0
+ENV GOLANGCI_LINT_VERSION=1.62.2
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
 	| sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
 

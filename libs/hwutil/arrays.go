@@ -1,10 +1,10 @@
 package hwutil
 
-func Filter[K any](array []K, condition func(value K) bool) []K {
+func Filter[K any](array []K, condition func(index int, value K) bool) []K {
 	var result []K
 
-	for _, value := range array {
-		if condition(value) {
+	for i, value := range array {
+		if condition(i, value) {
 			result = append(result, value)
 		}
 	}
@@ -41,6 +41,18 @@ func FlatMap[K any, V any](vs []K, f func(K) *V) []V {
 	var vsm []V
 	for _, key := range vs {
 		if vPtr := f(key); vPtr != nil {
+			vsm = append(vsm, *vPtr)
+		}
+	}
+
+	return vsm
+}
+
+// FlatMapI is FlatMap, but also provides you with the index of the current element
+func FlatMapI[K any, V any](vs []K, f func(int, K) *V) []V {
+	var vsm []V
+	for i, key := range vs {
+		if vPtr := f(i, key); vPtr != nil {
 			vsm = append(vsm, *vPtr)
 		}
 	}

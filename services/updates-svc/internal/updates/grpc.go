@@ -5,6 +5,8 @@ import (
 	"context"
 	pb "gen/services/updates_svc/v1"
 	"hwes"
+	"hwes/eventstoredb"
+	"strings"
 	"telemetry"
 	"time"
 
@@ -51,10 +53,7 @@ func (s *UpdatesGrpcService) ReceiveUpdates(
 		Str("closeStreamIn", tokenExpiresIn.String()).
 		Msg("will close session when token expires")
 
-	organizationID, err := auth.GetOrganizationID(ctx)
-	if err != nil {
-		return err
-	}
+	organizationID := auth.MustGetOrganizationID(ctx)
 
 	esSubscribeToAllOptions := esdb.SubscribeToAllOptions{
 		From:   esdb.End{},
@@ -122,17 +121,13 @@ func (s *UpdatesGrpcService) ReceiveUpdates(
 			continue
 		}
 
-		domainEvent := &pb.DomainEvent{
-			EventId:       event.EventID.String(),
-			EventType:     event.EventType,
-			AggregateId:   event.AggregateID.String(),
-			AggregateType: string(event.AggregateType),
-		}
-
 		res := &pb.ReceiveUpdatesResponse{
 			Revision: *esdbEvent.EventAppeared.Commit,
-			Event: &pb.ReceiveUpdatesResponse_DomainEvent{
-				DomainEvent: domainEvent,
+			Event: &pb.Event{
+				EventId:       event.EventID.String(),
+				EventType:     event.EventType,
+				AggregateId:   event.GetAggregateID().String(),
+				AggregateType: strings.TrimPrefix(string(event.GetAggregateType()), eventstoredb.EntityEventPrefix),
 			},
 		}
 

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package libs.events.v1;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "gen/libs/events/v1";
+
+extend google.protobuf.MessageOptions {
+  // We can define our events in Protobuf. The type of an event like "PATIENT_CREATED_v1"
+  // gets resolved via the option event_type.
+  // The field number 2123 is an arbitrary number above 1000 for custom options.
+  string event_type = 2123;
+}

@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 15.6
--- Dumped by pg_dump version 15.8
+-- Dumped by pg_dump version 15.10
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -58,7 +58,8 @@ CREATE TABLE public.patients (
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     is_discharged boolean DEFAULT false NOT NULL,
-    consistency bigint DEFAULT 0 NOT NULL
+    consistency bigint DEFAULT 0 NOT NULL,
+    organization_id uuid NOT NULL
 );
 
 

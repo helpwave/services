@@ -39,10 +39,7 @@ func (s ServiceServer) CreateOrganization(
 	ctx context.Context,
 	req *pb.CreateOrganizationRequest,
 ) (*pb.CreateOrganizationResponse, error) {
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
+	userID := auth.MustGetUserID(ctx)
 
 	organization, err := CreateOrganizationAndAddUser(
 		ctx,
@@ -201,10 +198,7 @@ func (s ServiceServer) GetOrganizationsForUser(
 	ctx context.Context,
 	_ *pb.GetOrganizationsForUserRequest,
 ) (*pb.GetOrganizationsForUserResponse, error) {
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
+	userID := auth.MustGetUserID(ctx)
 
 	organizations, err := GetOrganizationsByUserId(ctx, userID)
 	if err != nil {
@@ -284,6 +278,12 @@ func (s ServiceServer) DeleteOrganization(
 	if err != nil {
 		return nil, err
 	}
+
+	// TODO: uncomment in #888
+	// // delete from permission graph
+	// if err := s.authz.DeleteObject(ctx, commonPerm.Organization(organizationID)); err != nil {
+	// 	 return nil, fmt.Errorf("could not delete organization from spicedb: %w", err)
+	// }
 
 	return &pb.DeleteOrganizationResponse{}, nil
 }
@@ -431,10 +431,7 @@ func (s ServiceServer) GetInvitationsByOrganization(
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	userID := auth.MustGetUserID(ctx)
 
 	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
 	err = hwdb.Error(ctx, err)
@@ -536,10 +533,7 @@ func (s ServiceServer) GetMembersByOrganization(
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	userID := auth.MustGetUserID(ctx)
 
 	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
 	err = hwdb.Error(ctx, err)
@@ -628,10 +622,7 @@ func (s ServiceServer) AcceptInvitation(
 		return nil, err
 	}
 
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	userID := auth.MustGetUserID(ctx)
 
 	// Add user to organization
 	if err := AddUserToOrganization(ctx, s.kc, userID, currentInvitation.OrganizationID); err != nil {
@@ -716,10 +707,7 @@ func (s ServiceServer) RevokeInvitation(
 	organizationID := currentInvitation.OrganizationID
 	inviteeEmail := currentInvitation.Email
 
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	userID := auth.MustGetUserID(ctx)
 
 	isAdmin, err := organizationRepo.IsAdminInOrganization(ctx, organization_repo.IsAdminInOrganizationParams{
 		OrganizationID: organizationID,
@@ -871,10 +859,7 @@ func (s ServiceServer) CreatePersonalOrganization(
 		return nil, err
 	}
 
-	userID, err := auth.GetUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
+	userID := auth.MustGetUserID(ctx)
 
 	userClaims, err := auth.GetAuthClaims(ctx)
 	if err != nil {
@@ -886,7 +871,7 @@ func (s ServiceServer) CreatePersonalOrganization(
 		return nil, err
 	}
 
-	personalOrganizations := hwutil.Filter(organisations, func(organization *hwkc.Organization) bool {
+	personalOrganizations := hwutil.Filter(organisations, func(_ int, organization *hwkc.Organization) bool {
 		return organization.IsPersonal()
 	})
 

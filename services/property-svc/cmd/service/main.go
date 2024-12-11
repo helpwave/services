@@ -10,9 +10,10 @@ import (
 	pb "gen/services/property_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
-
+	hwspicedb "hwauthz/spicedb"
 	propertySet "property-svc/internal/property-set/api"
 	psh "property-svc/internal/property-set/handlers"
+	propertySetSpiceDBProjection "property-svc/internal/property-set/projections/spiceDBProjection"
 	propertyValue "property-svc/internal/property-value/api"
 	pvh "property-svc/internal/property-value/handlers"
 	"property-svc/internal/property-value/projections/property_value_postgres_projection"
@@ -21,7 +22,8 @@ import (
 	"property-svc/internal/property-view/projections/property_rules_postgres"
 	property "property-svc/internal/property/api"
 	ph "property-svc/internal/property/handlers"
-	"property-svc/internal/property/projections/property_postgres_projection"
+	propertyPostgresProjection "property-svc/internal/property/projections/postgres_projection"
+	propertySpiceDBProjection "property-svc/internal/property/projections/spiceDBProjection"
 )
 
 const ServiceName = "property-svc"
@@ -36,6 +38,7 @@ func Main(version string, ready func()) {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
+	authz := hwspicedb.NewSpiceDBAuthZ()
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
@@ -51,15 +54,17 @@ func Main(version string, ready func()) {
 	go projections.StartProjections(
 		ctx,
 		common.Shutdown,
-		property_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
+		propertySpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
+		propertySetSpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
+		propertyPostgresProjection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
 		property_value_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
 		property_rules_postgres.NewProjection(eventStore, ServiceName),
 	)
 
-	propertyHandlers := ph.NewPropertyHandlers(aggregateStore)
-	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore)
-	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore)
-	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore)
+	propertyHandlers := ph.NewPropertyHandlers(aggregateStore, authz)
+	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore, authz)
+	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore, authz)
+	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore, authz)
 
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()

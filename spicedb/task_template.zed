@@ -1,0 +1,11 @@
+definition task_template {
+	// every template was created by a user or handed over to a ward (i.e., made "public")
+	// keep in mind that relations are n-ary, so when writing this relation, remove any old ones
+	relation owner: user | ward;
+
+	// if a user as {G,U,D} access to the ward, it gets {G,U,D} access to the template
+	// the creator must also have said access, unless no ward exists, then the template is theirs
+	permission get = owner->get + owner;
+	permission update = owner->update + owner;
+	permission delete = owner->delete + owner;
+}

@@ -10,6 +10,8 @@ import (
 	"telemetry"
 	"time"
 
+	daprPb "github.com/dapr/dapr/pkg/proto/runtime/v1"
+
 	"common/auth"
 
 	"github.com/joho/godotenv"
@@ -82,7 +84,9 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 	contextCancel = cancel
 
 	// Collect options
-	options := SetupOptions{}
+	options := SetupOptions{
+		unauthenticatedMethods: []string{daprPb.AppCallbackHealthCheck_HealthCheck_FullMethodName},
+	}
 	for _, opt := range opts {
 		opt(&options)
 	}

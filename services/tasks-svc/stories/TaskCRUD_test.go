@@ -3,6 +3,9 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
+	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
 	"strconv"
@@ -339,6 +342,13 @@ func TestGetAssignedTasks(t *testing.T) {
 	}
 
 	userID := uuid.New()
+
+	// give new user appropriate permissions
+	authz := spicedb.NewSpiceDBAuthZ()
+	user := commonPerm.User(userID)
+	org := commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
+	_, err := authz.Create(hwauthz.NewRelationship(user, "member", org)).Commit(ctx)
+	require.NoError(t, err)
 
 	taskIds := make([]string, 0, len(suffixMap))
 	taskConsistencies := make(map[string]string)

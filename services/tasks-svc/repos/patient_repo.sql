@@ -1,7 +1,7 @@
 -- name: CreatePatient :exec
 INSERT INTO patients
-	(id, human_readable_identifier, notes, created_at, updated_at, consistency)
-VALUES ($1, $2, $3, $4, $5, $6);
+	(id, human_readable_identifier, notes, created_at, updated_at, consistency, organization_id)
+VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 -- name: UpdatePatient :exec
 UPDATE patients
@@ -72,7 +72,8 @@ FROM patients
 		 LEFT JOIN tasks ON tasks.patient_id = patients.id
 		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
 		 LEFT JOIN beds ON beds.id = patients.bed_id
-		 LEFT JOIN rooms ON rooms.id = beds.room_id;
+		 LEFT JOIN rooms ON rooms.id = beds.room_id
+WHERE patients.organization_id = @organization_id;
 
 -- name: DeletePatient :exec
 DELETE FROM patients WHERE id = $1;

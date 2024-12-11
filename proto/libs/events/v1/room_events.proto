@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package libs.events.v1;
+
+import "libs/events/v1/options.proto";
+
+option go_package = "gen/libs/events/v1";
+
+message RoomCreatedEvent {
+  option (libs.events.v1.event_type) = "ROOM_CREATED_v1";
+  string id = 1;
+}
+
+message RoomUpdatedEvent {
+  option (libs.events.v1.event_type) = "ROOM_UPDATED_v1";
+  string id = 1;
+  string name = 2;
+}
+
+message RoomDeletedEvent {
+  option (libs.events.v1.event_type) = "ROOM_DELETED_v1";
+  string id = 1;
+}

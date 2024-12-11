@@ -238,22 +238,44 @@ func SessionValidUntil(ctx context.Context) (time.Time, error) {
 	}
 }
 
-func GetUserID(ctx context.Context) (uuid.UUID, error) {
+// MaybeGetUserID can be used instead of MustGetUserID
+func MaybeGetUserID(ctx context.Context) *uuid.UUID {
 	res, ok := ctx.Value(userIDKey{}).(uuid.UUID)
 	if !ok {
-		return uuid.UUID{}, status.Error(codes.Internal, "userID not in context, set up auth")
-	} else {
-		return res, nil
+		return nil
 	}
+	return &res
 }
 
-func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
+// MustGetUserID panics, if context does not contain the userIDKey,
+// which should have been set in the auth middleware
+// Also see MaybeGetUserID, if you can not ensure that
+func MustGetUserID(ctx context.Context) uuid.UUID {
+	res := MaybeGetUserID(ctx)
+	if res == nil {
+		panic("MustGetUserID called, but userID not in context, set up auth for this handler!")
+	}
+	return *res
+}
+
+// MaybeGetOrganizationID can be used instead of MustGetOrganizationID
+func MaybeGetOrganizationID(ctx context.Context) *uuid.UUID {
 	res, ok := ctx.Value(organizationIDKey{}).(uuid.UUID)
 	if !ok {
-		return uuid.UUID{}, status.Error(codes.Internal, "organizationID not in context, set up auth")
-	} else {
-		return res, nil
+		return nil
 	}
+	return &res
+}
+
+// MustGetOrganizationID panics, if context does not contain the organizationIDKey,
+// which should have been set in the auth middleware
+// Also see MaybeGetOrganizationID, if you can not ensure that
+func MustGetOrganizationID(ctx context.Context) uuid.UUID {
+	res := MaybeGetOrganizationID(ctx)
+	if res == nil {
+		panic("MustGetOrganizationID called, but organizationID not in context, set up auth for this handler!")
+	}
+	return *res
 }
 
 // SetupAuth sets up auth, such that GetIDTokenVerifier and GetOAuthConfig work

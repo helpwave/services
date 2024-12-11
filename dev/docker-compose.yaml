@@ -104,7 +104,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '15'
+        TAG: '17'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -137,7 +137,7 @@ services:
       - -c
       - |
         bash migrate.sh
-        go run spice.go migrate
+        go run cmd/spice/spice.go migrate
         dapr run --run-file dev/dapr_run.yaml --config dev/dapr.yaml
     restart: unless-stopped
     network_mode: "service:devcontainer" # share ports with devcontainer
@@ -148,7 +148,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '15'
+        TAG: '17'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:

@@ -5,7 +5,12 @@ import (
 	"context"
 	"errors"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
+
+	patientPerm "tasks-svc/internal/patient/perm"
+	"tasks-svc/internal/task/perm"
 
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -26,7 +31,7 @@ type CreateTaskCommandHandler func(
 	subtasks []*pb.CreateTaskRequest_SubTask,
 ) (common.ConsistencyToken, error)
 
-func NewCreateTaskCommandHandler(as hwes.AggregateStore) CreateTaskCommandHandler {
+func NewCreateTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreateTaskCommandHandler {
 	return func(
 		ctx context.Context,
 		taskID uuid.UUID,
@@ -39,6 +44,13 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore) CreateTaskCommandHandle
 		assignedUserID uuid.NullUUID,
 		subtasks []*pb.CreateTaskRequest_SubTask,
 	) (common.ConsistencyToken, error) {
+		// check permissions
+		user := commonPerm.UserFromCtx(ctx)
+		check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserCreateTask, patientPerm.Patient(patientID))
+		if err := authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
+
 		a := aggregate.NewTaskAggregate(taskID)
 
 		exists, err := as.Exists(ctx, a)

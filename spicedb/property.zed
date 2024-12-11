@@ -1,0 +1,22 @@
+definition property {
+	// properties belong to an organization
+	relation organization: organization;
+
+	// any member of the org can get and update the property
+	permission get = organization->membership;
+	permission update = organization->membership;
+
+	// if you can get the property, you can also get its value
+	permission get_value = get;
+
+	// if you can update the property, you can also update its value
+	permission update_value = update;
+}
+
+definition property_set {
+	// sets belong to an organization
+	relation organization: organization;
+
+	// any member of the org can get the set
+	permission get = organization->membership;
+}

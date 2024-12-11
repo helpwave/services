@@ -1,0 +1,13 @@
+definition ward {
+	// wards belong to an organization
+	relation organization: organization;
+
+	// any member of the org can {G,U,D} the ward
+	permission get = organization->membership;
+	permission update = organization->membership;
+	permission delete = organization->membership;
+
+	// anyone with update access can create a new room, and publish new task templates
+	permission create_room = update;
+	permission publish_task_template = update;
+}

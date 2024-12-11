@@ -3,6 +3,9 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
+	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
 	"strconv"
@@ -30,6 +33,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	}
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
 	require.NoError(t, err, "could not create patient")
+
+	hwtesting.WaitForProjectionsToSettle()
 
 	patientId := createRes.GetId()
 
@@ -75,6 +80,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	dischargeRes, err := patientClient.DischargePatient(ctx, &pb.DischargePatientRequest{Id: patientId})
 	require.NoError(t, err)
 	assert.NotEqual(t, getPatientRes.Consistency, dischargeRes.Consistency)
+
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// get discharged patient
@@ -231,6 +238,7 @@ func TestGetPatientsByWard(t *testing.T) {
 	require.NoError(t, err, "could not create patient")
 
 	patientId1 := createRes1.GetId()
+	hwtesting.WaitForProjectionsToSettle()
 
 	assRes1, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
 		Id:          patientId1,
@@ -238,6 +246,7 @@ func TestGetPatientsByWard(t *testing.T) {
 		Consistency: &createRes1.Consistency,
 	})
 	require.NoError(t, err)
+	hwtesting.WaitForProjectionsToSettle()
 
 	createReq2 := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient 2",
@@ -245,6 +254,8 @@ func TestGetPatientsByWard(t *testing.T) {
 	}
 	createRes2, err := patientClient.CreatePatient(ctx, createReq2)
 	require.NoError(t, err, "could not create patient")
+
+	hwtesting.WaitForProjectionsToSettle()
 
 	patientId2 := createRes2.GetId()
 
@@ -627,9 +638,18 @@ func TestGetPatientDetails(t *testing.T) {
 }
 
 func TestGetRecentPatients(t *testing.T) {
-	userID := uuid.New() // new user for this test, to prevent interference with other tests
-	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
 	ctx := context.Background()
+
+	userID := uuid.New() // new user for this test, to prevent interference with other tests
+
+	// give new user appropriate permissions
+	authz := spicedb.NewSpiceDBAuthZ()
+	user := commonPerm.User(userID)
+	org := commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
+	_, err := authz.Create(hwauthz.NewRelationship(user, "member", org)).Commit(ctx)
+	require.NoError(t, err)
+
+	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
 
 	wardID, _ := prepareWard(t, ctx, "")
 	roomId, roomConsistency := prepareRoom(t, ctx, wardID, "")
@@ -649,6 +669,7 @@ func TestGetRecentPatients(t *testing.T) {
 		require.NoError(t, err)
 		ids = append(ids, patientRes.Id)
 		consistencies[patientRes.Id] = patientRes.Consistency
+		hwtesting.WaitForProjectionsToSettle()
 
 		if i == N {
 			assRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{

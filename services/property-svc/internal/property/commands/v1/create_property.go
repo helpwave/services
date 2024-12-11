@@ -5,12 +5,15 @@ import (
 	"context"
 	"errors"
 	pb "gen/services/property_svc/v1"
+	"hwauthz"
+	"hwauthz/commonPerm"
 	"hwes"
 
 	"github.com/google/uuid"
 
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
+	"property-svc/internal/property/perm"
 )
 
 type CreatePropertyCommandHandler func(ctx context.Context,
@@ -23,7 +26,7 @@ type CreatePropertyCommandHandler func(ctx context.Context,
 	fieldTypeData *models.FieldTypeData,
 ) (version common.ConsistencyToken, err error)
 
-func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyCommandHandler {
+func NewCreatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreatePropertyCommandHandler {
 	return func(ctx context.Context,
 		propertyID uuid.UUID,
 		subjectType pb.SubjectType,
@@ -33,6 +36,14 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyComma
 		setID *string,
 		fieldTypeData *models.FieldTypeData,
 	) (version common.ConsistencyToken, err error) {
+		user := commonPerm.UserFromCtx(ctx)
+		organization := commonPerm.OrganizationFromCtx(ctx)
+
+		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreateProperty, organization)
+		if err = authz.Must(ctx, check); err != nil {
+			return 0, err
+		}
+
 		a := aggregate.NewPropertyAggregate(propertyID)
 
 		exists, err := as.Exists(ctx, a)
