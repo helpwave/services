@@ -535,6 +535,26 @@ func (s ServiceServer) GetInvitationsByUser(
 
 	type rowType = organization_repo.GetInvitationsWithOrganizationByUserRow
 
+	// filter out invitations where permissions are missing
+	user := commonPerm.UserFromCtx(ctx)
+	email := perm.Email(claims.Email)
+
+	checks := make([]hwauthz.PermissionCheck, 0, 2*len(invitations))
+	for _, inv := range invitations {
+		checks = append(checks,
+			hwauthz.NewPermissionCheck(user, perm.InviteCanUserView, perm.Invite(inv.ID)),
+			hwauthz.NewPermissionCheck(email, perm.InviteCanUserView, perm.Invite(inv.ID)),
+		)
+	}
+	allowed, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	invitations = hwutil.Filter(invitations, func(i int, _ rowType) bool {
+		return allowed[2*i] || allowed[2*i+1] // either the user or their email is allowed to view this invite
+	})
+
+	// convert to response
 	invitationResponse := hwutil.Map(invitations,
 		func(invitation rowType) *pb.GetInvitationsByUserResponse_Invitation {
 			organization := &pb.GetInvitationsByUserResponse_Invitation_Organization{
@@ -617,8 +637,8 @@ func (s ServiceServer) AcceptInvitation(
 	invite := perm.Invite(invitationId)
 
 	checks := []hwauthz.PermissionCheck{
-		hwauthz.NewPermissionCheck(user, perm.InviteAccept, invite),  // either the user as access
-		hwauthz.NewPermissionCheck(email, perm.InviteAccept, invite), // or their email might have it
+		hwauthz.NewPermissionCheck(user, perm.InviteCanUserAccept, invite),  // either the user as access
+		hwauthz.NewPermissionCheck(email, perm.InviteCanUserAccept, invite), // or their email might have it
 	}
 	bools, err := s.authz.BulkCheck(ctx, checks)
 	if err != nil {
@@ -689,8 +709,8 @@ func (s ServiceServer) DeclineInvitation(
 	invite := perm.Invite(invitationId)
 
 	checks := []hwauthz.PermissionCheck{
-		hwauthz.NewPermissionCheck(user, perm.InviteDeny, invite),  // either the user as access
-		hwauthz.NewPermissionCheck(email, perm.InviteDeny, invite), // or their email might have it
+		hwauthz.NewPermissionCheck(user, perm.InviteCanUserDeny, invite),  // either the user as access
+		hwauthz.NewPermissionCheck(email, perm.InviteCanUserDeny, invite), // or their email might have it
 	}
 	bools, err := s.authz.BulkCheck(ctx, checks)
 	if err != nil {
@@ -749,7 +769,7 @@ func (s ServiceServer) RevokeInvitation(
 	user := commonPerm.UserFromCtx(ctx)
 	invite := perm.Invite(invitationId)
 
-	check := hwauthz.NewPermissionCheck(user, perm.InviteCancel, invite)
+	check := hwauthz.NewPermissionCheck(user, perm.InviteCanUserCancel, invite)
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}

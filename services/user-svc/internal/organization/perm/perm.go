@@ -43,8 +43,8 @@ const (
 	OrganizationCanUserGetMembers   = "get_members"
 	OrganizationCanUserInviteMember = "invite_member"
 	OrganizationCanUserRemoveMember = "remove_member"
-	InviteView                      = "view"
-	InviteAccept                    = "accept"
-	InviteDeny                      = "deny"
-	InviteCancel                    = "cancel"
+	InviteCanUserView               = "view"
+	InviteCanUserAccept             = "accept"
+	InviteCanUserDeny               = "deny"
+	InviteCanUserCancel             = "cancel"
 )
