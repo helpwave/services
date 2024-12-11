@@ -465,6 +465,10 @@ func (s ServiceServer) GetInvitationsByOrganization(
 	}
 
 	userID := auth.MustGetUserID(ctx)
+	claims, err := auth.GetAuthClaims(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
 	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
 	err = hwdb.Error(ctx, err)
@@ -473,18 +477,6 @@ func (s ServiceServer) GetInvitationsByOrganization(
 	}
 	if !doesOrganizationExist {
 		return &pb.GetInvitationsByOrganizationResponse{}, nil
-	}
-
-	hasAccess, err := organizationRepo.IsInOrganizationById(ctx, organization_repo.IsInOrganizationByIdParams{
-		Organizationid: organizationID,
-		Userid:         userID,
-	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-	if !hasAccess {
-		return nil, status.Error(codes.Unauthenticated, "Not a member of this Organization")
 	}
 
 	invitations, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
@@ -496,6 +488,26 @@ func (s ServiceServer) GetInvitationsByOrganization(
 		return nil, err
 	}
 
+	// filter out invitations where permissions are missing
+	user := commonPerm.UserFromCtx(ctx)
+	email := perm.Email(claims.Email)
+
+	checks := make([]hwauthz.PermissionCheck, 0, 2*len(invitations))
+	for _, inv := range invitations {
+		checks = append(checks,
+			hwauthz.NewPermissionCheck(user, perm.InviteCanUserView, perm.Invite(inv.ID)),
+			hwauthz.NewPermissionCheck(email, perm.InviteCanUserView, perm.Invite(inv.ID)),
+		)
+	}
+	allowed, err := s.authz.BulkCheck(ctx, checks)
+	if err != nil {
+		return nil, err
+	}
+	invitations = hwutil.Filter(invitations, func(i int, _ organization_repo.Invitation) bool {
+		return allowed[2*i] || allowed[2*i+1] // either the user or their email is allowed to view this invite
+	})
+
+	// convert to response
 	invitationsResponse := hwutil.Map(invitations,
 		func(invitation organization_repo.Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
 			return &pb.GetInvitationsByOrganizationResponse_Invitation{
