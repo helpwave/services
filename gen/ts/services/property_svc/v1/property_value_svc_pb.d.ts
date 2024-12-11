@@ -3,6 +3,7 @@ import * as jspb from 'google-protobuf'
 import * as services_property_svc_v1_types_pb from '../../../services/property_svc/v1/types_pb'; // proto import: "services/property_svc/v1/types.proto"
 import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
 import * as libs_common_v1_conflict_pb from '../../../libs/common/v1/conflict_pb'; // proto import: "libs/common/v1/conflict.proto"
+import * as libs_common_v1_types_pb from '../../../libs/common/v1/types_pb'; // proto import: "libs/common/v1/types.proto"
 
 
 export class AttachPropertyValueRequest extends jspb.Message {
@@ -21,8 +22,8 @@ export class AttachPropertyValueRequest extends jspb.Message {
   getBoolValue(): boolean;
   setBoolValue(value: boolean): AttachPropertyValueRequest;
 
-  getDateValue(): services_property_svc_v1_types_pb.Date | undefined;
-  setDateValue(value?: services_property_svc_v1_types_pb.Date): AttachPropertyValueRequest;
+  getDateValue(): libs_common_v1_types_pb.Date | undefined;
+  setDateValue(value?: libs_common_v1_types_pb.Date): AttachPropertyValueRequest;
   hasDateValue(): boolean;
   clearDateValue(): AttachPropertyValueRequest;
 
@@ -61,7 +62,7 @@ export namespace AttachPropertyValueRequest {
     textValue: string,
     numberValue: number,
     boolValue: boolean,
-    dateValue?: services_property_svc_v1_types_pb.Date.AsObject,
+    dateValue?: libs_common_v1_types_pb.Date.AsObject,
     dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     selectValue: string,
     multiSelectValue?: AttachPropertyValueRequest.MultiSelectValue.AsObject,
@@ -297,8 +298,8 @@ export namespace GetAttachedPropertyValuesResponse {
     getBoolValue(): boolean;
     setBoolValue(value: boolean): Value;
 
-    getDateValue(): services_property_svc_v1_types_pb.Date | undefined;
-    setDateValue(value?: services_property_svc_v1_types_pb.Date): Value;
+    getDateValue(): libs_common_v1_types_pb.Date | undefined;
+    setDateValue(value?: libs_common_v1_types_pb.Date): Value;
     hasDateValue(): boolean;
     clearDateValue(): Value;
 
@@ -345,7 +346,7 @@ export namespace GetAttachedPropertyValuesResponse {
       textValue: string,
       numberValue: number,
       boolValue: boolean,
-      dateValue?: services_property_svc_v1_types_pb.Date.AsObject,
+      dateValue?: libs_common_v1_types_pb.Date.AsObject,
       dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       selectValue?: GetAttachedPropertyValuesResponse.Value.SelectValueOption.AsObject,
       multiSelectValue?: GetAttachedPropertyValuesResponse.Value.MultiSelectValue.AsObject,

@@ -15,7 +15,7 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 import '../../../google/protobuf/timestamp.pb.dart' as $21;
 import '../../../libs/common/v1/conflict.pb.dart' as $22;
-import 'types.pb.dart' as $23;
+import '../../../libs/common/v1/types.pb.dart' as $24;
 import 'types.pbenum.dart' as $23;
 
 class AttachPropertyValueRequest_MultiSelectValue extends $pb.GeneratedMessage {
@@ -90,7 +90,7 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     $core.String? textValue,
     $core.double? numberValue,
     $core.bool? boolValue,
-    $23.Date? dateValue,
+    $24.Date? dateValue,
     $21.Timestamp? dateTimeValue,
     $core.String? selectValue,
     AttachPropertyValueRequest_MultiSelectValue? multiSelectValue,
@@ -150,7 +150,7 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'textValue')
     ..a<$core.double>(4, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OD)
     ..aOB(5, _omitFieldNames ? '' : 'boolValue')
-    ..aOM<$23.Date>(6, _omitFieldNames ? '' : 'dateValue', subBuilder: $23.Date.create)
+    ..aOM<$24.Date>(6, _omitFieldNames ? '' : 'dateValue', subBuilder: $24.Date.create)
     ..aOM<$21.Timestamp>(7, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $21.Timestamp.create)
     ..aOS(8, _omitFieldNames ? '' : 'selectValue')
     ..aOM<AttachPropertyValueRequest_MultiSelectValue>(9, _omitFieldNames ? '' : 'multiSelectValue', subBuilder: AttachPropertyValueRequest_MultiSelectValue.create)
@@ -228,15 +228,15 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   void clearBoolValue() => clearField(5);
 
   @$pb.TagNumber(6)
-  $23.Date get dateValue => $_getN(5);
+  $24.Date get dateValue => $_getN(5);
   @$pb.TagNumber(6)
-  set dateValue($23.Date v) { setField(6, v); }
+  set dateValue($24.Date v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasDateValue() => $_has(5);
   @$pb.TagNumber(6)
   void clearDateValue() => clearField(6);
   @$pb.TagNumber(6)
-  $23.Date ensureDateValue() => $_ensure(5);
+  $24.Date ensureDateValue() => $_ensure(5);
 
   @$pb.TagNumber(7)
   $21.Timestamp get dateTimeValue => $_getN(6);
@@ -714,7 +714,7 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     $core.String? textValue,
     $core.double? numberValue,
     $core.bool? boolValue,
-    $23.Date? dateValue,
+    $24.Date? dateValue,
     $21.Timestamp? dateTimeValue,
     GetAttachedPropertyValuesResponse_Value_SelectValueOption? selectValue,
     GetAttachedPropertyValuesResponse_Value_MultiSelectValue? multiSelectValue,
@@ -790,7 +790,7 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     ..aOS(6, _omitFieldNames ? '' : 'textValue')
     ..a<$core.double>(7, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OD)
     ..aOB(8, _omitFieldNames ? '' : 'boolValue')
-    ..aOM<$23.Date>(9, _omitFieldNames ? '' : 'dateValue', subBuilder: $23.Date.create)
+    ..aOM<$24.Date>(9, _omitFieldNames ? '' : 'dateValue', subBuilder: $24.Date.create)
     ..aOM<$21.Timestamp>(10, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $21.Timestamp.create)
     ..aOM<GetAttachedPropertyValuesResponse_Value_SelectValueOption>(11, _omitFieldNames ? '' : 'selectValue', subBuilder: GetAttachedPropertyValuesResponse_Value_SelectValueOption.create)
     ..aOM<GetAttachedPropertyValuesResponse_Value_MultiSelectValue>(12, _omitFieldNames ? '' : 'multiSelectValue', subBuilder: GetAttachedPropertyValuesResponse_Value_MultiSelectValue.create)
@@ -896,15 +896,15 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   void clearBoolValue() => clearField(8);
 
   @$pb.TagNumber(9)
-  $23.Date get dateValue => $_getN(8);
+  $24.Date get dateValue => $_getN(8);
   @$pb.TagNumber(9)
-  set dateValue($23.Date v) { setField(9, v); }
+  set dateValue($24.Date v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasDateValue() => $_has(8);
   @$pb.TagNumber(9)
   void clearDateValue() => clearField(9);
   @$pb.TagNumber(9)
-  $23.Date ensureDateValue() => $_ensure(8);
+  $24.Date ensureDateValue() => $_ensure(8);
 
   @$pb.TagNumber(10)
   $21.Timestamp get dateTimeValue => $_getN(9);

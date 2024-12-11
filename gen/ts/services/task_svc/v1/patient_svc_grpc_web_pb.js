@@ -19,6 +19,8 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var libs_common_v1_types_pb = require('../../../libs/common/v1/types_pb.js')
 const proto = {};
 proto.services = {};
 proto.services.task_svc = {};
