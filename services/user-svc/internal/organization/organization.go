@@ -908,7 +908,14 @@ func CreateOrganizationAndAddUser(
 	return &organization, nil
 }
 
-func AddUserToOrganization(ctx context.Context, tx hwdb.DBTX, authz hwauthz.AuthZ, kc hwkc.IClient, userID uuid.UUID, organizationID uuid.UUID) error {
+func AddUserToOrganization(
+	ctx context.Context,
+	tx hwdb.DBTX,
+	authz hwauthz.AuthZ,
+	kc hwkc.IClient,
+	userID uuid.UUID,
+	organizationID uuid.UUID,
+) error {
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(tx)
 
