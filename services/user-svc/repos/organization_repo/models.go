@@ -19,7 +19,6 @@ type Membership struct {
 	ID             uuid.UUID
 	UserID         uuid.UUID
 	OrganizationID uuid.UUID
-	IsAdmin        *bool
 }
 
 type Organization struct {

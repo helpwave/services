@@ -420,26 +420,6 @@ func (q *Queries) InviteMember(ctx context.Context, arg InviteMemberParams) (Inv
 	return i, err
 }
 
-const isAdminInOrganization = `-- name: IsAdminInOrganization :one
-SELECT EXISTS (
-	SELECT 1
-	FROM memberships
-	WHERE user_id = $1 AND organization_id = $2 AND is_admin = TRUE
-)
-`
-
-type IsAdminInOrganizationParams struct {
-	UserID         uuid.UUID
-	OrganizationID uuid.UUID
-}
-
-func (q *Queries) IsAdminInOrganization(ctx context.Context, arg IsAdminInOrganizationParams) (bool, error) {
-	row := q.db.QueryRow(ctx, isAdminInOrganization, arg.UserID, arg.OrganizationID)
-	var exists bool
-	err := row.Scan(&exists)
-	return exists, err
-}
-
 const isInOrganizationById = `-- name: IsInOrganizationById :one
 SELECT EXISTS(
 	SELECT 1
@@ -458,23 +438,6 @@ func (q *Queries) IsInOrganizationById(ctx context.Context, arg IsInOrganization
 	var exists bool
 	err := row.Scan(&exists)
 	return exists, err
-}
-
-const makeAdmin = `-- name: MakeAdmin :exec
-UPDATE memberships
-SET
-	is_admin=TRUE
-WHERE user_id = $1 AND organization_id = $2
-`
-
-type MakeAdminParams struct {
-	UserID         uuid.UUID
-	OrganizationID uuid.UUID
-}
-
-func (q *Queries) MakeAdmin(ctx context.Context, arg MakeAdminParams) error {
-	_, err := q.db.Exec(ctx, makeAdmin, arg.UserID, arg.OrganizationID)
-	return err
 }
 
 const removeMember = `-- name: RemoveMember :exec

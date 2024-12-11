@@ -817,21 +817,6 @@ func (s ServiceServer) RevokeInvitation(
 	organizationID := currentInvitation.OrganizationID
 	inviteeEmail := currentInvitation.Email
 
-	userID := auth.MustGetUserID(ctx)
-
-	isAdmin, err := organizationRepo.IsAdminInOrganization(ctx, organization_repo.IsAdminInOrganizationParams{
-		OrganizationID: organizationID,
-		UserID:         userID,
-	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
-	if !isAdmin {
-		return nil, status.Error(codes.PermissionDenied, "only admins can revoke invitations")
-	}
-
 	if currentInvitation.State != int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()) {
 		return nil, status.Error(codes.InvalidArgument, "only pending invitations can be revoked")
 	}
@@ -847,7 +832,7 @@ func (s ServiceServer) RevokeInvitation(
 	}
 
 	log.Info().
-		Str("admin", userID.String()).
+		Str("admin", auth.MustGetUserID(ctx).String()).
 		Str("organizationID", organizationID.String()).
 		Str("inviteeEmail", inviteeEmail).
 		Msg("admin revoked invitation to organization")
@@ -862,8 +847,15 @@ func CreateOrganizationAndAddUser(
 	kc hwkc.IClient,
 	authz hwauthz.AuthZ,
 ) (*organization_repo.Organization, error) {
-	db := hwdb.GetDB()
+	// open tx
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rollback()
+	organizationRepo := organization_repo.New(tx)
 
+	// create keycloak org
 	keycloakOrganization, err := kc.CreateOrganization(ctx, attr.LongName, attr.ShortName, attr.IsPersonal)
 	if err != nil {
 		return nil, err
@@ -874,18 +866,7 @@ func CreateOrganizationAndAddUser(
 		return nil, err
 	}
 
-	if err := kc.AddUserToOrganization(ctx, userID, organizationID); err != nil {
-		return nil, err
-	}
-
-	tx, rollback, err := hwdb.BeginTx(db, ctx)
-	if err != nil {
-		return nil, err
-	}
-	defer rollback()
-
-	organizationRepo := organization_repo.New(db).WithTx(tx)
-
+	// create db org
 	organization, err := organizationRepo.CreateOrganization(ctx, organization_repo.CreateOrganizationParams{
 		ID:              organizationID,
 		LongName:        attr.LongName,
@@ -900,6 +881,12 @@ func CreateOrganizationAndAddUser(
 		return nil, err
 	}
 
+	// add user to kc org
+	if err := kc.AddUserToOrganization(ctx, userID, organizationID); err != nil {
+		return nil, err
+	}
+
+	// add user to db org
 	err = organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
 		UserID:         userID,
 		OrganizationID: organization.ID,
@@ -909,15 +896,7 @@ func CreateOrganizationAndAddUser(
 		return nil, err
 	}
 
-	err = organizationRepo.MakeAdmin(ctx, organization_repo.MakeAdminParams{
-		UserID:         userID,
-		OrganizationID: organization.ID,
-	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
+	// add to permission graph
 	permUser := commonPerm.User(userID)
 	permOrg := commonPerm.Organization(organization.ID)
 	rel := hwauthz.NewRelationship(permUser, perm.OrganizationLeader, permOrg)
@@ -926,6 +905,7 @@ func CreateOrganizationAndAddUser(
 		return nil, err
 	}
 
+	// commit tx
 	if err := tx.Commit(ctx); err != nil {
 		return nil, err
 	}

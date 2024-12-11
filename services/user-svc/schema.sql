@@ -53,8 +53,7 @@ CREATE TABLE public.invitations (
 CREATE TABLE public.memberships (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     user_id uuid NOT NULL,
-    organization_id uuid NOT NULL,
-    is_admin boolean DEFAULT false
+    organization_id uuid NOT NULL
 );
 
 
