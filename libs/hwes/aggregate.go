@@ -160,7 +160,7 @@ func (a *AggregateBase) ClearUncommittedEvents() {
 func (a *AggregateBase) Load(events []Event) error {
 	for _, event := range events {
 		if event.GetAggregateID() != a.GetID() {
-			return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'",
+			return fmt.Errorf("AggregateBase.Load: event applied to aggregate '%s' but was targeted at aggregate '%s'",
 				a.GetID(), event.GetAggregateID())
 		}
 

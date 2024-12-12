@@ -128,6 +128,8 @@ func newTraceProvider(ctx context.Context, res *resource.Resource) (*trace.Trace
 	return traceProvider, nil
 }
 
+var ErrOtelTraceExporterInvalid = errors.New("OTEL_TRACE_EXPORTER invalid")
+
 // newTraceExporter returns a new trace.SpanExporter based on the OTEL_TRACE_EXPORTER env variable
 // A SpanExporter pushes traces to a tracing database. For more configuration see the corresponding documentation.
 func newTraceExporter(ctx context.Context) (trace.SpanExporter, error) {
@@ -145,6 +147,6 @@ func newTraceExporter(ctx context.Context) (trace.SpanExporter, error) {
 		// more info: https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.21.0
 		return otlptracehttp.New(ctx)
 	default:
-		return nil, errors.New("OTEL_TRACE_EXPORTER invalid")
+		return nil, ErrOtelTraceExporterInvalid
 	}
 }

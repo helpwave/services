@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"hwes"
 	"hwutil"
+	"hwutil/errs"
 
 	"property-svc/internal/property-view/models"
 
@@ -28,40 +30,65 @@ func (m *PropertyRuleCreatedEvent) ToJSON() ([]byte, error) {
 	return json.Marshal(inter)
 }
 
+var ErrNoMatcherFound = errors.New("could not find matcher in event")
+
 func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 	var inter map[string]interface{}
 	if err := json.Unmarshal(data, &inter); err != nil {
 		return err
 	}
 
-	ruleIDRaw, ok := inter["RuleID"].(string)
+	//
+	// RuleID
+	//
+
+	ruleIDfieldName := "RuleID"
+	ruleIDRaw, ok := inter[ruleIDfieldName].(string)
 	if !ok {
-		return errors.New("rule_id is not a string")
+		return fmt.Errorf("PropertyRuleCreatedEvent.FromJSON: %w", errs.NewInvalidMapFieldError(ruleIDfieldName,
+			errs.NewCastError("string", inter[ruleIDfieldName])))
 	}
 
 	ruleID, err := uuid.Parse(ruleIDRaw)
 	if err != nil {
-		return err
+		return fmt.Errorf("PropertyRuleCreatedEvent.FromJSON: %w",
+			errs.NewInvalidMapFieldError(ruleIDfieldName, err))
 	}
 
-	alwaysInclude, ok := hwutil.InterfaceAsStringSlice(inter["AlwaysInclude"])
+	//
+	// AlwaysInclude
+	//
+
+	alwaysIncludeFieldName := "AlwaysInclude"
+	alwaysInclude, ok := hwutil.InterfaceAsStringSlice(inter[alwaysIncludeFieldName])
 	if !ok {
-		return errors.New("AlwaysInclude is not a string[]")
+		return fmt.Errorf("PropertyRuleCreatedEvent.FromJSON: %w",
+			errs.NewInvalidMapFieldError(alwaysIncludeFieldName,
+				errs.NewCastError("string[]", inter[alwaysIncludeFieldName])))
 	}
 
 	alwaysIncludeUUIDs, err := hwutil.StringsToUUIDs(alwaysInclude)
 	if err != nil {
-		return err
+		return fmt.Errorf("PropertyRuleCreatedEvent.FromJSON: %w",
+			errs.NewInvalidMapFieldError(alwaysIncludeFieldName, err))
 	}
 
-	dontAlwaysInclude, ok := hwutil.InterfaceAsStringSlice(inter["DontAlwaysInclude"])
+	//
+	// DontAlwaysInclude
+	//
+
+	dontAlwaysIncludeFieldName := "DontAlwaysInclude"
+	dontAlwaysInclude, ok := hwutil.InterfaceAsStringSlice(inter[dontAlwaysIncludeFieldName])
 	if !ok {
-		return errors.New("DontAlwaysInclude is not a string[]")
+		return fmt.Errorf("PropertyRuleCreatedEvent.FromJSON: %w",
+			errs.NewInvalidMapFieldError(dontAlwaysIncludeFieldName,
+				errs.NewCastError("string[]", inter[dontAlwaysIncludeFieldName])))
 	}
 
 	dontAlwaysIncludeUUIDs, err := hwutil.StringsToUUIDs(dontAlwaysInclude)
 	if err != nil {
-		return err
+		return fmt.Errorf("PropertyRuleCreatedEvent.FromJSON: %w",
+			errs.NewInvalidMapFieldError(dontAlwaysIncludeFieldName, err))
 	}
 
 	rule := models.PropertyViewRule{
@@ -71,9 +98,16 @@ func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 		DontAlwaysInclude: dontAlwaysIncludeUUIDs,
 	}
 
-	matchers, ok := inter["Matchers"].(map[string]interface{})
+	//
+	// Matchers
+	//
+
+	matchersFieldName := "Matchers"
+	matchers, ok := inter[matchersFieldName].(map[string]interface{})
 	if !ok {
-		return errors.New("Could not assert matchers to a map")
+		return fmt.Errorf("PropertyRuleCreatedEvent.FromJSON: %w",
+			errs.NewInvalidMapFieldError(matchersFieldName,
+				errs.NewCastError("map[string]interface{}", inter[matchersFieldName])))
 	}
 
 	if taskMatchers, ok := models.TaskPropertyMatchersFromMap(matchers); ok {
@@ -86,7 +120,7 @@ func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 		return nil
 	}
 
-	return errors.New("could not find matcher in event")
+	return ErrNoMatcherFound
 }
 
 func NewPropertyRuleCreatedEvent(
