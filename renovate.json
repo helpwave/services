@@ -19,7 +19,6 @@
   },
   "rangeStrategy": "pin",
   "ignorePaths": [
-    "infrastructure/**",
     "gen/**"
   ],
   "packageRules": [
