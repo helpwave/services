@@ -1,3 +1,0 @@
-[InvalidRoomIdError]
-description = "error, which is returned when the room id that was provided did not point to an existing room"
-other = "The provided room does not exist"
