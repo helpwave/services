@@ -28,7 +28,6 @@ linters:
     # TODOs: #865
     - cyclop # TODO
     - dupl # TODO
-    - err113 # TODO
     - exhaustruct # TODO
     - gci # TODO
     - gocognit # TODO

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwutil"
+	"hwutil/errs"
 	"time"
 
 	"github.com/google/uuid"
@@ -113,7 +114,8 @@ func MultiSelectChangeFromMap(m map[string]interface{}) (MultiSelectChange, erro
 func MultiSelectChangeFromInterface(value interface{}) (MultiSelectChange, error) {
 	m, ok := value.(map[string]interface{})
 	if !ok {
-		return MultiSelectChange{}, errors.New("MultiSelectChangeFromInterface: value is not a map")
+		return MultiSelectChange{}, fmt.Errorf("MultiSelectChangeFromInterface: %w",
+			errs.NewCastError("map[string]interface{}", value))
 	}
 
 	return MultiSelectChangeFromMap(m)

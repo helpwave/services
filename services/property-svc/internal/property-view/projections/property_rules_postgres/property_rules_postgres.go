@@ -46,6 +46,8 @@ func NewProjection(es custom.EventStoreClient, serviceName string) *Projection {
 	return p
 }
 
+var ErrMissingRuleID = errors.New("ruleID missing")
+
 func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(eventsV1.PropertyRuleCreated, p.onPropertyRuleCreated)
 	p.RegisterEventListener(eventsV1.PropertyRuleListsUpdated, p.onPropertyRuleListsUpdated)
@@ -61,7 +63,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	}
 
 	if payload.RuleID == uuid.Nil {
-		return errors.New("ruleID missing"), hwutil.PtrTo(esdb.NackActionSkip)
+		return ErrMissingRuleID, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)

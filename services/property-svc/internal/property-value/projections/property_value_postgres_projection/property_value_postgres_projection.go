@@ -9,6 +9,7 @@ import (
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+	"hwutil/errs"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
@@ -348,6 +349,14 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 	return nil, nil
 }
 
+type UnknownFieldTypeError struct {
+	FieldType pb.FieldType
+}
+
+func (e UnknownFieldTypeError) Error() string {
+	return "unknown fieldType: " + e.FieldType.String()
+}
+
 // updateBasicPropertyValue is meant to be called in onPropertyValueUpdated
 func updateBasicPropertyValue(
 	ctx context.Context,
@@ -366,15 +375,17 @@ func updateBasicPropertyValue(
 	case fieldType == pb.FieldType_FIELD_TYPE_TEXT:
 		updatePropertyValueParams.TextValue = hwutil.PtrTo(fmt.Sprintf("%v", payload.Value))
 	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
-		val, ok := payload.Value.(float64)
-		if !ok {
-			return errors.New("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
+		val, err := hwutil.AssertFloat64(payload.Value)
+		if err != nil {
+			return fmt.Errorf("updateBasicPropertyValue: (FIELD_TYPE_NUMBER), parsing failed: %w", err),
+				hwutil.PtrTo(esdb.NackActionPark)
 		}
 		updatePropertyValueParams.NumberValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
 		val, ok := payload.Value.(bool)
 		if !ok {
-			return errors.New("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
+			return fmt.Errorf("updateBasicPropertyValue: (FIELD_TYPE_CHECKBOX), parsing failed: %w",
+				errs.NewCastError("bool", payload.Value)), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		updatePropertyValueParams.BoolValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
@@ -390,7 +401,7 @@ func updateBasicPropertyValue(
 		}
 		updatePropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
 	default:
-		return fmt.Errorf("updateBasicPropertyValue called with fieldType %s", fieldType.String()),
+		return fmt.Errorf("updateBasicPropertyValue: %w", UnknownFieldTypeError{FieldType: fieldType}),
 			hwutil.PtrTo(esdb.NackActionPark)
 	}
 
