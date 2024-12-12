@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"hwutil"
 	"telemetry"
@@ -94,56 +93,28 @@ func GetIDTokenVerifier(ctx context.Context) *oidc.IDTokenVerifier {
 // Make sure to keep in sync with claims when adding values
 type IDTokenClaims struct {
 	// Subject: User ID
-	Sub string `json:"sub"`
+	Sub string `json:"sub" validate:"uuid,required"`
 
 	// Claim: email
-	Email string `json:"email"`
+	Email string `json:"email" validate:"email,required"`
 
 	// Subject: name
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required"`
 
 	// Subject: preferred_username
-	PreferredUsername string `json:"preferred_username"`
+	PreferredUsername string `json:"preferred_username" validate:"required"`
 
 	// Subject: organization
-	Organization *OrganizationTokenClaim `json:"organization"`
+	Organization *OrganizationTokenClaim `json:"organization" validate:"required"`
 }
 
 type OrganizationTokenClaim struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
+	Id   string `json:"id" validate:"required,uuid"`
+	Name string `json:"name" validate:"required"`
 }
 
 func (t IDTokenClaims) AsExpected() error {
-	if len(t.Sub) == 0 {
-		return errors.New("sub missing in id token")
-	}
-
-	if len(t.Email) == 0 {
-		return errors.New("email missing in id token")
-	}
-
-	if len(t.Name) == 0 {
-		return errors.New("name missing in id token")
-	}
-
-	if len(t.PreferredUsername) == 0 {
-		return errors.New("preferred_username missing in id token")
-	}
-
-	if t.Organization == nil {
-		return errors.New("organization missing in id token")
-	}
-
-	if len(t.Organization.Id) == 0 {
-		return errors.New("organization.id missing in id token")
-	}
-
-	if len(t.Organization.Name) == 0 {
-		return errors.New("organization.name missing in id token")
-	}
-
-	return nil
+	return hwutil.Validate(t)
 }
 
 // VerifyIDToken verifies the correctness of the accessToken and returns its claim.
