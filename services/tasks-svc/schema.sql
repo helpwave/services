@@ -59,7 +59,9 @@ CREATE TABLE public.patients (
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     is_discharged boolean DEFAULT false NOT NULL,
     consistency bigint DEFAULT 0 NOT NULL,
-    organization_id uuid NOT NULL
+    organization_id uuid NOT NULL,
+    gender integer,
+    date_of_birth date
 );
 
 
