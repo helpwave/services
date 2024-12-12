@@ -13,25 +13,6 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class Gender extends $pb.ProtobufEnum {
-  static const Gender GENDER_UNSPECIFIED = Gender._(0, _omitEnumNames ? '' : 'GENDER_UNSPECIFIED');
-  static const Gender GENDER_FEMALE = Gender._(1, _omitEnumNames ? '' : 'GENDER_FEMALE');
-  static const Gender GENDER_MALE = Gender._(2, _omitEnumNames ? '' : 'GENDER_MALE');
-  static const Gender GENDER_DIVERSE = Gender._(3, _omitEnumNames ? '' : 'GENDER_DIVERSE');
-
-  static const $core.List<Gender> values = <Gender> [
-    GENDER_UNSPECIFIED,
-    GENDER_FEMALE,
-    GENDER_MALE,
-    GENDER_DIVERSE,
-  ];
-
-  static final $core.Map<$core.int, Gender> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static Gender? valueOf($core.int value) => _byValue[value];
-
-  const Gender._($core.int v, $core.String n) : super(v, n);
-}
-
 class GetPatientDetailsResponse_TaskStatus extends $pb.ProtobufEnum {
   static const GetPatientDetailsResponse_TaskStatus TASK_STATUS_UNSPECIFIED = GetPatientDetailsResponse_TaskStatus._(0, _omitEnumNames ? '' : 'TASK_STATUS_UNSPECIFIED');
   static const GetPatientDetailsResponse_TaskStatus TASK_STATUS_TODO = GetPatientDetailsResponse_TaskStatus._(1, _omitEnumNames ? '' : 'TASK_STATUS_TODO');

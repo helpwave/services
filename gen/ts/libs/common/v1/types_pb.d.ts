@@ -23,3 +23,9 @@ export namespace Date {
   }
 }
 
+export enum Gender { 
+  GENDER_UNSPECIFIED = 0,
+  GENDER_FEMALE = 1,
+  GENDER_MALE = 2,
+  GENDER_DIVERSE = 3,
+}

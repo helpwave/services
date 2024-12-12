@@ -13,39 +13,19 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use genderDescriptor instead')
-const Gender$json = {
-  '1': 'Gender',
-  '2': [
-    {'1': 'GENDER_UNSPECIFIED', '2': 0},
-    {'1': 'GENDER_FEMALE', '2': 1},
-    {'1': 'GENDER_MALE', '2': 2},
-    {'1': 'GENDER_DIVERSE', '2': 3},
-  ],
-};
-
-/// Descriptor for `Gender`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List genderDescriptor = $convert.base64Decode(
-    'CgZHZW5kZXISFgoSR0VOREVSX1VOU1BFQ0lGSUVEEAASEQoNR0VOREVSX0ZFTUFMRRABEg8KC0'
-    'dFTkRFUl9NQUxFEAISEgoOR0VOREVSX0RJVkVSU0UQAw==');
-
 @$core.Deprecated('Use createPatientRequestDescriptor instead')
 const CreatePatientRequest$json = {
   '1': 'CreatePatientRequest',
   '2': [
     {'1': 'human_readable_identifier', '3': 1, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
     {'1': 'notes', '3': 2, '4': 1, '5': 9, '10': 'notes'},
-    {'1': 'gender', '3': 3, '4': 1, '5': 14, '6': '.services.task_svc.v1.Gender', '10': 'gender'},
-    {'1': 'date_of_birth', '3': 4, '4': 1, '5': 11, '6': '.libs.common.v1.Date', '10': 'dateOfBirth'},
   ],
 };
 
 /// Descriptor for `CreatePatientRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createPatientRequestDescriptor = $convert.base64Decode(
     'ChRDcmVhdGVQYXRpZW50UmVxdWVzdBI6ChlodW1hbl9yZWFkYWJsZV9pZGVudGlmaWVyGAEgAS'
-    'gJUhdodW1hblJlYWRhYmxlSWRlbnRpZmllchIUCgVub3RlcxgCIAEoCVIFbm90ZXMSNAoGZ2Vu'
-    'ZGVyGAMgASgOMhwuc2VydmljZXMudGFza19zdmMudjEuR2VuZGVyUgZnZW5kZXISOAoNZGF0ZV'
-    '9vZl9iaXJ0aBgEIAEoCzIULmxpYnMuY29tbW9uLnYxLkRhdGVSC2RhdGVPZkJpcnRo');
+    'gJUhdodW1hblJlYWRhYmxlSWRlbnRpZmllchIUCgVub3RlcxgCIAEoCVIFbm90ZXM=');
 
 @$core.Deprecated('Use createPatientResponseDescriptor instead')
 const CreatePatientResponse$json = {
@@ -98,17 +78,13 @@ const GetPatientResponse$json = {
       '10': 'wardId',
       '17': true,
     },
-    {'1': 'gender', '3': 9, '4': 1, '5': 14, '6': '.services.task_svc.v1.Gender', '9': 2, '10': 'gender', '17': true},
-    {'1': 'date_of_birth', '3': 10, '4': 1, '5': 11, '6': '.libs.common.v1.Date', '9': 3, '10': 'dateOfBirth', '17': true},
-    {'1': 'room', '3': 7, '4': 1, '5': 11, '6': '.services.task_svc.v1.GetPatientResponse.Room', '9': 4, '10': 'room', '17': true},
-    {'1': 'bed', '3': 8, '4': 1, '5': 11, '6': '.services.task_svc.v1.GetPatientResponse.Bed', '9': 5, '10': 'bed', '17': true},
+    {'1': 'room', '3': 7, '4': 1, '5': 11, '6': '.services.task_svc.v1.GetPatientResponse.Room', '9': 2, '10': 'room', '17': true},
+    {'1': 'bed', '3': 8, '4': 1, '5': 11, '6': '.services.task_svc.v1.GetPatientResponse.Bed', '9': 3, '10': 'bed', '17': true},
   ],
   '3': [GetPatientResponse_Room$json, GetPatientResponse_Bed$json],
   '8': [
     {'1': '_bed_id'},
     {'1': '_ward_id'},
-    {'1': '_gender'},
-    {'1': '_date_of_birth'},
     {'1': '_room'},
     {'1': '_bed'},
   ],
@@ -138,15 +114,12 @@ final $typed_data.Uint8List getPatientResponseDescriptor = $convert.base64Decode
     'ChJHZXRQYXRpZW50UmVzcG9uc2USDgoCaWQYASABKAlSAmlkEjoKGWh1bWFuX3JlYWRhYmxlX2'
     'lkZW50aWZpZXIYAiABKAlSF2h1bWFuUmVhZGFibGVJZGVudGlmaWVyEhQKBW5vdGVzGAMgASgJ'
     'UgVub3RlcxIeCgZiZWRfaWQYBCABKAlCAhgBSABSBWJlZElkiAEBEiAKB3dhcmRfaWQYBSABKA'
-    'lCAhgBSAFSBndhcmRJZIgBARI5CgZnZW5kZXIYCSABKA4yHC5zZXJ2aWNlcy50YXNrX3N2Yy52'
-    'MS5HZW5kZXJIAlIGZ2VuZGVyiAEBEj0KDWRhdGVfb2ZfYmlydGgYCiABKAsyFC5saWJzLmNvbW'
-    '1vbi52MS5EYXRlSANSC2RhdGVPZkJpcnRoiAEBEkYKBHJvb20YByABKAsyLS5zZXJ2aWNlcy50'
-    'YXNrX3N2Yy52MS5HZXRQYXRpZW50UmVzcG9uc2UuUm9vbUgEUgRyb29tiAEBEkMKA2JlZBgIIA'
-    'EoCzIsLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRSZXNwb25zZS5CZWRIBVIDYmVk'
-    'iAEBGkMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSFwoHd2FyZF'
-    '9pZBgDIAEoCVIGd2FyZElkGikKA0JlZBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIE'
-    'bmFtZUIJCgdfYmVkX2lkQgoKCF93YXJkX2lkQgkKB19nZW5kZXJCEAoOX2RhdGVfb2ZfYmlydG'
-    'hCBwoFX3Jvb21CBgoEX2JlZA==');
+    'lCAhgBSAFSBndhcmRJZIgBARJGCgRyb29tGAcgASgLMi0uc2VydmljZXMudGFza19zdmMudjEu'
+    'R2V0UGF0aWVudFJlc3BvbnNlLlJvb21IAlIEcm9vbYgBARJDCgNiZWQYCCABKAsyLC5zZXJ2aW'
+    'Nlcy50YXNrX3N2Yy52MS5HZXRQYXRpZW50UmVzcG9uc2UuQmVkSANSA2JlZIgBARpDCgRSb29t'
+    'Eg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhcKB3dhcmRfaWQYAyABKAlSBn'
+    'dhcmRJZBopCgNCZWQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWVCCQoHX2Jl'
+    'ZF9pZEIKCghfd2FyZF9pZEIHCgVfcm9vbUIGCgRfYmVk');
 
 @$core.Deprecated('Use deletePatientRequestDescriptor instead')
 const DeletePatientRequest$json = {
@@ -188,13 +161,9 @@ const GetPatientByBedResponse$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
     {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
-    {'1': 'gender', '3': 5, '4': 1, '5': 14, '6': '.services.task_svc.v1.Gender', '9': 0, '10': 'gender', '17': true},
-    {'1': 'date_of_birth', '3': 6, '4': 1, '5': 11, '6': '.libs.common.v1.Date', '9': 1, '10': 'dateOfBirth', '17': true},
-    {'1': 'bed_id', '3': 4, '4': 1, '5': 9, '9': 2, '10': 'bedId', '17': true},
+    {'1': 'bed_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'bedId', '17': true},
   ],
   '8': [
-    {'1': '_gender'},
-    {'1': '_date_of_birth'},
     {'1': '_bed_id'},
   ],
 };
@@ -203,10 +172,7 @@ const GetPatientByBedResponse$json = {
 final $typed_data.Uint8List getPatientByBedResponseDescriptor = $convert.base64Decode(
     'ChdHZXRQYXRpZW50QnlCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZG'
     'FibGVfaWRlbnRpZmllchgCIAEoCVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISFAoFbm90ZXMY'
-    'AyABKAlSBW5vdGVzEjkKBmdlbmRlchgFIAEoDjIcLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdlbm'
-    'RlckgAUgZnZW5kZXKIAQESPQoNZGF0ZV9vZl9iaXJ0aBgGIAEoCzIULmxpYnMuY29tbW9uLnYx'
-    'LkRhdGVIAVILZGF0ZU9mQmlydGiIAQESGgoGYmVkX2lkGAQgASgJSAJSBWJlZElkiAEBQgkKB1'
-    '9nZW5kZXJCEAoOX2RhdGVfb2ZfYmlydGhCCQoHX2JlZF9pZA==');
+    'AyABKAlSBW5vdGVzEhoKBmJlZF9pZBgEIAEoCUgAUgViZWRJZIgBAUIJCgdfYmVkX2lk');
 
 @$core.Deprecated('Use getPatientsByWardRequestDescriptor instead')
 const GetPatientsByWardRequest$json = {
@@ -236,13 +202,9 @@ const GetPatientsByWardResponse_Patient$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
     {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
-    {'1': 'gender', '3': 5, '4': 1, '5': 14, '6': '.services.task_svc.v1.Gender', '9': 0, '10': 'gender', '17': true},
-    {'1': 'date_of_birth', '3': 6, '4': 1, '5': 11, '6': '.libs.common.v1.Date', '9': 1, '10': 'dateOfBirth', '17': true},
-    {'1': 'bed_id', '3': 4, '4': 1, '5': 9, '9': 2, '10': 'bedId', '17': true},
+    {'1': 'bed_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'bedId', '17': true},
   ],
   '8': [
-    {'1': '_gender'},
-    {'1': '_date_of_birth'},
     {'1': '_bed_id'},
   ],
 };
@@ -251,12 +213,9 @@ const GetPatientsByWardResponse_Patient$json = {
 final $typed_data.Uint8List getPatientsByWardResponseDescriptor = $convert.base64Decode(
     'ChlHZXRQYXRpZW50c0J5V2FyZFJlc3BvbnNlElMKCHBhdGllbnRzGAEgAygLMjcuc2VydmljZX'
     'MudGFza19zdmMudjEuR2V0UGF0aWVudHNCeVdhcmRSZXNwb25zZS5QYXRpZW50UghwYXRpZW50'
-    'cxqpAgoHUGF0aWVudBIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZm'
+    'cxqSAQoHUGF0aWVudBIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZm'
     'llchgCIAEoCVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISFAoFbm90ZXMYAyABKAlSBW5vdGVz'
-    'EjkKBmdlbmRlchgFIAEoDjIcLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdlbmRlckgAUgZnZW5kZX'
-    'KIAQESPQoNZGF0ZV9vZl9iaXJ0aBgGIAEoCzIULmxpYnMuY29tbW9uLnYxLkRhdGVIAVILZGF0'
-    'ZU9mQmlydGiIAQESGgoGYmVkX2lkGAQgASgJSAJSBWJlZElkiAEBQgkKB19nZW5kZXJCEAoOX2'
-    'RhdGVfb2ZfYmlydGhCCQoHX2JlZF9pZA==');
+    'EhoKBmJlZF9pZBgEIAEoCUgAUgViZWRJZIgBAUIJCgdfYmVkX2lk');
 
 @$core.Deprecated('Use getPatientAssignmentByWardRequestDescriptor instead')
 const GetPatientAssignmentByWardRequest$json = {
@@ -393,14 +352,10 @@ const UpdatePatientRequest$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'humanReadableIdentifier', '17': true},
     {'1': 'notes', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
-    {'1': 'gender', '3': 4, '4': 1, '5': 14, '6': '.services.task_svc.v1.Gender', '9': 2, '10': 'gender', '17': true},
-    {'1': 'date_of_birth', '3': 5, '4': 1, '5': 11, '6': '.libs.common.v1.Date', '9': 3, '10': 'dateOfBirth', '17': true},
   ],
   '8': [
     {'1': '_human_readable_identifier'},
     {'1': '_notes'},
-    {'1': '_gender'},
-    {'1': '_date_of_birth'},
   ],
 };
 
@@ -408,10 +363,8 @@ const UpdatePatientRequest$json = {
 final $typed_data.Uint8List updatePatientRequestDescriptor = $convert.base64Decode(
     'ChRVcGRhdGVQYXRpZW50UmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSPwoZaHVtYW5fcmVhZGFibG'
     'VfaWRlbnRpZmllchgCIAEoCUgAUhdodW1hblJlYWRhYmxlSWRlbnRpZmllcogBARIZCgVub3Rl'
-    'cxgDIAEoCUgBUgVub3Rlc4gBARI5CgZnZW5kZXIYBCABKA4yHC5zZXJ2aWNlcy50YXNrX3N2Yy'
-    '52MS5HZW5kZXJIAlIGZ2VuZGVyiAEBEj0KDWRhdGVfb2ZfYmlydGgYBSABKAsyFC5saWJzLmNv'
-    'bW1vbi52MS5EYXRlSANSC2RhdGVPZkJpcnRoiAEBQhwKGl9odW1hbl9yZWFkYWJsZV9pZGVudG'
-    'lmaWVyQggKBl9ub3Rlc0IJCgdfZ2VuZGVyQhAKDl9kYXRlX29mX2JpcnRo');
+    'cxgDIAEoCUgBUgVub3Rlc4gBAUIcChpfaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllckIICgZfbm'
+    '90ZXM=');
 
 @$core.Deprecated('Use updatePatientResponseDescriptor instead')
 const UpdatePatientResponse$json = {
@@ -521,8 +474,6 @@ const GetPatientDetailsResponse$json = {
     {'1': 'room', '3': 7, '4': 1, '5': 11, '6': '.services.task_svc.v1.GetPatientDetailsResponse.Room', '9': 1, '10': 'room', '17': true},
     {'1': 'bed', '3': 8, '4': 1, '5': 11, '6': '.services.task_svc.v1.GetPatientDetailsResponse.Bed', '9': 2, '10': 'bed', '17': true},
     {'1': 'is_discharged', '3': 9, '4': 1, '5': 8, '10': 'isDischarged'},
-    {'1': 'gender', '3': 10, '4': 1, '5': 14, '6': '.services.task_svc.v1.Gender', '9': 3, '10': 'gender', '17': true},
-    {'1': 'date_of_birth', '3': 11, '4': 1, '5': 11, '6': '.libs.common.v1.Date', '9': 4, '10': 'dateOfBirth', '17': true},
   ],
   '3': [GetPatientDetailsResponse_Room$json, GetPatientDetailsResponse_Bed$json, GetPatientDetailsResponse_Task$json],
   '4': [GetPatientDetailsResponse_TaskStatus$json],
@@ -530,8 +481,6 @@ const GetPatientDetailsResponse$json = {
     {'1': '_ward_id'},
     {'1': '_room'},
     {'1': '_bed'},
-    {'1': '_gender'},
-    {'1': '_date_of_birth'},
   ],
 };
 
@@ -604,22 +553,19 @@ final $typed_data.Uint8List getPatientDetailsResponseDescriptor = $convert.base6
     'Nlcy50YXNrX3N2Yy52MS5HZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlLlJvb21IAVIEcm9vbYgB'
     'ARJKCgNiZWQYCCABKAsyMy5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRQYXRpZW50RGV0YWlsc1'
     'Jlc3BvbnNlLkJlZEgCUgNiZWSIAQESIwoNaXNfZGlzY2hhcmdlZBgJIAEoCFIMaXNEaXNjaGFy'
-    'Z2VkEjkKBmdlbmRlchgKIAEoDjIcLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdlbmRlckgDUgZnZW'
-    '5kZXKIAQESPQoNZGF0ZV9vZl9iaXJ0aBgLIAEoCzIULmxpYnMuY29tbW9uLnYxLkRhdGVIBFIL'
-    'ZGF0ZU9mQmlydGiIAQEaQwoEUm9vbRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbm'
-    'FtZRIXCgd3YXJkX2lkGAMgASgJUgZ3YXJkSWQaKQoDQmVkEg4KAmlkGAEgASgJUgJpZBISCgRu'
-    'YW1lGAIgASgJUgRuYW1lGrgDCgRUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUg'
-    'RuYW1lEiAKC2Rlc2NyaXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhJSCgZzdGF0dXMYBCABKA4y'
-    'Oi5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlLlRhc2tTdG'
-    'F0dXNSBnN0YXR1cxItChBhc3NpZ25lZF91c2VyX2lkGAUgASgJSABSDmFzc2lnbmVkVXNlcklk'
-    'iAEBEh0KCnBhdGllbnRfaWQYBiABKAlSCXBhdGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1Ym'
-    'xpYxJYCghzdWJ0YXNrcxgIIAMoCzI8LnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRE'
-    'ZXRhaWxzUmVzcG9uc2UuVGFzay5TdWJUYXNrUghzdWJ0YXNrcxpBCgdTdWJUYXNrEg4KAmlkGA'
-    'EgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbmUYAyABKAhSBGRvbmVCEwoRX2Fz'
-    'c2lnbmVkX3VzZXJfaWQicgoKVGFza1N0YXR1cxIbChdUQVNLX1NUQVRVU19VTlNQRUNJRklFRB'
-    'AAEhQKEFRBU0tfU1RBVFVTX1RPRE8QARIbChdUQVNLX1NUQVRVU19JTl9QUk9HUkVTUxACEhQK'
-    'EFRBU0tfU1RBVFVTX0RPTkUQA0IKCghfd2FyZF9pZEIHCgVfcm9vbUIGCgRfYmVkQgkKB19nZW'
-    '5kZXJCEAoOX2RhdGVfb2ZfYmlydGg=');
+    'Z2VkGkMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSFwoHd2FyZF'
+    '9pZBgDIAEoCVIGd2FyZElkGikKA0JlZBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIE'
+    'bmFtZRq4AwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtkZX'
+    'NjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRpb24SUgoGc3RhdHVzGAQgASgOMjouc2VydmljZXMu'
+    'dGFza19zdmMudjEuR2V0UGF0aWVudERldGFpbHNSZXNwb25zZS5UYXNrU3RhdHVzUgZzdGF0dX'
+    'MSLQoQYXNzaWduZWRfdXNlcl9pZBgFIAEoCUgAUg5hc3NpZ25lZFVzZXJJZIgBARIdCgpwYXRp'
+    'ZW50X2lkGAYgASgJUglwYXRpZW50SWQSFgoGcHVibGljGAcgASgIUgZwdWJsaWMSWAoIc3VidG'
+    'Fza3MYCCADKAsyPC5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRQYXRpZW50RGV0YWlsc1Jlc3Bv'
+    'bnNlLlRhc2suU3ViVGFza1IIc3VidGFza3MaQQoHU3ViVGFzaxIOCgJpZBgBIAEoCVICaWQSEg'
+    'oEbmFtZRgCIAEoCVIEbmFtZRISCgRkb25lGAMgASgIUgRkb25lQhMKEV9hc3NpZ25lZF91c2Vy'
+    'X2lkInIKClRhc2tTdGF0dXMSGwoXVEFTS19TVEFUVVNfVU5TUEVDSUZJRUQQABIUChBUQVNLX1'
+    'NUQVRVU19UT0RPEAESGwoXVEFTS19TVEFUVVNfSU5fUFJPR1JFU1MQAhIUChBUQVNLX1NUQVRV'
+    'U19ET05FEANCCgoIX3dhcmRfaWRCBwoFX3Jvb21CBgoEX2JlZA==');
 
 @$core.Deprecated('Use getPatientListRequestDescriptor instead')
 const GetPatientListRequest$json = {
@@ -656,13 +602,7 @@ const GetPatientListResponse_Patient$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
     {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
-    {'1': 'gender', '3': 5, '4': 1, '5': 14, '6': '.services.task_svc.v1.Gender', '9': 0, '10': 'gender', '17': true},
-    {'1': 'date_of_birth', '3': 6, '4': 1, '5': 11, '6': '.libs.common.v1.Date', '9': 1, '10': 'dateOfBirth', '17': true},
     {'1': 'tasks', '3': 4, '4': 3, '5': 11, '6': '.services.task_svc.v1.GetPatientListResponse.Task', '10': 'tasks'},
-  ],
-  '8': [
-    {'1': '_gender'},
-    {'1': '_date_of_birth'},
   ],
 };
 
@@ -694,13 +634,7 @@ const GetPatientListResponse_PatientWithRoomAndBed$json = {
     {'1': 'room', '3': 3, '4': 1, '5': 11, '6': '.services.task_svc.v1.GetPatientListResponse.Room', '10': 'room'},
     {'1': 'bed', '3': 4, '4': 1, '5': 11, '6': '.services.task_svc.v1.GetPatientListResponse.Bed', '10': 'bed'},
     {'1': 'notes', '3': 5, '4': 1, '5': 9, '10': 'notes'},
-    {'1': 'gender', '3': 7, '4': 1, '5': 14, '6': '.services.task_svc.v1.Gender', '9': 0, '10': 'gender', '17': true},
-    {'1': 'date_of_birth', '3': 8, '4': 1, '5': 11, '6': '.libs.common.v1.Date', '9': 1, '10': 'dateOfBirth', '17': true},
     {'1': 'tasks', '3': 6, '4': 3, '5': 11, '6': '.services.task_svc.v1.GetPatientListResponse.Task', '10': 'tasks'},
-  ],
-  '8': [
-    {'1': '_gender'},
-    {'1': '_date_of_birth'},
   ],
 };
 
@@ -751,34 +685,29 @@ final $typed_data.Uint8List getPatientListResponseDescriptor = $convert.base64De
     'Y3RpdmUSZQoTdW5hc3NpZ25lZF9wYXRpZW50cxgCIAMoCzI0LnNlcnZpY2VzLnRhc2tfc3ZjLn'
     'YxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuUGF0aWVudFISdW5hc3NpZ25lZFBhdGllbnRzEmUK'
     'E2Rpc2NoYXJnZWRfcGF0aWVudHMYAyADKAsyNC5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRQYX'
-    'RpZW50TGlzdFJlc3BvbnNlLlBhdGllbnRSEmRpc2NoYXJnZWRQYXRpZW50cxrLAgoHUGF0aWVu'
+    'RpZW50TGlzdFJlc3BvbnNlLlBhdGllbnRSEmRpc2NoYXJnZWRQYXRpZW50cxq0AQoHUGF0aWVu'
     'dBIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllchgCIAEoCVIXaH'
-    'VtYW5SZWFkYWJsZUlkZW50aWZpZXISFAoFbm90ZXMYAyABKAlSBW5vdGVzEjkKBmdlbmRlchgF'
-    'IAEoDjIcLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdlbmRlckgAUgZnZW5kZXKIAQESPQoNZGF0ZV'
-    '9vZl9iaXJ0aBgGIAEoCzIULmxpYnMuY29tbW9uLnYxLkRhdGVIAVILZGF0ZU9mQmlydGiIAQES'
-    'RwoFdGFza3MYBCADKAsyMS5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3'
-    'BvbnNlLlRhc2tSBXRhc2tzQgkKB19nZW5kZXJCEAoOX2RhdGVfb2ZfYmlydGgaKQoDQmVkEg4K'
-    'AmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lGkMKBFJvb20SDgoCaWQYASABKAlSAm'
-    'lkEhIKBG5hbWUYAiABKAlSBG5hbWUSFwoHd2FyZF9pZBgDIAEoCVIGd2FyZElkGuQDChVQYXRp'
-    'ZW50V2l0aFJvb21BbmRCZWQSDgoCaWQYASABKAlSAmlkEjoKGWh1bWFuX3JlYWRhYmxlX2lkZW'
-    '50aWZpZXIYAiABKAlSF2h1bWFuUmVhZGFibGVJZGVudGlmaWVyEkUKBHJvb20YAyABKAsyMS5z'
-    'ZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlJvb21SBHJvb20SQg'
-    'oDYmVkGAQgASgLMjAuc2VydmljZXMudGFza19zdmMudjEuR2V0UGF0aWVudExpc3RSZXNwb25z'
-    'ZS5CZWRSA2JlZBIUCgVub3RlcxgFIAEoCVIFbm90ZXMSOQoGZ2VuZGVyGAcgASgOMhwuc2Vydm'
-    'ljZXMudGFza19zdmMudjEuR2VuZGVySABSBmdlbmRlcogBARI9Cg1kYXRlX29mX2JpcnRoGAgg'
-    'ASgLMhQubGlicy5jb21tb24udjEuRGF0ZUgBUgtkYXRlT2ZCaXJ0aIgBARJHCgV0YXNrcxgGIA'
-    'MoCzIxLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuVGFza1IF'
-    'dGFza3NCCQoHX2dlbmRlckIQCg5fZGF0ZV9vZl9iaXJ0aBqyAwoEVGFzaxIOCgJpZBgBIAEoCV'
-    'ICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRp'
-    'b24STwoGc3RhdHVzGAQgASgOMjcuc2VydmljZXMudGFza19zdmMudjEuR2V0UGF0aWVudExpc3'
-    'RSZXNwb25zZS5UYXNrU3RhdHVzUgZzdGF0dXMSLQoQYXNzaWduZWRfdXNlcl9pZBgFIAEoCUgA'
-    'Ug5hc3NpZ25lZFVzZXJJZIgBARIdCgpwYXRpZW50X2lkGAYgASgJUglwYXRpZW50SWQSFgoGcH'
-    'VibGljGAcgASgIUgZwdWJsaWMSVQoIc3VidGFza3MYCCADKAsyOS5zZXJ2aWNlcy50YXNrX3N2'
-    'Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlRhc2suU3ViVGFza1IIc3VidGFza3MaQQoHU3'
-    'ViVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRISCgRkb25lGAMgASgI'
-    'UgRkb25lQhMKEV9hc3NpZ25lZF91c2VyX2lkInIKClRhc2tTdGF0dXMSGwoXVEFTS19TVEFUVV'
-    'NfVU5TUEVDSUZJRUQQABIUChBUQVNLX1NUQVRVU19UT0RPEAESGwoXVEFTS19TVEFUVVNfSU5f'
-    'UFJPR1JFU1MQAhIUChBUQVNLX1NUQVRVU19ET05FEAM=');
+    'VtYW5SZWFkYWJsZUlkZW50aWZpZXISFAoFbm90ZXMYAyABKAlSBW5vdGVzEkcKBXRhc2tzGAQg'
+    'AygLMjEuc2VydmljZXMudGFza19zdmMudjEuR2V0UGF0aWVudExpc3RSZXNwb25zZS5UYXNrUg'
+    'V0YXNrcxopCgNCZWQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUaQwoEUm9v'
+    'bRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIXCgd3YXJkX2lkGAMgASgJUg'
+    'Z3YXJkSWQazQIKFVBhdGllbnRXaXRoUm9vbUFuZEJlZBIOCgJpZBgBIAEoCVICaWQSOgoZaHVt'
+    'YW5fcmVhZGFibGVfaWRlbnRpZmllchgCIAEoCVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISRQ'
+    'oEcm9vbRgDIAEoCzIxLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9u'
+    'c2UuUm9vbVIEcm9vbRJCCgNiZWQYBCABKAsyMC5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRQYX'
+    'RpZW50TGlzdFJlc3BvbnNlLkJlZFIDYmVkEhQKBW5vdGVzGAUgASgJUgVub3RlcxJHCgV0YXNr'
+    'cxgGIAMoCzIxLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuVG'
+    'Fza1IFdGFza3MasgMKBFRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUS'
+    'IAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEk8KBnN0YXR1cxgEIAEoDjI3LnNlcn'
+    'ZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuVGFza1N0YXR1c1IGc3Rh'
+    'dHVzEi0KEGFzc2lnbmVkX3VzZXJfaWQYBSABKAlIAFIOYXNzaWduZWRVc2VySWSIAQESHQoKcG'
+    'F0aWVudF9pZBgGIAEoCVIJcGF0aWVudElkEhYKBnB1YmxpYxgHIAEoCFIGcHVibGljElUKCHN1'
+    'YnRhc2tzGAggAygLMjkuc2VydmljZXMudGFza19zdmMudjEuR2V0UGF0aWVudExpc3RSZXNwb2'
+    '5zZS5UYXNrLlN1YlRhc2tSCHN1YnRhc2tzGkEKB1N1YlRhc2sSDgoCaWQYASABKAlSAmlkEhIK'
+    'BG5hbWUYAiABKAlSBG5hbWUSEgoEZG9uZRgDIAEoCFIEZG9uZUITChFfYXNzaWduZWRfdXNlcl'
+    '9pZCJyCgpUYXNrU3RhdHVzEhsKF1RBU0tfU1RBVFVTX1VOU1BFQ0lGSUVEEAASFAoQVEFTS19T'
+    'VEFUVVNfVE9ETxABEhsKF1RBU0tfU1RBVFVTX0lOX1BST0dSRVNTEAISFAoQVEFTS19TVEFUVV'
+    'NfRE9ORRAD');
 
 @$core.Deprecated('Use readmitPatientRequestDescriptor instead')
 const ReadmitPatientRequest$json = {

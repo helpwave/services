@@ -15,6 +15,8 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 import '../../../google/protobuf/timestamp.pb.dart' as $21;
 
+export 'types.pbenum.dart';
+
 class Date extends $pb.GeneratedMessage {
   factory Date({
     $21.Timestamp? date,

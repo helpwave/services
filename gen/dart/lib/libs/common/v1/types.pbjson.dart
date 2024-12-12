@@ -13,6 +13,22 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use genderDescriptor instead')
+const Gender$json = {
+  '1': 'Gender',
+  '2': [
+    {'1': 'GENDER_UNSPECIFIED', '2': 0},
+    {'1': 'GENDER_FEMALE', '2': 1},
+    {'1': 'GENDER_MALE', '2': 2},
+    {'1': 'GENDER_DIVERSE', '2': 3},
+  ],
+};
+
+/// Descriptor for `Gender`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List genderDescriptor = $convert.base64Decode(
+    'CgZHZW5kZXISFgoSR0VOREVSX1VOU1BFQ0lGSUVEEAASEQoNR0VOREVSX0ZFTUFMRRABEg8KC0'
+    'dFTkRFUl9NQUxFEAISEgoOR0VOREVSX0RJVkVSU0UQAw==');
+
 @$core.Deprecated('Use dateDescriptor instead')
 const Date$json = {
   '1': 'Date',
