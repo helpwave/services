@@ -96,9 +96,9 @@ func TestIDTokenClaims_AsExpected(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			err := tt.claims.AsExpected()
 			if tt.expectedError {
-				assert.Error(t, err)
+				require.Error(t, err)
 			} else {
-				assert.NoError(t, err)
+				require.NoError(t, err)
 			}
 		})
 	}
