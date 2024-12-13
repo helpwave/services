@@ -30,6 +30,10 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	//
 	// create new task
 	//
+
+	ST1 := "SubTask 1"
+	ST2 := "SubTask 2"
+
 	createReq := &pb.CreateTaskRequest{
 		Name:           t.Name() + " task",
 		Description:    hwutil.PtrTo("Some Description"),
@@ -39,8 +43,8 @@ func TestCreateUpdateGetTask(t *testing.T) {
 		InitialStatus:  nil,
 		AssignedUserId: nil,
 		Subtasks: []*pb.CreateTaskRequest_SubTask{
-			{Name: "ST 1"},
-			{Name: "ST 2", Done: hwutil.PtrTo(true)},
+			{Name: ST1},
+			{Name: ST2, Done: hwutil.PtrTo(true)},
 		},
 	}
 	createRes, err := taskClient.CreateTask(ctx, createReq)
@@ -70,12 +74,12 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.Len(t, task.GetSubtasks(), 2)
 	found := 0
 	for _, st := range task.GetSubtasks() {
-		if st.Name == "ST 1" {
+		if st.Name == ST1 {
 			found++
 			assert.False(t, st.GetDone())
 			assert.Equal(t, hwtesting.FakeTokenUser, st.GetCreatedBy())
 		}
-		if st.Name == "ST 2" {
+		if st.Name == ST2 {
 			found++
 			assert.True(t, st.GetDone())
 			assert.Equal(t, hwtesting.FakeTokenUser, st.GetCreatedBy())
