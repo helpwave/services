@@ -19,7 +19,6 @@ type Membership struct {
 	ID             uuid.UUID
 	UserID         uuid.UUID
 	OrganizationID uuid.UUID
-	IsAdmin        *bool
 }
 
 type Organization struct {
@@ -28,7 +27,7 @@ type Organization struct {
 	ShortName       string
 	ContactEmail    string
 	AvatarUrl       *string
-	IsPersonal      *bool
+	IsPersonal      bool
 	CreatedByUserID uuid.UUID
 }
 

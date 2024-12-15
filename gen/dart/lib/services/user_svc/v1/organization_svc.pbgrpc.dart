@@ -49,10 +49,6 @@ class OrganizationServiceClient extends $grpc.Client {
       '/services.user_svc.v1.OrganizationService/GetMembersByOrganization',
       ($18.GetMembersByOrganizationRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $18.GetMembersByOrganizationResponse.fromBuffer(value));
-  static final _$addMember = $grpc.ClientMethod<$18.AddMemberRequest, $18.AddMemberResponse>(
-      '/services.user_svc.v1.OrganizationService/AddMember',
-      ($18.AddMemberRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $18.AddMemberResponse.fromBuffer(value));
   static final _$removeMember = $grpc.ClientMethod<$18.RemoveMemberRequest, $18.RemoveMemberResponse>(
       '/services.user_svc.v1.OrganizationService/RemoveMember',
       ($18.RemoveMemberRequest value) => value.writeToBuffer(),
@@ -118,10 +114,6 @@ class OrganizationServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$18.GetMembersByOrganizationResponse> getMembersByOrganization($18.GetMembersByOrganizationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getMembersByOrganization, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$18.AddMemberResponse> addMember($18.AddMemberRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$addMember, request, options: options);
   }
 
   $grpc.ResponseFuture<$18.RemoveMemberResponse> removeMember($18.RemoveMemberRequest request, {$grpc.CallOptions? options}) {
@@ -211,13 +203,6 @@ abstract class OrganizationServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $18.GetMembersByOrganizationRequest.fromBuffer(value),
         ($18.GetMembersByOrganizationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$18.AddMemberRequest, $18.AddMemberResponse>(
-        'AddMember',
-        addMember_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $18.AddMemberRequest.fromBuffer(value),
-        ($18.AddMemberResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$18.RemoveMemberRequest, $18.RemoveMemberResponse>(
         'RemoveMember',
         removeMember_Pre,
@@ -304,10 +289,6 @@ abstract class OrganizationServiceBase extends $grpc.Service {
     return getMembersByOrganization(call, await request);
   }
 
-  $async.Future<$18.AddMemberResponse> addMember_Pre($grpc.ServiceCall call, $async.Future<$18.AddMemberRequest> request) async {
-    return addMember(call, await request);
-  }
-
   $async.Future<$18.RemoveMemberResponse> removeMember_Pre($grpc.ServiceCall call, $async.Future<$18.RemoveMemberRequest> request) async {
     return removeMember(call, await request);
   }
@@ -347,7 +328,6 @@ abstract class OrganizationServiceBase extends $grpc.Service {
   $async.Future<$18.UpdateOrganizationResponse> updateOrganization($grpc.ServiceCall call, $18.UpdateOrganizationRequest request);
   $async.Future<$18.DeleteOrganizationResponse> deleteOrganization($grpc.ServiceCall call, $18.DeleteOrganizationRequest request);
   $async.Future<$18.GetMembersByOrganizationResponse> getMembersByOrganization($grpc.ServiceCall call, $18.GetMembersByOrganizationRequest request);
-  $async.Future<$18.AddMemberResponse> addMember($grpc.ServiceCall call, $18.AddMemberRequest request);
   $async.Future<$18.RemoveMemberResponse> removeMember($grpc.ServiceCall call, $18.RemoveMemberRequest request);
   $async.Future<$18.InviteMemberResponse> inviteMember($grpc.ServiceCall call, $18.InviteMemberRequest request);
   $async.Future<$18.GetInvitationsByOrganizationResponse> getInvitationsByOrganization($grpc.ServiceCall call, $18.GetInvitationsByOrganizationRequest request);

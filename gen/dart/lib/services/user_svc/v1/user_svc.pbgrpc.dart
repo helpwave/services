@@ -21,10 +21,6 @@ export 'user_svc.pb.dart';
 
 @$pb.GrpcServiceName('services.user_svc.v1.UserService')
 class UserServiceClient extends $grpc.Client {
-  static final _$createUser = $grpc.ClientMethod<$19.CreateUserRequest, $19.CreateUserResponse>(
-      '/services.user_svc.v1.UserService/CreateUser',
-      ($19.CreateUserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $19.CreateUserResponse.fromBuffer(value));
   static final _$readSelf = $grpc.ClientMethod<$19.ReadSelfRequest, $19.ReadSelfResponse>(
       '/services.user_svc.v1.UserService/ReadSelf',
       ($19.ReadSelfRequest value) => value.writeToBuffer(),
@@ -44,10 +40,6 @@ class UserServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$19.CreateUserResponse> createUser($19.CreateUserRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$createUser, request, options: options);
-  }
-
   $grpc.ResponseFuture<$19.ReadSelfResponse> readSelf($19.ReadSelfRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$readSelf, request, options: options);
   }
@@ -66,13 +58,6 @@ abstract class UserServiceBase extends $grpc.Service {
   $core.String get $name => 'services.user_svc.v1.UserService';
 
   UserServiceBase() {
-    $addMethod($grpc.ServiceMethod<$19.CreateUserRequest, $19.CreateUserResponse>(
-        'CreateUser',
-        createUser_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $19.CreateUserRequest.fromBuffer(value),
-        ($19.CreateUserResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$19.ReadSelfRequest, $19.ReadSelfResponse>(
         'ReadSelf',
         readSelf_Pre,
@@ -96,10 +81,6 @@ abstract class UserServiceBase extends $grpc.Service {
         ($19.UpdateUserResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$19.CreateUserResponse> createUser_Pre($grpc.ServiceCall call, $async.Future<$19.CreateUserRequest> request) async {
-    return createUser(call, await request);
-  }
-
   $async.Future<$19.ReadSelfResponse> readSelf_Pre($grpc.ServiceCall call, $async.Future<$19.ReadSelfRequest> request) async {
     return readSelf(call, await request);
   }
@@ -112,7 +93,6 @@ abstract class UserServiceBase extends $grpc.Service {
     return updateUser(call, await request);
   }
 
-  $async.Future<$19.CreateUserResponse> createUser($grpc.ServiceCall call, $19.CreateUserRequest request);
   $async.Future<$19.ReadSelfResponse> readSelf($grpc.ServiceCall call, $19.ReadSelfRequest request);
   $async.Future<$19.ReadPublicProfileResponse> readPublicProfile($grpc.ServiceCall call, $19.ReadPublicProfileRequest request);
   $async.Future<$19.UpdateUserResponse> updateUser($grpc.ServiceCall call, $19.UpdateUserRequest request);

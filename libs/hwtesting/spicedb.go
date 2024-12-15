@@ -67,26 +67,45 @@ func MigrateSpiceDB(ctx context.Context, endpoint string) {
 	spiceMigrate.Migrate(ctx,
 		filepath.Join(getRepoRoot(), "spicedb"),
 		spiceClient,
+		nil,
 	)
 
 	// add the README user to its org
 	_, err = spiceClient.WriteRelationships(ctx, &spicev1.WriteRelationshipsRequest{
-		Updates: []*spicev1.RelationshipUpdate{{
-			Operation: spicev1.RelationshipUpdate_OPERATION_CREATE,
-			Relationship: &spicev1.Relationship{
-				Resource: &spicev1.ObjectReference{
-					ObjectType: "organization",
-					ObjectId:   FakeTokenOrganization,
-				},
-				Relation: "member",
-				Subject: &spicev1.SubjectReference{
-					Object: &spicev1.ObjectReference{
-						ObjectType: "user",
-						ObjectId:   FakeTokenUser,
+		Updates: []*spicev1.RelationshipUpdate{
+			{
+				Operation: spicev1.RelationshipUpdate_OPERATION_CREATE,
+				Relationship: &spicev1.Relationship{
+					Resource: &spicev1.ObjectReference{
+						ObjectType: "organization",
+						ObjectId:   FakeTokenOrganization,
+					},
+					Relation: "member",
+					Subject: &spicev1.SubjectReference{
+						Object: &spicev1.ObjectReference{
+							ObjectType: "user",
+							ObjectId:   FakeTokenUser,
+						},
 					},
 				},
 			},
-		}},
+			{
+				Operation: spicev1.RelationshipUpdate_OPERATION_CREATE,
+				Relationship: &spicev1.Relationship{
+					Resource: &spicev1.ObjectReference{
+						ObjectType: "user",
+						ObjectId:   FakeTokenUser,
+					},
+					Relation: "organization",
+					Subject: &spicev1.SubjectReference{
+						Object: &spicev1.ObjectReference{
+							ObjectType: "organization",
+							ObjectId:   FakeTokenOrganization,
+						},
+					},
+				},
+			},
+		},
 	})
 	if err != nil {
 		panic(fmt.Errorf("could not write relation: %w", err))
