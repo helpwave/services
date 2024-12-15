@@ -8,13 +8,6 @@ export class UserServiceClient {
                credentials?: null | { [index: string]: string; },
                options?: null | { [index: string]: any; });
 
-  createUser(
-    request: services_user_svc_v1_user_svc_pb.CreateUserRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_user_svc_v1_user_svc_pb.CreateUserResponse) => void
-  ): grpcWeb.ClientReadableStream<services_user_svc_v1_user_svc_pb.CreateUserResponse>;
-
   readSelf(
     request: services_user_svc_v1_user_svc_pb.ReadSelfRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -42,11 +35,6 @@ export class UserServicePromiseClient {
   constructor (hostname: string,
                credentials?: null | { [index: string]: string; },
                options?: null | { [index: string]: any; });
-
-  createUser(
-    request: services_user_svc_v1_user_svc_pb.CreateUserRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_user_svc_v1_user_svc_pb.CreateUserResponse>;
 
   readSelf(
     request: services_user_svc_v1_user_svc_pb.ReadSelfRequest,

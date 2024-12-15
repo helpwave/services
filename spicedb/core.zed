@@ -4,4 +4,12 @@ definition spice_schema_migrations/migration {
 	relation version: spice_schema_migrations/version
 }
 
-definition user {}
+definition user {
+	// inverse relation to organization's member & leader relations
+	relation organization: organization
+
+	// any user with a shared organization membership can get this user's public profile
+	permission get_public_profile = organization->membership;
+}
+
+definition email {}

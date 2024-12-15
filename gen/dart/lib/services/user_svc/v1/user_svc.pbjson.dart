@@ -13,34 +13,6 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use createUserRequestDescriptor instead')
-const CreateUserRequest$json = {
-  '1': 'CreateUserRequest',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
-    {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
-    {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
-  ],
-};
-
-/// Descriptor for `CreateUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createUserRequestDescriptor = $convert.base64Decode(
-    'ChFDcmVhdGVVc2VyUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFAoFZW1haWwYAiABKAlSBWVtYW'
-    'lsEhoKCG5pY2tuYW1lGAMgASgJUghuaWNrbmFtZRISCgRuYW1lGAQgASgJUgRuYW1l');
-
-@$core.Deprecated('Use createUserResponseDescriptor instead')
-const CreateUserResponse$json = {
-  '1': 'CreateUserResponse',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-  ],
-};
-
-/// Descriptor for `CreateUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createUserResponseDescriptor = $convert.base64Decode(
-    'ChJDcmVhdGVVc2VyUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
-
 @$core.Deprecated('Use readSelfOrganizationDescriptor instead')
 const ReadSelfOrganization$json = {
   '1': 'ReadSelfOrganization',
