@@ -6,6 +6,8 @@ import (
 	"hwes"
 	"hwutil"
 
+	"property-svc/internal/property-view/errs"
+
 	"github.com/google/uuid"
 
 	propertyViewEventsV1 "property-svc/internal/property-view/events/v1"
@@ -54,7 +56,7 @@ func (a *PropertyViewRuleAggregate) onPropertyRuleCreated(event hwes.Event) erro
 	// json unmarshaller sets uuid.Nil for missing uuids
 	// if they are set, they have to be valid
 	if payload.RuleID == uuid.Nil {
-		return errors.New("RuleID missing")
+		return errs.ErrMissingRuleID
 	}
 	if a.GetID() != payload.RuleID {
 		return errors.New("RuleID not AggregateID")

@@ -121,6 +121,12 @@ func (a *AggregateBase) RegisterEventListener(eventType string, eventHandler eve
 	return a
 }
 
+type EventTypeInvalidError string
+
+func (e EventTypeInvalidError) Error() string {
+	return fmt.Sprintf("event type '%s' is invalid", string(e))
+}
+
 // HandleEvent finds and calls the registered event handler
 // based on the type of the passed event.
 // The executed event handler can modify the in-memory data of the aggregate.
@@ -133,7 +139,7 @@ func (a *AggregateBase) HandleEvent(event Event) error {
 
 	eventHandler, found := a.eventHandlers[event.EventType]
 	if !found {
-		return fmt.Errorf("event type '%s' is invalid", event.EventType)
+		return EventTypeInvalidError(event.EventType)
 	}
 
 	if err := eventHandler(event); err != nil {
@@ -155,13 +161,27 @@ func (a *AggregateBase) ClearUncommittedEvents() {
 	a.uncommittedEvents = make([]Event, 0)
 }
 
+type EventAggregateMismatchError struct {
+	Targeted uuid.UUID
+	Got      uuid.UUID
+}
+
+func (e EventAggregateMismatchError) Error() string {
+	return fmt.Sprintf("event applied to aggregate %q but was targeted at aggregate %q",
+		e.Got.String(), e.Targeted.String())
+}
+
+var ErrLoadDeletedAggregate = errors.New("AggregateBase.Load: aggregate has been marked as deleted")
+
 // Load applies events to an aggregate by utilizing the registered event listeners
 // Currently not in use. Could be helpful for testing.
 func (a *AggregateBase) Load(events []Event) error {
 	for _, event := range events {
 		if event.GetAggregateID() != a.GetID() {
-			return fmt.Errorf("AggregateBase.Load: event applied to aggregate '%s' but was targeted at aggregate '%s'",
-				a.GetID(), event.GetAggregateID())
+			return fmt.Errorf("AggregateBase.Load: %w", EventAggregateMismatchError{
+				Targeted: a.GetID(),
+				Got:      event.GetAggregateID(),
+			})
 		}
 
 		if err := a.HandleEvent(event); err != nil {
@@ -172,7 +192,7 @@ func (a *AggregateBase) Load(events []Event) error {
 		a.version++
 	}
 	if a.IsDeleted() {
-		return errors.New("AggregateBase.Load: aggregate has been marked as deleted")
+		return fmt.Errorf("AggregateBase.Load: %w", ErrLoadDeletedAggregate)
 	}
 
 	return nil
@@ -183,8 +203,10 @@ func (a *AggregateBase) Load(events []Event) error {
 // Apply -> You apply a *new* event to the aggregate that could be persisted
 func (a *AggregateBase) Apply(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
-		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'",
-			a.GetID(), event.GetAggregateID())
+		return fmt.Errorf("AggregateBase.Apply: %w", EventAggregateMismatchError{
+			Targeted: a.GetID(),
+			Got:      event.GetAggregateID(),
+		})
 	}
 
 	if err := a.HandleEvent(event); err != nil {
@@ -197,18 +219,29 @@ func (a *AggregateBase) Apply(event Event) error {
 	return nil
 }
 
+type EventOutOfDateError struct {
+	AggregateVersion uint64
+	EventVersion     uint64
+}
+
+func (e EventOutOfDateError) Error() string {
+	return fmt.Sprintf("event version (%d) is lower than aggregate version (%d)",
+		e.EventVersion, e.AggregateVersion)
+}
+
 // Progress should be called after all events are loaded though an aggregate store.
 // The passed event gets applied to an aggregate by utilizing the registered event listeners.
 // Progress -> You progress the state of an aggregate
 func (a *AggregateBase) Progress(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
-		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'",
-			a.GetID(), event.GetAggregateID())
+		return fmt.Errorf("AggregateBase.Progress: %w", EventAggregateMismatchError{
+			Targeted: a.GetID(),
+			Got:      event.GetAggregateID(),
+		})
 	}
 
 	if event.GetVersion() < a.GetVersion() {
-		return fmt.Errorf("event version of %d is lower then aggregate version of %d",
-			event.GetVersion(), a.GetVersion())
+		return EventOutOfDateError{EventVersion: event.GetVersion(), AggregateVersion: a.GetVersion()}
 	}
 
 	if err := a.HandleEvent(event); err != nil {

@@ -3,11 +3,11 @@ package v1
 import (
 	"common"
 	"context"
-	"errors"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+	"hwes/errs"
 
 	patientPerm "tasks-svc/internal/patient/perm"
 	"tasks-svc/internal/task/perm"
@@ -59,7 +59,7 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) Cr
 		}
 
 		if exists {
-			return 0, errors.New("cannot create an already existing aggregate")
+			return 0, errs.ErrAlreadyExists
 		}
 
 		finalStatus := pb.TaskStatus_TASK_STATUS_TODO

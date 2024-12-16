@@ -103,7 +103,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 		if fieldType == pb.FieldType_FIELD_TYPE_SELECT {
 			val, ok := payload.Value.(string)
 			if !ok {
-				return errors.New("could not assert string"), hwutil.PtrTo(esdb.NackActionPark)
+				return errs.NewCastError("string", payload.Value), hwutil.PtrTo(esdb.NackActionPark)
 			}
 			id, err := uuid.Parse(val)
 			if err != nil {
@@ -175,13 +175,13 @@ func createBasicPropertyValue(
 	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
 		val, ok := payload.Value.(float64)
 		if !ok {
-			return errors.New("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
+			return errs.NewCastError("float64", payload.Value), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		createPropertyValueParams.NumberValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
 		val, ok := payload.Value.(bool)
 		if !ok {
-			return errors.New("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
+			return errs.NewCastError("bool", payload.Value), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		createPropertyValueParams.BoolValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
@@ -206,6 +206,18 @@ func createBasicPropertyValue(
 	return nil, nil
 }
 
+type PropertyValueNotFoundError uuid.UUID
+
+func (e PropertyValueNotFoundError) Error() string {
+	return fmt.Sprintf("propertyValue with id %s not found", uuid.UUID(e).String())
+}
+
+type PropertyNotFoundForValueError uuid.UUID
+
+func (e PropertyNotFoundForValueError) Error() string {
+	return fmt.Sprintf("property with id %s not found for propertyValue", uuid.UUID(e).String())
+}
+
 func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
@@ -218,7 +230,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 	// Get Property for FieldType
 	propertyValue, err := hwdb.Optional(p.propertyValueRepo.GetPropertyValueByID)(ctx, evt.AggregateID)
 	if propertyValue == nil {
-		return fmt.Errorf("propertyValue with id %s not found", evt.AggregateID), hwutil.PtrTo(esdb.NackActionRetry)
+		return PropertyValueNotFoundError(evt.AggregateID), hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -226,8 +238,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 
 	property, err := hwdb.Optional(p.propertyRepo.GetPropertyById)(ctx, propertyValue.PropertyID)
 	if property == nil {
-		return fmt.Errorf("property with id %s not found for propertyValue", propertyValue.PropertyID.String()),
-			hwutil.PtrTo(esdb.NackActionRetry)
+		return PropertyNotFoundForValueError(propertyValue.PropertyID), hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)

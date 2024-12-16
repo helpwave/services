@@ -4,6 +4,8 @@ import (
 	"common/hwerr"
 	"context"
 	"errors"
+	"fmt"
+	"github.com/google/uuid"
 	"hwlocale"
 	"reflect"
 	"strings"
@@ -260,4 +262,10 @@ func pgConnErr(ctx context.Context, connErr *pgconn.ConnectError) error {
 		Err(connErr).
 		Msg("connection issue")
 	return genericStatusError(ctx, "database connection issue")
+}
+
+type RecordNotFoundError uuid.UUID
+
+func (e RecordNotFoundError) Error() string {
+	return fmt.Sprintf("could not find record with id %q", uuid.UUID(e).String())
 }

@@ -52,10 +52,9 @@ func getUserID(ctx context.Context) string {
 //   - SetupTracking was called earlier
 //   - the context originates from an authenticated request
 func AddPatientToRecentActivity(ctx context.Context, patientID string) {
-	if userID := getUserID(ctx); userID != "" {
-		if err := lru.AddItemForUser(ctx, PatientKey, userID, patientID); err != nil {
-			zlog.Ctx(ctx).Error().Err(err).Msg("could not add patient to recent activity")
-		}
+	userID := getUserID(ctx)
+	if err := lru.AddItemForUser(ctx, PatientKey, userID, patientID); err != nil {
+		zlog.Ctx(ctx).Error().Err(err).Msg("could not add patient to recent activity")
 	}
 }
 
@@ -64,9 +63,8 @@ func AddPatientToRecentActivity(ctx context.Context, patientID string) {
 //   - SetupTracking was called earlier
 //   - the context originates from an authenticated request
 func RemovePatientFromRecentActivity(ctx context.Context, patientID string) {
-	if userID := getUserID(ctx); userID != "" {
-		_ = lru.RemoveItemForUser(ctx, PatientKey, userID, patientID)
-	}
+	userID := getUserID(ctx)
+	_ = lru.RemoveItemForUser(ctx, PatientKey, userID, patientID)
 }
 
 // GetRecentPatientsForUser returns patient ids from the current user's recent activity
@@ -75,9 +73,6 @@ func RemovePatientFromRecentActivity(ctx context.Context, patientID string) {
 //   - the context originates from an authenticated request
 func GetRecentPatientsForUser(ctx context.Context) ([]string, error) {
 	userID := getUserID(ctx)
-	if userID == "" {
-		return nil, errors.New("GetRecentPatientsForUser called, but context has no userID")
-	}
 	return lru.GetItemsForUser(ctx, PatientKey, userID)
 }
 
@@ -86,10 +81,9 @@ func GetRecentPatientsForUser(ctx context.Context) ([]string, error) {
 //   - SetupTracking was called earlier
 //   - the context originates from an authenticated request
 func AddWardToRecentActivity(ctx context.Context, wardID string) {
-	if userID := getUserID(ctx); userID != "" {
-		if err := lru.AddItemForUser(ctx, WardKey, userID, wardID); err != nil {
-			zlog.Ctx(ctx).Error().Err(err).Msg("could not add ward to recent activity")
-		}
+	userID := getUserID(ctx)
+	if err := lru.AddItemForUser(ctx, WardKey, userID, wardID); err != nil {
+		zlog.Ctx(ctx).Error().Err(err).Msg("could not add ward to recent activity")
 	}
 }
 
@@ -98,9 +92,8 @@ func AddWardToRecentActivity(ctx context.Context, wardID string) {
 //   - SetupTracking was called earlier
 //   - the context originates from an authenticated request
 func RemoveWardFromRecentActivity(ctx context.Context, wardID string) {
-	if userID := getUserID(ctx); userID != "" {
-		_ = lru.RemoveItemForUser(ctx, WardKey, userID, wardID)
-	}
+	userID := getUserID(ctx)
+	_ = lru.RemoveItemForUser(ctx, WardKey, userID, wardID)
 }
 
 // GetRecentWardsForUser returns ward ids from the current user's recent activity

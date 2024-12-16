@@ -45,8 +45,9 @@ func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 	ruleIDfieldName := "RuleID"
 	ruleIDRaw, ok := inter[ruleIDfieldName].(string)
 	if !ok {
-		return fmt.Errorf("PropertyRuleCreatedEvent.FromJSON: %w", errs.NewInvalidMapFieldError(ruleIDfieldName,
-			errs.NewCastError("string", inter[ruleIDfieldName])))
+		return fmt.Errorf("PropertyRuleCreatedEvent.FromJSON: %w",
+			errs.NewInvalidMapFieldError(ruleIDfieldName,
+				errs.NewCastError("string", inter[ruleIDfieldName])))
 	}
 
 	ruleID, err := uuid.Parse(ruleIDRaw)
