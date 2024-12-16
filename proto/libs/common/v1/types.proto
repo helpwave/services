@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package libs.common.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "gen/libs/common/v1";
+
+message Date {
+  // information more precise than date information shall be disregarded by clients
+  google.protobuf.Timestamp date = 1;
+}
+
+enum Gender {
+  GENDER_UNSPECIFIED = 0;
+  GENDER_FEMALE = 1;
+  GENDER_MALE = 2;
+  GENDER_DIVERSE = 3;
+}

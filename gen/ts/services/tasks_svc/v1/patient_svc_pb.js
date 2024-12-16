@@ -25,6 +25,8 @@ var services_tasks_svc_v1_types_pb = require('../../../services/tasks_svc/v1/typ
 goog.object.extend(proto, services_tasks_svc_v1_types_pb);
 var libs_common_v1_conflict_pb = require('../../../libs/common/v1/conflict_pb.js');
 goog.object.extend(proto, libs_common_v1_conflict_pb);
+var libs_common_v1_types_pb = require('../../../libs/common/v1/types_pb.js');
+goog.object.extend(proto, libs_common_v1_types_pb);
 goog.exportSymbol('proto.services.tasks_svc.v1.AssignBedRequest', null, global);
 goog.exportSymbol('proto.services.tasks_svc.v1.AssignBedResponse', null, global);
 goog.exportSymbol('proto.services.tasks_svc.v1.CreatePatientRequest', null, global);
@@ -1070,7 +1072,9 @@ proto.services.tasks_svc.v1.CreatePatientRequest.prototype.toObject = function(o
 proto.services.tasks_svc.v1.CreatePatientRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    notes: jspb.Message.getFieldWithDefault(msg, 2, "")
+    notes: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    dateOfBirth: (f = msg.getDateOfBirth()) && libs_common_v1_types_pb.Date.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1115,6 +1119,15 @@ proto.services.tasks_svc.v1.CreatePatientRequest.deserializeBinaryFromReader = f
       var value = /** @type {string} */ (reader.readString());
       msg.setNotes(value);
       break;
+    case 3:
+      var value = /** @type {!proto.libs.common.v1.Gender} */ (reader.readEnum());
+      msg.setGender(value);
+      break;
+    case 4:
+      var value = new libs_common_v1_types_pb.Date;
+      reader.readMessage(value,libs_common_v1_types_pb.Date.deserializeBinaryFromReader);
+      msg.setDateOfBirth(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1156,6 +1169,21 @@ proto.services.tasks_svc.v1.CreatePatientRequest.serializeBinaryToWriter = funct
     writer.writeString(
       2,
       f
+    );
+  }
+  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeEnum(
+      3,
+      f
+    );
+  }
+  f = message.getDateOfBirth();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      libs_common_v1_types_pb.Date.serializeBinaryToWriter
     );
   }
 };
@@ -1212,6 +1240,79 @@ proto.services.tasks_svc.v1.CreatePatientRequest.prototype.clearNotes = function
  */
 proto.services.tasks_svc.v1.CreatePatientRequest.prototype.hasNotes = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional libs.common.v1.Gender gender = 3;
+ * @return {!proto.libs.common.v1.Gender}
+ */
+proto.services.tasks_svc.v1.CreatePatientRequest.prototype.getGender = function() {
+  return /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {!proto.libs.common.v1.Gender} value
+ * @return {!proto.services.tasks_svc.v1.CreatePatientRequest} returns this
+ */
+proto.services.tasks_svc.v1.CreatePatientRequest.prototype.setGender = function(value) {
+  return jspb.Message.setField(this, 3, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.CreatePatientRequest} returns this
+ */
+proto.services.tasks_svc.v1.CreatePatientRequest.prototype.clearGender = function() {
+  return jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.CreatePatientRequest.prototype.hasGender = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional libs.common.v1.Date date_of_birth = 4;
+ * @return {?proto.libs.common.v1.Date}
+ */
+proto.services.tasks_svc.v1.CreatePatientRequest.prototype.getDateOfBirth = function() {
+  return /** @type{?proto.libs.common.v1.Date} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_types_pb.Date, 4));
+};
+
+
+/**
+ * @param {?proto.libs.common.v1.Date|undefined} value
+ * @return {!proto.services.tasks_svc.v1.CreatePatientRequest} returns this
+*/
+proto.services.tasks_svc.v1.CreatePatientRequest.prototype.setDateOfBirth = function(value) {
+  return jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.CreatePatientRequest} returns this
+ */
+proto.services.tasks_svc.v1.CreatePatientRequest.prototype.clearDateOfBirth = function() {
+  return this.setDateOfBirth(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.CreatePatientRequest.prototype.hasDateOfBirth = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -1540,6 +1641,8 @@ proto.services.tasks_svc.v1.GetPatientResponse.toObject = function(includeInstan
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
     notes: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 10, 0),
+    dateOfBirth: (f = msg.getDateOfBirth()) && libs_common_v1_types_pb.Date.toObject(includeInstance, f),
     room: (f = msg.getRoom()) && proto.services.tasks_svc.v1.GetPatientResponse.Room.toObject(includeInstance, f),
     bed: (f = msg.getBed()) && proto.services.tasks_svc.v1.GetPatientResponse.Bed.toObject(includeInstance, f),
     consistency: jspb.Message.getFieldWithDefault(msg, 9, "")
@@ -1590,6 +1693,15 @@ proto.services.tasks_svc.v1.GetPatientResponse.deserializeBinaryFromReader = fun
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setNotes(value);
+      break;
+    case 10:
+      var value = /** @type {!proto.libs.common.v1.Gender} */ (reader.readEnum());
+      msg.setGender(value);
+      break;
+    case 11:
+      var value = new libs_common_v1_types_pb.Date;
+      reader.readMessage(value,libs_common_v1_types_pb.Date.deserializeBinaryFromReader);
+      msg.setDateOfBirth(value);
       break;
     case 7:
       var value = new proto.services.tasks_svc.v1.GetPatientResponse.Room;
@@ -1653,6 +1765,21 @@ proto.services.tasks_svc.v1.GetPatientResponse.serializeBinaryToWriter = functio
     writer.writeString(
       3,
       f
+    );
+  }
+  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 10));
+  if (f != null) {
+    writer.writeEnum(
+      10,
+      f
+    );
+  }
+  f = message.getDateOfBirth();
+  if (f != null) {
+    writer.writeMessage(
+      11,
+      f,
+      libs_common_v1_types_pb.Date.serializeBinaryToWriter
     );
   }
   f = message.getRoom();
@@ -2146,6 +2273,79 @@ proto.services.tasks_svc.v1.GetPatientResponse.prototype.setNotes = function(val
 
 
 /**
+ * optional libs.common.v1.Gender gender = 10;
+ * @return {!proto.libs.common.v1.Gender}
+ */
+proto.services.tasks_svc.v1.GetPatientResponse.prototype.getGender = function() {
+  return /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getFieldWithDefault(this, 10, 0));
+};
+
+
+/**
+ * @param {!proto.libs.common.v1.Gender} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientResponse.prototype.setGender = function(value) {
+  return jspb.Message.setField(this, 10, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientResponse.prototype.clearGender = function() {
+  return jspb.Message.setField(this, 10, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientResponse.prototype.hasGender = function() {
+  return jspb.Message.getField(this, 10) != null;
+};
+
+
+/**
+ * optional libs.common.v1.Date date_of_birth = 11;
+ * @return {?proto.libs.common.v1.Date}
+ */
+proto.services.tasks_svc.v1.GetPatientResponse.prototype.getDateOfBirth = function() {
+  return /** @type{?proto.libs.common.v1.Date} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_types_pb.Date, 11));
+};
+
+
+/**
+ * @param {?proto.libs.common.v1.Date|undefined} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientResponse} returns this
+*/
+proto.services.tasks_svc.v1.GetPatientResponse.prototype.setDateOfBirth = function(value) {
+  return jspb.Message.setWrapperField(this, 11, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientResponse.prototype.clearDateOfBirth = function() {
+  return this.setDateOfBirth(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientResponse.prototype.hasDateOfBirth = function() {
+  return jspb.Message.getField(this, 11) != null;
+};
+
+
+/**
  * optional Room room = 7;
  * @return {?proto.services.tasks_svc.v1.GetPatientResponse.Room}
  */
@@ -2402,6 +2602,8 @@ proto.services.tasks_svc.v1.GetPatientByBedResponse.toObject = function(includeI
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
     notes: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    dateOfBirth: (f = msg.getDateOfBirth()) && libs_common_v1_types_pb.Date.toObject(includeInstance, f),
     bedId: jspb.Message.getFieldWithDefault(msg, 4, ""),
     consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
@@ -2451,6 +2653,15 @@ proto.services.tasks_svc.v1.GetPatientByBedResponse.deserializeBinaryFromReader 
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setNotes(value);
+      break;
+    case 6:
+      var value = /** @type {!proto.libs.common.v1.Gender} */ (reader.readEnum());
+      msg.setGender(value);
+      break;
+    case 7:
+      var value = new libs_common_v1_types_pb.Date;
+      reader.readMessage(value,libs_common_v1_types_pb.Date.deserializeBinaryFromReader);
+      msg.setDateOfBirth(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
@@ -2508,6 +2719,21 @@ proto.services.tasks_svc.v1.GetPatientByBedResponse.serializeBinaryToWriter = fu
     writer.writeString(
       3,
       f
+    );
+  }
+  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 6));
+  if (f != null) {
+    writer.writeEnum(
+      6,
+      f
+    );
+  }
+  f = message.getDateOfBirth();
+  if (f != null) {
+    writer.writeMessage(
+      7,
+      f,
+      libs_common_v1_types_pb.Date.serializeBinaryToWriter
     );
   }
   f = message.getBedId();
@@ -2578,6 +2804,79 @@ proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.getNotes = functio
  */
 proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.setNotes = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional libs.common.v1.Gender gender = 6;
+ * @return {!proto.libs.common.v1.Gender}
+ */
+proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.getGender = function() {
+  return /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {!proto.libs.common.v1.Gender} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientByBedResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.setGender = function(value) {
+  return jspb.Message.setField(this, 6, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientByBedResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.clearGender = function() {
+  return jspb.Message.setField(this, 6, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.hasGender = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional libs.common.v1.Date date_of_birth = 7;
+ * @return {?proto.libs.common.v1.Date}
+ */
+proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.getDateOfBirth = function() {
+  return /** @type{?proto.libs.common.v1.Date} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_types_pb.Date, 7));
+};
+
+
+/**
+ * @param {?proto.libs.common.v1.Date|undefined} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientByBedResponse} returns this
+*/
+proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.setDateOfBirth = function(value) {
+  return jspb.Message.setWrapperField(this, 7, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientByBedResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.clearDateOfBirth = function() {
+  return this.setDateOfBirth(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.hasDateOfBirth = function() {
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
@@ -2904,6 +3203,8 @@ proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.toObject = functio
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
     notes: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    dateOfBirth: (f = msg.getDateOfBirth()) && libs_common_v1_types_pb.Date.toObject(includeInstance, f),
     bedId: jspb.Message.getFieldWithDefault(msg, 4, ""),
     consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
@@ -2953,6 +3254,15 @@ proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.deserializeBinaryF
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setNotes(value);
+      break;
+    case 6:
+      var value = /** @type {!proto.libs.common.v1.Gender} */ (reader.readEnum());
+      msg.setGender(value);
+      break;
+    case 7:
+      var value = new libs_common_v1_types_pb.Date;
+      reader.readMessage(value,libs_common_v1_types_pb.Date.deserializeBinaryFromReader);
+      msg.setDateOfBirth(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
@@ -3010,6 +3320,21 @@ proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.serializeBinaryToW
     writer.writeString(
       3,
       f
+    );
+  }
+  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 6));
+  if (f != null) {
+    writer.writeEnum(
+      6,
+      f
+    );
+  }
+  f = message.getDateOfBirth();
+  if (f != null) {
+    writer.writeMessage(
+      7,
+      f,
+      libs_common_v1_types_pb.Date.serializeBinaryToWriter
     );
   }
   f = /** @type {string} */ (jspb.Message.getField(message, 4));
@@ -3080,6 +3405,79 @@ proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.getNotes
  */
 proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.setNotes = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional libs.common.v1.Gender gender = 6;
+ * @return {!proto.libs.common.v1.Gender}
+ */
+proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.getGender = function() {
+  return /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {!proto.libs.common.v1.Gender} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.setGender = function(value) {
+  return jspb.Message.setField(this, 6, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.clearGender = function() {
+  return jspb.Message.setField(this, 6, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.hasGender = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional libs.common.v1.Date date_of_birth = 7;
+ * @return {?proto.libs.common.v1.Date}
+ */
+proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.getDateOfBirth = function() {
+  return /** @type{?proto.libs.common.v1.Date} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_types_pb.Date, 7));
+};
+
+
+/**
+ * @param {?proto.libs.common.v1.Date|undefined} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient} returns this
+*/
+proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.setDateOfBirth = function(value) {
+  return jspb.Message.setWrapperField(this, 7, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.clearDateOfBirth = function() {
+  return this.setDateOfBirth(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.hasDateOfBirth = function() {
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
@@ -4318,6 +4716,8 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.toObject = function(includ
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
     notes: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 9, 0),
+    dateOfBirth: (f = msg.getDateOfBirth()) && libs_common_v1_types_pb.Date.toObject(includeInstance, f),
     tasksList: jspb.Message.toObjectList(msg.getTasksList(),
     proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.toObject, includeInstance),
     room: (f = msg.getRoom()) && proto.services.tasks_svc.v1.GetPatientDetailsResponse.Room.toObject(includeInstance, f),
@@ -4371,6 +4771,15 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.deserializeBinaryFromReade
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setNotes(value);
+      break;
+    case 9:
+      var value = /** @type {!proto.libs.common.v1.Gender} */ (reader.readEnum());
+      msg.setGender(value);
+      break;
+    case 10:
+      var value = new libs_common_v1_types_pb.Date;
+      reader.readMessage(value,libs_common_v1_types_pb.Date.deserializeBinaryFromReader);
+      msg.setDateOfBirth(value);
       break;
     case 4:
       var value = new proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task;
@@ -4443,6 +4852,21 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.serializeBinaryToWriter = 
     writer.writeString(
       3,
       f
+    );
+  }
+  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 9));
+  if (f != null) {
+    writer.writeEnum(
+      9,
+      f
+    );
+  }
+  f = message.getDateOfBirth();
+  if (f != null) {
+    writer.writeMessage(
+      10,
+      f,
+      libs_common_v1_types_pb.Date.serializeBinaryToWriter
     );
   }
   f = message.getTasksList();
@@ -5559,6 +5983,79 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.setNotes = funct
 
 
 /**
+ * optional libs.common.v1.Gender gender = 9;
+ * @return {!proto.libs.common.v1.Gender}
+ */
+proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.getGender = function() {
+  return /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getFieldWithDefault(this, 9, 0));
+};
+
+
+/**
+ * @param {!proto.libs.common.v1.Gender} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientDetailsResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.setGender = function(value) {
+  return jspb.Message.setField(this, 9, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientDetailsResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.clearGender = function() {
+  return jspb.Message.setField(this, 9, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.hasGender = function() {
+  return jspb.Message.getField(this, 9) != null;
+};
+
+
+/**
+ * optional libs.common.v1.Date date_of_birth = 10;
+ * @return {?proto.libs.common.v1.Date}
+ */
+proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.getDateOfBirth = function() {
+  return /** @type{?proto.libs.common.v1.Date} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_types_pb.Date, 10));
+};
+
+
+/**
+ * @param {?proto.libs.common.v1.Date|undefined} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientDetailsResponse} returns this
+*/
+proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.setDateOfBirth = function(value) {
+  return jspb.Message.setWrapperField(this, 10, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientDetailsResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.clearDateOfBirth = function() {
+  return this.setDateOfBirth(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.hasDateOfBirth = function() {
+  return jspb.Message.getField(this, 10) != null;
+};
+
+
+/**
  * repeated Task tasks = 4;
  * @return {!Array<!proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task>}
  */
@@ -6457,9 +6954,11 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Patient.toObject = function(i
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    notes: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 8, 0),
+    dateOfBirth: (f = msg.getDateOfBirth()) && libs_common_v1_types_pb.Date.toObject(includeInstance, f),
     room: (f = msg.getRoom()) && proto.services.tasks_svc.v1.GetPatientListResponse.Room.toObject(includeInstance, f),
     bed: (f = msg.getBed()) && proto.services.tasks_svc.v1.GetPatientListResponse.Bed.toObject(includeInstance, f),
-    notes: jspb.Message.getFieldWithDefault(msg, 5, ""),
     tasksList: jspb.Message.toObjectList(msg.getTasksList(),
     proto.services.tasks_svc.v1.GetPatientListResponse.Task.toObject, includeInstance),
     consistency: jspb.Message.getFieldWithDefault(msg, 7, "")
@@ -6507,6 +7006,19 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Patient.deserializeBinaryFrom
       var value = /** @type {string} */ (reader.readString());
       msg.setHumanReadableIdentifier(value);
       break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setNotes(value);
+      break;
+    case 8:
+      var value = /** @type {!proto.libs.common.v1.Gender} */ (reader.readEnum());
+      msg.setGender(value);
+      break;
+    case 9:
+      var value = new libs_common_v1_types_pb.Date;
+      reader.readMessage(value,libs_common_v1_types_pb.Date.deserializeBinaryFromReader);
+      msg.setDateOfBirth(value);
+      break;
     case 3:
       var value = new proto.services.tasks_svc.v1.GetPatientListResponse.Room;
       reader.readMessage(value,proto.services.tasks_svc.v1.GetPatientListResponse.Room.deserializeBinaryFromReader);
@@ -6516,10 +7028,6 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Patient.deserializeBinaryFrom
       var value = new proto.services.tasks_svc.v1.GetPatientListResponse.Bed;
       reader.readMessage(value,proto.services.tasks_svc.v1.GetPatientListResponse.Bed.deserializeBinaryFromReader);
       msg.setBed(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setNotes(value);
       break;
     case 6:
       var value = new proto.services.tasks_svc.v1.GetPatientListResponse.Task;
@@ -6573,6 +7081,28 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Patient.serializeBinaryToWrit
       f
     );
   }
+  f = message.getNotes();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 8));
+  if (f != null) {
+    writer.writeEnum(
+      8,
+      f
+    );
+  }
+  f = message.getDateOfBirth();
+  if (f != null) {
+    writer.writeMessage(
+      9,
+      f,
+      libs_common_v1_types_pb.Date.serializeBinaryToWriter
+    );
+  }
   f = message.getRoom();
   if (f != null) {
     writer.writeMessage(
@@ -6587,13 +7117,6 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Patient.serializeBinaryToWrit
       4,
       f,
       proto.services.tasks_svc.v1.GetPatientListResponse.Bed.serializeBinaryToWriter
-    );
-  }
-  f = message.getNotes();
-  if (f.length > 0) {
-    writer.writeString(
-      5,
-      f
     );
   }
   f = message.getTasksList();
@@ -6647,6 +7170,97 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.getHumanRea
  */
 proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.setHumanReadableIdentifier = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string notes = 5;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.getNotes = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientListResponse.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.setNotes = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+/**
+ * optional libs.common.v1.Gender gender = 8;
+ * @return {!proto.libs.common.v1.Gender}
+ */
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.getGender = function() {
+  return /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
+};
+
+
+/**
+ * @param {!proto.libs.common.v1.Gender} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientListResponse.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.setGender = function(value) {
+  return jspb.Message.setField(this, 8, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientListResponse.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.clearGender = function() {
+  return jspb.Message.setField(this, 8, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.hasGender = function() {
+  return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional libs.common.v1.Date date_of_birth = 9;
+ * @return {?proto.libs.common.v1.Date}
+ */
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.getDateOfBirth = function() {
+  return /** @type{?proto.libs.common.v1.Date} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_types_pb.Date, 9));
+};
+
+
+/**
+ * @param {?proto.libs.common.v1.Date|undefined} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientListResponse.Patient} returns this
+*/
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.setDateOfBirth = function(value) {
+  return jspb.Message.setWrapperField(this, 9, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetPatientListResponse.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.clearDateOfBirth = function() {
+  return this.setDateOfBirth(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.hasDateOfBirth = function() {
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
@@ -6721,24 +7335,6 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.clearBed = 
  */
 proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.hasBed = function() {
   return jspb.Message.getField(this, 4) != null;
-};
-
-
-/**
- * optional string notes = 5;
- * @return {string}
- */
-proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.getNotes = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.services.tasks_svc.v1.GetPatientListResponse.Patient} returns this
- */
-proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.setNotes = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -8518,6 +9114,8 @@ proto.services.tasks_svc.v1.UpdatePatientRequest.toObject = function(includeInst
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
     notes: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    dateOfBirth: (f = msg.getDateOfBirth()) && libs_common_v1_types_pb.Date.toObject(includeInstance, f),
     consistency: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
@@ -8566,6 +9164,15 @@ proto.services.tasks_svc.v1.UpdatePatientRequest.deserializeBinaryFromReader = f
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setNotes(value);
+      break;
+    case 5:
+      var value = /** @type {!proto.libs.common.v1.Gender} */ (reader.readEnum());
+      msg.setGender(value);
+      break;
+    case 6:
+      var value = new libs_common_v1_types_pb.Date;
+      reader.readMessage(value,libs_common_v1_types_pb.Date.deserializeBinaryFromReader);
+      msg.setDateOfBirth(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
@@ -8619,6 +9226,21 @@ proto.services.tasks_svc.v1.UpdatePatientRequest.serializeBinaryToWriter = funct
     writer.writeString(
       3,
       f
+    );
+  }
+  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
+    writer.writeEnum(
+      5,
+      f
+    );
+  }
+  f = message.getDateOfBirth();
+  if (f != null) {
+    writer.writeMessage(
+      6,
+      f,
+      libs_common_v1_types_pb.Date.serializeBinaryToWriter
     );
   }
   f = /** @type {string} */ (jspb.Message.getField(message, 4));
@@ -8718,6 +9340,79 @@ proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.clearNotes = function
  */
 proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.hasNotes = function() {
   return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional libs.common.v1.Gender gender = 5;
+ * @return {!proto.libs.common.v1.Gender}
+ */
+proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.getGender = function() {
+  return /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {!proto.libs.common.v1.Gender} value
+ * @return {!proto.services.tasks_svc.v1.UpdatePatientRequest} returns this
+ */
+proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.setGender = function(value) {
+  return jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.UpdatePatientRequest} returns this
+ */
+proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.clearGender = function() {
+  return jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.hasGender = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional libs.common.v1.Date date_of_birth = 6;
+ * @return {?proto.libs.common.v1.Date}
+ */
+proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.getDateOfBirth = function() {
+  return /** @type{?proto.libs.common.v1.Date} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_types_pb.Date, 6));
+};
+
+
+/**
+ * @param {?proto.libs.common.v1.Date|undefined} value
+ * @return {!proto.services.tasks_svc.v1.UpdatePatientRequest} returns this
+*/
+proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.setDateOfBirth = function(value) {
+  return jspb.Message.setWrapperField(this, 6, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.UpdatePatientRequest} returns this
+ */
+proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.clearDateOfBirth = function() {
+  return this.setDateOfBirth(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.UpdatePatientRequest.prototype.hasDateOfBirth = function() {
+  return jspb.Message.getField(this, 6) != null;
 };
 
 

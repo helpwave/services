@@ -27,6 +27,8 @@ var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/time
 goog.object.extend(proto, google_protobuf_timestamp_pb);
 var libs_common_v1_conflict_pb = require('../../../libs/common/v1/conflict_pb.js');
 goog.object.extend(proto, libs_common_v1_conflict_pb);
+var libs_common_v1_types_pb = require('../../../libs/common/v1/types_pb.js');
+goog.object.extend(proto, libs_common_v1_types_pb);
 goog.exportSymbol('proto.services.property_svc.v1.AttachPropertyValueRequest', null, global);
 goog.exportSymbol('proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue', null, global);
 goog.exportSymbol('proto.services.property_svc.v1.AttachPropertyValueRequest.ValueCase', null, global);
@@ -318,7 +320,7 @@ proto.services.property_svc.v1.AttachPropertyValueRequest.toObject = function(in
     textValue: jspb.Message.getFieldWithDefault(msg, 3, ""),
     numberValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0),
     boolValue: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
-    dateValue: (f = msg.getDateValue()) && services_property_svc_v1_types_pb.Date.toObject(includeInstance, f),
+    dateValue: (f = msg.getDateValue()) && libs_common_v1_types_pb.Date.toObject(includeInstance, f),
     dateTimeValue: (f = msg.getDateTimeValue()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     selectValue: jspb.Message.getFieldWithDefault(msg, 8, ""),
     multiSelectValue: (f = msg.getMultiSelectValue()) && proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.toObject(includeInstance, f),
@@ -380,8 +382,8 @@ proto.services.property_svc.v1.AttachPropertyValueRequest.deserializeBinaryFromR
       msg.setBoolValue(value);
       break;
     case 6:
-      var value = new services_property_svc_v1_types_pb.Date;
-      reader.readMessage(value,services_property_svc_v1_types_pb.Date.deserializeBinaryFromReader);
+      var value = new libs_common_v1_types_pb.Date;
+      reader.readMessage(value,libs_common_v1_types_pb.Date.deserializeBinaryFromReader);
       msg.setDateValue(value);
       break;
     case 7:
@@ -471,7 +473,7 @@ proto.services.property_svc.v1.AttachPropertyValueRequest.serializeBinaryToWrite
     writer.writeMessage(
       6,
       f,
-      services_property_svc_v1_types_pb.Date.serializeBinaryToWriter
+      libs_common_v1_types_pb.Date.serializeBinaryToWriter
     );
   }
   f = message.getDateTimeValue();
@@ -857,17 +859,17 @@ proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.hasBoolValue
 
 
 /**
- * optional Date date_value = 6;
- * @return {?proto.services.property_svc.v1.Date}
+ * optional libs.common.v1.Date date_value = 6;
+ * @return {?proto.libs.common.v1.Date}
  */
 proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.getDateValue = function() {
-  return /** @type{?proto.services.property_svc.v1.Date} */ (
-    jspb.Message.getWrapperField(this, services_property_svc_v1_types_pb.Date, 6));
+  return /** @type{?proto.libs.common.v1.Date} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_types_pb.Date, 6));
 };
 
 
 /**
- * @param {?proto.services.property_svc.v1.Date|undefined} value
+ * @param {?proto.libs.common.v1.Date|undefined} value
  * @return {!proto.services.property_svc.v1.AttachPropertyValueRequest} returns this
 */
 proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.setDateValue = function(value) {
@@ -2063,7 +2065,7 @@ proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.toObject 
     textValue: jspb.Message.getFieldWithDefault(msg, 6, ""),
     numberValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 7, 0.0),
     boolValue: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
-    dateValue: (f = msg.getDateValue()) && services_property_svc_v1_types_pb.Date.toObject(includeInstance, f),
+    dateValue: (f = msg.getDateValue()) && libs_common_v1_types_pb.Date.toObject(includeInstance, f),
     dateTimeValue: (f = msg.getDateTimeValue()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     selectValue: (f = msg.getSelectValue()) && proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.SelectValueOption.toObject(includeInstance, f),
     multiSelectValue: (f = msg.getMultiSelectValue()) && proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.toObject(includeInstance, f),
@@ -2138,8 +2140,8 @@ proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.deseriali
       msg.setBoolValue(value);
       break;
     case 9:
-      var value = new services_property_svc_v1_types_pb.Date;
-      reader.readMessage(value,services_property_svc_v1_types_pb.Date.deserializeBinaryFromReader);
+      var value = new libs_common_v1_types_pb.Date;
+      reader.readMessage(value,libs_common_v1_types_pb.Date.deserializeBinaryFromReader);
       msg.setDateValue(value);
       break;
     case 10:
@@ -2255,7 +2257,7 @@ proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.serialize
     writer.writeMessage(
       9,
       f,
-      services_property_svc_v1_types_pb.Date.serializeBinaryToWriter
+      libs_common_v1_types_pb.Date.serializeBinaryToWriter
     );
   }
   f = message.getDateTimeValue();
@@ -2866,17 +2868,17 @@ proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype
 
 
 /**
- * optional Date date_value = 9;
- * @return {?proto.services.property_svc.v1.Date}
+ * optional libs.common.v1.Date date_value = 9;
+ * @return {?proto.libs.common.v1.Date}
  */
 proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getDateValue = function() {
-  return /** @type{?proto.services.property_svc.v1.Date} */ (
-    jspb.Message.getWrapperField(this, services_property_svc_v1_types_pb.Date, 9));
+  return /** @type{?proto.libs.common.v1.Date} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_types_pb.Date, 9));
 };
 
 
 /**
- * @param {?proto.services.property_svc.v1.Date|undefined} value
+ * @param {?proto.libs.common.v1.Date|undefined} value
  * @return {!proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
 */
 proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setDateValue = function(value) {

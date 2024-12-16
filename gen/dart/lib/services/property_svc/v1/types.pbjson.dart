@@ -50,15 +50,3 @@ final $typed_data.Uint8List fieldTypeDescriptor = $convert.base64Decode(
     'D0ZJRUxEX1RZUEVfREFURRAEEhgKFEZJRUxEX1RZUEVfREFURV9USU1FEAUSFQoRRklFTERfVF'
     'lQRV9TRUxFQ1QQBhIbChdGSUVMRF9UWVBFX01VTFRJX1NFTEVDVBAH');
 
-@$core.Deprecated('Use dateDescriptor instead')
-const Date$json = {
-  '1': 'Date',
-  '2': [
-    {'1': 'date', '3': 1, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'date'},
-  ],
-};
-
-/// Descriptor for `Date`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List dateDescriptor = $convert.base64Decode(
-    'CgREYXRlEi4KBGRhdGUYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgRkYXRl');
-
