@@ -591,42 +591,6 @@ export namespace GetMembersByOrganizationResponse {
 
 }
 
-export class AddMemberRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): AddMemberRequest;
-
-  getUserId(): string;
-  setUserId(value: string): AddMemberRequest;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): AddMemberRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: AddMemberRequest): AddMemberRequest.AsObject;
-  static serializeBinaryToWriter(message: AddMemberRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): AddMemberRequest;
-  static deserializeBinaryFromReader(message: AddMemberRequest, reader: jspb.BinaryReader): AddMemberRequest;
-}
-
-export namespace AddMemberRequest {
-  export type AsObject = {
-    id: string,
-    userId: string,
-  }
-}
-
-export class AddMemberResponse extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): AddMemberResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: AddMemberResponse): AddMemberResponse.AsObject;
-  static serializeBinaryToWriter(message: AddMemberResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): AddMemberResponse;
-  static deserializeBinaryFromReader(message: AddMemberResponse, reader: jspb.BinaryReader): AddMemberResponse;
-}
-
-export namespace AddMemberResponse {
-  export type AsObject = {
-  }
-}
-
 export class RemoveMemberRequest extends jspb.Message {
   getId(): string;
   setId(value: string): RemoveMemberRequest;

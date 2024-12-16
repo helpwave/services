@@ -34,8 +34,8 @@ func TestTaskAggregate_UpdateName(t *testing.T) {
 	taskID := uuid.New()
 	patientID := uuid.New()
 
-	initialTaskName := "Test Task"
-	updatedTaskName := "Test Task Updated"
+	initialTaskName := t.Name()
+	updatedTaskName := t.Name() + " Updated"
 
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
@@ -72,7 +72,7 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 	patientID := uuid.New()
 
 	initialTaskDescription := ""
-	updatedTaskDescription := "Text text"
+	updatedTaskDescription := t.Name()
 
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
@@ -81,7 +81,7 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 			ctx,
 			taskAggregate,
 			taskID,
-			"Test task",
+			t.Name(),
 			patientID,
 			pb.TaskStatus_TASK_STATUS_TODO,
 		)
@@ -121,7 +121,7 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 			ctx,
 			taskAggregate,
 			taskID,
-			"Test task",
+			t.Name(),
 			patientID,
 			pb.TaskStatus_TASK_STATUS_TODO,
 		)
@@ -155,8 +155,8 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	subtaskID := uuid.New()
 	patientID := uuid.New()
 
-	taskName := "Test Task"
-	subtaskName := "Test Subtask"
+	taskName := t.Name()
+	subtaskName := t.Name() + " Subtask"
 
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
@@ -206,7 +206,7 @@ func TestTaskAggregate_AssignTask(t *testing.T) {
 	taskID := uuid.New()
 	patientID := uuid.New()
 
-	taskName := "Test Task"
+	taskName := t.Name()
 
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
@@ -239,7 +239,7 @@ func TestTaskAggregate_DeleteTask(t *testing.T) {
 	taskID := uuid.New()
 	patientID := uuid.New()
 
-	taskName := "Test Task"
+	taskName := t.Name()
 
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 

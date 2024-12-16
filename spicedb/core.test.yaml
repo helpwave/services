@@ -1,0 +1,44 @@
+
+relationships:
+  # Alice leads the A organization
+  - "organization:a#leader@user:alice"
+  - "user:alice#organization@organization:a"
+  # Bob leads the B organization
+  - "organization:b#leader@user:bob"
+  - "user:bob#organization@organization:b"
+  # Bob is also, explicitly, a member of the B organization
+  - "organization:b#member@user:bob"
+  # Charlie is a common member
+  - "organization:a#member@user:charlie"
+  - "user:charlie#organization@organization:a"
+  - "organization:b#member@user:charlie"
+  - "user:charlie#organization@organization:b"
+  # Clara is a common member, and leader of the A organization
+  - "organization:a#leader@user:clara"
+  - "organization:a#member@user:clara"
+  - "organization:b#member@user:clara"
+  - "user:clara#organization@organization:a"
+  - "user:clara#organization@organization:b"
+
+  # Oscar is only a member of one organization (A organization)
+  - "organization:a#member@user:oscar"
+  - "user:oscar#organization@organization:a"
+
+
+tests:
+  - name: members of org b can get bobs profile
+    validate:
+      - relation: "user:bob#get_public_profile"
+        exhaustive:
+          - "[user:bob] is <organization:b#leader>/<organization:b#member>"
+          - "[user:charlie] is <organization:b#member>"
+          - "[user:clara] is <organization:b#member>"
+  - name: members of both orgs can get charlie profile
+    validate:
+      - relation: "user:charlie#get_public_profile"
+        exhaustive:
+          - "[user:alice] is <organization:a#leader>"
+          - "[user:bob] is <organization:b#leader>/<organization:b#member>"
+          - "[user:charlie] is <organization:a#member>/<organization:b#member>"
+          - "[user:clara] is <organization:a#leader>/<organization:a#member>/<organization:b#member>"
+          - "[user:oscar] is <organization:a#member>"

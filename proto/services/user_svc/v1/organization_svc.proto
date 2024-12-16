@@ -112,9 +112,9 @@ message GetOrganizationsForUserResponse {
 
 message UpdateOrganizationRequest {
   string id = 1;  // @gotags: validate:"uuid4"
-  optional string long_name = 2;
-  optional string short_name = 3;
-  optional string contact_email = 4;
+  optional string long_name = 2; // @gotags: validate:"omitempty,gte=4,lte=64"
+  optional string short_name = 3; // @gotags: validate:"omitempty,gte=2,lte=16"
+  optional string contact_email = 4; // @gotags: validate:"omitempty,email"
   optional string avatar_url = 5;
   optional bool is_personal = 6;
 }
@@ -150,18 +150,6 @@ message GetMembersByOrganizationResponse {
     optional string avatar_url = 4;
   }
 }
-
-
-//
-// AddMember
-//
-
-message AddMemberRequest {
-  string id = 1; // @gotags: validate:"uuid4"
-  string user_id = 2; // @gotags: validate:"uuid4"
-}
-
-message AddMemberResponse {}
 
 //
 // RemoveMember
@@ -288,7 +276,6 @@ service OrganizationService {
   rpc UpdateOrganization (UpdateOrganizationRequest) returns (UpdateOrganizationResponse) {}
   rpc DeleteOrganization (DeleteOrganizationRequest) returns (DeleteOrganizationResponse) {}
   rpc GetMembersByOrganization (GetMembersByOrganizationRequest) returns (GetMembersByOrganizationResponse) {}
-  rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
   rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
   rpc GetInvitationsByOrganization(GetInvitationsByOrganizationRequest) returns (GetInvitationsByOrganizationResponse) {}

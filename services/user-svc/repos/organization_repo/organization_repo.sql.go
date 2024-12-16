@@ -26,23 +26,6 @@ func (q *Queries) AddUserToOrganization(ctx context.Context, arg AddUserToOrgani
 	return err
 }
 
-const changeMembershipAdminStatus = `-- name: ChangeMembershipAdminStatus :exec
-UPDATE memberships
-SET
-	is_admin=TRUE
-WHERE user_id = $1 AND organization_id = $2
-`
-
-type ChangeMembershipAdminStatusParams struct {
-	UserID         uuid.UUID
-	OrganizationID uuid.UUID
-}
-
-func (q *Queries) ChangeMembershipAdminStatus(ctx context.Context, arg ChangeMembershipAdminStatusParams) error {
-	_, err := q.db.Exec(ctx, changeMembershipAdminStatus, arg.UserID, arg.OrganizationID)
-	return err
-}
-
 const createOrganization = `-- name: CreateOrganization :one
 INSERT INTO organizations (id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -55,7 +38,7 @@ type CreateOrganizationParams struct {
 	ShortName       string
 	ContactEmail    string
 	AvatarUrl       *string
-	IsPersonal      *bool
+	IsPersonal      bool
 	CreatedByUserID uuid.UUID
 }
 
@@ -408,9 +391,15 @@ func (q *Queries) GetOrganizationsWithMembersByUser(ctx context.Context, userID 
 }
 
 const inviteMember = `-- name: InviteMember :one
-INSERT INTO invitations (email, organization_id, state)
-VALUES ($1, $2, $3)
-RETURNING id, email, organization_id, state
+WITH inserted_invitation AS (
+	INSERT INTO invitations (email, organization_id, state)
+	VALUES ($1, $2, $3) RETURNING id
+)
+SELECT
+	inserted_invitation.id AS invitation_id,
+	users.id AS user_id
+FROM inserted_invitation
+LEFT JOIN users ON users.email = $1
 `
 
 type InviteMemberParams struct {
@@ -419,36 +408,16 @@ type InviteMemberParams struct {
 	State          int32
 }
 
-func (q *Queries) InviteMember(ctx context.Context, arg InviteMemberParams) (Invitation, error) {
+type InviteMemberRow struct {
+	InvitationID uuid.UUID
+	UserID       uuid.NullUUID
+}
+
+func (q *Queries) InviteMember(ctx context.Context, arg InviteMemberParams) (InviteMemberRow, error) {
 	row := q.db.QueryRow(ctx, inviteMember, arg.Email, arg.OrganizationID, arg.State)
-	var i Invitation
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.OrganizationID,
-		&i.State,
-	)
+	var i InviteMemberRow
+	err := row.Scan(&i.InvitationID, &i.UserID)
 	return i, err
-}
-
-const isAdminInOrganization = `-- name: IsAdminInOrganization :one
-SELECT EXISTS (
-	SELECT 1
-	FROM memberships
-	WHERE user_id = $1 AND organization_id = $2 AND is_admin = TRUE
-)
-`
-
-type IsAdminInOrganizationParams struct {
-	UserID         uuid.UUID
-	OrganizationID uuid.UUID
-}
-
-func (q *Queries) IsAdminInOrganization(ctx context.Context, arg IsAdminInOrganizationParams) (bool, error) {
-	row := q.db.QueryRow(ctx, isAdminInOrganization, arg.UserID, arg.OrganizationID)
-	var exists bool
-	err := row.Scan(&exists)
-	return exists, err
 }
 
 const isInOrganizationById = `-- name: IsInOrganizationById :one
