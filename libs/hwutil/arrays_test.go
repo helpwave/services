@@ -63,3 +63,61 @@ func TestWithout(t *testing.T) {
 		})
 	}
 }
+
+func TestSameItems(t *testing.T) {
+	tests := []struct {
+		name           string
+		a, b           []int
+		expectedResult bool
+	}{
+		{
+			name:           "Same elements in same order",
+			a:              []int{1, 2, 3},
+			b:              []int{1, 2, 3},
+			expectedResult: true,
+		},
+		{
+			name:           "Same elements in different order",
+			a:              []int{1, 2, 3},
+			b:              []int{3, 1, 2},
+			expectedResult: true,
+		},
+		{
+			name:           "Different elements",
+			a:              []int{1, 2, 3},
+			b:              []int{4, 5, 6},
+			expectedResult: false,
+		},
+		{
+			name:           "One array is empty",
+			a:              []int{},
+			b:              []int{1, 2, 3},
+			expectedResult: false,
+		},
+		{
+			name:           "Both arrays are empty",
+			a:              []int{},
+			b:              []int{},
+			expectedResult: true,
+		},
+		{
+			name:           "Arrays with duplicate elements",
+			a:              []int{1, 2, 2, 3},
+			b:              []int{1, 2, 3, 3},
+			expectedResult: false,
+		},
+		{
+			name:           "Different lengths, same unique elements",
+			a:              []int{1, 2, 3},
+			b:              []int{1, 2, 3, 3},
+			expectedResult: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := SameItems(tt.a, tt.b)
+			require.Equal(t, tt.expectedResult, result)
+		})
+	}
+}

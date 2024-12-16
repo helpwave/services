@@ -201,7 +201,7 @@ func Without[T comparable](original, itemsToRemove []T) []T {
 		toRemove[item] = true
 	}
 
-	var result []T
+	result := make([]T, 0)
 	for _, item := range original {
 		if _, exists := toRemove[item]; !exists {
 			result = append(result, item)
@@ -217,14 +217,14 @@ func SameItems[T comparable](a, b []T) bool {
 		return false
 	}
 
-	A := make(map[T]bool)
+	A := make(map[T]int)
 	for _, item := range a {
-		A[item] = true
+		A[item] += 1
 	}
 
-	B := make(map[T]bool)
+	B := make(map[T]int)
 	for _, item := range b {
-		B[item] = true
+		B[item] += 1
 	}
 
 	// Compare the maps
