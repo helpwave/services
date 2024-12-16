@@ -37,14 +37,6 @@ upstreams:
 #
 # [AGW]: https://apisix.apache.org/blog/2022/01/25/apisix-grpc-web-integration/
 services:
-  - id: task-svc
-    upstream_id: dapr-grpc
-    plugins:
-      grpc-web: {}
-      proxy-rewrite:
-        headers:
-          add:
-            dapr-app-id: task-svc
   - id: tasks-svc
     upstream_id: dapr-grpc
     plugins:
@@ -96,22 +88,7 @@ global_rules:
 # Routes define all endpoints APISIX is supposed to handle and maps them to their service
 routes:
   # Service Routes
-  - id: task-svc
-    uri: /task-svc/*
-    service_id: task-svc
-    # TODO: maybe we can move this to the service?
-    plugins:
-      cors:
-        # TODO: Scope to grpc-web spec
-        allow_origins: "**"
-        allow_methods: "**"
-        allow_headers: "**"
-        expose_headers: "grpc-status,grpc-message"
-        max_age: 5
-        allow_credential: true
-        _meta:
-          priority: -1
-  - id: tasks-svc
+ - id: tasks-svc
     uri: /tasks-svc/*
     service_id: tasks-svc
     # TODO: maybe we can move this to the service?

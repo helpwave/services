@@ -160,7 +160,12 @@ func GetDiskVersion(schemaDir string) int {
 	return i
 }
 
-func Migrate(ctx context.Context, schemaDir string, client *authzed.Client) {
+func Migrate(
+	ctx context.Context,
+	schemaDir string,
+	client *authzed.Client,
+	hooks map[int]func(context.Context, *authzed.Client),
+) {
 	diskVersion := GetDiskVersion(schemaDir)
 	currentVersion := GetCurrentVersion(ctx, client)
 
@@ -177,6 +182,15 @@ func Migrate(ctx context.Context, schemaDir string, client *authzed.Client) {
 
 	WriteSchema(ctx, client, CollectSchema(schemaDir))
 	UpdateCurrentVersion(ctx, client, currentVersion, diskVersion)
+
+	// run hooks
+	if hooks != nil {
+		for i := currentVersion; i <= diskVersion; i++ {
+			if hooks[i] != nil {
+				hooks[i](ctx, client)
+			}
+		}
+	}
 
 	fmt.Println("done")
 }

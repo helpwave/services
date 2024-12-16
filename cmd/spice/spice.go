@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"fmt"
+	hooks "hooks"
 	"hwauthz/spicedb/migrate"
 	"os"
 	"os/exec"
@@ -86,7 +87,7 @@ func getClient() *authzed.Client {
 
 // migrateCmd is the <migrate> command handler
 func migrateCmd() {
-	migrate.Migrate(context.Background(), CLI.Directory, getClient())
+	migrate.Migrate(context.Background(), CLI.Directory, getClient(), hooks.Hooks)
 }
 
 // schemaCmd is the <schema> command handler

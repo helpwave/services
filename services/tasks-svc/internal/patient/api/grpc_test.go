@@ -91,8 +91,8 @@ func TestPatientGrpcService_CreatePatient(t *testing.T) {
 	defer teardown()
 
 	// First, create a new Patient
-	humanReadableIdentifier := "Test patient"
-	notes := "notes"
+	humanReadableIdentifier := t.Name() + " patient"
+	notes := t.Name()
 
 	createPatientResponse, err := client.CreatePatient(ctx, &pb.CreatePatientRequest{
 		HumanReadableIdentifier: humanReadableIdentifier,
@@ -117,7 +117,7 @@ func TestPatientGrpcService_UpdatePatient(t *testing.T) {
 
 	// Initial values
 	humanReadableIdentifier1 := "Test patient"
-	notes1 := "notes"
+	notes1 := t.Name()
 
 	// First, create a new patient
 	createPatientResponse, err := client.CreatePatient(ctx,

@@ -16,15 +16,17 @@ type recoveryAssertService struct {
 	testpb.TestServiceServer
 }
 
+const PanicValue = "panic"
+
 func (s *recoveryAssertService) Ping(ctx context.Context, ping *testpb.PingRequest) (*testpb.PingResponse, error) {
-	if ping.GetValue() == "panic" {
+	if ping.GetValue() == PanicValue {
 		panic("very bad thing happened")
 	}
 	return s.TestServiceServer.Ping(ctx, ping)
 }
 
 func (s *recoveryAssertService) PingList(ping *testpb.PingListRequest, stream testpb.TestService_PingListServer) error {
-	if ping.Value == "panic" {
+	if ping.Value == PanicValue {
 		panic("very bad thing happened")
 	}
 	return s.TestServiceServer.PingList(ping, stream)
