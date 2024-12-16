@@ -32,14 +32,6 @@ common:
     ZED_TOKEN: helpwave
 
 apps:
-  - appID: task-svc
-    appDirPath: ../services/task-svc
-    appPort: 3001
-    env:
-      SERVICE: task-svc
-      POSTGRES_DB: task-svc
-    command: ["air"]
-
   - appID: user-svc
     appDirPath: ../services/user-svc
     appPort: 3002

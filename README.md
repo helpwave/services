@@ -121,15 +121,14 @@ TODO: We are still looking for a tool that works well for this :/
 grpcurl --plaintext \
 	-H "Authorization: Bearer <...>" \
 	-d '{}' \
-	localhost:3001 \
-	services.task_svc.v1.WardService/GetWards
+	localhost:3004 \
+	services.tasks_svc.v1.WardService/GetWards
 ```
 
 ## Ports
 
 | Service       | Port  | Protocol                |
 |---------------|-------|-------------------------|
-| task-svc      | 3001  | gRPC                    |
 | user-svc      | 3002  | gRPC                    |
 | tasks-svc     | 3004  | gRPC                    |
 | property-svc  | 3005  | gRPC                    |
@@ -296,9 +295,9 @@ you arguments into migrate/migrate running in a container.
 
 #### Examples
 
-* Migrate the task-svc database all the way up `./migrate.sh task-svc up`
-* Migrate the task-svc database one down: `./migrate.sh task-svc down 1`
-* Current migration version of the task-svc database: `./migrate.sh task-svc version`
+* Migrate the tasks-svc database all the way up `./migrate.sh tasks-svc up`
+* Migrate the tasks-svc database one down: `./migrate.sh tasks-svc down 1`
+* Current migration version of the tasks-svc database: `./migrate.sh tasks-svc version`
 
 #### desired
 
@@ -423,4 +422,5 @@ To arm the versioning, search for "arm-versioning" in the codebase.
 ## Archived Services
 
 - impulse-svc ([9bbe537](https://github.com/helpwave/services/commit/9bbe53744dc2650bc99b21e0894c1a9bc42f6f12))
+- task-svc ([cf58338](https://github.com/helpwave/services/commit/cf583382e4ac96d4756c7a1100b26a5c8154c477))
 

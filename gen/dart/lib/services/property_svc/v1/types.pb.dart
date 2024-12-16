@@ -13,13 +13,13 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../google/protobuf/timestamp.pb.dart' as $21;
+import '../../../google/protobuf/timestamp.pb.dart' as $15;
 
 export 'types.pbenum.dart';
 
 class Date extends $pb.GeneratedMessage {
   factory Date({
-    $21.Timestamp? date,
+    $15.Timestamp? date,
   }) {
     final $result = create();
     if (date != null) {
@@ -32,7 +32,7 @@ class Date extends $pb.GeneratedMessage {
   factory Date.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Date', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
-    ..aOM<$21.Timestamp>(1, _omitFieldNames ? '' : 'date', subBuilder: $21.Timestamp.create)
+    ..aOM<$15.Timestamp>(1, _omitFieldNames ? '' : 'date', subBuilder: $15.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -59,15 +59,15 @@ class Date extends $pb.GeneratedMessage {
 
   /// information more precise than date information shall be disregarded by clients
   @$pb.TagNumber(1)
-  $21.Timestamp get date => $_getN(0);
+  $15.Timestamp get date => $_getN(0);
   @$pb.TagNumber(1)
-  set date($21.Timestamp v) { setField(1, v); }
+  set date($15.Timestamp v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasDate() => $_has(0);
   @$pb.TagNumber(1)
   void clearDate() => clearField(1);
   @$pb.TagNumber(1)
-  $21.Timestamp ensureDate() => $_ensure(0);
+  $15.Timestamp ensureDate() => $_ensure(0);
 }
 
 
