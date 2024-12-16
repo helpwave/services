@@ -8,6 +8,8 @@ import (
 	"hwdb"
 	"hwes"
 
+	"property-svc/internal/property-value/models"
+
 	"property-svc/internal/property/perm"
 
 	"github.com/google/uuid"
@@ -20,7 +22,7 @@ type AttachPropertyValueCommandHandler func(
 	ctx context.Context,
 	propertyValueID uuid.UUID,
 	propertyID uuid.UUID,
-	value interface{},
+	valueChange models.TypedValueChange,
 	subjectID uuid.UUID,
 ) (common.ConsistencyToken, error)
 
@@ -31,7 +33,7 @@ func NewAttachPropertyValueCommandHandler(
 		ctx context.Context,
 		propertyValueID uuid.UUID,
 		propertyID uuid.UUID,
-		value interface{},
+		valueChange models.TypedValueChange,
 		subjectID uuid.UUID,
 	) (common.ConsistencyToken, error) {
 		user := commonPerm.UserFromCtx(ctx)
@@ -52,17 +54,18 @@ func NewAttachPropertyValueCommandHandler(
 			return 0, err
 		}
 
-		if existingPropertyValueID != nil {
+		// if no value exists yet, create one
+		if existingPropertyValueID == nil {
+			a = aggregate.NewPropertyValueAggregate(propertyValueID)
+			if err := a.CreatePropertyValue(ctx, propertyID, valueChange, subjectID); err != nil {
+				return 0, err
+			}
+		} else {
 			if a, err = aggregate.LoadPropertyValueAggregate(ctx, as, *existingPropertyValueID); err != nil {
 				return 0, err
 			}
 			// TODO: update value will be triggered, even if the value is not the type the property defines
-			if err := a.UpdatePropertyValue(ctx, value); err != nil {
-				return 0, err
-			}
-		} else {
-			a = aggregate.NewPropertyValueAggregate(propertyValueID)
-			if err := a.CreatePropertyValue(ctx, propertyID, value, subjectID); err != nil {
+			if err := a.UpdatePropertyValue(ctx, valueChange); err != nil {
 				return 0, err
 			}
 		}

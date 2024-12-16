@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 
 message Date {
   // information more precise than date information shall be disregarded by clients
-  google.protobuf.Timestamp date = 1;
+  google.protobuf.Timestamp date = 1; // @gotags: validate:"required"
 }
 
 enum SubjectType {

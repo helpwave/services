@@ -140,7 +140,7 @@ type Date struct {
 	unknownFields protoimpl.UnknownFields
 
 	// information more precise than date information shall be disregarded by clients
-	Date *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
+	Date *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 
 func (x *Date) Reset() {

@@ -2,9 +2,7 @@ package property_value_postgres_projection
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	pb "gen/services/property_svc/v1"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
@@ -58,9 +56,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	if payload.Value == nil {
-		return errors.New("onPropertyValueCreated: payload is empty"), hwutil.PtrTo(esdb.NackActionPark)
-	}
+	change := payload.Change
 
 	propertyID, err := uuid.Parse(payload.PropertyID)
 	if err != nil {
@@ -81,7 +77,6 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
-	fieldType := (pb.FieldType)(property.FieldType)
 
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {
@@ -91,38 +86,28 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 
 	repo := p.propertyValueRepo.WithTx(tx)
 
-	err, ack := createBasicPropertyValue(ctx, evt, repo, payload, propertyID, evt.AggregateID, subjectID, fieldType)
+	err, ack := createBasicPropertyValue(ctx, evt, repo, change, propertyID, evt.AggregateID, subjectID)
 	if err != nil {
 		return fmt.Errorf("onPropertyValueCreated: could not createbasicPropertyValue: %w", err), ack
 	}
 
-	if fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
+	// for selects we are going to add options into the appropriate tables as well
+	isSingleSelectChange := change.SingleSelectValue != nil
+	isMultiSelectChange := change.MultiSelectValues != nil
+
+	if isSingleSelectChange || isMultiSelectChange {
 		var selectsToAdd []property_value_repo.ConnectValueWithSelectOptionsParams
 
-		if fieldType == pb.FieldType_FIELD_TYPE_SELECT {
-			val, ok := payload.Value.(string)
-			if !ok {
-				return errors.New("could not assert string"), hwutil.PtrTo(esdb.NackActionPark)
-			}
-			id, err := uuid.Parse(val)
+		if isSingleSelectChange {
+			id, err := uuid.Parse(*change.SingleSelectValue)
 			if err != nil {
-				return err, hwutil.PtrTo(esdb.NackActionPark)
+				return fmt.Errorf("option change is not a uuid: %w", err), hwutil.PtrTo(esdb.NackActionSkip)
 			}
 			selectsToAdd = []property_value_repo.ConnectValueWithSelectOptionsParams{
 				{ValueID: evt.AggregateID, SelectOption: id},
 			}
-		} else {
-			// FieldType_FIELD_TYPE_MULTI_SELECT
-			multiSelectChange, err := models.MultiSelectChangeFromInterface(payload.Value)
-			if err != nil {
-				log.Error().
-					Err(err).
-					Type("value_type", payload.Value).
-					Any("value", payload.Value).
-					Msg("onPropertyValueCreated: could not parse payload.Value as MultiSelectChange")
-				return fmt.Errorf("onPropertyValueCreated: could not parse payload.Value as MultiSelectChange: %w", err),
-					hwutil.PtrTo(esdb.NackActionPark)
-			}
+		} else { // isMultiSelectChange
+			multiSelectChange := change.MultiSelectValues
 			ids, err := hwutil.StringsToUUIDs(multiSelectChange.SelectValues)
 			if err != nil {
 				return fmt.Errorf("onPropertyValueCreated: at least one select option uuid could not be parsed: %w", err),
@@ -155,11 +140,10 @@ func createBasicPropertyValue(
 	ctx context.Context,
 	evt hwes.Event,
 	repo *property_value_repo.Queries,
-	payload propertyValueEventsV1.PropertyValueCreatedEvent,
+	valueChange models.TypedValueChange,
 	propertyID,
 	aggregateID,
 	subjectID uuid.UUID,
-	fieldType pb.FieldType,
 ) (error, *esdb.NackAction) {
 	createPropertyValueParams := property_value_repo.CreateBasicPropertyValueParams{
 		ID:          aggregateID,
@@ -168,35 +152,11 @@ func createBasicPropertyValue(
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	}
 
-	switch {
-	case fieldType == pb.FieldType_FIELD_TYPE_TEXT:
-		createPropertyValueParams.TextValue = hwutil.PtrTo(fmt.Sprintf("%v", payload.Value))
-	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
-		val, ok := payload.Value.(float64)
-		if !ok {
-			return errors.New("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
-		}
-		createPropertyValueParams.NumberValue = &val
-	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
-		val, ok := payload.Value.(bool)
-		if !ok {
-			return errors.New("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
-		}
-		createPropertyValueParams.BoolValue = &val
-	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
-		val, err := hwutil.AssertTimestampToTime(payload.Value)
-		if err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionPark)
-		}
-		createPropertyValueParams.DateValue = hwdb.TimeToDate(*val)
-	case fieldType == pb.FieldType_FIELD_TYPE_DATE_TIME:
-		val, err := hwutil.AssertTimestampToTime(payload.Value)
-		if err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionPark)
-		}
-		createPropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
-	}
+	_ = valueChange.SetBasicValues(&createPropertyValueParams)
+	// do nothing, if nothing was set, we will create the property anyway,
+	// we are going to add options to it later in the handler
 
+	// create value
 	err := repo.CreateBasicPropertyValue(ctx, createPropertyValueParams)
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -214,136 +174,116 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	// Get Property for FieldType
-	propertyValue, err := hwdb.Optional(p.propertyValueRepo.GetPropertyValueByID)(ctx, evt.AggregateID)
-	if propertyValue == nil {
-		return fmt.Errorf("propertyValue with id %s not found", evt.AggregateID), hwutil.PtrTo(esdb.NackActionRetry)
-	}
-	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
-	}
+	change := payload.Change
 
-	property, err := hwdb.Optional(p.propertyRepo.GetPropertyById)(ctx, propertyValue.PropertyID)
-	if property == nil {
-		return fmt.Errorf("property with id %s not found for propertyValue", propertyValue.PropertyID.String()),
-			hwutil.PtrTo(esdb.NackActionRetry)
-	}
-	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
-	}
-
-	fieldType := (pb.FieldType)(property.FieldType)
-
-	switch {
-	case payload.Value == nil:
+	if change.ValueRemoved {
 		// Delete PropertyValue
 		err := p.propertyValueRepo.DeletePropertyValue(ctx, evt.AggregateID)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
 		}
-	case fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
-		tx, rollback, err := hwdb.BeginTx(p.db, ctx)
+		return nil, nil
+	}
+
+	isSingleSelectUpdate := change.SingleSelectValue != nil
+	isMultiSelectUpdate := change.MultiSelectValues != nil
+
+	if isSingleSelectUpdate || isMultiSelectUpdate {
+		return updateSelectPropertyValue(ctx, p.db, evt, change)
+	}
+
+	return updateBasicPropertyValue(ctx, evt, p.propertyValueRepo, change)
+}
+
+func updateSelectPropertyValue(
+	ctx context.Context,
+	db hwdb.DBTX,
+	evt hwes.Event,
+	valueChange models.TypedValueChange,
+) (error, *esdb.NackAction) {
+	aggregateID := evt.AggregateID
+
+	tx, rollback, err := hwdb.BeginTx(db, ctx)
+	if err != nil {
+		return fmt.Errorf("could not start tx: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
+	}
+	defer rollback()
+
+	propertyValueRepo := property_value_repo.New(tx)
+
+	var toAdd []uuid.UUID
+	if valueChange.SingleSelectValue != nil {
+		parsedID, err := uuid.Parse(*valueChange.SingleSelectValue)
 		if err != nil {
-			return fmt.Errorf("could not start tx: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
+			return err, hwutil.PtrTo(esdb.NackActionPark)
 		}
-		defer rollback()
 
-		propertyValueRepo := p.propertyValueRepo.WithTx(tx)
+		toAdd = []uuid.UUID{parsedID}
 
-		var toAdd []uuid.UUID
-		if fieldType == pb.FieldType_FIELD_TYPE_SELECT {
-			val, ok := payload.Value.(string)
-			if !ok {
-				err = fmt.Errorf(
-					"onPropertyValueUpdated: could not get select value: type is %T, expected string",
-					payload.Value,
-				)
-				return err, hwutil.PtrTo(esdb.NackActionPark)
-			}
-			parsedID, err := uuid.Parse(val)
+		// delete any other connection
+		err = propertyValueRepo.DisconnectValueFromAllSelectOptions(ctx, aggregateID)
+		if err != nil {
+			return fmt.Errorf("onPropertyValueUpdated: could not disconnectvalue from all options: %w", err),
+				hwutil.PtrTo(esdb.NackActionRetry)
+		}
+	} else if valueChange.MultiSelectValues != nil {
+		val := *valueChange.MultiSelectValues
+
+		toAdd, err = hwutil.StringsToUUIDs(val.SelectValues)
+		if err != nil {
+			return fmt.Errorf("onPropertyValueUpdated: could not parse SelectValues: %w", err),
+				hwutil.PtrTo(esdb.NackActionPark)
+		}
+
+		// delete requested options
+		if len(val.RemoveSelectValues) != 0 {
+			arr, err := hwutil.MapWithErr(val.RemoveSelectValues,
+				func(s string) (property_value_repo.DisconnectValueFromSelectOptionsParams, error) {
+					id, err := uuid.Parse(s)
+					if err != nil {
+						return property_value_repo.DisconnectValueFromSelectOptionsParams{}, err
+					}
+					return property_value_repo.DisconnectValueFromSelectOptionsParams{
+						ValueID:      aggregateID,
+						SelectOption: id,
+					}, nil
+				})
 			if err != nil {
-				return err, hwutil.PtrTo(esdb.NackActionPark)
+				return fmt.Errorf("onPropertyValueUpdated: could not parse RemoveSelectValues: %w", err),
+					hwutil.PtrTo(esdb.NackActionPark)
 			}
-
-			toAdd = []uuid.UUID{parsedID}
-
-			// delete any other connection
-			err = propertyValueRepo.DisconnectValueFromAllSelectOptions(ctx, evt.AggregateID)
-			if err != nil {
-				return fmt.Errorf("onPropertyValueUpdated: could not disconnectvalue from all options: %w", err),
+			if err := hwdb.ExecBatch(propertyValueRepo.DisconnectValueFromSelectOptions(ctx, arr)); err != nil {
+				return fmt.Errorf("onPropertyValueUpdated: could not disconnect desired options: %w", err),
 					hwutil.PtrTo(esdb.NackActionRetry)
 			}
-		} else {
-			val, err := models.MultiSelectChangeFromInterface(payload.Value)
-			if err != nil {
-				log.Error().
-					Err(err).
-					Type("value_type", payload.Value).
-					Any("value", payload.Value).
-					Msg("onPropertyValueUpdated: could not parse payload.Value as MultiSelectChange")
-				return fmt.Errorf("onPropertyValueUpdated: could not parse payload.Value as MultiSelectChange: %w", err),
-					hwutil.PtrTo(esdb.NackActionPark)
-			}
-
-			toAdd, err = hwutil.StringsToUUIDs(val.SelectValues)
-			if err != nil {
-				return fmt.Errorf("onPropertyValueUpdated: could not parse SelectValues: %w", err),
-					hwutil.PtrTo(esdb.NackActionPark)
-			}
-
-			// delete requested options
-			if len(val.RemoveSelectValues) != 0 {
-				arr, err := hwutil.MapWithErr(
-					val.RemoveSelectValues,
-					func(s string) (property_value_repo.DisconnectValueFromSelectOptionsParams, error) {
-						id, err := uuid.Parse(s)
-						if err != nil {
-							return property_value_repo.DisconnectValueFromSelectOptionsParams{}, err
-						}
-						return property_value_repo.DisconnectValueFromSelectOptionsParams{
-							ValueID:      evt.AggregateID,
-							SelectOption: id,
-						}, nil
-					})
-				if err != nil {
-					return fmt.Errorf("onPropertyValueUpdated: could not parse RemoveSelectValues: %w", err),
-						hwutil.PtrTo(esdb.NackActionPark)
-				}
-				if err := hwdb.ExecBatch(propertyValueRepo.DisconnectValueFromSelectOptions(ctx, arr)); err != nil {
-					return fmt.Errorf("onPropertyValueUpdated: could not disconnect desired options: %w", err),
-						hwutil.PtrTo(esdb.NackActionRetry)
-				}
-			}
 		}
+	}
 
-		// add new connection
-		args := hwutil.Map(toAdd, func(id uuid.UUID) property_value_repo.ConnectValueWithSelectOptionsParams {
-			return property_value_repo.ConnectValueWithSelectOptionsParams{
-				ValueID:      evt.AggregateID,
-				SelectOption: id,
-			}
-		})
-		if err := hwdb.ExecBatch(propertyValueRepo.ConnectValueWithSelectOptions(ctx, args)); err != nil {
-			return fmt.Errorf("onPropertyValueUpdated: could not connect select options: %w", err),
-				hwutil.PtrTo(esdb.NackActionRetry)
+	// add new connection
+	args := hwutil.Map(toAdd, func(id uuid.UUID) property_value_repo.ConnectValueWithSelectOptionsParams {
+		return property_value_repo.ConnectValueWithSelectOptionsParams{
+			ValueID:      evt.AggregateID,
+			SelectOption: id,
 		}
+	})
+	if err := hwdb.ExecBatch(propertyValueRepo.ConnectValueWithSelectOptions(ctx, args)); err != nil {
+		return fmt.Errorf("onPropertyValueUpdated: could not connect select options: %w", err),
+			hwutil.PtrTo(esdb.NackActionRetry)
+	}
 
-		// update consistency
-		err = propertyValueRepo.UpdatePropertyValueByID(ctx, property_value_repo.UpdatePropertyValueByIDParams{
-			ID:          evt.AggregateID,
-			Consistency: int64(evt.GetVersion()), //nolint:gosec
-		})
-		if err := hwdb.Error(ctx, err); err != nil {
-			return fmt.Errorf("onPropertyValueUpdated: could not update consistency of value: %w", err),
-				hwutil.PtrTo(esdb.NackActionRetry)
-		}
+	// update consistency
+	err = propertyValueRepo.UpdatePropertyValueByID(ctx, property_value_repo.UpdatePropertyValueByIDParams{
+		ID:          evt.AggregateID,
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return fmt.Errorf("onPropertyValueUpdated: could not update consistency of value: %w", err),
+			hwutil.PtrTo(esdb.NackActionRetry)
+	}
 
-		if err := tx.Commit(ctx); err != nil {
-			return fmt.Errorf("onPropertyValueUpdated: could not commit tx: %w", err),
-				hwutil.PtrTo(esdb.NackActionRetry)
-		}
-	default:
-		return updateBasicPropertyValue(ctx, evt, p.propertyValueRepo, fieldType, evt.AggregateID, payload)
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("onPropertyValueUpdated: could not commit tx: %w", err),
+			hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	return nil, nil
 }
@@ -353,44 +293,17 @@ func updateBasicPropertyValue(
 	ctx context.Context,
 	evt hwes.Event,
 	repo *property_value_repo.Queries,
-	fieldType pb.FieldType,
-	aggregateID uuid.UUID,
-	payload propertyValueEventsV1.PropertyValueUpdatedEvent,
+	valueChange models.TypedValueChange,
 ) (error, *esdb.NackAction) {
+	aggregateID := evt.AggregateID
+
 	updatePropertyValueParams := property_value_repo.UpdatePropertyValueByIDParams{
 		ID:          aggregateID,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	}
 
-	switch {
-	case fieldType == pb.FieldType_FIELD_TYPE_TEXT:
-		updatePropertyValueParams.TextValue = hwutil.PtrTo(fmt.Sprintf("%v", payload.Value))
-	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
-		val, ok := payload.Value.(float64)
-		if !ok {
-			return errors.New("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
-		}
-		updatePropertyValueParams.NumberValue = &val
-	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
-		val, ok := payload.Value.(bool)
-		if !ok {
-			return errors.New("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
-		}
-		updatePropertyValueParams.BoolValue = &val
-	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
-		val, err := hwutil.AssertTimestampToTime(payload.Value)
-		if err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionPark)
-		}
-		updatePropertyValueParams.DateValue = hwdb.TimeToDate(*val)
-	case fieldType == pb.FieldType_FIELD_TYPE_DATE_TIME:
-		val, err := hwutil.AssertTimestampToTime(payload.Value)
-		if err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionPark)
-		}
-		updatePropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
-	default:
-		return fmt.Errorf("updateBasicPropertyValue called with fieldType %s", fieldType.String()),
+	if done := valueChange.SetBasicValues(&updatePropertyValueParams); !done {
+		return fmt.Errorf("updateBasicPropertyValue: could not set setBasicFromChange: %v", valueChange),
 			hwutil.PtrTo(esdb.NackActionPark)
 	}
 
