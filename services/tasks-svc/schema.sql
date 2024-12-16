@@ -60,7 +60,7 @@ CREATE TABLE public.patients (
     is_discharged boolean DEFAULT false NOT NULL,
     consistency bigint DEFAULT 0 NOT NULL,
     organization_id uuid NOT NULL,
-    gender integer,
+    gender integer DEFAULT 0 NOT NULL,
     date_of_birth date
 );
 

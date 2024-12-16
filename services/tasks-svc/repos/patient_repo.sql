@@ -9,6 +9,8 @@ SET human_readable_identifier = coalesce(sqlc.narg('human_readable_identfier'), 
     notes = coalesce(sqlc.narg('notes'), notes),
     updated_at = coalesce(sqlc.narg('updated_at'), updated_at),
     is_discharged = coalesce(sqlc.narg('is_discharged'), is_discharged),
+	gender = coalesce(sqlc.narg('gender'), gender),
+	date_of_birth = coalesce(sqlc.narg('date_of_birth'), date_of_birth),
 	consistency = @consistency
 WHERE id = $1;
 

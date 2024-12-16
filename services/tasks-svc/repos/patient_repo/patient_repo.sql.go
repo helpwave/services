@@ -22,7 +22,7 @@ type CreatePatientParams struct {
 	ID                      uuid.UUID
 	HumanReadableIdentifier string
 	Notes                   string
-	Gender                  *int32
+	Gender                  int32
 	DateOfBirth             pgtype.Date
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
@@ -204,7 +204,7 @@ type GetPatientWithBedAndRoomRow struct {
 	IsDischarged            bool
 	Consistency             int64
 	OrganizationID          uuid.UUID
-	Gender                  *int32
+	Gender                  int32
 	DateOfBirth             pgtype.Date
 	BedName                 *string
 	BedConsistency          *int64
@@ -286,7 +286,9 @@ SET human_readable_identifier = coalesce($2, human_readable_identifier),
     notes = coalesce($3, notes),
     updated_at = coalesce($4, updated_at),
     is_discharged = coalesce($5, is_discharged),
-	consistency = $6
+	gender = coalesce($6, gender),
+	date_of_birth = coalesce($7, date_of_birth),
+	consistency = $8
 WHERE id = $1
 `
 
@@ -296,6 +298,8 @@ type UpdatePatientParams struct {
 	Notes                  *string
 	UpdatedAt              pgtype.Timestamp
 	IsDischarged           *bool
+	Gender                 *int32
+	DateOfBirth            pgtype.Date
 	Consistency            int64
 }
 
@@ -306,6 +310,8 @@ func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) er
 		arg.Notes,
 		arg.UpdatedAt,
 		arg.IsDischarged,
+		arg.Gender,
+		arg.DateOfBirth,
 		arg.Consistency,
 	)
 	return err

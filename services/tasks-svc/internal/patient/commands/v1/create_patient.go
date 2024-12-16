@@ -4,9 +4,11 @@ import (
 	"common"
 	"context"
 	"errors"
+	v1 "gen/libs/common/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+	"time"
 
 	"tasks-svc/internal/patient/perm"
 
@@ -20,6 +22,8 @@ type CreatePatientCommandHandler func(
 	patientID uuid.UUID,
 	humanReadableIdentifier string,
 	notes *string,
+	gender v1.Gender,
+	dateOfBirth *time.Time,
 ) (common.ConsistencyToken, error)
 
 func NewCreatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreatePatientCommandHandler {
@@ -28,6 +32,8 @@ func NewCreatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 		patientID uuid.UUID,
 		humanReadableIdentifier string,
 		notes *string,
+		gender v1.Gender,
+		dateOfBirth *time.Time,
 	) (common.ConsistencyToken, error) {
 		a := aggregate.NewPatientAggregate(patientID)
 
@@ -53,7 +59,7 @@ func NewCreatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 			finalNotes = *notes
 		}
 
-		if err := a.CreatePatient(ctx, humanReadableIdentifier, finalNotes); err != nil {
+		if err := a.CreatePatient(ctx, humanReadableIdentifier, finalNotes, gender, dateOfBirth); err != nil {
 			return 0, err
 		}
 

@@ -1,6 +1,7 @@
 package models
 
 import (
+	v1 "gen/libs/common/v1"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,6 +16,8 @@ type Patient struct {
 	IsDischarged            bool
 	CreatedAt               time.Time
 	UpdatedAt               time.Time
+	Gender                  v1.Gender
+	DateOfBirth             *time.Time
 }
 
 type PatientWithConsistency struct {

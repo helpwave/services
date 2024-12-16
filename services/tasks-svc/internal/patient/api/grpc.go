@@ -11,6 +11,7 @@ import (
 	"hwdb/locale"
 	"hwes"
 	"hwutil"
+	"time"
 
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -54,8 +55,14 @@ func (s *PatientGrpcService) CreatePatient(
 	log := zlog.Ctx(ctx)
 	patientID := uuid.New()
 
+	var dateOfBirth *time.Time
+	if dob := req.GetDateOfBirth(); dob != nil {
+		asTime := dob.GetDate().AsTime()
+		dateOfBirth = &asTime
+	}
+
 	consistency, err := s.handlers.Commands.V1.CreatePatient(
-		ctx, patientID, req.GetHumanReadableIdentifier(), req.Notes)
+		ctx, patientID, req.GetHumanReadableIdentifier(), req.Notes, req.GetGender(), dateOfBirth)
 	if err != nil {
 		return nil, err
 	}
@@ -455,7 +462,14 @@ func (s *PatientGrpcService) UpdatePatient(
 		return nil, err
 	}
 
-	consistency, err := s.handlers.Commands.V1.UpdatePatient(ctx, patientID, req.HumanReadableIdentifier, req.Notes)
+	consistency, err := s.handlers.Commands.V1.UpdatePatient(
+		ctx,
+		patientID,
+		req.HumanReadableIdentifier,
+		req.Notes,
+		req.Gender,
+		req.DateOfBirth,
+	)
 	if err != nil {
 		return nil, err
 	}

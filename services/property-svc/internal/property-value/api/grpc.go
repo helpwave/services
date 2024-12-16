@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	commonPb "gen/libs/common/v1"
 	pb "gen/services/property_svc/v1"
 	"hwes"
 	"hwutil"
@@ -188,7 +189,7 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(
 					}
 				case pnv.Value.DateValue != nil:
 					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
-						DateValue: &pb.Date{
+						DateValue: &commonPb.Date{
 							Date: timestamppb.New(*pnv.Value.DateValue),
 						},
 					}

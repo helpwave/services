@@ -4,6 +4,7 @@ import (
 	"common"
 	"common/auth"
 	"context"
+	v1 "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
@@ -74,6 +75,8 @@ func NewGetAllPatientsWithDetailsQueryHandler(authz hwauthz.AuthZ) GetAllPatient
 							IsDischarged:            row.Patient.IsDischarged,
 							CreatedAt:               row.Patient.CreatedAt.Time,
 							UpdatedAt:               row.Patient.UpdatedAt.Time,
+							Gender:                  v1.Gender(row.Patient.Gender),
+							DateOfBirth:             hwdb.DateToTime(row.Patient.DateOfBirth),
 						},
 						Consistency: common.ConsistencyToken(row.Patient.Consistency).String(), //nolint:gosec
 					},

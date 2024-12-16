@@ -2,7 +2,9 @@ package stories
 
 import (
 	"context"
+	v1 "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwauthz/spicedb"
@@ -30,6 +32,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	createReq := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient",
 		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
+		Gender:                  nil,
+		DateOfBirth:             nil,
 	}
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
 	require.NoError(t, err, "could not create patient")
@@ -48,14 +52,20 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	assert.Equal(t, createReq.GetHumanReadableIdentifier(), getPatientRes.GetHumanReadableIdentifier())
 	assert.Equal(t, createReq.GetNotes(), getPatientRes.GetNotes())
 	assert.Equal(t, createRes.GetConsistency(), getPatientRes.GetConsistency())
+	assert.Equal(t, v1.Gender_GENDER_UNSPECIFIED, getPatientRes.GetGender())
+	assert.Equal(t, nil, getPatientRes.DateOfBirth)
 
 	//
 	// update patient
 	//
 
+	dateOfBirth := time.Now().UTC().Round(time.Hour * 24)
 	updateReq := &pb.UpdatePatientRequest{
 		Id:                      patientId,
 		HumanReadableIdentifier: hwutil.PtrTo(t.Name() + " patient 1"),
+		Notes:                   hwutil.PtrTo(t.Name() + " Notes"),
+		Gender:                  hwutil.PtrTo(v1.Gender_GENDER_DIVERSE),
+		DateOfBirth:             &v1.Date{Date: timestamppb.New(dateOfBirth)},
 		Consistency:             &getPatientRes.Consistency,
 	}
 	updateRes, err := patientClient.UpdatePatient(ctx, updateReq)
@@ -72,6 +82,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 
 	assert.Equal(t, updateReq.GetHumanReadableIdentifier(), getPatientRes.GetHumanReadableIdentifier())
 	assert.Equal(t, updateRes.GetConsistency(), getPatientRes.GetConsistency())
+	assert.Equal(t, updateReq.GetGender(), getPatientRes.GetGender())
+	assert.Equal(t, updateReq.GetDateOfBirth().Date.AsTime(), getPatientRes.GetDateOfBirth().Date.AsTime())
 
 	//
 	// discharge patient

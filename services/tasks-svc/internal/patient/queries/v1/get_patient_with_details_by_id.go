@@ -3,6 +3,7 @@ package v1
 import (
 	"common"
 	"context"
+	v1 "gen/libs/common/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
@@ -76,6 +77,8 @@ func NewGetPatientWithDetailsByIDQueryHandler(
 					IsDischarged:            patientRes.IsDischarged,
 					CreatedAt:               patientRes.CreatedAt.Time,
 					UpdatedAt:               patientRes.UpdatedAt.Time,
+					Gender:                  v1.Gender(patientRes.Gender),
+					DateOfBirth:             hwdb.DateToTime(patientRes.DateOfBirth),
 				},
 				Consistency: common.ConsistencyToken(patientRes.Consistency).String(), //nolint:gosec
 			},

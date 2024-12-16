@@ -62,6 +62,7 @@ func NewGetPatientAssignmentByWardQueryHandler(authz hwauthz.AuthZ) GetPatientAs
 								Patient: models.Patient{
 									ID:                      bedRow.PatientID.UUID,
 									HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier,
+									// TODO
 								},
 								Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(), //nolint:gosec
 							}
