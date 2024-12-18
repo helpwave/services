@@ -12,7 +12,7 @@ env:
   BUF_CLI_VERSION: '1.47.2'
   NODE_VERSION: '18.x'
   # renovate: datasource=dart-version depName=dart
-  DART_VERSION: '3.5.4'
+  DART_VERSION: '3.6.0'
 
 jobs:
   check-preconditions:
