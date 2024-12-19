@@ -1,7 +1,6 @@
 package hwutil
 
 import (
-	"flag"
 	"os"
 
 	"github.com/rs/zerolog/log"
@@ -29,8 +28,4 @@ func MustGetEnv(key string) string {
 func HasEnv(key string) bool {
 	_, found := os.LookupEnv(key)
 	return found
-}
-
-func IsRunningInGoTests() bool {
-	return flag.Lookup("test.v") != nil
 }

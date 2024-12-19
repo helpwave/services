@@ -41,7 +41,7 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 	}
 
 	// dapr/grpc service
-	service, ok := daprd.NewServiceWithListener(listener, DefaultServerOptions()...).(*daprd.Server)
+	service, ok := daprd.NewServiceWithListener(listener, DefaultServerOptions(ctx)...).(*daprd.Server)
 	if !ok {
 		log.Fatal().Msg("dapr service listener is not a *daprd.Server")
 	}
@@ -87,10 +87,13 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 // DefaultUnaryInterceptors returns the slice of default interceptors for unary gRPC calls
 //
 //	chain := grpc.ChainUnaryInterceptor(common.DefaultUnaryInterceptors()...)
-func DefaultUnaryInterceptors(metrics *prometheusGrpcProvider.ServerMetrics) []grpc.UnaryServerInterceptor {
+func DefaultUnaryInterceptors(
+	ctx context.Context,
+	metrics *prometheusGrpcProvider.ServerMetrics,
+) []grpc.UnaryServerInterceptor {
 	return []grpc.UnaryServerInterceptor{
 		metrics.UnaryServerInterceptor(),
-		hwgrpc.UnaryPanicRecoverInterceptor(),
+		hwgrpc.UnaryPanicRecoverInterceptor(ctx),
 		hwgrpc.UnaryLoggingInterceptor,
 		hwgrpc.UnaryErrorQualityControlInterceptor,
 		hwgrpc.UnaryLocaleInterceptor,
@@ -104,10 +107,13 @@ func DefaultUnaryInterceptors(metrics *prometheusGrpcProvider.ServerMetrics) []g
 // DefaultStreamInterceptors returns the slice of default interceptors for stream gRPC calls
 //
 //	chain := grpc.ChainStreamInterceptor(common.DefaultStreamInterceptors()...)
-func DefaultStreamInterceptors(metrics *prometheusGrpcProvider.ServerMetrics) []grpc.StreamServerInterceptor {
+func DefaultStreamInterceptors(
+	ctx context.Context,
+	metrics *prometheusGrpcProvider.ServerMetrics,
+) []grpc.StreamServerInterceptor {
 	return []grpc.StreamServerInterceptor{
 		metrics.StreamServerInterceptor(),
-		hwgrpc.StreamPanicRecoverInterceptor(),
+		hwgrpc.StreamPanicRecoverInterceptor(ctx),
 		hwgrpc.StreamLoggingInterceptor,
 		hwgrpc.StreamErrorQualityControlInterceptor,
 		hwgrpc.StreamLocaleInterceptor,
@@ -118,16 +124,14 @@ func DefaultStreamInterceptors(metrics *prometheusGrpcProvider.ServerMetrics) []
 	}
 }
 
-func DefaultServerOptions() []grpc.ServerOption {
+func DefaultServerOptions(ctx context.Context) []grpc.ServerOption {
 	// register new metrics collector with prometheus
 	metrics := prometheusGrpcProvider.NewServerMetrics()
 
-	if !hwutil.IsRunningInGoTests() {
-		telemetry.PrometheusRegistry().MustRegister(metrics)
-	}
+	telemetry.PrometheusRegistry(ctx).MustRegister(metrics)
 
-	unaryInterceptorChain := grpc.ChainUnaryInterceptor(DefaultUnaryInterceptors(metrics)...)
-	streamInterceptorChain := grpc.ChainStreamInterceptor(DefaultStreamInterceptors(metrics)...)
+	unaryInterceptorChain := grpc.ChainUnaryInterceptor(DefaultUnaryInterceptors(ctx, metrics)...)
+	streamInterceptorChain := grpc.ChainStreamInterceptor(DefaultStreamInterceptors(ctx, metrics)...)
 	statsHandler := grpc.StatsHandler(otelgrpc.NewServerHandler())
 
 	return []grpc.ServerOption{unaryInterceptorChain, streamInterceptorChain, statsHandler}

@@ -34,7 +34,7 @@ func server() (context.Context, pb.PatientServiceClient, func()) {
 	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
 	// Start Server
-	grpcServer := grpc.NewServer(common.DefaultServerOptions()...)
+	grpcServer := grpc.NewServer(common.DefaultServerOptions(ctx)...)
 	pb.RegisterPatientServiceServer(grpcServer, patientGrpcService)
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 

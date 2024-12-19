@@ -38,7 +38,7 @@ func server() (context.Context, pb.PropertyViewsServiceClient, *hwes_test.Aggreg
 	ctx := common.Setup("property-svc", "test", common.WithFakeAuthOnly())
 
 	// Start Server
-	grpcServer := grpc.NewServer(common.DefaultServerOptions()...)
+	grpcServer := grpc.NewServer(common.DefaultServerOptions(ctx)...)
 	pb.RegisterPropertyViewsServiceServer(grpcServer, grpcService)
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"hwutil"
+	"hwutil/errs"
 	"net/http"
 	"os"
 	"time"
@@ -15,8 +16,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
-
-var prometheusRegistry *prometheus.Registry
 
 func SetupLogging(mode, rawLevel, service, version string) {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
@@ -50,11 +49,12 @@ func SetupLogging(mode, rawLevel, service, version string) {
 }
 
 func startMetricsServer(ctx context.Context, addr string, shutdown func(error)) {
+	reg := PrometheusRegistry(ctx)
 	server := &http.Server{
 		Addr: addr,
 		Handler: promhttp.InstrumentMetricHandler(
-			PrometheusRegistry(),
-			promhttp.HandlerFor(PrometheusRegistry(), promhttp.HandlerOpts{}),
+			reg,
+			promhttp.HandlerFor(reg, promhttp.HandlerOpts{}),
 		),
 		ReadHeaderTimeout: time.Second * 30, // prevent potential slowloris attack
 	}
@@ -85,11 +85,23 @@ func startMetricsServer(ctx context.Context, addr string, shutdown func(error)) 
 	cancel() // prevent mem leak
 }
 
+type promRegKey struct{}
+
+func PrometheusRegistry(ctx context.Context) *prometheus.Registry {
+	value := ctx.Value(promRegKey{})
+	reg, ok := value.(*prometheus.Registry)
+	if !ok {
+		panic(errs.NewCastError("*prometheus.Registry", value))
+	}
+	return reg
+}
+
 // SetupMetrics will start a new http server for prometheus to scrape from
-func SetupMetrics(ctx context.Context, shutdown func(error)) {
+func SetupMetrics(ctx context.Context, shutdown func(error)) context.Context {
 	// create new prometheus registry, we do not use the global default one,
 	// as it causes problems with tests
-	prometheusRegistry = prometheus.NewRegistry()
+	prometheusRegistry := prometheus.NewRegistry()
+	ctx = context.WithValue(ctx, promRegKey{}, prometheusRegistry)
 
 	l := log.Ctx(ctx)
 
@@ -97,16 +109,13 @@ func SetupMetrics(ctx context.Context, shutdown func(error)) {
 
 	if addr == "" {
 		l.Warn().Msg("METRICS_ADDR not set, will not export metrics")
-		return
+		return ctx
 	}
 
 	l.Info().Str("addr", addr).Msg("starting metrics server")
 
 	go startMetricsServer(ctx, addr, shutdown)
-}
-
-func PrometheusRegistry() *prometheus.Registry {
-	return prometheusRegistry
+	return ctx
 }
 
 // LazyCounter prevents access to PrometheusRegistry, before it is initialized
@@ -123,14 +132,14 @@ func NewLazyCounter(opts prometheus.CounterOpts) LazyCounter {
 	}
 }
 
-func (lc *LazyCounter) Counter() prometheus.Counter {
+func (lc *LazyCounter) Counter(ctx context.Context) prometheus.Counter {
 	if lc.counter != nil {
 		return *lc.counter
 	}
-	lc.counter = hwutil.PtrTo(promauto.With(prometheusRegistry).NewCounter(lc.opts))
+	lc.counter = hwutil.PtrTo(promauto.With(PrometheusRegistry(ctx)).NewCounter(lc.opts))
 	return *lc.counter
 }
 
-func (lc *LazyCounter) Ensure() {
-	lc.Counter()
+func (lc *LazyCounter) Ensure(ctx context.Context) {
+	lc.Counter(ctx)
 }

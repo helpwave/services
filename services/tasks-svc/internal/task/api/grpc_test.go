@@ -27,7 +27,7 @@ func server() (context.Context, pb.TaskServiceClient, func()) {
 	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
 	// Start Server
-	grpcServer := grpc.NewServer(common.DefaultServerOptions()...)
+	grpcServer := grpc.NewServer(common.DefaultServerOptions(ctx)...)
 	pb.RegisterTaskServiceServer(grpcServer, taskGrpcService)
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
