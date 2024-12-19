@@ -19,7 +19,7 @@ import (
 func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	t.Parallel()
 
-	propertyClient := propertyServiceClient()
+	propertyClient := propertyServiceClient("", "")
 	ctx := context.Background()
 
 	//
@@ -169,7 +169,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	t.Parallel()
 
-	propertyClient := propertyServiceClient()
+	propertyClient := propertyServiceClient("", "")
 	ctx := context.Background()
 
 	//
@@ -339,7 +339,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	t.Parallel()
 
-	propertyClient := propertyServiceClient()
+	propertyClient := propertyServiceClient("", "")
 	ctx := context.Background()
 
 	//
@@ -529,7 +529,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	t.Parallel()
 
-	propertyClient := propertyServiceClient()
+	propertyClient := propertyServiceClient("", "")
 	ctx := context.Background()
 
 	//
@@ -689,7 +689,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	t.Parallel()
 
-	propertyClient := propertyServiceClient()
+	propertyClient := propertyServiceClient("", "")
 	ctx := context.Background()
 
 	//

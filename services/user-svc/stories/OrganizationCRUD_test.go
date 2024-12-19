@@ -18,7 +18,7 @@ func TestCreateUpdateGetOrganization(t *testing.T) {
 
 	ctx := context.Background()
 
-	client := pb.NewOrganizationServiceClient(hwtesting.GetGrpcConn(""))
+	client := pb.NewOrganizationServiceClient(hwtesting.GetGrpcConn("", ""))
 
 	//
 	// create new org

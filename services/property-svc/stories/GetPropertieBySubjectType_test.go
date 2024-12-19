@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	pb "gen/services/property_svc/v1"
+	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
 	"regexp"
@@ -19,10 +20,18 @@ import (
 //   - Check GetPropertiesBySubjectType
 func TestGetProperties(t *testing.T) {
 	t.Parallel()
-
-	propertyClient := propertyServiceClient()
-
 	ctx := context.Background()
+
+	// new user and org for this test, to prevent interference with other tests
+	userID := uuid.New()
+	orgID := uuid.New()
+
+	// give user appropriate permissions
+	authz := spicedb.NewSpiceDBAuthZ()
+	err := spicedb.AddUserToOrganization(ctx, authz, userID, orgID, false)
+	require.NoError(t, err)
+
+	propertyClient := propertyServiceClient(userID.String(), orgID.String())
 
 	//
 	// Create new Properties

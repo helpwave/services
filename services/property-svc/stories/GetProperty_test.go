@@ -31,7 +31,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 	patientID := uuid.New()
 	taskID := uuid.New()
 
-	// give new user appropriate permissions
+	// give appropriate permissions
 	authz := spicedb.NewSpiceDBAuthZ()
 	patient := commonPerm.GenericObject{Id: patientID.String(), Typ: "patient"}
 	task := commonPerm.GenericObject{Id: taskID.String(), Typ: "task"}
@@ -44,7 +44,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		Commit(ctx)
 	require.NoError(t, err)
 
-	propertyClient := propertyServiceClient()
+	propertyClient := propertyServiceClient("", "")
 	propertyViewClient := propertyViewServiceClient()
 
 	//
@@ -193,7 +193,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 func TestTaskGetPropertyConsistency(t *testing.T) {
 	t.Parallel()
 
-	propertyClient := propertyServiceClient()
+	propertyClient := propertyServiceClient("", "")
 
 	ctx := context.Background()
 

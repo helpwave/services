@@ -9,14 +9,13 @@ import (
 	pb "gen/services/user_svc/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
+	"hwauthz/spicedb"
 	"hwdb"
 	"hwlocale"
 	"hwutil"
 
-	"user-svc/internal/organization/perm"
-	userPerm "user-svc/internal/user/perm"
-
 	"user-svc/internal/hwkc"
+	"user-svc/internal/organization/perm"
 	"user-svc/locale"
 	"user-svc/repos/organization_repo"
 	"user-svc/repos/user_repo"
@@ -380,9 +379,9 @@ func (s ServiceServer) RemoveMember(
 
 	deletedUser := commonPerm.User(userID)
 	if _, err := s.authz.
-		Delete(hwauthz.NewRelationship(deletedUser, perm.OrganizationMember, permOrg)).
-		Delete(hwauthz.NewRelationship(deletedUser, perm.OrganizationLeader, permOrg)).
-		Delete(hwauthz.NewRelationship(permOrg, userPerm.UserOrganization, deletedUser)).
+		Delete(hwauthz.NewRelationship(deletedUser, commonPerm.OrganizationMember, permOrg)).
+		Delete(hwauthz.NewRelationship(deletedUser, commonPerm.OrganizationLeader, permOrg)).
+		Delete(hwauthz.NewRelationship(permOrg, commonPerm.UserOrganization, deletedUser)).
 		Commit(ctx); err != nil {
 		return nil, err
 	}
@@ -721,6 +720,7 @@ func (s ServiceServer) AcceptInvitation(
 		s.kc,
 		userID,
 		currentInvitation.OrganizationID,
+		false,
 	); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -901,6 +901,7 @@ func CreateOrganizationAndAddUser(
 		kc,
 		userID,
 		organizationID,
+		true,
 	); err != nil {
 		return nil, err
 	}
@@ -920,6 +921,7 @@ func AddUserToOrganization(
 	kc hwkc.IClient,
 	userID uuid.UUID,
 	organizationID uuid.UUID,
+	leader bool,
 ) error {
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(tx)
@@ -939,11 +941,7 @@ func AddUserToOrganization(
 	}
 
 	// add user to org in spice
-	permUser := commonPerm.User(userID)
-	permOrg := commonPerm.Organization(organizationID)
-	rel := hwauthz.NewRelationship(permUser, perm.OrganizationLeader, permOrg)
-	backRel := hwauthz.NewRelationship(permOrg, userPerm.UserOrganization, permUser)
-	if _, err := authz.Create(rel).Create(backRel).Commit(ctx); err != nil {
+	if err := spicedb.AddUserToOrganization(ctx, authz, userID, organizationID, leader); err != nil {
 		return err
 	}
 
