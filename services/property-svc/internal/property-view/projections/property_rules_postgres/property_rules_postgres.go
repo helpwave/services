@@ -2,13 +2,14 @@ package property_rules_postgres
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 	"slices"
+
+	"property-svc/internal/property-view/errs"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
@@ -51,6 +52,14 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(eventsV1.PropertyRuleListsUpdated, p.onPropertyRuleListsUpdated)
 }
 
+type UnexpectedMatchersTypeError struct {
+	typ interface{}
+}
+
+func (e UnexpectedMatchersTypeError) Error() string {
+	return fmt.Sprintf("unexpected matchers type, got %T", e.typ)
+}
+
 func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
@@ -61,7 +70,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	}
 
 	if payload.RuleID == uuid.Nil {
-		return errors.New("ruleID missing"), hwutil.PtrTo(esdb.NackActionSkip)
+		return errs.ErrMissingRuleID, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
@@ -104,8 +113,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 			return fmt.Errorf("could not create patient rule: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 		}
 	default:
-		return fmt.Errorf("unexpected matchers type, got %T", payload.Matchers),
-			hwutil.PtrTo(esdb.NackActionSkip)
+		return UnexpectedMatchersTypeError{typ: payload.Matchers}, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	// handle (dont)alwaysInclude logic

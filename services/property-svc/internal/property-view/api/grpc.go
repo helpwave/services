@@ -23,6 +23,8 @@ func NewPropertyViewService(aggregateStore hwes.AggregateStore, handlers *handle
 	return &PropertyViewGrpcService{as: aggregateStore, handlers: handlers}
 }
 
+var ErrNoMatcher = errors.New("no matcher provided")
+
 func (s PropertyViewGrpcService) UpdatePropertyViewRule(
 	ctx context.Context,
 	req *pb.UpdatePropertyViewRuleRequest,
@@ -38,7 +40,7 @@ func (s PropertyViewGrpcService) UpdatePropertyViewRule(
 	}
 
 	if matcher == nil {
-		return nil, errors.New("UpdatePropertyViewRule: no matcher provided")
+		return nil, ErrNoMatcher
 	}
 
 	appendToAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(

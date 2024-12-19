@@ -1,25 +1,39 @@
 package hwutil
 
 import (
-	"errors"
+	"fmt"
 	"time"
+
+	"hwutil/errs"
 )
 
 // AssertTimestampToTime takes an interface and returns a time
 func AssertTimestampToTime(i interface{}) (*time.Time, error) {
-	var s float64
-	var n float64
 	d, ok := i.(map[string]interface{})
 	if !ok {
-		return nil, errors.New("could not assert map")
+		return nil, fmt.Errorf("AssertTimestampToTime: %w",
+			errs.NewCastError("map[string]interface{}", i))
 	}
-	s, ok = d["seconds"].(float64)
-	if !ok {
-		return nil, errors.New("could not assert seconds")
+
+	fields := []string{"seconds", "nanos"}
+	values := make([]float64, len(fields))
+
+	for i, field := range fields {
+		var err error
+		values[i], err = AssertFloat64(d[field])
+		if err != nil {
+			return nil, fmt.Errorf("AssertTimestampToTime: %w", errs.NewInvalidMapFieldError(field, err))
+		}
 	}
-	n, ok = d["nanos"].(float64)
-	if !ok {
-		return nil, errors.New("could not assert nanos")
+
+	timestamp := time.Unix(int64(values[0]), int64(values[1]))
+	return &timestamp, nil
+}
+
+func AssertFloat64(i interface{}) (float64, error) {
+	if f, ok := i.(float64); ok {
+		return f, nil
+	} else {
+		return 0, errs.NewCastError("float32", i)
 	}
-	return PtrTo(time.Unix(int64(s), int64(n))), nil
 }

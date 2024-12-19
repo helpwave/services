@@ -68,9 +68,11 @@ func (m PatientPropertyMatchers) QueryProperties(ctx context.Context) ([]Propert
 	return hwutil.Map(rows, cast), err
 }
 
+var ErrPatientIDNotValid = errors.New("PatientID not valid")
+
 func (m PatientPropertyMatchers) GetSubjectID() (uuid.UUID, error) {
 	if !m.PatientID.Valid {
-		return uuid.UUID{}, errors.New("PatientPropertyMatchers GetSubjectID: PatientID not valid")
+		return uuid.UUID{}, ErrPatientIDNotValid
 	}
 	return m.PatientID.UUID, nil
 }
