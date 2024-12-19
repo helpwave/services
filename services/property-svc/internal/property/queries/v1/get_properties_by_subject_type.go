@@ -25,7 +25,7 @@ func NewGetPropertiesQueryHandler(authz hwauthz.AuthZ) GetPropertiesQueryHandler
 	return func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
 		user := commonPerm.UserFromCtx(ctx)
 
-		propertyRepo := property_repo.New(hwdb.GetDB())
+		propertyRepo := property_repo.New(hwdb.GetDB(ctx))
 
 		var subjectTypeID *int32
 		if subjectType != nil {

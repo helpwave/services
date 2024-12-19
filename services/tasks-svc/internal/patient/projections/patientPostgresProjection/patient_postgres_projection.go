@@ -22,7 +22,7 @@ type Projection struct {
 	patientRepo *patient_repo.Queries
 }
 
-func NewProjection(es *esdb.Client, serviceName string) *Projection {
+func NewProjection(ctx context.Context, es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := serviceName + "-patient-postgres-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
@@ -30,7 +30,7 @@ func NewProjection(es *esdb.Client, serviceName string) *Projection {
 			subscriptionGroupName,
 			&[]string{aggregate.PatientAggregateType + "-"},
 		),
-		patientRepo: patient_repo.New(hwdb.GetDB()),
+		patientRepo: patient_repo.New(hwdb.GetDB(ctx)),
 	}
 	p.initEventListeners()
 	return p

@@ -20,7 +20,7 @@ type GetPatientByBedQueryHandler func(ctx context.Context, bedID uuid.UUID) (*mo
 
 func NewGetPatientByBedQueryHandler(authz hwauthz.AuthZ) GetPatientByBedQueryHandler {
 	return func(ctx context.Context, bedID uuid.UUID) (*models.PatientWithConsistency, error) {
-		patientRepo := patient_repo.New(hwdb.GetDB())
+		patientRepo := patient_repo.New(hwdb.GetDB(ctx))
 
 		// check bed permissions
 		user := commonPerm.UserFromCtx(ctx)

@@ -24,7 +24,7 @@ type Projection struct {
 	taskRepo *task_repo.Queries
 }
 
-func NewProjection(es *esdb.Client, serviceName string) *Projection {
+func NewProjection(ctx context.Context, es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := serviceName + "-task-postgres-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
@@ -32,7 +32,7 @@ func NewProjection(es *esdb.Client, serviceName string) *Projection {
 			subscriptionGroupName,
 			&[]string{aggregate.TaskAggregateType + "-"},
 		),
-		taskRepo: task_repo.New(hwdb.GetDB()),
+		taskRepo: task_repo.New(hwdb.GetDB(ctx)),
 	}
 	p.initEventListeners()
 	return p

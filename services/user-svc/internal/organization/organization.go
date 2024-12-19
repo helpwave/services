@@ -78,7 +78,7 @@ func (s ServiceServer) GetOrganization(
 	ctx context.Context,
 	req *pb.GetOrganizationRequest,
 ) (*pb.GetOrganizationResponse, error) {
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -170,7 +170,7 @@ type OrganizationWithMembers struct {
 func GetOrganizationsByUserId(
 	ctx context.Context, userId uuid.UUID, authz hwauthz.AuthZ,
 ) ([]OrganizationWithMembers, error) {
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	rows, err := organizationRepo.GetOrganizationsWithMembersByUser(ctx, userId)
 	err = hwdb.Error(ctx, err)
@@ -279,7 +279,7 @@ func (s ServiceServer) UpdateOrganization(
 		return nil, err
 	}
 
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	organizationID, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -313,7 +313,7 @@ func (s ServiceServer) DeleteOrganization(
 		return nil, err
 	}
 
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	organizationID, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -352,7 +352,7 @@ func (s ServiceServer) RemoveMember(
 	}
 
 	log := zlog.Ctx(ctx)
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	userID, err := uuid.Parse(req.UserId)
 	if err != nil {
@@ -399,7 +399,7 @@ func (s ServiceServer) InviteMember(
 	req *pb.InviteMemberRequest,
 ) (*pb.InviteMemberResponse, error) {
 	log := zlog.Ctx(ctx)
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	// check permissions
 	permUser := commonPerm.UserFromCtx(ctx)
@@ -479,7 +479,7 @@ func (s ServiceServer) GetInvitationsByOrganization(
 	ctx context.Context,
 	req *pb.GetInvitationsByOrganizationRequest,
 ) (*pb.GetInvitationsByOrganizationResponse, error) {
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	organizationID, err := uuid.Parse(req.OrganizationId)
 	if err != nil {
@@ -548,7 +548,7 @@ func (s ServiceServer) GetInvitationsByUser(
 	ctx context.Context,
 	req *pb.GetInvitationsByUserRequest,
 ) (*pb.GetInvitationsByUserResponse, error) {
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	claims, err := auth.GetAuthClaims(ctx)
 	if err != nil {
@@ -612,7 +612,7 @@ func (s ServiceServer) GetMembersByOrganization(
 	ctx context.Context,
 	req *pb.GetMembersByOrganizationRequest,
 ) (*pb.GetMembersByOrganizationResponse, error) {
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	organizationID, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -652,7 +652,7 @@ func (s ServiceServer) AcceptInvitation(
 	ctx context.Context,
 	req *pb.AcceptInvitationRequest,
 ) (*pb.AcceptInvitationResponse, error) {
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	invitationId, err := uuid.Parse(req.InvitationId)
 	if err != nil {
@@ -715,7 +715,7 @@ func (s ServiceServer) AcceptInvitation(
 	// Add user to organization
 	if err := AddUserToOrganization(
 		ctx,
-		hwdb.GetDB(),
+		hwdb.GetDB(ctx),
 		s.authz,
 		s.kc,
 		userID,
@@ -732,7 +732,7 @@ func (s ServiceServer) DeclineInvitation(
 	ctx context.Context,
 	req *pb.DeclineInvitationRequest,
 ) (*pb.DeclineInvitationResponse, error) {
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	invitationId, err := uuid.Parse(req.InvitationId)
 	if err != nil {
@@ -797,7 +797,7 @@ func (s ServiceServer) RevokeInvitation(
 	ctx context.Context,
 	req *pb.RevokeInvitationRequest,
 ) (*pb.RevokeInvitationResponse, error) {
-	organizationRepo := organization_repo.New(hwdb.GetDB())
+	organizationRepo := organization_repo.New(hwdb.GetDB(ctx))
 
 	log := zlog.Ctx(ctx)
 
@@ -860,7 +860,7 @@ func CreateOrganizationAndAddUser(
 	authz hwauthz.AuthZ,
 ) (*organization_repo.Organization, error) {
 	// open tx
-	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(ctx), ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -996,7 +996,7 @@ func (s ServiceServer) CreatePersonalOrganization(
 	personalOrganizationLocale := hwlocale.Localize(ctx, locale.PersonalOrganizationName(ctx))
 	organizationName := fmt.Sprintf("%s %s", personalOrganizationLocale, userClaims.Name)
 
-	userRepo := user_repo.New(hwdb.GetDB())
+	userRepo := user_repo.New(hwdb.GetDB(ctx))
 
 	// create user, if it does not exist yet
 	userResult, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)

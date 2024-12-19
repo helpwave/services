@@ -31,7 +31,7 @@ func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHan
 			return nil, 0, err
 		}
 
-		propertyRepo := property_repo.New(hwdb.GetDB())
+		propertyRepo := property_repo.New(hwdb.GetDB(ctx))
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
 			ctx,

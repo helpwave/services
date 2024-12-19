@@ -61,7 +61,7 @@ func setup() (
 	if err != nil {
 		panic(err)
 	}
-	hwdb.TestingSetDB(dbMock)
+	ctx = hwdb.WithDB(ctx, dbMock)
 
 	teardown = func() {
 		closer()

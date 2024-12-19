@@ -23,7 +23,7 @@ type GetAllPatientsWithDetailsQueryHandler func(ctx context.Context) ([]*models.
 
 func NewGetAllPatientsWithDetailsQueryHandler(authz hwauthz.AuthZ) GetAllPatientsWithDetailsQueryHandler {
 	return func(ctx context.Context) ([]*models.PatientDetails, error) {
-		patientRepo := patient_repo.New(hwdb.GetDB())
+		patientRepo := patient_repo.New(hwdb.GetDB(ctx))
 
 		// gather inputs
 		organizationID := auth.MustGetOrganizationID(ctx)

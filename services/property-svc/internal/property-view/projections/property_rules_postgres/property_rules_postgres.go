@@ -31,7 +31,7 @@ type Projection struct {
 	viewsRepo        *views_repo.Queries
 }
 
-func NewProjection(es custom.EventStoreClient, serviceName string) *Projection {
+func NewProjection(ctx context.Context, es custom.EventStoreClient, serviceName string) *Projection {
 	subscriptionGroupName := serviceName + "-property-rules-postgres-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
@@ -39,9 +39,9 @@ func NewProjection(es custom.EventStoreClient, serviceName string) *Projection {
 			subscriptionGroupName,
 			&[]string{aggregate.PropertyViewRuleAggregateType + "-"},
 		),
-		db:            hwdb.GetDB(),
-		taskViewsRepo: task_views_repo.New(hwdb.GetDB()),
-		viewsRepo:     views_repo.New(hwdb.GetDB()),
+		db:            hwdb.GetDB(ctx),
+		taskViewsRepo: task_views_repo.New(hwdb.GetDB(ctx)),
+		viewsRepo:     views_repo.New(hwdb.GetDB(ctx)),
 	}
 	p.initEventListeners()
 	return p

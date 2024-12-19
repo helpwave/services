@@ -2,7 +2,6 @@ package service
 
 import (
 	"common"
-	"context"
 	pb "gen/services/tasks_svc/v1"
 	hwspicedb "hwauthz/spicedb"
 	"hwdb"
@@ -34,7 +33,7 @@ const ServiceName = "tasks-svc"
 func Main(version string, ready func()) {
 	ctx := common.Setup(ServiceName, version, common.WithAuth())
 
-	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
+	ctx, closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
 	tracking.SetupTracking(ctx, ServiceName, 10, 24*time.Hour, 20)
@@ -50,8 +49,8 @@ func Main(version string, ready func()) {
 		ctx,
 		common.Shutdown,
 		task_spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
-		task_postgres_projection.NewProjection(eventStore, ServiceName),
-		patientPostgresProjection.NewProjection(eventStore, ServiceName),
+		task_postgres_projection.NewProjection(ctx, eventStore, ServiceName),
+		patientPostgresProjection.NewProjection(ctx, eventStore, ServiceName),
 		patientSpiceDBProjection.NewProjection(eventStore, authz, ServiceName),
 	)
 
