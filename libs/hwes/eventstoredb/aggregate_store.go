@@ -27,6 +27,9 @@ func NewAggregateStore(es *esdb.Client) *AggregateStore {
 	return &AggregateStore{es: es}
 }
 
+var ErrNoAppliedEvents = errors.New("aggregate has no applied events. " +
+	"Consider to persist and load the aggregate first")
+
 // getExpectedRevisionByPreviousRead implements a strategy for our getExpectedRevision strategy pattern.
 // This function resolves the version by returning the version of the last applied event of our aggregate.
 func (as *AggregateStore) getExpectedRevisionByPreviousRead(
@@ -34,7 +37,7 @@ func (as *AggregateStore) getExpectedRevisionByPreviousRead(
 	a hwes.Aggregate,
 ) (esdb.ExpectedRevision, error) {
 	if len(a.GetAppliedEvents()) == 0 {
-		return nil, errors.New("aggregate has no applied events. Consider to persist and load the aggregate first")
+		return nil, ErrNoAppliedEvents
 	}
 	lastAppliedEvent := a.GetAppliedEvents()[len(a.GetAppliedEvents())-1]
 	eventNumber := lastAppliedEvent.GetVersion()
@@ -97,6 +100,8 @@ func (as *AggregateStore) doSave(
 	return common.ConsistencyToken(r.NextExpectedVersion), nil
 }
 
+var ErrAggregateWasDeleted = errors.New("aggregate has been marked as deleted")
+
 // Implements AggregateStore interface
 
 func (as *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
@@ -131,7 +136,7 @@ func (as *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) er
 	}
 
 	if aggregate.IsDeleted() {
-		return errors.New("AggregateStore.Load: aggregate has been marked as deleted")
+		return fmt.Errorf("AggregateStore.Load: %w", ErrAggregateWasDeleted)
 	}
 
 	return nil

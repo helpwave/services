@@ -35,7 +35,7 @@ func Main(version string, ready func()) {
 	flag.Parse()
 	log.Debug().Bool("replayMode", *replayMode).Msg("flags")
 
-	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
+	ctx, closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
 	authz := hwspicedb.NewSpiceDBAuthZ()
@@ -56,9 +56,9 @@ func Main(version string, ready func()) {
 		common.Shutdown,
 		propertySpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
 		propertySetSpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
-		propertyPostgresProjection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
-		property_value_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
-		property_rules_postgres.NewProjection(eventStore, ServiceName),
+		propertyPostgresProjection.NewProjection(eventStore, ServiceName, hwdb.GetDB(ctx)),
+		property_value_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.GetDB(ctx)),
+		property_rules_postgres.NewProjection(ctx, eventStore, ServiceName),
 	)
 
 	propertyHandlers := ph.NewPropertyHandlers(aggregateStore, authz)

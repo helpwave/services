@@ -32,7 +32,7 @@ func NewGetTasksByPatientIDQueryHandler(authz hwauthz.AuthZ) GetTasksByPatientID
 			return nil, err
 		}
 
-		taskRepo := task_repo.New(hwdb.GetDB())
+		taskRepo := task_repo.New(hwdb.GetDB(ctx))
 
 		tasksWithSubtasks, err := taskRepo.GetTasksWithSubtasksByPatient(ctx, patientID)
 		if err := hwdb.Error(ctx, err); err != nil {

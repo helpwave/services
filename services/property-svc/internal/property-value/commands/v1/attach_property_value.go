@@ -40,7 +40,7 @@ func NewAttachPropertyValueCommandHandler(
 			return 0, err
 		}
 
-		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
+		propertyValueRepo := property_value_repo.New(hwdb.GetDB(ctx))
 		var a *aggregate.PropertyValueAggregate
 
 		query := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)

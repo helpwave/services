@@ -3,8 +3,6 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"hwauthz"
-	"hwauthz/commonPerm"
 	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
@@ -19,6 +17,8 @@ import (
 )
 
 func TestCreateUpdateGetTask(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	taskClient := taskServiceClient()
 
@@ -249,6 +249,8 @@ func TestCreateUpdateGetTask(t *testing.T) {
 }
 
 func TestGetTasksByPatient(t *testing.T) {
+	t.Parallel()
+
 	taskClient := taskServiceClient()
 	ctx := context.Background()
 
@@ -334,6 +336,8 @@ func TestGetTasksByPatient(t *testing.T) {
 }
 
 func TestGetAssignedTasks(t *testing.T) {
+	t.Parallel()
+
 	taskClient := taskServiceClient()
 	ctx := context.Background()
 
@@ -349,9 +353,7 @@ func TestGetAssignedTasks(t *testing.T) {
 
 	// give new user appropriate permissions
 	authz := spicedb.NewSpiceDBAuthZ()
-	user := commonPerm.User(userID)
-	org := commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
-	_, err := authz.Create(hwauthz.NewRelationship(user, "member", org)).Commit(ctx)
+	err := spicedb.AddUserToOrganization(ctx, authz, userID, uuid.MustParse(hwtesting.FakeTokenOrganization), false)
 	require.NoError(t, err)
 
 	taskIds := make([]string, 0, len(suffixMap))
@@ -387,7 +389,7 @@ func TestGetAssignedTasks(t *testing.T) {
 	hwtesting.WaitForProjectionsToSettle()
 
 	// client for userid
-	customTaskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String()))
+	customTaskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String(), ""))
 
 	res, err := customTaskClient.GetAssignedTasks(ctx, &pb.GetAssignedTasksRequest{})
 	require.NoError(t, err)

@@ -12,5 +12,6 @@ import (
 // - AuthenticatedUserMetadata accesses the AuthenticatedUserClaim map incorrectly
 // - AuthenticatedUserClaim map is not JSON-able
 func TestAuthenticatedUserMetadataDoesNotCrash(t *testing.T) {
+	t.Parallel()
 	_ = AuthenticatedUserMetadata(uuid.NewString())
 }

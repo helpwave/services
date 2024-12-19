@@ -21,7 +21,7 @@ func Main(version string, ready func()) {
 		common.WithNonOrganizationMethod(pb.OrganizationService_CreatePersonalOrganization_FullMethodName),
 	)
 
-	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
+	ctx, closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
 	kc, err := hwkc.BuildClient(ctx)

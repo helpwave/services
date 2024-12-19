@@ -27,7 +27,7 @@ func server() (context.Context, pb.TaskServiceClient, func()) {
 	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
 	// Start Server
-	grpcServer := grpc.NewServer(common.DefaultServerOptions()...)
+	grpcServer := grpc.NewServer(common.DefaultServerOptions(ctx)...)
 	pb.RegisterTaskServiceServer(grpcServer, taskGrpcService)
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
@@ -43,6 +43,8 @@ func setup() (ctx context.Context, client pb.TaskServiceClient, teardown func())
 }
 
 func TestTaskGrpcService_CreateTask_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, teardown := setup()
 	defer teardown()
 
@@ -120,6 +122,8 @@ func TestTaskGrpcService_CreateTask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_UpdateTask_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, teardown := setup()
 	defer teardown()
 
@@ -143,6 +147,8 @@ func TestTaskGrpcService_UpdateTask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_AssignTask_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, teardown := setup()
 	defer teardown()
 
@@ -169,6 +175,8 @@ func TestTaskGrpcService_AssignTask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_UnassignTask_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, teardown := setup()
 	defer teardown()
 
@@ -195,6 +203,8 @@ func TestTaskGrpcService_UnassignTask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_CreateSubtask_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, teardown := setup()
 	defer teardown()
 
@@ -243,6 +253,7 @@ func TestTaskGrpcService_CreateSubtask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_UpdateSubtask_Validation(t *testing.T) {
+	t.Parallel()
 	ctx, client, teardown := setup()
 	defer teardown()
 
@@ -275,6 +286,8 @@ func TestTaskGrpcService_UpdateSubtask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_DeleteSubtask_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, teardown := setup()
 	defer teardown()
 
@@ -301,6 +314,8 @@ func TestTaskGrpcService_DeleteSubtask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_RemoveTaskDueDate_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, teardown := setup()
 	defer teardown()
 
@@ -324,6 +339,8 @@ func TestTaskGrpcService_RemoveTaskDueDate_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_DeleteTask_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, teardown := setup()
 	defer teardown()
 

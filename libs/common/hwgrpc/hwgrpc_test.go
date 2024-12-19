@@ -21,6 +21,7 @@ func arrayEq(t *testing.T, expected []language.Tag, parsed []language.Tag) {
 }
 
 func TestParseLocales(t *testing.T) {
+	t.Parallel()
 	const mdnExample = "fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5"
 	expected := []language.Tag{language.MustParse("fr-CH"), language.French, language.English, language.German}
 	parsed, ok := hwgrpc.ParseLocales(mdnExample)
@@ -32,6 +33,7 @@ func TestParseLocales(t *testing.T) {
 }
 
 func TestParseLocalesReordered(t *testing.T) {
+	t.Parallel()
 	const mdnExample = "fr-CH, de;q=0.7, en;q=0.8, fr;q=0.9, *;q=0.5"
 	expected := []language.Tag{language.MustParse("fr-CH"), language.French, language.English, language.German}
 	parsed, ok := hwgrpc.ParseLocales(mdnExample)
@@ -43,6 +45,7 @@ func TestParseLocalesReordered(t *testing.T) {
 }
 
 func TestParseLocalesSimple(t *testing.T) {
+	t.Parallel()
 	const mdnExample = "de"
 	expected := []language.Tag{language.German}
 	parsed, ok := hwgrpc.ParseLocales(mdnExample)

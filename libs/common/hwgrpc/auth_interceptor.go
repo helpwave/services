@@ -63,7 +63,7 @@ func authInterceptor(ctx context.Context) (context.Context, error) {
 			Msg("only fake auth is enabled! no attempt verifying token. falling back to fake token instead")
 		claims, tokenExpires, err = auth.VerifyFakeToken(ctx, token)
 	} else {
-		// verify token -> if fakeToken is used claims will be nil and we will get an error
+		// verify token -> if fakeToken is used claims will be nil, and we will get an error
 		claims, tokenExpires, err = auth.VerifyIDToken(ctx, token)
 	}
 

@@ -25,7 +25,7 @@ type GetTasksWithPatientsByAssigneeQueryHandler func(
 
 func NewGetTasksWithPatientsByAssigneeQueryHandler(authz hwauthz.AuthZ) GetTasksWithPatientsByAssigneeQueryHandler {
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {
-		taskRepo := task_repo.New(hwdb.GetDB())
+		taskRepo := task_repo.New(hwdb.GetDB(ctx))
 
 		user := commonPerm.UserFromCtx(ctx)
 

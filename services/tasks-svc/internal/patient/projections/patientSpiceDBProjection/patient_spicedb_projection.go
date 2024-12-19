@@ -2,11 +2,11 @@ package patientSpiceDBProjection
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+	"hwes/errs"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 
@@ -44,7 +44,7 @@ func (p *Projection) initEventListeners() {
 // Event handlers
 func (p *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	if evt.OrganizationID == nil {
-		return errors.New("onPatientCreated: organizationID missing"), hwutil.PtrTo(esdb.NackActionSkip)
+		return errs.ErrOrganizationMissing, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	organization := commonPerm.Organization(*evt.OrganizationID)

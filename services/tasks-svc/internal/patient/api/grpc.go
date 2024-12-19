@@ -79,7 +79,7 @@ func (s *PatientGrpcService) GetPatient(
 		return nil, err
 	}
 
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
 
 	// check permissions
 	user := commonPerm.UserFromCtx(ctx)
@@ -360,7 +360,7 @@ func (s *PatientGrpcService) GetRecentPatients(
 	_ *pb.GetRecentPatientsRequest,
 ) (*pb.GetRecentPatientsResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
 
 	var recentPatientIdsStrs []string
 	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)

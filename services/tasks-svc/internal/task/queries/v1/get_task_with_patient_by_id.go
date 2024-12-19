@@ -3,7 +3,6 @@ package v1
 import (
 	"common"
 	"context"
-	"fmt"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
@@ -29,14 +28,14 @@ func NewGetTaskWithPatientByIDQueryHandler(authz hwauthz.AuthZ) GetTaskWithPatie
 			return nil, err
 		}
 
-		taskRepo := task_repo.New(hwdb.GetDB())
+		taskRepo := task_repo.New(hwdb.GetDB(ctx))
 
 		rows, err := taskRepo.GetTaskWithPatientById(ctx, taskID)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err
 		}
 		if len(rows) == 0 {
-			return nil, fmt.Errorf("could not find record with ID %s", taskID.String())
+			return nil, hwdb.RecordNotFoundError(taskID)
 		}
 
 		// check patient permissions

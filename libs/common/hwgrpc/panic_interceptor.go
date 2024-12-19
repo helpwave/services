@@ -32,22 +32,22 @@ func recoveryHandlerFn() recovery.RecoveryHandlerFuncContext {
 
 		_, _ = fmt.Fprintln(os.Stderr, string(debug.Stack()))
 
-		panicsRecovered.Counter().Inc()
+		panicsRecovered.Counter(ctx).Inc()
 
 		return hwerr.NewStatusError(ctx, codes.Internal, "panic recovered", locale.GenericError(ctx))
 	}
 }
 
-func UnaryPanicRecoverInterceptor() grpc.UnaryServerInterceptor {
-	panicsRecovered.Ensure()
+func UnaryPanicRecoverInterceptor(ctx context.Context) grpc.UnaryServerInterceptor {
+	panicsRecovered.Ensure(ctx)
 
 	return recovery.UnaryServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),
 	)
 }
 
-func StreamPanicRecoverInterceptor() grpc.StreamServerInterceptor {
-	panicsRecovered.Ensure()
+func StreamPanicRecoverInterceptor(ctx context.Context) grpc.StreamServerInterceptor {
+	panicsRecovered.Ensure(ctx)
 
 	return recovery.StreamServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),

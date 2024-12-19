@@ -3,8 +3,6 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"hwauthz"
-	"hwauthz/commonPerm"
 	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
@@ -19,6 +17,8 @@ import (
 )
 
 func TestCreateUpdateGetPatient(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	patientClient := patientServiceClient()
@@ -172,6 +172,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 }
 
 func TestGetPatientByBed(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	patientClient := patientServiceClient()
@@ -217,6 +219,8 @@ func TestGetPatientByBed(t *testing.T) {
 }
 
 func TestGetPatientsByWard(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	patientClient := patientServiceClient()
@@ -299,6 +303,8 @@ func TestGetPatientsByWard(t *testing.T) {
 }
 
 func TestGetPatientAssignmentByWard(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	patientClient := patientServiceClient()
 
@@ -367,6 +373,8 @@ func TestGetPatientAssignmentByWard(t *testing.T) {
 }
 
 func TestGetPatientList(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	patientClient := patientServiceClient()
 	taskClient := taskServiceClient()
@@ -535,6 +543,8 @@ func TestGetPatientList(t *testing.T) {
 }
 
 func TestGetPatientDetails(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	patientClient := patientServiceClient()
@@ -641,18 +651,18 @@ func TestGetPatientDetails(t *testing.T) {
 }
 
 func TestGetRecentPatients(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	userID := uuid.New() // new user for this test, to prevent interference with other tests
 
 	// give new user appropriate permissions
 	authz := spicedb.NewSpiceDBAuthZ()
-	user := commonPerm.User(userID)
-	org := commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
-	_, err := authz.Create(hwauthz.NewRelationship(user, "member", org)).Commit(ctx)
+	err := spicedb.AddUserToOrganization(ctx, authz, userID, uuid.MustParse(hwtesting.FakeTokenOrganization), false)
 	require.NoError(t, err)
 
-	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
+	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String(), ""))
 
 	wardID, _ := prepareWard(t, ctx, "")
 	roomId, roomConsistency := prepareRoom(t, ctx, wardID, "")

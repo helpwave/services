@@ -2,9 +2,9 @@ package patientPostgresProjection
 
 import (
 	"context"
-	"errors"
 	"hwdb"
 	"hwes"
+	"hwes/errs"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 
@@ -22,7 +22,7 @@ type Projection struct {
 	patientRepo *patient_repo.Queries
 }
 
-func NewProjection(es *esdb.Client, serviceName string) *Projection {
+func NewProjection(ctx context.Context, es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := serviceName + "-patient-postgres-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
@@ -30,7 +30,7 @@ func NewProjection(es *esdb.Client, serviceName string) *Projection {
 			subscriptionGroupName,
 			&[]string{aggregate.PatientAggregateType + "-"},
 		),
-		patientRepo: patient_repo.New(hwdb.GetDB()),
+		patientRepo: patient_repo.New(hwdb.GetDB(ctx)),
 	}
 	p.initEventListeners()
 	return p
@@ -63,7 +63,7 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 	}
 
 	if evt.OrganizationID == nil {
-		return errors.New("onPatientCreated: organizationID missing"), hwutil.PtrTo(esdb.NackActionSkip)
+		return errs.ErrOrganizationMissing, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 	organizationID := *evt.OrganizationID
 

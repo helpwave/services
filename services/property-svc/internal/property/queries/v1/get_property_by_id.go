@@ -3,11 +3,11 @@ package v1
 import (
 	"common"
 	"context"
-	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
+	"hwes/errs"
 
 	"github.com/google/uuid"
 
@@ -31,7 +31,7 @@ func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHan
 			return nil, 0, err
 		}
 
-		propertyRepo := property_repo.New(hwdb.GetDB())
+		propertyRepo := property_repo.New(hwdb.GetDB(ctx))
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
 			ctx,
@@ -42,7 +42,7 @@ func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHan
 			return nil, 0, err
 		}
 		if len(rows) == 0 {
-			return nil, 0, fmt.Errorf("record with id %s not found", propertyID.String())
+			return nil, 0, errs.NotFoundError(propertyID)
 		}
 
 		property := &models.Property{

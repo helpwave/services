@@ -56,7 +56,7 @@ func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 
 func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) (*pb.CreateRoomResponse, error) {
 	log := zlog.Ctx(ctx)
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := room_repo.New(hwdb.GetDB(ctx))
 
 	// parse input
 	wardID, err := uuid.Parse(req.GetWardId())
@@ -118,7 +118,7 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 }
 
 func (s ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.GetRoomResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := room_repo.New(hwdb.GetDB(ctx))
 
 	// parse inputs
 	id, err := uuid.Parse(req.GetId())
@@ -169,7 +169,7 @@ func (s ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb
 }
 
 func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) (*pb.UpdateRoomResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := room_repo.New(hwdb.GetDB(ctx))
 
 	// parse inputs
 	roomID, err := uuid.Parse(req.GetId())
@@ -212,7 +212,7 @@ func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest
 }
 
 func (s ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := room_repo.New(hwdb.GetDB(ctx))
 
 	// parse inputs
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
@@ -277,7 +277,7 @@ func (s ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*
 }
 
 func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) (*pb.DeleteRoomResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := room_repo.New(hwdb.GetDB(ctx))
 
 	// parse inputs
 	roomID, err := uuid.Parse(req.GetId())
@@ -321,7 +321,7 @@ func (s ServiceServer) GetRoomOverviewsByWard(
 	ctx context.Context,
 	req *pb.GetRoomOverviewsByWardRequest,
 ) (*pb.GetRoomOverviewsByWardResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := room_repo.New(hwdb.GetDB(ctx))
 
 	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {

@@ -8,13 +8,19 @@ import (
 )
 
 func TestPbToTimestamp(t *testing.T) {
+	t.Parallel()
+
 	t.Run("src = nil", func(t *testing.T) {
+		t.Parallel()
+
 		if hwdb.PbToTimestamp(nil).Valid {
 			t.Error()
 		}
 	})
 
 	t.Run("src not nil", func(t *testing.T) {
+		t.Parallel()
+
 		src := timestamppb.Timestamp{
 			Seconds: 0,
 			Nanos:   0,
