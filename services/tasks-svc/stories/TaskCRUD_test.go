@@ -19,6 +19,8 @@ import (
 )
 
 func TestCreateUpdateGetTask(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	taskClient := taskServiceClient()
 
@@ -249,6 +251,8 @@ func TestCreateUpdateGetTask(t *testing.T) {
 }
 
 func TestGetTasksByPatient(t *testing.T) {
+	t.Parallel()
+
 	taskClient := taskServiceClient()
 	ctx := context.Background()
 
@@ -334,6 +338,8 @@ func TestGetTasksByPatient(t *testing.T) {
 }
 
 func TestGetAssignedTasks(t *testing.T) {
+	t.Parallel()
+
 	taskClient := taskServiceClient()
 	ctx := context.Background()
 

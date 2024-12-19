@@ -16,6 +16,8 @@ import (
 //   - Create a new bed
 //   - Update it
 func TestCreateUpdateGetBed(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	bedClient := bedServiceClient()
 
@@ -78,6 +80,8 @@ func TestCreateUpdateGetBed(t *testing.T) {
 }
 
 func TestGetBedByPatient(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	// first, prepare room
@@ -118,6 +122,8 @@ func TestGetBedByPatient(t *testing.T) {
 }
 
 func TestGetBeds(t *testing.T) {
+	t.Parallel()
+
 	bedClient := bedServiceClient()
 	ctx := context.Background()
 

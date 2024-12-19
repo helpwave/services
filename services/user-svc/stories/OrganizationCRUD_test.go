@@ -14,6 +14,8 @@ import (
 )
 
 func TestCreateUpdateGetOrganization(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	client := pb.NewOrganizationServiceClient(hwtesting.GetGrpcConn(""))

@@ -27,6 +27,8 @@ func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwe
 }
 
 func TestTaskAggregate_UpdateName(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -64,6 +66,8 @@ func TestTaskAggregate_UpdateName(t *testing.T) {
 }
 
 func TestTaskAggregate_UpdateDescription(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -103,6 +107,8 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 }
 
 func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -147,6 +153,8 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 }
 
 func TestTaskAggregate_CompleteSubtask(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -199,6 +207,8 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 }
 
 func TestTaskAggregate_AssignTask(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -234,6 +244,8 @@ func TestTaskAggregate_AssignTask(t *testing.T) {
 }
 
 func TestTaskAggregate_DeleteTask(t *testing.T) {
+	t.Parallel()
+
 	ctx := auth.ContextWithUserID(context.Background(), uuid.New())
 
 	taskID := uuid.New()

@@ -24,6 +24,8 @@ import (
 //   - Add to always include list for ward and subjectid (matcher too precise)
 //     After each step: GetProperty and check AlwaysIncludedForViewSource for wardid
 func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	wardID := uuid.New()
 	patientID := uuid.New()
@@ -189,6 +191,8 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 //   - Update name
 //   - TODO: conflict detection
 func TestTaskGetPropertyConsistency(t *testing.T) {
+	t.Parallel()
+
 	propertyClient := propertyServiceClient()
 
 	ctx := context.Background()

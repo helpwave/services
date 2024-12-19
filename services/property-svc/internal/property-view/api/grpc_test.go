@@ -72,6 +72,8 @@ func setup() (
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, _, dbMock, teardown := setup()
 	defer teardown()
 
@@ -217,6 +219,8 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_AllEmptyNoEffect(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, as, _, teardown := setup()
 	defer teardown()
 
@@ -240,6 +244,8 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_AllEmptyNoEffect(t *test
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_GreenPath_Created(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, as, dbMock, teardown := setup()
 	defer teardown()
 
@@ -308,6 +314,8 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_GreenPath_Created(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, as, dbMock, teardown := setup()
 	defer teardown()
 
@@ -376,6 +384,8 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_GreenPath_Updated(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, as, dbMock, teardown := setup()
 	defer teardown()
 
@@ -473,6 +483,8 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_GreenPath_Updated(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, as, dbMock, teardown := setup()
 	defer teardown()
 

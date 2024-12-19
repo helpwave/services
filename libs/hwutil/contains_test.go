@@ -16,6 +16,8 @@ type testCase[T comparable] struct {
 func runTestContains[T comparable](t *testing.T, testCase testCase[T]) {
 	t.Helper()
 	t.Run(fmt.Sprintf("contains %v the value %v", testCase.haystack, testCase.needle), func(t *testing.T) {
+		t.Parallel()
+
 		got := hwutil.Contains(testCase.haystack, testCase.needle)
 		if testCase.expected != got {
 			t.Errorf("expected %t, got %t", testCase.expected, got)
@@ -24,6 +26,8 @@ func runTestContains[T comparable](t *testing.T, testCase testCase[T]) {
 }
 
 func TestContains(t *testing.T) {
+	t.Parallel()
+
 	runTestContains(t, testCase[string]{
 		haystack: []string{"ABC", "DEF", "GHI"},
 		needle:   "DEF",

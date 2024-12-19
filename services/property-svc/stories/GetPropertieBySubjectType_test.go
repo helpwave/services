@@ -18,6 +18,8 @@ import (
 //   - Create Properties
 //   - Check GetPropertiesBySubjectType
 func TestGetProperties(t *testing.T) {
+	t.Parallel()
+
 	propertyClient := propertyServiceClient()
 
 	ctx := context.Background()

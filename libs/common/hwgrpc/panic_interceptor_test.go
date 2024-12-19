@@ -37,6 +37,7 @@ type RecoverySuite struct {
 }
 
 func TestPanicRecoverInterceptor(t *testing.T) {
+	t.Parallel()
 	telemetry.SetupMetrics(context.Background(), nil)
 	s := &RecoverySuite{
 		InterceptorTestSuite: &testpb.InterceptorTestSuite{

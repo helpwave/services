@@ -19,6 +19,8 @@ import (
 )
 
 func TestCreateUpdateGetPatient(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	patientClient := patientServiceClient()
@@ -172,6 +174,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 }
 
 func TestGetPatientByBed(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	patientClient := patientServiceClient()
@@ -217,6 +221,8 @@ func TestGetPatientByBed(t *testing.T) {
 }
 
 func TestGetPatientsByWard(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	patientClient := patientServiceClient()
@@ -299,6 +305,8 @@ func TestGetPatientsByWard(t *testing.T) {
 }
 
 func TestGetPatientAssignmentByWard(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	patientClient := patientServiceClient()
 
@@ -367,6 +375,8 @@ func TestGetPatientAssignmentByWard(t *testing.T) {
 }
 
 func TestGetPatientList(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	patientClient := patientServiceClient()
 	taskClient := taskServiceClient()
@@ -535,6 +545,8 @@ func TestGetPatientList(t *testing.T) {
 }
 
 func TestGetPatientDetails(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	patientClient := patientServiceClient()
@@ -641,6 +653,8 @@ func TestGetPatientDetails(t *testing.T) {
 }
 
 func TestGetRecentPatients(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 
 	userID := uuid.New() // new user for this test, to prevent interference with other tests

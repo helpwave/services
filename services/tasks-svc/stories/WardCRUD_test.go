@@ -21,6 +21,8 @@ import (
 //   - Create a new ward
 //   - Update it
 func TestCreateUpdateGetWard(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	wardClient := wardServiceClient()
 
@@ -91,6 +93,8 @@ func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient
 }
 
 func TestGetRecentWards(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	userID := uuid.New() // new user for this test, to prevent interference with other tests
 
@@ -175,6 +179,8 @@ func TestGetRecentWards(t *testing.T) {
 }
 
 func TestGetWards(t *testing.T) {
+	t.Parallel()
+
 	wardClient := wardServiceClient()
 	ctx := context.Background()
 
@@ -214,6 +220,8 @@ func TestGetWards(t *testing.T) {
 }
 
 func TestGetWardOverviews(t *testing.T) {
+	t.Parallel()
+
 	wardClient := wardServiceClient()
 	patientClient := patientServiceClient()
 	taskClient := taskServiceClient()
@@ -285,6 +293,8 @@ func TestGetWardOverviews(t *testing.T) {
 }
 
 func TestGetWardDetails(t *testing.T) {
+	t.Parallel()
+
 	wardClient := wardServiceClient()
 	taskTemplateClient := taskTemplateServiceClient()
 	ctx := context.Background()

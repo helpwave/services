@@ -30,6 +30,8 @@ func requireTrue(t *testing.T, b bool) {
 }
 
 func TestOpenAndClosingReceiveUpdatesStream(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	updatesClient := updatesServiceClient()
 
@@ -40,6 +42,8 @@ func TestOpenAndClosingReceiveUpdatesStream(t *testing.T) {
 }
 
 func TestReceivingEvents(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	es := eventstoredb.SetupEventStoreByEnv()
 
@@ -101,6 +105,8 @@ func TestReceivingEvents(t *testing.T) {
 }
 
 func TestAutoClosingWhenTokenExpiresReceiveUpdateStream(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	updatesClient := updatesServiceClient()
 
