@@ -2,13 +2,14 @@ package property_value_postgres_projection
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwdb"
 	"hwes"
+	esErrs "hwes/errs"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+	"hwutil/errs"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
@@ -59,7 +60,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	}
 
 	if payload.Value == nil {
-		return errors.New("onPropertyValueCreated: payload is empty"), hwutil.PtrTo(esdb.NackActionPark)
+		return esErrs.ErrPayloadMissing, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	propertyID, err := uuid.Parse(payload.PropertyID)
@@ -75,8 +76,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	// GetProperty for the fieldType
 	property, err := hwdb.Optional(p.propertyRepo.GetPropertyById)(ctx, propertyID)
 	if property == nil {
-		return fmt.Errorf("property with id %s not found for propertyValue", payload.PropertyID),
-			hwutil.PtrTo(esdb.NackActionRetry)
+		return PropertyNotFoundForValueError(propertyID), hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -102,7 +102,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 		if fieldType == pb.FieldType_FIELD_TYPE_SELECT {
 			val, ok := payload.Value.(string)
 			if !ok {
-				return errors.New("could not assert string"), hwutil.PtrTo(esdb.NackActionPark)
+				return errs.NewCastError("string", payload.Value), hwutil.PtrTo(esdb.NackActionPark)
 			}
 			id, err := uuid.Parse(val)
 			if err != nil {
@@ -174,13 +174,13 @@ func createBasicPropertyValue(
 	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
 		val, ok := payload.Value.(float64)
 		if !ok {
-			return errors.New("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
+			return errs.NewCastError("float64", payload.Value), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		createPropertyValueParams.NumberValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
 		val, ok := payload.Value.(bool)
 		if !ok {
-			return errors.New("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
+			return errs.NewCastError("bool", payload.Value), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		createPropertyValueParams.BoolValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
@@ -205,6 +205,18 @@ func createBasicPropertyValue(
 	return nil, nil
 }
 
+type PropertyValueNotFoundError uuid.UUID
+
+func (e PropertyValueNotFoundError) Error() string {
+	return fmt.Sprintf("propertyValue with id %s not found", uuid.UUID(e).String())
+}
+
+type PropertyNotFoundForValueError uuid.UUID
+
+func (e PropertyNotFoundForValueError) Error() string {
+	return fmt.Sprintf("property with id %s not found for propertyValue", uuid.UUID(e).String())
+}
+
 func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
@@ -217,7 +229,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 	// Get Property for FieldType
 	propertyValue, err := hwdb.Optional(p.propertyValueRepo.GetPropertyValueByID)(ctx, evt.AggregateID)
 	if propertyValue == nil {
-		return fmt.Errorf("propertyValue with id %s not found", evt.AggregateID), hwutil.PtrTo(esdb.NackActionRetry)
+		return PropertyValueNotFoundError(evt.AggregateID), hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -225,8 +237,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 
 	property, err := hwdb.Optional(p.propertyRepo.GetPropertyById)(ctx, propertyValue.PropertyID)
 	if property == nil {
-		return fmt.Errorf("property with id %s not found for propertyValue", propertyValue.PropertyID.String()),
-			hwutil.PtrTo(esdb.NackActionRetry)
+		return PropertyNotFoundForValueError(propertyValue.PropertyID), hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -254,11 +265,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		if fieldType == pb.FieldType_FIELD_TYPE_SELECT {
 			val, ok := payload.Value.(string)
 			if !ok {
-				err = fmt.Errorf(
-					"onPropertyValueUpdated: could not get select value: type is %T, expected string",
-					payload.Value,
-				)
-				return err, hwutil.PtrTo(esdb.NackActionPark)
+				return errs.NewCastError("string", payload.Value), hwutil.PtrTo(esdb.NackActionPark)
 			}
 			parsedID, err := uuid.Parse(val)
 			if err != nil {
@@ -348,6 +355,14 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 	return nil, nil
 }
 
+type UnknownFieldTypeError struct {
+	FieldType pb.FieldType
+}
+
+func (e UnknownFieldTypeError) Error() string {
+	return "unknown fieldType: " + e.FieldType.String()
+}
+
 // updateBasicPropertyValue is meant to be called in onPropertyValueUpdated
 func updateBasicPropertyValue(
 	ctx context.Context,
@@ -366,15 +381,17 @@ func updateBasicPropertyValue(
 	case fieldType == pb.FieldType_FIELD_TYPE_TEXT:
 		updatePropertyValueParams.TextValue = hwutil.PtrTo(fmt.Sprintf("%v", payload.Value))
 	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
-		val, ok := payload.Value.(float64)
-		if !ok {
-			return errors.New("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
+		val, err := hwutil.AssertFloat64(payload.Value)
+		if err != nil {
+			return fmt.Errorf("updateBasicPropertyValue: (FIELD_TYPE_NUMBER), parsing failed: %w", err),
+				hwutil.PtrTo(esdb.NackActionPark)
 		}
 		updatePropertyValueParams.NumberValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
 		val, ok := payload.Value.(bool)
 		if !ok {
-			return errors.New("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
+			return fmt.Errorf("updateBasicPropertyValue: (FIELD_TYPE_CHECKBOX), parsing failed: %w",
+				errs.NewCastError("bool", payload.Value)), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		updatePropertyValueParams.BoolValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
@@ -390,7 +407,7 @@ func updateBasicPropertyValue(
 		}
 		updatePropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
 	default:
-		return fmt.Errorf("updateBasicPropertyValue called with fieldType %s", fieldType.String()),
+		return fmt.Errorf("updateBasicPropertyValue: %w", UnknownFieldTypeError{FieldType: fieldType}),
 			hwutil.PtrTo(esdb.NackActionPark)
 	}
 

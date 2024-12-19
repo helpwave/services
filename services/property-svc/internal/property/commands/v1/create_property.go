@@ -3,11 +3,11 @@ package v1
 import (
 	"common"
 	"context"
-	"errors"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+	"hwes/errs"
 
 	"github.com/google/uuid"
 
@@ -52,7 +52,7 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		}
 
 		if exists {
-			return 0, errors.New("cannot create an already existing aggregate")
+			return 0, errs.ErrAlreadyExists
 		}
 
 		if err := a.CreateProperty(ctx, subjectType, fieldType, name); err != nil {

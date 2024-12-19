@@ -67,9 +67,11 @@ func (m TaskPropertyMatchers) QueryProperties(ctx context.Context) ([]Properties
 	return hwutil.Map(rows, cast), err
 }
 
+var ErrTaskIDNotValid = errors.New("taskID not valid")
+
 func (m TaskPropertyMatchers) GetSubjectID() (uuid.UUID, error) {
 	if !m.TaskID.Valid {
-		return uuid.UUID{}, errors.New("TaskPropertyMatchers GetSubjectID: TaskID not valid")
+		return uuid.UUID{}, ErrTaskIDNotValid
 	}
 	return m.TaskID.UUID, nil
 }

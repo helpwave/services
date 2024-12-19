@@ -217,7 +217,7 @@ func (s *SpiceDBAuthZ) BulkCheck(ctx context.Context, checks []hwauthz.Permissio
 		resc := req.GetResource()
 
 		if pberr := pair.GetError(); pberr != nil {
-			err := fmt.Errorf("spicedb: error while checking permissions: %s", pberr.GetMessage())
+			err := fmt.Errorf("spicedb: error while checking permissions: %s", pberr.GetMessage()) //nolint:err113
 			log.Error().Err(err).Msg("spicedb: error while checking permissions")
 			return nil, err
 		}

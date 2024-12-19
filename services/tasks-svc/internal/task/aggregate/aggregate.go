@@ -1,11 +1,13 @@
 package aggregate
 
 import (
+	"common/hwerr"
 	"context"
-	"fmt"
 	pb "gen/services/tasks_svc/v1"
 	"hwes"
 	"time"
+
+	"tasks-svc/internal/task/errs"
 
 	"github.com/google/uuid"
 
@@ -77,7 +79,7 @@ func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 
 	value, found := pb.TaskStatus_value[payload.Status]
 	if !found {
-		return fmt.Errorf("invalid taskStatus: %s", payload.Status)
+		return hwerr.InvalidEnumError{Enum: "TaskStatus", Value: payload.Status}
 	}
 	status := (pb.TaskStatus)(value)
 
@@ -97,7 +99,7 @@ func (a *TaskAggregate) onTaskStatusUpdated(evt hwes.Event) error {
 
 	value, found := pb.TaskStatus_value[payload.Status]
 	if !found {
-		return fmt.Errorf("invalid taskStatus: %s", payload.Status)
+		return hwerr.InvalidEnumError{Enum: "TaskStatus", Value: payload.Status}
 	}
 	status := (pb.TaskStatus)(value)
 
@@ -224,7 +226,7 @@ func (a *TaskAggregate) onSubtaskNameUpdated(evt hwes.Event) error {
 
 	subtask, found := a.Task.Subtasks[subtaskID]
 	if !found {
-		return fmt.Errorf("Subtask '%s' not found in task '%s'", subtaskID, a.Task.ID)
+		return errs.SubtaskNotInTaskError{Subtask: subtaskID, Task: a.Task.ID}
 	}
 
 	subtask.Name = payload.Name

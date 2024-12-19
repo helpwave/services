@@ -151,6 +151,8 @@ func TestIntegration(t *testing.T) {
 	}
 }
 
+var ErrTest = errors.New("test error")
+
 func TestAggregateBase_RegisterEventListener_HandleEvent(t *testing.T) {
 	aggregate := NewUserAggregate(uuid.New())
 
@@ -169,7 +171,7 @@ func TestAggregateBase_RegisterEventListener_HandleEvent(t *testing.T) {
 	}
 
 	fncWithErr := func(event hwes.Event) error {
-		return errors.New("test error")
+		return ErrTest
 	}
 
 	aggregate.RegisterEventListener(UserCreated, fncWithNoErr)
@@ -181,7 +183,7 @@ func TestAggregateBase_RegisterEventListener_HandleEvent(t *testing.T) {
 	aggregate.RegisterEventListener(UserCreated, fncWithErr)
 
 	if err := aggregate.HandleEvent(userCreatedEvent); err != nil {
-		if errors.Unwrap(err).Error() != "test error" {
+		if !errors.Is(err, ErrTest) {
 			t.Error(err)
 		}
 	} else {
