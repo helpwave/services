@@ -2,12 +2,18 @@ package spicedb
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"hwauthz"
 	"hwauthz/commonPerm"
 )
 
-func AddUserToOrganization(ctx context.Context, authz hwauthz.AuthZ, userID, organizationID uuid.UUID, leader bool) error {
+func AddUserToOrganization(
+	ctx context.Context,
+	authz hwauthz.AuthZ,
+	userID, organizationID uuid.UUID,
+	leader bool,
+) error {
 	permUser := commonPerm.User(userID)
 	permOrg := commonPerm.Organization(organizationID)
 
