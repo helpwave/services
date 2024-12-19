@@ -252,9 +252,8 @@ func TestTaskGrpcService_CreateSubtask_Validation(t *testing.T) {
 	require.NoError(t, err, codes.InvalidArgument, "rejects fully valid request")
 }
 
+//nolint:paralleltest
 func TestTaskGrpcService_UpdateSubtask_Validation(t *testing.T) {
-	t.Parallel()
-
 	ctx, client, teardown := setup()
 	defer teardown()
 

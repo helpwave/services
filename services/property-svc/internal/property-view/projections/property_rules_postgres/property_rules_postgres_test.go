@@ -52,9 +52,8 @@ func setup() (ctx context.Context, projection *Projection, dbMock pgxmock.PgxPoo
 	return ctx, projection, dbMock, teardown
 }
 
+//nolint:paralleltest
 func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPath(t *testing.T) {
-	t.Parallel()
-
 	ctx, projection, dbMock, teardown := setup()
 	defer teardown()
 

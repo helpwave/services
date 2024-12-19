@@ -121,7 +121,10 @@ func DefaultStreamInterceptors(metrics *prometheusGrpcProvider.ServerMetrics) []
 func DefaultServerOptions() []grpc.ServerOption {
 	// register new metrics collector with prometheus
 	metrics := prometheusGrpcProvider.NewServerMetrics()
-	telemetry.PrometheusRegistry().MustRegister(metrics)
+
+	if !hwutil.IsRunningInGoTests() {
+		telemetry.PrometheusRegistry().MustRegister(metrics)
+	}
 
 	unaryInterceptorChain := grpc.ChainUnaryInterceptor(DefaultUnaryInterceptors(metrics)...)
 	streamInterceptorChain := grpc.ChainStreamInterceptor(DefaultStreamInterceptors(metrics)...)
