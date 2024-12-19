@@ -17,9 +17,9 @@ import (
 // TestGetPropertiesBySubjectType:
 //   - Create Properties
 //   - Check GetPropertiesBySubjectType
-//
-//nolint:paralleltest
 func TestGetProperties(t *testing.T) {
+	t.Parallel()
+
 	propertyClient := propertyServiceClient()
 
 	ctx := context.Background()
