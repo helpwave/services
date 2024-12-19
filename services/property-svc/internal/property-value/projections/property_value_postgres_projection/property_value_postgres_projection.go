@@ -2,11 +2,11 @@ package property_value_postgres_projection
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwdb"
 	"hwes"
+	esErrs "hwes/errs"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 	"hwutil/errs"
@@ -60,7 +60,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	}
 
 	if payload.Value == nil {
-		return errors.New("onPropertyValueCreated: payload is empty"), hwutil.PtrTo(esdb.NackActionPark)
+		return esErrs.ErrPayloadMissing, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	propertyID, err := uuid.Parse(payload.PropertyID)
@@ -76,8 +76,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	// GetProperty for the fieldType
 	property, err := hwdb.Optional(p.propertyRepo.GetPropertyById)(ctx, propertyID)
 	if property == nil {
-		return fmt.Errorf("property with id %s not found for propertyValue", payload.PropertyID),
-			hwutil.PtrTo(esdb.NackActionRetry)
+		return PropertyNotFoundForValueError(propertyID), hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -266,11 +265,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		if fieldType == pb.FieldType_FIELD_TYPE_SELECT {
 			val, ok := payload.Value.(string)
 			if !ok {
-				err = fmt.Errorf(
-					"onPropertyValueUpdated: could not get select value: type is %T, expected string",
-					payload.Value,
-				)
-				return err, hwutil.PtrTo(esdb.NackActionPark)
+				return errs.NewCastError("string", payload.Value), hwutil.PtrTo(esdb.NackActionPark)
 			}
 			parsedID, err := uuid.Parse(val)
 			if err != nil {

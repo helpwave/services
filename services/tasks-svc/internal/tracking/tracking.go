@@ -4,7 +4,6 @@ import (
 	"common/auth"
 	"context"
 	"decaying_lru"
-	"errors"
 	"hwutil"
 	"time"
 
@@ -101,11 +100,7 @@ func RemoveWardFromRecentActivity(ctx context.Context, wardID string) {
 //   - SetupTracking was called earlier
 //   - the context originates from an authenticated request
 func GetRecentWardsForUser(ctx context.Context) ([]string, error) {
-	userID := getUserID(ctx)
-	if userID == "" {
-		return nil, errors.New("GetRecentWardsForUser called, but context has no userID")
-	}
-	return lru.GetItemsForUser(ctx, WardKey, userID)
+	return lru.GetItemsForUser(ctx, WardKey, getUserID(ctx))
 }
 
 // SetLRU overwrites the lru, to use a custom setup, instead of SetupTracking (e.g., for testing)

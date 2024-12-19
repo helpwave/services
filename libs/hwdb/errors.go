@@ -5,11 +5,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"hwlocale"
 	"reflect"
 	"strings"
 	"telemetry"
+
+	"github.com/google/uuid"
 
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"

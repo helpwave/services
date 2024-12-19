@@ -2,7 +2,6 @@ package aggregate
 
 import (
 	"context"
-	"errors"
 	"hwes"
 	"hwutil"
 
@@ -59,7 +58,10 @@ func (a *PropertyViewRuleAggregate) onPropertyRuleCreated(event hwes.Event) erro
 		return errs.ErrMissingRuleID
 	}
 	if a.GetID() != payload.RuleID {
-		return errors.New("RuleID not AggregateID")
+		return hwes.EventAggregateMismatchError{
+			Targeted: a.GetID(),
+			Got:      payload.RuleID,
+		}
 	}
 	a.PropertyViewRule = &payload.PropertyViewRule
 	return nil

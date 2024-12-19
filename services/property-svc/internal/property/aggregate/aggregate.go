@@ -2,10 +2,11 @@ package aggregate
 
 import (
 	"context"
-	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwes"
 	"hwutil"
+
+	"property-svc/internal/property/util"
 
 	"github.com/google/uuid"
 
@@ -73,17 +74,15 @@ func (a *PropertyAggregate) onPropertyCreated(evt hwes.Event) error {
 		return err
 	}
 
-	val, found := pb.FieldType_value[payload.FieldType]
-	if !found {
-		return fmt.Errorf("invalid property fieldType: %s", payload.FieldType)
+	fieldType, err := util.ParseFieldType(payload.FieldType)
+	if err != nil {
+		return err
 	}
-	fieldType := (pb.FieldType)(val)
 
-	val, found = pb.SubjectType_value[payload.SubjectType]
-	if !found {
-		return fmt.Errorf("invalid property subjectType: %s", payload.SubjectType)
+	subjectType, err := util.ParseSubjectType(payload.SubjectType)
+	if err != nil {
+		return err
 	}
-	subjectType := (pb.SubjectType)(val)
 
 	a.Property.SubjectType = subjectType
 	a.Property.FieldType = fieldType
@@ -139,11 +138,10 @@ func (a *PropertyAggregate) onSubjectTypeUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	value, found := pb.SubjectType_value[payload.SubjectType]
-	if !found {
-		return fmt.Errorf("invalid subjectType: %s", payload.SubjectType)
+	subjectType, err := util.ParseSubjectType(payload.SubjectType)
+	if err != nil {
+		return err
 	}
-	subjectType := (pb.SubjectType)(value)
 
 	a.Property.SubjectType = subjectType
 	return nil
@@ -177,6 +175,12 @@ func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 	return nil
 }
 
+type SelectOptionNameMissingError uuid.UUID
+
+func (e SelectOptionNameMissingError) Error() string {
+	return "name missing for selectOption with id " + uuid.UUID(e).String()
+}
+
 func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event) error {
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -194,7 +198,7 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 	for _, option := range payload.UpsertedSelectOptions {
 		if _, exists := selectOptions[option.ID]; !exists {
 			if option.Name == nil {
-				return fmt.Errorf("name missing for selectOption with id %s", option.ID.String())
+				return SelectOptionNameMissingError(option.ID)
 			}
 			selectOptions[option.ID] = models.SelectOption{
 				ID:          option.ID,

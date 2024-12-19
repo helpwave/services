@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"hwutil"
-	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -89,14 +88,8 @@ func (c *Client) ensureSuccessfulResponse(res *http.Response) error {
 	if res.StatusCode >= 200 && res.StatusCode <= 299 {
 		return nil
 	}
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return fmt.Errorf("response status code not 2xx, cannot read response body for error message: %w", err)
-	}
-	return fmt.Errorf(
-		"response status for %s - %s is %d: %s",
-		res.Request.Method, res.Request.URL.String(), res.StatusCode, string(body),
-	)
+
+	return BadResponseError{Res: res}
 }
 
 func (c *Client) GetUserById(ctx context.Context, userID uuid.UUID) (*User, error) {

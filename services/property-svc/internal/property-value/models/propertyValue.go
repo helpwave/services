@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwutil"
@@ -76,12 +75,12 @@ type MultiSelectChange struct {
 func interfaceToStringSlice(interf interface{}) ([]string, error) {
 	slice, ok := interf.([]interface{})
 	if !ok {
-		return nil, errors.New("value is not a slice")
+		return nil, errs.NewCastError("[]interface{}", interf)
 	}
 
 	strings, ok := hwutil.InterfacesToStrings(slice)
 	if !ok {
-		return nil, errors.New("value is not a []string")
+		return nil, errs.NewCastError("[]string", slice)
 	}
 	return strings, nil
 }

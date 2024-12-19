@@ -1,12 +1,12 @@
 package task_postgres_projection
 
 import (
+	"common/hwerr"
 	"context"
-	"errors"
-	"fmt"
 	pb "gen/services/tasks_svc/v1"
 	"hwdb"
 	"hwes"
+	esErrs "hwes/errs"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 
@@ -57,6 +57,14 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(taskEventsV1.TaskDeleted, p.onTaskDeleted)
 }
 
+func parseTaskStatus(status string) (pb.TaskStatus, error) {
+	value, found := pb.TaskStatus_value[status]
+	if !found {
+		return 0, hwerr.InvalidEnumError{Enum: "TaskStatus", Value: status}
+	}
+	return (pb.TaskStatus)(value), nil
+}
+
 func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
@@ -76,17 +84,16 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	value, found := pb.TaskStatus_value[payload.Status]
-	if !found {
-		return fmt.Errorf("invalid taskStatus: %s", payload.Status), hwutil.PtrTo(esdb.NackActionPark)
+	status, err := parseTaskStatus(payload.Status)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
-	status := (pb.TaskStatus)(value)
 
 	var committerID uuid.UUID
 	if evt.CommitterUserID != nil {
 		committerID = *evt.CommitterUserID
 	} else {
-		return errors.New("commiterId is not set"), hwutil.PtrTo(esdb.NackActionPark)
+		return esErrs.ErrCommitterMissing, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	// Add to db
@@ -115,13 +122,12 @@ func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (e
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	value, found := pb.TaskStatus_value[payload.Status]
-	if !found {
-		return fmt.Errorf("invalid taskStatus: %s", payload.Status), hwutil.PtrTo(esdb.NackActionPark)
+	status, err := parseTaskStatus(payload.Status)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
-	status := (pb.TaskStatus)(value)
 
-	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	err = p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
 		ID:          evt.AggregateID,
 		Status:      hwutil.PtrTo(int32(status)),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -295,7 +301,7 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 	if evt.CommitterUserID != nil {
 		committerID = *evt.CommitterUserID
 	} else {
-		return errors.New("committerID not set"), hwutil.PtrTo(esdb.NackActionPark)
+		return esErrs.ErrCommitterMissing, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)

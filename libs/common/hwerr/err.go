@@ -2,6 +2,7 @@ package hwerr
 
 import (
 	"context"
+	"fmt"
 	"hwlocale"
 
 	zlog "github.com/rs/zerolog"
@@ -53,4 +54,13 @@ func LocalizedMessage(ctx context.Context, locale hwlocale.Locale) *errdetails.L
 		Locale:  tag.String(),
 		Message: str,
 	}
+}
+
+type InvalidEnumError struct {
+	Enum  string
+	Value string
+}
+
+func (e InvalidEnumError) Error() string {
+	return fmt.Sprintf("invalid enum: %q is not a valid %q", e.Value, e.Enum)
 }

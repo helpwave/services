@@ -3,10 +3,11 @@ package v1
 import (
 	"common"
 	"context"
-	"fmt"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+
+	"tasks-svc/internal/task/errs"
 
 	"tasks-svc/internal/task/perm"
 
@@ -45,7 +46,7 @@ func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 
 		currentSubtask, found := a.Task.Subtasks[subtaskID]
 		if !found {
-			return 0, fmt.Errorf("subtask with ID: %s not found on Task with ID: %s", subtaskID, taskID)
+			return 0, errs.SubtaskNotInTaskError{Subtask: subtaskID, Task: taskID}
 		}
 
 		if name != nil && *name != currentSubtask.Name {
