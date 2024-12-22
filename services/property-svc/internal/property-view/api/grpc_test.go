@@ -29,7 +29,13 @@ import (
 	"google.golang.org/grpc"
 )
 
-func server() (context.Context, pb.PropertyViewsServiceClient, *hwes_test.AggregateStore, func()) {
+func setup() (
+	context.Context,
+	pb.PropertyViewsServiceClient,
+	*hwes_test.AggregateStore,
+	pgxmock.PgxPoolIface,
+	func(),
+) {
 	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
 	propertyViewHandlers := handlers.NewPropertyViewHandlers(aggregateStore, test.NewTrueAuthZ())
@@ -37,38 +43,28 @@ func server() (context.Context, pb.PropertyViewsServiceClient, *hwes_test.Aggreg
 
 	ctx := common.Setup("property-svc", "test", common.WithFakeAuthOnly())
 
-	// Start Server
-	grpcServer := grpc.NewServer(common.DefaultServerOptions(ctx)...)
-	pb.RegisterPropertyViewsServiceServer(grpcServer, grpcService)
-	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
-
-	client := pb.NewPropertyViewsServiceClient(conn)
-
-	return ctx, client, aggregateStore, closer
-}
-
-func setup() (
-	ctx context.Context,
-	client pb.PropertyViewsServiceClient,
-	as *hwes_test.AggregateStore,
-	dbMock pgxmock.PgxPoolIface,
-	teardown func(),
-) {
-	ctx, client, as, closer := server()
-	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
-
+	// database mock
 	dbMock, err := pgxmock.NewPool()
 	if err != nil {
 		panic(err)
 	}
 	ctx = hwdb.WithDB(ctx, dbMock)
 
-	teardown = func() {
+	// auth
+	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
+
+	// Start Server
+	grpcServer := grpc.NewServer(common.DefaultServerOptions(ctx)...)
+	pb.RegisterPropertyViewsServiceServer(grpcServer, grpcService)
+	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
+	client := pb.NewPropertyViewsServiceClient(conn)
+
+	teardown := func() {
 		closer()
 		dbMock.Close()
 	}
 
-	return ctx, client, as, dbMock, teardown
+	return ctx, client, aggregateStore, dbMock, teardown
 }
 
 //nolint:paralleltest

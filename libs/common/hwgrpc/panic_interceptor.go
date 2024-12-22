@@ -1,14 +1,13 @@
 package hwgrpc
 
 import (
-	"context"
-	"fmt"
-	"os"
-	"runtime/debug"
-	"telemetry"
-
 	"common/hwerr"
 	"common/locale"
+	"context"
+	"fmt"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"os"
+	"runtime/debug"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	"github.com/prometheus/client_golang/prometheus"
@@ -17,10 +16,8 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-var panicsRecovered = telemetry.NewLazyCounter(prometheus.CounterOpts{
-	Name: "services_panics_recovered_total",
-	Help: "Total number of panics recovered by PanicRecoverInterceptor",
-})
+// TODO: remove global state
+var panicsRecovered prometheus.Counter
 
 func recoveryHandlerFn() recovery.RecoveryHandlerFuncContext {
 	return func(ctx context.Context, recovered any) (err error) {
@@ -32,22 +29,31 @@ func recoveryHandlerFn() recovery.RecoveryHandlerFuncContext {
 
 		_, _ = fmt.Fprintln(os.Stderr, string(debug.Stack()))
 
-		panicsRecovered.Counter(ctx).Inc()
+		panicsRecovered.Inc()
 
 		return hwerr.NewStatusError(ctx, codes.Internal, "panic recovered", locale.GenericError(ctx))
 	}
 }
 
-func UnaryPanicRecoverInterceptor(ctx context.Context) grpc.UnaryServerInterceptor {
-	panicsRecovered.Ensure(ctx)
+func ensureCounter(registry *prometheus.Registry) {
+	if registry != nil {
+		panicsRecovered = promauto.With(registry).NewCounter(prometheus.CounterOpts{
+			Name: "services_panics_recovered_total",
+			Help: "Total number of panics recovered by PanicRecoverInterceptor",
+		})
+	}
+}
+
+func UnaryPanicRecoverInterceptor(registry *prometheus.Registry) grpc.UnaryServerInterceptor {
+	ensureCounter(registry)
 
 	return recovery.UnaryServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),
 	)
 }
 
-func StreamPanicRecoverInterceptor(ctx context.Context) grpc.StreamServerInterceptor {
-	panicsRecovered.Ensure(ctx)
+func StreamPanicRecoverInterceptor(registry *prometheus.Registry) grpc.StreamServerInterceptor {
+	ensureCounter(registry)
 
 	return recovery.StreamServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),

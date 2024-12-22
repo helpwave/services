@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"hwutil"
+	"hwutil/errs"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -34,7 +35,7 @@ type DBTX interface {
 // POSTGRES_PORT (5432)
 //
 // SetupDatabaseFromEnv returns a close function, which has to be called in order to shut down the database cleanly
-func SetupDatabaseFromEnv(ctx context.Context) (context.Context, func()) {
+func SetupDatabaseFromEnv(ctx context.Context) (DBTX, func()) {
 	log.Info().Msg("connecting to postgres ...")
 
 	dsn := hwutil.GetEnvOr("POSTGRES_DSN", "")
@@ -48,12 +49,9 @@ func SetupDatabaseFromEnv(ctx context.Context) (context.Context, func()) {
 		log.Fatal().Err(err).Msg("could not connect to database")
 	}
 
-	// make db available via GetDB
-	ctx = WithDB(ctx, dbpool)
-
 	log.Info().Msg("connected to postgres")
 
-	return ctx, func() {
+	return dbpool, func() {
 		log.Info().Msg("closing db pool")
 		dbpool.Close()
 	}
@@ -115,6 +113,7 @@ func GetDB(ctx context.Context) DBTX {
 		log.Error().
 			Msg("GetDB called without set-up database, you will run into nil-pointers. " +
 				"Make sure to call SetupDatabaseFromEnv()!")
+		panic(errs.NewCastError("DBTX", value))
 	}
 	return db
 }

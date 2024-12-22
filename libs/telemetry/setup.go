@@ -4,12 +4,9 @@ import (
 	"context"
 	"errors"
 	"hwutil"
-	"hwutil/errs"
 	"net/http"
 	"os"
 	"time"
-
-	"github.com/prometheus/client_golang/prometheus/promauto"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -48,8 +45,7 @@ func SetupLogging(mode, rawLevel, service, version string) {
 	log.Info().Msg("Logging is set up")
 }
 
-func startMetricsServer(ctx context.Context, addr string, shutdown func(error)) {
-	reg := PrometheusRegistry(ctx)
+func startMetricsServer(ctx context.Context, reg *prometheus.Registry, addr string, shutdown func(error)) {
 	server := &http.Server{
 		Addr: addr,
 		Handler: promhttp.InstrumentMetricHandler(
@@ -85,23 +81,11 @@ func startMetricsServer(ctx context.Context, addr string, shutdown func(error)) 
 	cancel() // prevent mem leak
 }
 
-type promRegKey struct{}
-
-func PrometheusRegistry(ctx context.Context) *prometheus.Registry {
-	value := ctx.Value(promRegKey{})
-	reg, ok := value.(*prometheus.Registry)
-	if !ok {
-		panic(errs.NewCastError("*prometheus.Registry", value))
-	}
-	return reg
-}
-
 // SetupMetrics will start a new http server for prometheus to scrape from
-func SetupMetrics(ctx context.Context, shutdown func(error)) context.Context {
+func SetupMetrics(ctx context.Context, shutdown func(error)) *prometheus.Registry {
 	// create new prometheus registry, we do not use the global default one,
 	// as it causes problems with tests
 	prometheusRegistry := prometheus.NewRegistry()
-	ctx = context.WithValue(ctx, promRegKey{}, prometheusRegistry)
 
 	l := log.Ctx(ctx)
 
@@ -109,37 +93,11 @@ func SetupMetrics(ctx context.Context, shutdown func(error)) context.Context {
 
 	if addr == "" {
 		l.Warn().Msg("METRICS_ADDR not set, will not export metrics")
-		return ctx
+		return prometheusRegistry
 	}
 
 	l.Info().Str("addr", addr).Msg("starting metrics server")
 
-	go startMetricsServer(ctx, addr, shutdown)
-	return ctx
-}
-
-// LazyCounter prevents access to PrometheusRegistry, before it is initialized
-// by creating the counter only when it is needed
-type LazyCounter struct {
-	opts    prometheus.CounterOpts
-	counter *prometheus.Counter
-}
-
-func NewLazyCounter(opts prometheus.CounterOpts) LazyCounter {
-	return LazyCounter{
-		opts:    opts,
-		counter: nil,
-	}
-}
-
-func (lc *LazyCounter) Counter(ctx context.Context) prometheus.Counter {
-	if lc.counter != nil {
-		return *lc.counter
-	}
-	lc.counter = hwutil.PtrTo(promauto.With(PrometheusRegistry(ctx)).NewCounter(lc.opts))
-	return *lc.counter
-}
-
-func (lc *LazyCounter) Ensure(ctx context.Context) {
-	lc.Counter(ctx)
+	go startMetricsServer(ctx, prometheusRegistry, addr, shutdown)
+	return prometheusRegistry
 }

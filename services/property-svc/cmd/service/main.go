@@ -35,7 +35,7 @@ func Main(version string, ready func()) {
 	flag.Parse()
 	log.Debug().Bool("replayMode", *replayMode).Msg("flags")
 
-	ctx, closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
+	db, closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
 	authz := hwspicedb.NewSpiceDBAuthZ()
@@ -89,7 +89,7 @@ func Main(version string, ready func()) {
 		if ready != nil {
 			ready()
 		}
-	})
+	}, common.WithDB(db))
 
 	common.Shutdown(nil)
 }
