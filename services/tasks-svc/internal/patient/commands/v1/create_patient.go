@@ -3,10 +3,10 @@ package v1
 import (
 	"common"
 	"context"
-	"errors"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+	"hwes/errs"
 
 	"tasks-svc/internal/patient/perm"
 
@@ -45,7 +45,7 @@ func NewCreatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 		}
 
 		if exists {
-			return 0, errors.New("cannot create an already existing aggregate")
+			return 0, errs.ErrAlreadyExists
 		}
 
 		finalNotes := ""

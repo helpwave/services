@@ -3,12 +3,13 @@ package postgres_projection
 import (
 	"context"
 	"errors"
-	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+
+	"property-svc/internal/property/util"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
@@ -86,17 +87,15 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	value, found := pb.SubjectType_value[payload.SubjectType]
-	if !found {
-		return fmt.Errorf("subject_type %s invalid", payload.SubjectType), hwutil.PtrTo(esdb.NackActionPark)
+	subjectType, err := util.ParseSubjectType(payload.SubjectType)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
-	subjectType := (pb.SubjectType)(value)
 
-	value, found = pb.FieldType_value[payload.FieldType]
-	if !found {
-		return fmt.Errorf("field_type %s invalid", payload.FieldType), hwutil.PtrTo(esdb.NackActionPark)
+	fieldType, err := util.ParseFieldType(payload.FieldType)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
-	fieldType := (pb.FieldType)(value)
 
 	// create query
 	err = p.propertyRepo.CreateProperty(ctx, property_repo.CreatePropertyParams{
@@ -179,13 +178,12 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	value, found := pb.SubjectType_value[payload.SubjectType]
-	if !found {
-		return fmt.Errorf("invalid fieldType: %s", payload.SubjectType), hwutil.PtrTo(esdb.NackActionPark)
+	subjectType, err := util.ParseSubjectType(payload.SubjectType)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
-	subjectType := (pb.SubjectType)(value)
 
-	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+	err = p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
 		ID:          evt.AggregateID,
 		SubjectType: hwutil.PtrTo(int32(subjectType)),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec

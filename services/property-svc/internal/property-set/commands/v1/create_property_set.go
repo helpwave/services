@@ -3,11 +3,11 @@ package v1
 import (
 	"common"
 	"context"
-	"errors"
 	"fmt"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+	"hwes/errs"
 
 	"property-svc/internal/property-set/perm"
 
@@ -15,8 +15,6 @@ import (
 
 	"property-svc/internal/property-set/aggregate"
 )
-
-var ErrAlreadyExists = errors.New("cannot create an already existing aggregate")
 
 type CreatePropertySetCommandHandler func(
 	ctx context.Context,
@@ -42,7 +40,7 @@ func NewCreatePropertySetCommandHandler(as hwes.AggregateStore, authz hwauthz.Au
 		}
 
 		if exists {
-			return 0, ErrAlreadyExists
+			return 0, errs.ErrAlreadyExists
 		}
 
 		if err := a.CreatePropertySet(ctx, name); err != nil {

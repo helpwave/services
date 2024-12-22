@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"hwutil"
+	"hwutil/errs"
 	"strings"
 	"telemetry"
 	"time"
@@ -70,13 +71,16 @@ type metadata struct {
 func GetEventTypeOptionOfProtoMessageV1(protoMessage proto.Message) string {
 	eventTypeOption := pbEventsV1.E_EventType
 
-	protoEventType, ok := proto.GetExtension(protoMessage.ProtoReflect().Descriptor().Options(), eventTypeOption).(string)
+	descriptorOptions := protoMessage.ProtoReflect().Descriptor().Options()
+	protoEventTypeAny := proto.GetExtension(descriptorOptions, eventTypeOption)
+	protoEventType, ok := protoEventTypeAny.(string)
 	if !ok {
-		panic(fmt.Sprintf(
-			"String type assertion for eventType '%s' on protoMessage '%s' failed.",
-			eventTypeOption.TypeDescriptor().FullName(),
-			protoMessage.ProtoReflect().Descriptor().FullName(),
-		))
+		panic(
+			fmt.Errorf("not a string: eventType %q on protoMessage %q: %w",
+				eventTypeOption.TypeDescriptor().FullName(),
+				protoMessage.ProtoReflect().Descriptor().FullName(),
+				errs.NewCastError("string", protoEventTypeAny)),
+		)
 	}
 
 	if protoEventType == "" {
@@ -164,6 +168,12 @@ func NewEventFromProto(aggregate Aggregate, message proto.Message, opts ...Event
 	return event, nil
 }
 
+type StreamIdMalformedError string
+
+func (e StreamIdMalformedError) Error() string {
+	return fmt.Sprintf("cannot resolve aggregateType and aggregateID from streamID %q", string(e))
+}
+
 // resolveAggregateIDAndTypeFromStreamID extracts the aggregateID and aggregateType of a given streamID
 // See aggregate.GetTypeID
 //
@@ -181,13 +191,13 @@ func resolveAggregateIDAndTypeFromStreamID(streamID string) (aID uuid.UUID, aggr
 		aggregateTypeStr = streamIDParts[0]
 		aggregateIDStr = streamIDParts[1]
 	} else {
-		err = fmt.Errorf("cannot resolve aggregateType and aggregateID from streamID '%s'", streamID)
+		err = StreamIdMalformedError(streamID)
 		return
 	}
 
 	aggregateType = AggregateType(aggregateTypeStr)
 	if aggregateType == "" {
-		err = fmt.Errorf("resolved empty aggregateType from streamID '%s'", streamID)
+		err = StreamIdMalformedError(streamID)
 		return
 	}
 
@@ -326,9 +336,11 @@ func (e *Event) SetProtoData(message proto.Message) error {
 	return nil
 }
 
+var ErrGetJsonOnProtoData = errors.New("data of event is marked as proto, use GetProtoData instead")
+
 func (e *Event) GetJsonData(data interface{}) error {
 	if e.DataIsProto {
-		return errors.New("data of this event is marked as proto, use GetProtoData instead")
+		return ErrGetJsonOnProtoData
 	}
 
 	if jsonable, ok := data.(hwutil.JSONAble); ok {
@@ -337,9 +349,11 @@ func (e *Event) GetJsonData(data interface{}) error {
 	return json.Unmarshal(e.Data, data)
 }
 
+var ErrGetProtoOnJsonData = errors.New("data of event is not marked as proto, use GetJsonData instead")
+
 func (e *Event) GetProtoData(message proto.Message) error {
 	if !e.DataIsProto {
-		return errors.New("data of this event is not marked as proto, use GetJsonData instead")
+		return ErrGetProtoOnJsonData
 	}
 
 	return protojson.Unmarshal(e.Data, message)

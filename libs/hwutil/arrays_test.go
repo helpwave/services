@@ -1,8 +1,9 @@
 package hwutil
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestWithout(t *testing.T) {

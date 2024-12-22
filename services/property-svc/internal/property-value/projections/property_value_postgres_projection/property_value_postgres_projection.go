@@ -71,8 +71,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	// GetProperty for the fieldType
 	property, err := hwdb.Optional(p.propertyRepo.GetPropertyById)(ctx, propertyID)
 	if property == nil {
-		return fmt.Errorf("property with id %s not found for propertyValue", payload.PropertyID),
-			hwutil.PtrTo(esdb.NackActionRetry)
+		return PropertyNotFoundForValueError(propertyID), hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -163,6 +162,18 @@ func createBasicPropertyValue(
 	}
 
 	return nil, nil
+}
+
+type PropertyValueNotFoundError uuid.UUID
+
+func (e PropertyValueNotFoundError) Error() string {
+	return fmt.Sprintf("propertyValue with id %s not found", uuid.UUID(e).String())
+}
+
+type PropertyNotFoundForValueError uuid.UUID
+
+func (e PropertyNotFoundForValueError) Error() string {
+	return fmt.Sprintf("property with id %s not found for propertyValue", uuid.UUID(e).String())
 }
 
 func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
@@ -302,8 +313,8 @@ func updateBasicPropertyValue(
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	}
 
-	if done := valueChange.SetBasicValues(&updatePropertyValueParams); !done {
-		return fmt.Errorf("updateBasicPropertyValue: could not set setBasicFromChange: %v", valueChange),
+	if err := valueChange.SetBasicValues(&updatePropertyValueParams); err != nil {
+		return fmt.Errorf("updateBasicPropertyValue: could not set setBasicFromChange: %w", err),
 			hwutil.PtrTo(esdb.NackActionPark)
 	}
 

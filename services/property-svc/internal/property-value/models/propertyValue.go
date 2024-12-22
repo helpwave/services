@@ -6,6 +6,7 @@ import (
 	pb "gen/services/property_svc/v1"
 	"hwdb"
 	"hwutil"
+	"hwutil/errs"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
@@ -158,7 +159,9 @@ type BasicChangeSettable interface {
 	SetDateTimeValue(value pgtype.Timestamp)
 }
 
-func (c TypedValueChange) SetBasicValues(settable BasicChangeSettable) bool {
+var ErrNotABasicValue = errors.New("no basic value change to set")
+
+func (c TypedValueChange) SetBasicValues(settable BasicChangeSettable) error {
 	switch {
 	case c.TextValue != nil:
 		settable.SetTextValue(c.TextValue)
@@ -171,21 +174,21 @@ func (c TypedValueChange) SetBasicValues(settable BasicChangeSettable) bool {
 	case c.DateTimeValue != nil:
 		settable.SetDateTimeValue(hwdb.TimeToTimestamp(*c.DateTimeValue))
 	default:
-		return false
+		return ErrNotABasicValue
 	}
 
-	return true
+	return nil
 }
 
 func interfaceToStringSlice(interf interface{}) ([]string, error) {
 	slice, ok := interf.([]interface{})
 	if !ok {
-		return nil, errors.New("value is not a slice")
+		return nil, errs.NewCastError("[]interface{}", interf)
 	}
 
 	strings, ok := hwutil.InterfacesToStrings(slice)
 	if !ok {
-		return nil, errors.New("value is not a []string")
+		return nil, errs.NewCastError("[]string", slice)
 	}
 	return strings, nil
 }
@@ -218,7 +221,8 @@ func MultiSelectChangeFromMap(m map[string]interface{}) (MultiSelectChange, erro
 func MultiSelectChangeFromInterface(value interface{}) (MultiSelectChange, error) {
 	m, ok := value.(map[string]interface{})
 	if !ok {
-		return MultiSelectChange{}, errors.New("MultiSelectChangeFromInterface: value is not a map")
+		return MultiSelectChange{}, fmt.Errorf("MultiSelectChangeFromInterface: %w",
+			errs.NewCastError("map[string]interface{}", value))
 	}
 
 	return MultiSelectChangeFromMap(m)
