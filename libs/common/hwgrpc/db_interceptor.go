@@ -2,8 +2,9 @@ package hwgrpc
 
 import (
 	"context"
-	"google.golang.org/grpc"
 	"hwdb"
+
+	"google.golang.org/grpc"
 )
 
 func UnaryDBInterceptor(db hwdb.DBTX) grpc.UnaryServerInterceptor {

@@ -4,6 +4,8 @@ import (
 	"context"
 	"hwes"
 
+	"property-svc/internal/property-value/models"
+
 	"github.com/google/uuid"
 )
 
@@ -13,10 +15,10 @@ const (
 )
 
 type PropertyValueCreatedEvent struct {
-	ID         string      `json:"id"`
-	PropertyID string      `json:"property_id"`
-	Value      interface{} `json:"value"`
-	SubjectID  string      `json:"subject_id"`
+	ID         string                  `json:"id"`
+	PropertyID string                  `json:"property_id"`
+	Change     models.TypedValueChange `json:"change"`
+	SubjectID  string                  `json:"subject_id"`
 }
 
 func NewPropertyValueCreatedEvent(
@@ -24,25 +26,29 @@ func NewPropertyValueCreatedEvent(
 	a hwes.Aggregate,
 	id uuid.UUID,
 	propertyID uuid.UUID,
-	value interface{},
+	valueChange models.TypedValueChange,
 	subjectID uuid.UUID,
 ) (hwes.Event, error) {
 	payload := PropertyValueCreatedEvent{
 		ID:         id.String(),
 		PropertyID: propertyID.String(),
-		Value:      value,
+		Change:     valueChange,
 		SubjectID:  subjectID.String(),
 	}
 	return hwes.NewEvent(a, PropertyValueCreated, hwes.WithData(payload), hwes.WithContext(ctx))
 }
 
 type PropertyValueUpdatedEvent struct {
-	Value interface{} `json:"value"`
+	Change models.TypedValueChange `json:"change"`
 }
 
-func NewPropertyValueUpdatedEvent(ctx context.Context, a hwes.Aggregate, value interface{}) (hwes.Event, error) {
+func NewPropertyValueUpdatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	valueChange models.TypedValueChange,
+) (hwes.Event, error) {
 	payload := PropertyValueUpdatedEvent{
-		Value: value,
+		Change: valueChange,
 	}
 	return hwes.NewEvent(a, PropertyValueUpdated, hwes.WithData(payload), hwes.WithContext(ctx))
 }

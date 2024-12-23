@@ -7,6 +7,7 @@ import (
 
 	zlog "github.com/rs/zerolog"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	genstatus "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/protoadapt"
@@ -63,4 +64,19 @@ type InvalidEnumError struct {
 
 func (e InvalidEnumError) Error() string {
 	return fmt.Sprintf("invalid enum: %q is not a valid %q", e.Value, e.Enum)
+}
+
+// ProtoStatusError implements the Error interface on *genstatus.Status
+type ProtoStatusError struct {
+	status *genstatus.Status
+}
+
+func (e ProtoStatusError) Error() string {
+	return e.status.GetMessage()
+}
+
+func NewProtoStatusError(status *genstatus.Status) ProtoStatusError {
+	return ProtoStatusError{
+		status: status,
+	}
 }

@@ -2,12 +2,13 @@ package hwgrpc_test
 
 import (
 	"context"
+	"hwdb"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/pashagolub/pgxmock/v4"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
-	"hwdb"
-	"testing"
 
 	"common/hwgrpc"
 )

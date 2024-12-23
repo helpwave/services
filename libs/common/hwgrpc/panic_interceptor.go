@@ -1,13 +1,15 @@
 package hwgrpc
 
 import (
-	"common/hwerr"
-	"common/locale"
 	"context"
 	"fmt"
-	"github.com/prometheus/client_golang/prometheus/promauto"
 	"os"
 	"runtime/debug"
+
+	"common/hwerr"
+	"common/locale"
+
+	"github.com/prometheus/client_golang/prometheus/promauto"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	"github.com/prometheus/client_golang/prometheus"

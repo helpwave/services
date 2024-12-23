@@ -2,11 +2,12 @@ package common
 
 import (
 	"context"
-	"github.com/prometheus/client_golang/prometheus"
 	"hwdb"
 	"hwutil"
 	"net"
 	"telemetry"
+
+	"github.com/prometheus/client_golang/prometheus"
 
 	"common/auth"
 	"common/hwgrpc"

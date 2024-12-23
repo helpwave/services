@@ -2,9 +2,10 @@ package hwdb
 
 import (
 	"context"
+	"testing"
+
 	"github.com/pashagolub/pgxmock/v4"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestContextFunctions(t *testing.T) {
