@@ -7,8 +7,6 @@ import (
 	"net"
 	"telemetry"
 
-	"github.com/prometheus/client_golang/prometheus"
-
 	"common/auth"
 	"common/hwgrpc"
 
@@ -35,7 +33,7 @@ import (
 //		api.RegisterMyServiceServer(grpcServer, &myServiceServer{})
 //	})
 //	// cleanup after yourself here
-func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook func(*daprd.Server), opts ...DefaultServerOptionsOpt) {
+func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook func(*daprd.Server)) {
 	log := zlog.Ctx(ctx)
 
 	listener, err := net.Listen("tcp", addr)
@@ -44,7 +42,7 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 	}
 
 	// dapr/grpc service
-	service, ok := daprd.NewServiceWithListener(listener, DefaultServerOptions(opts...)...).(*daprd.Server)
+	service, ok := daprd.NewServiceWithListener(listener, DefaultServerOptions(ctx)...).(*daprd.Server)
 	if !ok {
 		log.Fatal().Msg("dapr service listener is not a *daprd.Server")
 	}
@@ -90,13 +88,13 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 // DefaultUnaryInterceptors returns the slice of default interceptors for unary gRPC calls
 //
 //	chain := grpc.ChainUnaryInterceptor(common.DefaultUnaryInterceptors()...)
-func DefaultUnaryInterceptors(opt DefaultServerOptionsOpt) []grpc.UnaryServerInterceptor {
+func DefaultUnaryInterceptors(ctx context.Context) []grpc.UnaryServerInterceptor {
 	return []grpc.UnaryServerInterceptor{
-		hwgrpc.UnaryPanicRecoverInterceptor(opt.prometheusRegistry),
+		hwgrpc.UnaryPanicRecoverInterceptor(ctx),
 		hwgrpc.UnaryLoggingInterceptor,
 		hwgrpc.UnaryErrorQualityControlInterceptor,
 		hwgrpc.UnaryLocaleInterceptor,
-		hwgrpc.UnaryDBInterceptor(opt.db),
+		hwgrpc.UnaryDBInterceptor(hwdb.GetDB(ctx)),
 		defaultUnaryAuthInterceptor,
 		defaultUnaryOrganizationInterceptor,
 		hwgrpc.UnaryValidateInterceptor,
@@ -107,13 +105,13 @@ func DefaultUnaryInterceptors(opt DefaultServerOptionsOpt) []grpc.UnaryServerInt
 // DefaultStreamInterceptors returns the slice of default interceptors for stream gRPC calls
 //
 //	chain := grpc.ChainStreamInterceptor(common.DefaultStreamInterceptors()...)
-func DefaultStreamInterceptors(opt DefaultServerOptionsOpt) []grpc.StreamServerInterceptor {
+func DefaultStreamInterceptors(ctx context.Context) []grpc.StreamServerInterceptor {
 	return []grpc.StreamServerInterceptor{
-		hwgrpc.StreamPanicRecoverInterceptor(opt.prometheusRegistry),
+		hwgrpc.StreamPanicRecoverInterceptor(ctx),
 		hwgrpc.StreamLoggingInterceptor,
 		hwgrpc.StreamErrorQualityControlInterceptor,
 		hwgrpc.StreamLocaleInterceptor,
-		hwgrpc.StreamDBInterceptor(opt.db),
+		hwgrpc.StreamDBInterceptor(hwdb.GetDB(ctx)),
 		defaultStreamAuthInterceptor,
 		defaultStreamOrganizationInterceptor,
 		hwgrpc.StreamValidateInterceptor,
@@ -121,48 +119,20 @@ func DefaultStreamInterceptors(opt DefaultServerOptionsOpt) []grpc.StreamServerI
 	}
 }
 
-type DefaultServerOptionsOpt struct {
-	db                 hwdb.DBTX
-	prometheusRegistry *prometheus.Registry
-}
-
-func WithDB(db hwdb.DBTX) DefaultServerOptionsOpt {
-	return DefaultServerOptionsOpt{db: db}
-}
-
-func WithPrometheusRegistry(registry *prometheus.Registry) DefaultServerOptionsOpt {
-	return DefaultServerOptionsOpt{prometheusRegistry: registry}
-}
-
-func mergeDefaultServerOptionsOpts(opts []DefaultServerOptionsOpt) DefaultServerOptionsOpt {
-	res := DefaultServerOptionsOpt{}
-	for _, opt := range opts {
-		if opt.db != nil {
-			res.db = opt.db
-		}
-		if opt.prometheusRegistry != nil {
-			res.prometheusRegistry = opt.prometheusRegistry
-		}
-	}
-	return res
-}
-
-func DefaultServerOptions(opts ...DefaultServerOptionsOpt) []grpc.ServerOption {
-	opt := mergeDefaultServerOptionsOpts(opts)
-
+// TODO: document expected values in context
+func DefaultServerOptions(ctx context.Context) []grpc.ServerOption {
 	// default interceptors
-	unaryInterceptors := DefaultUnaryInterceptors(opt)
-	streamInterceptors := DefaultStreamInterceptors(opt)
+	unaryInterceptors := DefaultUnaryInterceptors(ctx)
+	streamInterceptors := DefaultStreamInterceptors(ctx)
 
-	// register new metrics collector with prometheus, if registry provided
-	if promRegistry := opt.prometheusRegistry; promRegistry != nil {
-		metrics := prometheusGrpcProvider.NewServerMetrics()
-		promRegistry.MustRegister(metrics)
+	// register new metrics collector with prometheus
+	promRegistry := telemetry.PrometheusRegistry(ctx)
+	metrics := prometheusGrpcProvider.NewServerMetrics()
+	promRegistry.MustRegister(metrics)
 
-		// prepend metrics interceptor
-		unaryInterceptors = hwutil.Prepend(metrics.UnaryServerInterceptor(), unaryInterceptors)
-		streamInterceptors = hwutil.Prepend(metrics.StreamServerInterceptor(), streamInterceptors)
-	}
+	// prepend metrics interceptor
+	unaryInterceptors = hwutil.Prepend(metrics.UnaryServerInterceptor(), unaryInterceptors)
+	streamInterceptors = hwutil.Prepend(metrics.StreamServerInterceptor(), streamInterceptors)
 
 	// create chains
 	unaryInterceptorChain := grpc.ChainUnaryInterceptor(unaryInterceptors...)

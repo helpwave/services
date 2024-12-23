@@ -9,6 +9,8 @@ import (
 )
 
 func TestContextFunctions(t *testing.T) {
+	t.Parallel()
+
 	dbMock, err := pgxmock.NewPool()
 	if err != nil {
 		panic(err)

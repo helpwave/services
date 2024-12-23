@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwdb"

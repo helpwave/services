@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"runtime/debug"
+	"telemetry"
 
 	"common/hwerr"
 	"common/locale"
@@ -37,25 +38,30 @@ func recoveryHandlerFn() recovery.RecoveryHandlerFuncContext {
 	}
 }
 
-func ensureCounter(registry *prometheus.Registry) {
-	if registry != nil {
-		panicsRecovered = promauto.With(registry).NewCounter(prometheus.CounterOpts{
-			Name: "services_panics_recovered_total",
-			Help: "Total number of panics recovered by PanicRecoverInterceptor",
-		})
+func ensureCounter(ctx context.Context) {
+	registry := telemetry.PrometheusRegistry(ctx)
+	if registry == nil { // prometheus not set up
+		return
 	}
+
+	// TODO: what if the counter already exists, and has values?
+	// TODO: when this is not called, nil-pointer issues will arise
+	panicsRecovered = promauto.With(registry).NewCounter(prometheus.CounterOpts{
+		Name: "services_panics_recovered_total",
+		Help: "Total number of panics recovered by PanicRecoverInterceptor",
+	})
 }
 
-func UnaryPanicRecoverInterceptor(registry *prometheus.Registry) grpc.UnaryServerInterceptor {
-	ensureCounter(registry)
+func UnaryPanicRecoverInterceptor(ctx context.Context) grpc.UnaryServerInterceptor {
+	ensureCounter(ctx)
 
 	return recovery.UnaryServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),
 	)
 }
 
-func StreamPanicRecoverInterceptor(registry *prometheus.Registry) grpc.StreamServerInterceptor {
-	ensureCounter(registry)
+func StreamPanicRecoverInterceptor(ctx context.Context) grpc.StreamServerInterceptor {
+	ensureCounter(ctx)
 
 	return recovery.StreamServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),

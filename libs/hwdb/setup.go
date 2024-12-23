@@ -35,7 +35,7 @@ type DBTX interface {
 // POSTGRES_PORT (5432)
 //
 // SetupDatabaseFromEnv returns a close function, which has to be called in order to shut down the database cleanly
-func SetupDatabaseFromEnv(ctx context.Context) (DBTX, func()) {
+func SetupDatabaseFromEnv(ctx context.Context) (context.Context, func()) {
 	log.Info().Msg("connecting to postgres ...")
 
 	dsn := hwutil.GetEnvOr("POSTGRES_DSN", "")
@@ -49,9 +49,11 @@ func SetupDatabaseFromEnv(ctx context.Context) (DBTX, func()) {
 		log.Fatal().Err(err).Msg("could not connect to database")
 	}
 
+	ctx = WithDB(ctx, dbpool)
+
 	log.Info().Msg("connected to postgres")
 
-	return dbpool, func() {
+	return ctx, func() {
 		log.Info().Msg("closing db pool")
 		dbpool.Close()
 	}

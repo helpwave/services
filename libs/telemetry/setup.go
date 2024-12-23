@@ -82,10 +82,11 @@ func startMetricsServer(ctx context.Context, reg *prometheus.Registry, addr stri
 }
 
 // SetupMetrics will start a new http server for prometheus to scrape from
-func SetupMetrics(ctx context.Context, shutdown func(error)) *prometheus.Registry {
+func SetupMetrics(ctx context.Context, shutdown func(error)) context.Context {
 	// create new prometheus registry, we do not use the global default one,
 	// as it causes problems with tests
 	prometheusRegistry := prometheus.NewRegistry()
+	ctx = WithPrometheusRegistry(ctx, prometheusRegistry)
 
 	l := log.Ctx(ctx)
 
@@ -93,11 +94,30 @@ func SetupMetrics(ctx context.Context, shutdown func(error)) *prometheus.Registr
 
 	if addr == "" {
 		l.Warn().Msg("METRICS_ADDR not set, will not export metrics")
-		return prometheusRegistry
+		return ctx
 	}
 
 	l.Info().Str("addr", addr).Msg("starting metrics server")
 
 	go startMetricsServer(ctx, prometheusRegistry, addr, shutdown)
-	return prometheusRegistry
+	return ctx
+}
+
+type promRegKey struct{}
+
+func WithPrometheusRegistry(ctx context.Context, registry *prometheus.Registry) context.Context {
+	return context.WithValue(ctx, promRegKey{}, registry)
+}
+
+var ErrPrometheusRegistryMissing = errors.New("PrometheusRegistry called, but no (valid) registry in context")
+
+func PrometheusRegistry(ctx context.Context) *prometheus.Registry {
+	value := ctx.Value(promRegKey{})
+	asReg, ok := value.(*prometheus.Registry)
+
+	// we allow nil (which will not be ok), else panic
+	if value != nil && !ok {
+		panic(ErrPrometheusRegistryMissing)
+	}
+	return asReg
 }

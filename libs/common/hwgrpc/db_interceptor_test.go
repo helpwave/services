@@ -30,6 +30,8 @@ func TestDBInterceptor(t *testing.T) {
 		"missing db": {
 			db: nil,
 			handler: func(t *testing.T, ctx context.Context) {
+				t.Helper()
+
 				// GetDB will not work
 				require.Panics(t, func() {
 					hwdb.GetDB(ctx)
@@ -39,6 +41,8 @@ func TestDBInterceptor(t *testing.T) {
 		"existing db": {
 			db: existingDB,
 			handler: func(t *testing.T, ctx context.Context) {
+				t.Helper()
+
 				require.Equal(t, existingDB, hwdb.GetDB(ctx))
 			},
 		},
@@ -95,7 +99,7 @@ func TestDBInterceptor(t *testing.T) {
 
 type fakeServerStream struct {
 	grpc.ServerStream
-	ctx context.Context
+	ctx context.Context //nolint:containedctx
 }
 
 func (f *fakeServerStream) Context() context.Context {
