@@ -19,10 +19,19 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-// TODO: remove global state
-var panicsRecovered prometheus.Counter
+func newPanicsRecoveredCounter(ctx context.Context) prometheus.Counter {
+	registry := telemetry.PrometheusRegistry(ctx)
+	if registry == nil { // prometheus not set up
+		return nil // TODO: replace with a no-op to prevent nil handling
+	}
 
-func recoveryHandlerFn() recovery.RecoveryHandlerFuncContext {
+	return promauto.With(registry).NewCounter(prometheus.CounterOpts{
+		Name: "services_panics_recovered_total",
+		Help: "Total number of panics recovered by PanicRecoverInterceptor",
+	})
+}
+
+func recoveryHandlerFn(panicsRecovered prometheus.Counter) recovery.RecoveryHandlerFuncContext {
 	return func(ctx context.Context, recovered any) (err error) {
 		zlog.Ctx(ctx).
 			Error().
@@ -32,38 +41,26 @@ func recoveryHandlerFn() recovery.RecoveryHandlerFuncContext {
 
 		_, _ = fmt.Fprintln(os.Stderr, string(debug.Stack()))
 
-		panicsRecovered.Inc()
+		if panicsRecovered != nil {
+			panicsRecovered.Inc()
+		}
 
 		return hwerr.NewStatusError(ctx, codes.Internal, "panic recovered", locale.GenericError(ctx))
 	}
 }
 
-func ensureCounter(ctx context.Context) {
-	registry := telemetry.PrometheusRegistry(ctx)
-	if registry == nil { // prometheus not set up
-		return
-	}
-
-	// TODO: what if the counter already exists, and has values?
-	// TODO: when this is not called, nil-pointer issues will arise
-	panicsRecovered = promauto.With(registry).NewCounter(prometheus.CounterOpts{
-		Name: "services_panics_recovered_total",
-		Help: "Total number of panics recovered by PanicRecoverInterceptor",
-	})
-}
-
 func UnaryPanicRecoverInterceptor(ctx context.Context) grpc.UnaryServerInterceptor {
-	ensureCounter(ctx)
+	panicsRecovered := newPanicsRecoveredCounter(ctx)
 
 	return recovery.UnaryServerInterceptor(
-		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),
+		recovery.WithRecoveryHandlerContext(recoveryHandlerFn(panicsRecovered)),
 	)
 }
 
 func StreamPanicRecoverInterceptor(ctx context.Context) grpc.StreamServerInterceptor {
-	ensureCounter(ctx)
+	panicsRecovered := newPanicsRecoveredCounter(ctx)
 
 	return recovery.StreamServerInterceptor(
-		recovery.WithRecoveryHandlerContext(recoveryHandlerFn()),
+		recovery.WithRecoveryHandlerContext(recoveryHandlerFn(panicsRecovered)),
 	)
 }
