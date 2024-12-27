@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwes"
 
@@ -27,7 +27,7 @@ func NewGetPatientWithDetailsByIDQueryHandler(
 		taskHandlers := th.NewTaskHandlers(as, authz)
 
 		// check permissions
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		taskCheck := hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
 		if err := authz.Must(ctx, taskCheck); err != nil {
 			return nil, err

@@ -5,7 +5,7 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwes/errs"
 
@@ -23,7 +23,7 @@ type GetPropertyByIDQueryHandler func(
 
 func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHandler {
 	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error) {
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 
 		// Verify user is allowed to see this property
 		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))

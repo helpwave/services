@@ -6,7 +6,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwdb/locale"
 	"hwes"
@@ -82,7 +82,7 @@ func (s *PatientGrpcService) GetPatient(
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -367,7 +367,7 @@ func (s *PatientGrpcService) GetRecentPatients(
 	if err != nil {
 		return nil, hwerr.NewStatusError(ctx,
 			codes.Internal,
-			"decaying_lru error: "+err.Error(),
+			"decayinglru error: "+err.Error(),
 			locale.GenericError(ctx),
 		)
 	}
@@ -393,7 +393,7 @@ func (s *PatientGrpcService) GetRecentPatients(
 		return &parsedUUID
 	})
 
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	checks := hwutil.Map(recentPatientIds, func(patientID uuid.UUID) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
 	})

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 	"hwes/errs"
 	"hwes/eventstoredb/projections/custom"
@@ -48,7 +48,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 
 	// Parse Values
 	var payload propertyEventsV1.PropertyCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -64,7 +64,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	organizationID := *evt.OrganizationID
 
 	relationship := hwauthz.NewRelationship(
-		commonPerm.Organization(organizationID),
+		commonperm.Organization(organizationID),
 		perm.PropertyOrganization,
 		perm.Property(propertyID),
 	)

@@ -68,7 +68,7 @@ func (a *TaskAggregate) initEventListeners() {
 
 func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 	var payload taskEventsV1.TaskCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -93,7 +93,7 @@ func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 
 func (a *TaskAggregate) onTaskStatusUpdated(evt hwes.Event) error {
 	var payload taskEventsV1.TaskStatusUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -110,7 +110,7 @@ func (a *TaskAggregate) onTaskStatusUpdated(evt hwes.Event) error {
 
 func (a *TaskAggregate) onTaskNameUpdated(evt hwes.Event) error {
 	var payload taskEventsV1.TaskNameUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -121,7 +121,7 @@ func (a *TaskAggregate) onTaskNameUpdated(evt hwes.Event) error {
 
 func (a *TaskAggregate) onTaskDescriptionUpdated(evt hwes.Event) error {
 	var payload taskEventsV1.TaskDescriptionUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -132,7 +132,7 @@ func (a *TaskAggregate) onTaskDescriptionUpdated(evt hwes.Event) error {
 
 func (a *TaskAggregate) onTaskDueAtUpdated(evt hwes.Event) error {
 	var payload taskEventsV1.TaskDueAtUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -147,13 +147,13 @@ func (a *TaskAggregate) onTaskAssigned(evt hwes.Event) error {
 	switch evt.EventType {
 	case taskEventsV1.TaskAssigned:
 		var payload taskEventsV1.TaskAssignedEvent
-		if err := evt.GetJsonData(&payload); err != nil {
+		if err := evt.GetJSONData(&payload); err != nil {
 			return err
 		}
 		userIDStr = payload.UserID
 	case taskEventsV1.TaskSelfAssigned:
 		var payload taskEventsV1.TaskSelfAssignedEvent
-		if err := evt.GetJsonData(&payload); err != nil {
+		if err := evt.GetJSONData(&payload); err != nil {
 			return err
 		}
 		userIDStr = payload.UserID
@@ -171,7 +171,7 @@ func (a *TaskAggregate) onTaskAssigned(evt hwes.Event) error {
 
 func (a *TaskAggregate) onTaskUnassigned(evt hwes.Event) error {
 	var payload taskEventsV1.TaskUnassignedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -192,7 +192,7 @@ func (a *TaskAggregate) onTaskUnpublished(_ hwes.Event) error {
 
 func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
 	var payload taskEventsV1.SubtaskCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -215,7 +215,7 @@ func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
 
 func (a *TaskAggregate) onSubtaskNameUpdated(evt hwes.Event) error {
 	var payload taskEventsV1.SubtaskNameUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -237,7 +237,7 @@ func (a *TaskAggregate) onSubtaskNameUpdated(evt hwes.Event) error {
 
 func (a *TaskAggregate) onSubtaskCompleted(evt hwes.Event) error {
 	var payload taskEventsV1.SubtaskCompletedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -255,7 +255,7 @@ func (a *TaskAggregate) onSubtaskCompleted(evt hwes.Event) error {
 
 func (a *TaskAggregate) onSubtaskUncompleted(evt hwes.Event) error {
 	var payload taskEventsV1.SubtaskUncompletedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -273,7 +273,7 @@ func (a *TaskAggregate) onSubtaskUncompleted(evt hwes.Event) error {
 
 func (a *TaskAggregate) onSubtaskDeleted(evt hwes.Event) error {
 	var payload taskEventsV1.SubtaskDeletedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 

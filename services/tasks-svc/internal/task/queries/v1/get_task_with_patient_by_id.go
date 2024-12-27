@@ -5,7 +5,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 
 	patientPerm "tasks-svc/internal/patient/perm"
@@ -22,7 +22,7 @@ type GetTaskWithPatientByIDQueryHandler func(ctx context.Context, taskID uuid.UU
 func NewGetTaskWithPatientByIDQueryHandler(authz hwauthz.AuthZ) GetTaskWithPatientByIDQueryHandler {
 	return func(ctx context.Context, taskID uuid.UUID) (*models.TaskWithPatient, error) {
 		// check task permissions
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		taskCheck := hwauthz.NewPermissionCheck(user, perm.TaskCanUserGet, perm.Task(taskID))
 		if err := authz.Must(ctx, taskCheck); err != nil {
 			return nil, err

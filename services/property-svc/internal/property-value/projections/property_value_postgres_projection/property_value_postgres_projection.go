@@ -51,7 +51,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	log := zlog.Ctx(ctx)
 
 	var payload propertyValueEventsV1.PropertyValueCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -180,7 +180,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 	log := zlog.Ctx(ctx)
 
 	var payload propertyValueEventsV1.PropertyValueUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}

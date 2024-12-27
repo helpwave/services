@@ -1,4 +1,4 @@
-package commonPerm
+package commonperm
 
 import (
 	"common/auth"

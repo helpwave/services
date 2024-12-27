@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 
 	"github.com/google/uuid"
@@ -23,7 +23,7 @@ func NewGetPatientByBedQueryHandler(authz hwauthz.AuthZ) GetPatientByBedQueryHan
 		patientRepo := patient_repo.New(hwdb.GetDB())
 
 		// check bed permissions
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, bedPerm.BedCanUserGet, bedPerm.Bed(bedID))
 		if err := authz.Must(ctx, check); err != nil {
 			return nil, err

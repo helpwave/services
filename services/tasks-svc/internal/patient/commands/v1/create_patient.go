@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 	"hwes/errs"
 
@@ -32,8 +32,8 @@ func NewCreatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 		a := aggregate.NewPatientAggregate(patientID)
 
 		// check permissions
-		user := commonPerm.UserFromCtx(ctx)
-		org := commonPerm.OrganizationFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
+		org := commonperm.OrganizationFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreatePatient, org)
 		if err := authz.Must(ctx, check); err != nil {
 			return 0, err

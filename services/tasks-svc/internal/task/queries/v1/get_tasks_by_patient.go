@@ -4,7 +4,7 @@ import (
 	"common"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -26,7 +26,7 @@ type GetTasksByPatientIDQueryHandler func(
 func NewGetTasksByPatientIDQueryHandler(authz hwauthz.AuthZ) GetTasksByPatientIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error) {
 		// check permissions
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		taskCheck := hwauthz.NewPermissionCheck(user, patientPerm.PatientCanUserGet, patientPerm.Patient(patientID))
 		if err := authz.Must(ctx, taskCheck); err != nil {
 			return nil, err

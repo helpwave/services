@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -141,7 +141,7 @@ func PatientPropertyMatchersFromMap(m map[string]interface{}) (PatientPropertyMa
 }
 
 func (m PatientPropertyMatchers) UserMustBeAllowedToUpdateRule(ctx context.Context, authz hwauthz.AuthZ) error {
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 
 	checks := make([]hwauthz.PermissionCheck, 0)
 
@@ -156,7 +156,7 @@ func (m PatientPropertyMatchers) UserMustBeAllowedToUpdateRule(ctx context.Conte
 	}
 
 	if len(checks) == 0 {
-		org := commonPerm.OrganizationFromCtx(ctx)
+		org := commonperm.OrganizationFromCtx(ctx)
 		checks = append(checks,
 			hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserAlterRootPropertyRules, org))
 	}

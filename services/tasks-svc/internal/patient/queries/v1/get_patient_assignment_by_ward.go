@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -33,7 +33,7 @@ func NewGetPatientAssignmentByWardQueryHandler(authz hwauthz.AuthZ) GetPatientAs
 		// THAT'S WE DO NOT DO ANY FURTHER FILTERING (E.G. ROOMS, BEDS, TASKS) HERE
 		// THIS NEEDS A SECOND LOOK ONCE PERMISSIONS BECOME MORE FLEXIBLE!
 
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		taskCheck := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserGet, wardPerm.Ward(wardID))
 		if err := authz.Must(ctx, taskCheck); err != nil {
 			return nil, err

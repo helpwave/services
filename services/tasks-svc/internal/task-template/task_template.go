@@ -7,7 +7,7 @@ import (
 	"fmt"
 	pbEventsV1 "gen/libs/events/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
@@ -61,7 +61,7 @@ func (s ServiceServer) CreateTaskTemplate(
 	log := zlog.Ctx(ctx)
 	db := hwdb.GetDB()
 
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
 	if err != nil {
@@ -171,7 +171,7 @@ func (s ServiceServer) DeleteTaskTemplate(
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserDelete, perm.TaskTemplate(id))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -230,7 +230,7 @@ func (s ServiceServer) DeleteTaskTemplateSubTask(
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserUpdate, perm.TaskTemplate(subtask.TaskTemplateID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -281,7 +281,7 @@ func (s ServiceServer) UpdateTaskTemplate(
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserUpdate, perm.TaskTemplate(id))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -342,7 +342,7 @@ func (s ServiceServer) UpdateTaskTemplateSubTask(
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserUpdate, perm.TaskTemplate(taskTemplateID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -391,7 +391,7 @@ func (s ServiceServer) CreateTaskTemplateSubTask(
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserUpdate, perm.TaskTemplate(taskTemplateID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -438,7 +438,7 @@ func (s ServiceServer) GetAllTaskTemplates(
 ) (*pb.GetAllTaskTemplatesResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
 	if err != nil {
@@ -520,7 +520,7 @@ func (s ServiceServer) GetTaskTemplate(
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.TaskTemplateCanUserGet, perm.TaskTemplate(taskTemplateID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err

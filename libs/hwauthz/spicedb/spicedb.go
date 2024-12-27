@@ -29,13 +29,13 @@ func fullyConsistent() *v1.Consistency {
 	}
 }
 
-func SetupSpiceDbByEnv() *authzed.Client {
+func SetupSpiceDBByEnv() *authzed.Client {
 	endpoint := hwutil.MustGetEnv("ZED_ENDPOINT")
 	token := hwutil.MustGetEnv("ZED_TOKEN")
-	return SetupSpiceDb(endpoint, token)
+	return SetupSpiceDB(endpoint, token)
 }
 
-func SetupSpiceDb(endpoint, token string) *authzed.Client {
+func SetupSpiceDB(endpoint, token string) *authzed.Client {
 	log := zlog.Logger // global logger
 
 	client, err := authzed.NewClient(
@@ -76,7 +76,7 @@ type SpiceDBAuthZ struct {
 
 // NewSpiceDBAuthZ constructs a new SpiceDBAuthZ instance
 func NewSpiceDBAuthZ() *SpiceDBAuthZ {
-	client := SetupSpiceDbByEnv()
+	client := SetupSpiceDBByEnv()
 	return &SpiceDBAuthZ{client: client}
 }
 

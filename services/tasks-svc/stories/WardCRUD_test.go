@@ -4,7 +4,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
@@ -98,9 +98,9 @@ func TestGetRecentWards(t *testing.T) {
 	authz := spicedb.NewSpiceDBAuthZ()
 	_, err := authz.Create(
 		hwauthz.NewRelationship(
-			commonPerm.User(userID),
+			commonperm.User(userID),
 			"member",
-			commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization)),
+			commonperm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization)),
 		),
 	).Commit(ctx)
 	require.NoError(t, err)

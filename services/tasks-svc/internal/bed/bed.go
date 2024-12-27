@@ -7,7 +7,7 @@ import (
 	"fmt"
 	pbEventsV1 "gen/libs/events/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
@@ -71,7 +71,7 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, roomPerm.RoomCanUserCreateBed, roomPerm.Room(roomId))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -146,7 +146,7 @@ func (s ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.G
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.BedCanUserGet, perm.Bed(id))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -189,7 +189,7 @@ func (s ServiceServer) GetBedByPatient(
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	checks := make([]hwauthz.PermissionCheck, 0)
 	checks = append(checks,
 		hwauthz.NewPermissionCheck(user, patientPerm.PatientCanUserGet, patientPerm.Patient(patientId)))
@@ -237,7 +237,7 @@ func (s ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	checks := hwutil.Map(beds, func(b bed_repo.Bed) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.BedCanUserGet, perm.Bed(b.ID))
 	})
@@ -288,7 +288,7 @@ func (s ServiceServer) GetBedsByRoom(
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	checks := hwutil.Map(beds, func(b bed_repo.Bed) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.BedCanUserGet, perm.Bed(b.ID))
 	})
@@ -326,7 +326,7 @@ func (s ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) 
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.BedCanUserUpdate, perm.Bed(bedID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -372,7 +372,7 @@ func (s ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) 
 	}
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.BedCanUserDelete, perm.Bed(bedID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err

@@ -52,7 +52,7 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 	log := zlog.Ctx(ctx)
 
 	var payload patientEventsV1.PatientCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -87,7 +87,7 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 	log := zlog.Ctx(ctx)
 
 	var payload patientEventsV1.BedAssignedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -142,7 +142,7 @@ func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error,
 	log := zlog.Ctx(ctx)
 
 	var payload patientEventsV1.NotesUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -164,7 +164,7 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 	log := zlog.Ctx(ctx)
 
 	var payload patientEventsV1.HumanReadableIdentifierUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}

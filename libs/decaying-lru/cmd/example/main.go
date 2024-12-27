@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"decaying_lru"
+	"decayinglru"
 )
 
 func must(err error) {
@@ -22,7 +22,7 @@ const (
 
 func main() {
 	ctx := context.Background()
-	lru := decaying_lru.Setup(ctx, "example", size, time.Second, inverseP)
+	lru := decayinglru.Setup(ctx, "example", size, time.Second, inverseP)
 
 	must(lru.AddItemForUser(ctx, "test", "1", "abc"))
 	must(lru.AddItemForUser(ctx, "test", "1", "def"))

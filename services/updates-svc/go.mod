@@ -4,7 +4,7 @@ go 1.23
 
 replace (
 	common => ../../libs/common
-	decaying_lru => ../../libs/decaying_lru
+	decayinglru => ../../libs/decaying-lru
 	gen => ../../gen/go
 	hwauthz => ../../libs/hwauthz
 	hwdb => ../../libs/hwdb

@@ -35,7 +35,7 @@ type Client struct {
 func NewClientFromEnv(ctx context.Context) (*Client, error) {
 	clientSecret := hwutil.MustGetEnv("OAUTH_KC_CLIENT_SECRET")
 	realm := hwutil.GetEnvOr("OAUTH_KC_REALM", "helpwave")
-	return NewClient(ctx, realm, auth.GetOAuthIssuerUrl(), auth.GetOAuthClientId(), clientSecret)
+	return NewClient(ctx, realm, auth.GetOAuthIssuerURL(), auth.GetOAuthClientID(), clientSecret)
 }
 
 func NewClient(ctx context.Context, realm, issuerUrl, clientId, clientSecret string) (*Client, error) {

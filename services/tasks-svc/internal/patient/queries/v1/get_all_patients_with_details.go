@@ -6,7 +6,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -27,7 +27,7 @@ func NewGetAllPatientsWithDetailsQueryHandler(authz hwauthz.AuthZ) GetAllPatient
 
 		// gather inputs
 		organizationID := auth.MustGetOrganizationID(ctx)
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 
 		// do query
 		rows, err := patientRepo.GetAllPatientsWithTasksBedAndRoom(ctx, organizationID)

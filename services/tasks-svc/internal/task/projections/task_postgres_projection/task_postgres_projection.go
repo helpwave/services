@@ -69,7 +69,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -117,7 +117,7 @@ func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (e
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskStatusUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -143,7 +143,7 @@ func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (err
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskNameUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -164,7 +164,7 @@ func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Even
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskDescriptionUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -185,7 +185,7 @@ func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (er
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskDueAtUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -210,14 +210,14 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 	switch evt.EventType {
 	case taskEventsV1.TaskAssigned:
 		var payload taskEventsV1.TaskAssignedEvent
-		if err := evt.GetJsonData(&payload); err != nil {
+		if err := evt.GetJSONData(&payload); err != nil {
 			log.Error().Err(err).Msg("unmarshal failed")
 			return err, hwutil.PtrTo(esdb.NackActionPark)
 		}
 		userIDStr = payload.UserID
 	case taskEventsV1.TaskSelfAssigned:
 		var payload taskEventsV1.TaskSelfAssignedEvent
-		if err := evt.GetJsonData(&payload); err != nil {
+		if err := evt.GetJSONData(&payload); err != nil {
 			log.Error().Err(err).Msg("unmarshal failed")
 			return err, hwutil.PtrTo(esdb.NackActionPark)
 		}
@@ -245,7 +245,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskUnassignedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -292,7 +292,7 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -328,7 +328,7 @@ func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -354,7 +354,7 @@ func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (er
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskCompletedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -380,7 +380,7 @@ func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskUncompletedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -406,7 +406,7 @@ func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (erro
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskDeletedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}

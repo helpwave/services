@@ -114,10 +114,10 @@ func WithContext(ctx context.Context) EventOption {
 	}
 }
 
-// WithData applies SetJsonData after construction
+// WithData applies SetJSONData after construction
 func WithData(data interface{}) EventOption {
 	return func(event *Event) error {
-		return event.SetJsonData(data)
+		return event.SetJSONData(data)
 	}
 }
 
@@ -140,7 +140,7 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 
 	// TODO: We have to default to empty eventData as the eventstoredb-ui does not allow querying events without data
 	var empty struct{}
-	if err := evt.SetJsonData(empty); err != nil {
+	if err := evt.SetJSONData(empty); err != nil {
 		return Event{}, fmt.Errorf("NewEvent: could not set empty data: %w", err)
 	}
 
@@ -168,9 +168,9 @@ func NewEventFromProto(aggregate Aggregate, message proto.Message, opts ...Event
 	return event, nil
 }
 
-type StreamIdMalformedError string
+type StreamIDMalformedError string
 
-func (e StreamIdMalformedError) Error() string {
+func (e StreamIDMalformedError) Error() string {
 	return fmt.Sprintf("cannot resolve aggregateType and aggregateID from streamID %q", string(e))
 }
 
@@ -191,13 +191,13 @@ func resolveAggregateIDAndTypeFromStreamID(streamID string) (aID uuid.UUID, aggr
 		aggregateTypeStr = streamIDParts[0]
 		aggregateIDStr = streamIDParts[1]
 	} else {
-		err = StreamIdMalformedError(streamID)
+		err = StreamIDMalformedError(streamID)
 		return
 	}
 
 	aggregateType = AggregateType(aggregateTypeStr)
 	if aggregateType == "" {
-		err = StreamIdMalformedError(streamID)
+		err = StreamIDMalformedError(streamID)
 		return
 	}
 
@@ -308,7 +308,7 @@ func (e *Event) SetData(data []byte) *Event {
 	return e
 }
 
-func (e *Event) SetJsonData(data interface{}) error {
+func (e *Event) SetJSONData(data interface{}) error {
 	var dataBytes []byte
 	var err error
 
@@ -319,7 +319,7 @@ func (e *Event) SetJsonData(data interface{}) error {
 	}
 
 	if err != nil {
-		return fmt.Errorf("SetJsonData: %w", err)
+		return fmt.Errorf("SetJSONData: %w", err)
 	}
 	e.DataIsProto = false
 	e.Data = dataBytes
@@ -336,11 +336,11 @@ func (e *Event) SetProtoData(message proto.Message) error {
 	return nil
 }
 
-var ErrGetJsonOnProtoData = errors.New("data of event is marked as proto, use GetProtoData instead")
+var ErrGetJSONOnProtoData = errors.New("data of event is marked as proto, use GetProtoData instead")
 
-func (e *Event) GetJsonData(data interface{}) error {
+func (e *Event) GetJSONData(data interface{}) error {
 	if e.DataIsProto {
-		return ErrGetJsonOnProtoData
+		return ErrGetJSONOnProtoData
 	}
 
 	if jsonable, ok := data.(hwutil.JSONAble); ok {
@@ -349,11 +349,11 @@ func (e *Event) GetJsonData(data interface{}) error {
 	return json.Unmarshal(e.Data, data)
 }
 
-var ErrGetProtoOnJsonData = errors.New("data of event is not marked as proto, use GetJsonData instead")
+var ErrGetProtoOnJSONData = errors.New("data of event is not marked as proto, use GetJSONData instead")
 
 func (e *Event) GetProtoData(message proto.Message) error {
 	if !e.DataIsProto {
-		return ErrGetProtoOnJsonData
+		return ErrGetProtoOnJSONData
 	}
 
 	return protojson.Unmarshal(e.Data, message)

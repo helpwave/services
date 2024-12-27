@@ -1,7 +1,7 @@
 // This is adapted from github.com/jackc/pgx-zerolog,
 // and thus is licensed under the MIT LICENSE,
 // available in jackc/pgx-zerolog's LICENSE file
-package pgx_zerolog
+package pgxzerolog
 
 import (
 	"context"

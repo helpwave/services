@@ -6,7 +6,7 @@ import (
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwes"
 	"hwutil"
@@ -105,7 +105,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 				// add multiselectvalue to array
 				properties[row.Property.ID].Value.MultiSelectValues = append(
 					properties[row.Property.ID].Value.MultiSelectValues, models.SelectValueOption{
-						Id:          row.SelectOptionID.UUID,      // known to be valid by if
+						ID:          row.SelectOptionID.UUID,      // known to be valid by if
 						Name:        *row.SelectOptionName,        // known to be set due to NOT NULL and successful LEFT JOIN
 						Description: *row.SelectOptionDescription, // known to be set due to NOT NULL and successful LEFT JOIN
 					})
@@ -132,7 +132,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 		propertySlice := hwutil.MapValuesPtrToSlice(properties)
 
 		// filter out properties where permissions are missing
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		checks := hwutil.Map(propertySlice, func(p models.PropertyAndValue) hwauthz.PermissionCheck {
 			return hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGetValue, perm.Property(p.PropertyID))
 		})

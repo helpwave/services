@@ -48,7 +48,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}

@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 
 	"github.com/google/uuid"
 
@@ -63,14 +63,14 @@ func TestBulkCheck(t *testing.T) {
 	tx := hwauthz.NewTx(client, nil, nil)
 
 	for i := range checks {
-		sub := commonPerm.GenericObject{
+		sub := commonperm.GenericObject{
 			Typ: "user",
-			Id:  strconv.Itoa(i),
+			ID_: strconv.Itoa(i),
 		}
 		relation := hwauthz.Permission("member")
-		resc := commonPerm.GenericObject{
+		resc := commonperm.GenericObject{
 			Typ: "organization",
-			Id:  strconv.Itoa(i),
+			ID_: strconv.Itoa(i),
 		}
 		checks[i] = hwauthz.NewPermissionCheck(sub, relation, resc)
 
@@ -106,18 +106,18 @@ func TestLookupResources(t *testing.T) {
 	client := NewSpiceDBAuthZ()
 
 	// preparations
-	sub := commonPerm.GenericObject{
+	sub := commonperm.GenericObject{
 		Typ: "user",
-		Id:  uuid.New().String(),
+		ID_: uuid.New().String(),
 	}
 	relation := hwauthz.Relation("member")
 
 	// create test relations
 	tx := hwauthz.NewTx(client, nil, nil)
 	for i := range 3 {
-		resc := commonPerm.GenericObject{
+		resc := commonperm.GenericObject{
 			Typ: "organization",
-			Id:  strconv.Itoa(i),
+			ID_: strconv.Itoa(i),
 		}
 		relationship := hwauthz.NewRelationship(sub, relation, resc)
 		tx.Create(relationship)
@@ -139,23 +139,23 @@ func TestDeleteObject(t *testing.T) {
 	client := NewSpiceDBAuthZ()
 
 	// setup permission graph
-	ward := commonPerm.GenericObject{
+	ward := commonperm.GenericObject{
 		Typ: "ward",
-		Id:  uuid.New().String(),
+		ID_: uuid.New().String(),
 	}
 
-	org := commonPerm.GenericObject{
+	org := commonperm.GenericObject{
 		Typ: "organization",
-		Id:  uuid.New().String(),
+		ID_: uuid.New().String(),
 	}
 	// the ward, which we will delete, is the (direct) resource of this relationship
 	orgRelation := hwauthz.Relation("organization")
 	resourceRelationship := hwauthz.NewRelationship(org, orgRelation, ward)
 	tx := client.Create(resourceRelationship)
 
-	room := commonPerm.GenericObject{
+	room := commonperm.GenericObject{
 		Typ: "room",
-		Id:  uuid.New().String(),
+		ID_: uuid.New().String(),
 	}
 
 	// the ward is the (direct) subject of this relationship

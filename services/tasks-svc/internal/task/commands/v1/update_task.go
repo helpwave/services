@@ -5,7 +5,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 
 	"tasks-svc/internal/task/perm"
@@ -37,7 +37,7 @@ func NewUpdateTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) Up
 		dueAt *timestamppb.Timestamp,
 	) (common.ConsistencyToken, error) {
 		// check permissions
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, perm.TaskCanUserUpdate, perm.Task(taskID))
 		if err := authz.Must(ctx, check); err != nil {
 			return 0, err

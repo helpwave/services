@@ -1,4 +1,4 @@
-# decaying_lru
+# decayinglru
 
 A module, which allows a service to leverage a redis-powered [LRU](https://en.wikipedia.org/wiki/Least_Recently_Used) which decays.
 Such a data structure is, for example, needed for `recently-used` tracking.

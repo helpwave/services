@@ -4,7 +4,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
@@ -647,8 +647,8 @@ func TestGetRecentPatients(t *testing.T) {
 
 	// give new user appropriate permissions
 	authz := spicedb.NewSpiceDBAuthZ()
-	user := commonPerm.User(userID)
-	org := commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
+	user := commonperm.User(userID)
+	org := commonperm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
 	_, err := authz.Create(hwauthz.NewRelationship(user, "member", org)).Commit(ctx)
 	require.NoError(t, err)
 

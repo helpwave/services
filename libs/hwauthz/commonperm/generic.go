@@ -1,4 +1,4 @@
-package commonPerm
+package commonperm
 
 import "hwauthz"
 
@@ -7,7 +7,7 @@ import "hwauthz"
 // For example for tests, or if the type is only used once or so
 type GenericObject struct {
 	Typ hwauthz.ObjectType
-	Id  string
+	ID_ string
 }
 
 func (s GenericObject) Type() hwauthz.ObjectType {
@@ -15,5 +15,5 @@ func (s GenericObject) Type() hwauthz.ObjectType {
 }
 
 func (s GenericObject) ID() string {
-	return s.Id
+	return s.ID_
 }

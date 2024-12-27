@@ -6,7 +6,7 @@ import (
 	"fmt"
 	pbEventsV1 "gen/libs/events/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
@@ -65,7 +65,7 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 	}
 
 	// check permission
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserCreateRoom, wardPerm.Ward(wardID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -127,7 +127,7 @@ func (s ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb
 	}
 
 	// check permission
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserGet, perm.Room(id))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -178,7 +178,7 @@ func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest
 	}
 
 	// check permission
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserUpdate, perm.Room(roomID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -258,7 +258,7 @@ func (s ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*
 	})
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	checks := hwutil.Map(rooms, func(r *pb.GetRoomsResponse_Room) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.RoomCanUserGet, perm.Room(uuid.MustParse(r.Id)))
 	})
@@ -286,7 +286,7 @@ func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest
 	}
 
 	// check permission
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.RoomCanUserDelete, perm.Room(roomID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -332,7 +332,7 @@ func (s ServiceServer) GetRoomOverviewsByWard(
 	// CURRENTLY THIS CHECK IMPLIES ACCESS TO ALL OTHER RESOURCES, SO NO FILTERING IS NEEDED
 	// THIS MAY CHANGE IN THE FUTURE!
 
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserGet, wardPerm.Ward(wardID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err

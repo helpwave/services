@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 	"hwes/errs"
 	"hwes/eventstoredb/projections/custom"
@@ -47,7 +47,7 @@ func (p *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 		return errs.ErrOrganizationMissing, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
-	organization := commonPerm.Organization(*evt.OrganizationID)
+	organization := commonperm.Organization(*evt.OrganizationID)
 	patient := perm.Patient(evt.AggregateID)
 	relationship := hwauthz.NewRelationship(organization, perm.PatientOrganization, patient)
 

@@ -4,7 +4,7 @@ go 1.23
 
 replace (
 	common => ../../libs/common
-	decaying_lru => ../../libs/decaying_lru
+	decayinglru => ../../libs/decaying-lru
 	gen => ../../gen/go
 	hwauthz => ../../libs/hwauthz
 	hwdb => ../../libs/hwdb
@@ -17,7 +17,7 @@ replace (
 
 require (
 	common v0.0.0
-	decaying_lru v0.0.0
+	decayinglru v0.0.0
 	gen v0.0.0
 	github.com/EventStore/EventStore-Client-Go/v4 v4.2.0
 	github.com/dapr/go-sdk v1.11.0

@@ -1,4 +1,4 @@
-package pgx_zerolog
+package pgxzerolog
 
 import (
 	"context"

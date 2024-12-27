@@ -1,4 +1,4 @@
-module decaying_lru
+module decayinglru
 
 go 1.23
 

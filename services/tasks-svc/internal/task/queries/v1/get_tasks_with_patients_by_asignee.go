@@ -5,7 +5,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -27,7 +27,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler(authz hwauthz.AuthZ) GetTasks
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {
 		taskRepo := task_repo.New(hwdb.GetDB())
 
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 
 		rows, err := taskRepo.GetTasksWithPatientByAssignee(ctx, uuid.NullUUID{
 			UUID:  assigneeID,

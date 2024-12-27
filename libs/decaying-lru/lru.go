@@ -1,4 +1,4 @@
-package decaying_lru
+package decayinglru
 
 import (
 	"context"

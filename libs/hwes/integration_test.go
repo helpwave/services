@@ -28,7 +28,7 @@ type UserAggregate struct {
 
 func (a *UserAggregate) onUserCreated(evt hwes.Event) error {
 	var payload UserCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -45,7 +45,7 @@ func (a *UserAggregate) onUserCreated(evt hwes.Event) error {
 
 func (a *UserAggregate) onUsernameUpdated(evt hwes.Event) error {
 	var payload UsernameUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 

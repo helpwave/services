@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -24,7 +24,7 @@ func NewGetPatientsByWardQueryHandler(authz hwauthz.AuthZ) GetPatientsByWardQuer
 		patientRepo := patient_repo.New(hwdb.GetDB())
 
 		// ensure get-access to ward
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserGet, wardPerm.Ward(wardID))
 		if err := authz.Must(ctx, check); err != nil {
 			return nil, err

@@ -5,7 +5,7 @@ import (
 	events "gen/libs/events/v1"
 	pb "gen/services/user_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 
 	"user-svc/internal/user/perm"
@@ -49,8 +49,8 @@ func (s ServiceServer) ReadPublicProfile(
 	}
 
 	// check permissions
-	reqestingUser := commonPerm.UserFromCtx(ctx)
-	requestedUser := commonPerm.User(userID)
+	reqestingUser := commonperm.UserFromCtx(ctx)
+	requestedUser := commonperm.User(userID)
 	check := hwauthz.NewPermissionCheck(reqestingUser, perm.UserCanUserGetPublicProfile, requestedUser)
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
