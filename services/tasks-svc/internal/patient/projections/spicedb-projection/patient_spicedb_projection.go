@@ -42,9 +42,9 @@ func (p *Projection) initEventListeners() {
 }
 
 // Event handlers
-func (p *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	if evt.OrganizationID == nil {
-		return errs.ErrOrganizationMissing, hwutil.PtrTo(esdb.NackActionSkip)
+		return hwutil.PtrTo(esdb.NackActionSkip), errs.ErrOrganizationMissing
 	}
 
 	organization := commonperm.Organization(*evt.OrganizationID)
@@ -53,16 +53,16 @@ func (p *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 
 	_, err := p.authz.Create(relationship).Commit(ctx)
 	if err != nil {
-		return fmt.Errorf("onPatientCreated: could not write spicedb relationship: %w", err),
-			hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry),
+			fmt.Errorf("onPatientCreated: could not write spicedb relationship: %w", err)
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onPatientDeleted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPatientDeleted(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	if err := p.authz.DeleteObject(ctx, perm.Patient(evt.AggregateID)); err != nil {
-		return fmt.Errorf("could not delete patient from spicedb: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), fmt.Errorf("could not delete patient from spicedb: %w", err)
 	}
 	return nil, nil
 }

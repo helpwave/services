@@ -43,23 +43,23 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(propertyEventsV1.PropertyCreated, p.onPropertyCreated)
 }
 
-func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	// Parse Values
 	var payload propertyEventsV1.PropertyCreatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	propertyID, err := uuid.Parse(payload.ID)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	if evt.OrganizationID == nil {
-		return errs.ErrOrganizationMissing, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), errs.ErrOrganizationMissing
 	}
 	organizationID := *evt.OrganizationID
 
@@ -74,8 +74,8 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		Create(relationship).
 		Commit(ctx)
 	if err != nil {
-		return fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err),
-			hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry),
+			fmt.Errorf("could not create spice relationship %s: %w", relationship.String(), err)
 	}
 
 	log.Debug().

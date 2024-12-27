@@ -89,7 +89,7 @@ func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPat
 		"RuleID": "96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
 	}`)
 
-	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
+	action, err := projection.onPropertyRuleCreated(ctx, hwes.Event{
 		EventID:         uuid.MustParse("227592bd-7aa0-4018-bcd4-c68fb06090ee"),
 		EventType:       v1.PropertyRuleCreated,
 		AggregateID:     uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
@@ -155,7 +155,7 @@ func TestPropertyViewPropertyRulesProjection_Update_GreenPath(t *testing.T) {
 	)
 	data := buf.Bytes()
 
-	err, action := projection.onPropertyRuleListsUpdated(ctx, hwes.Event{
+	action, err := projection.onPropertyRuleListsUpdated(ctx, hwes.Event{
 		EventID:         uuid.MustParse("227592bd-7aa0-4018-bcd4-c68fb06090ee"),
 		EventType:       v1.PropertyRuleListsUpdated,
 		AggregateID:     uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
@@ -207,7 +207,7 @@ func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_Green
 		"RuleID": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
 	}`)
 
-	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
+	action, err := projection.onPropertyRuleCreated(ctx, hwes.Event{
 		EventID:         uuid.MustParse("227592bd-7aa0-4018-bcd4-c68fb06090ee"),
 		EventType:       v1.PropertyRuleCreated,
 		AggregateID:     uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"),
@@ -237,7 +237,7 @@ func TestPropertyViewPropertyRulesProjection_Create_InvalidPropertyMatcher(t *te
 		"RuleID": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
 	}`)
 
-	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
+	action, err := projection.onPropertyRuleCreated(ctx, hwes.Event{
 		EventID:         uuid.MustParse("227592bd-7aa0-4018-bcd4-c68fb06090ee"),
 		EventType:       v1.PropertyRuleCreated,
 		AggregateID:     uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"),

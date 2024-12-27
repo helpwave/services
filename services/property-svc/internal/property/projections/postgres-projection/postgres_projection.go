@@ -71,30 +71,30 @@ func (p *Projection) initEventListeners() {
 		p.onFieldTypeDataSelectOptionsUpserted)
 }
 
-func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload propertyEventsV1.PropertyCreatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	// Create Property
 	propertyID, err := uuid.Parse(payload.ID)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	subjectType, err := util.ParseSubjectType(payload.SubjectType)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	fieldType, err := util.ParseFieldType(payload.FieldType)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	// create query
@@ -106,23 +106,23 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onPropertyDescriptionUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPropertyDescriptionUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload propertyEventsV1.PropertyDescriptionUpdatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
@@ -132,25 +132,25 @@ func (p *Projection) onPropertyDescriptionUpdated(ctx context.Context, evt hwes.
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload propertyEventsV1.PropertySetIDUpdatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
 	if payload.SetID != "" {
 		if parsedID, err := hwutil.ParseNullUUID(&payload.SetID); err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionPark)
+			return hwutil.PtrTo(esdb.NackActionPark), err
 		} else {
 			setID = parsedID
 		}
@@ -163,24 +163,24 @@ func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event)
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload propertyEventsV1.PropertySubjectTypeUpdatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	subjectType, err := util.ParseSubjectType(payload.SubjectType)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err = p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
@@ -190,19 +190,19 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload propertyEventsV1.PropertyNameUpdatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
@@ -212,43 +212,43 @@ func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (error, 
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onPropertyArchived(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPropertyArchived(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
 		ID:          evt.GetAggregateID(),
 		IsArchived:  hwutil.PtrTo(true),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onPropertyRetrieved(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPropertyRetrieved(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
 		ID:          evt.GetAggregateID(),
 		IsArchived:  hwutil.PtrTo(false),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 	defer rollback()
 	propertyRepo := p.propertyRepo.WithTx(tx)
@@ -256,13 +256,13 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 	var payload propertyEventsV1.FieldTypeDataCreatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	if payload.FieldTypeData.SelectData != nil {
 		selectDataID, err := propertyRepo.CreateSelectData(ctx, payload.FieldTypeData.SelectData.AllowFreetext)
 		if err := hwdb.Error(ctx, err); err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionRetry)
+			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
 		for _, option := range payload.FieldTypeData.SelectData.SelectOptions {
 			err := propertyRepo.CreateSelectOption(ctx, property_repo.CreateSelectOptionParams{
@@ -273,7 +273,7 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 				SelectDataID: selectDataID,
 			})
 			if err := hwdb.Error(ctx, err); err != nil {
-				return err, hwutil.PtrTo(esdb.NackActionRetry)
+				return hwutil.PtrTo(esdb.NackActionRetry), err
 			}
 		}
 
@@ -284,22 +284,22 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 			Consistency:  int64(evt.GetVersion()), //nolint:gosec
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionRetry)
+			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 	defer rollback()
 	propertyRepo := p.propertyRepo.WithTx(tx)
@@ -307,12 +307,12 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	property, err := propertyRepo.GetPropertyById(ctx, evt.AggregateID)
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	if property.SelectDataID.Valid {
@@ -322,14 +322,14 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 			Consistency:   int64(evt.GetVersion()), //nolint:gosec
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionRetry)
+			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
 	} else if property.FieldType == int32(pb.FieldType_FIELD_TYPE_SELECT) ||
 		property.FieldType == int32(pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
 		// if the property was created with field_type_select but selectData wasn't created initially we have to do it here
 		sdID, err := propertyRepo.CreateSelectData(ctx, payload.NewAllowFreetext)
 		if err := hwdb.Error(ctx, err); err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionRetry)
+			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
 		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
@@ -337,12 +337,12 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 			Consistency:  int64(evt.GetVersion()), //nolint:gosec
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionRetry)
+			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
@@ -351,11 +351,11 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 	ctx context.Context,
 	evt hwes.Event,
-) (error, *esdb.NackAction) {
+) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 	defer rollback()
 	propertyRepo := p.propertyRepo.WithTx(tx)
@@ -363,13 +363,13 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	property, err := propertyRepo.GetPropertyById(ctx, evt.AggregateID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	var selectDataID uuid.UUID
@@ -377,7 +377,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 		// Create SelectData and reference from property
 		sdID, err := propertyRepo.CreateSelectData(ctx, false)
 		if err := hwdb.Error(ctx, err); err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionRetry)
+			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
 		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
@@ -385,7 +385,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 			Consistency:  int64(evt.GetVersion()), //nolint:gosec
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
-			return err, hwutil.PtrTo(esdb.NackActionRetry)
+			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
 		selectDataID = sdID
 	} else {
@@ -417,11 +417,11 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 	})
 
 	if existsBatchErr != nil {
-		return existsBatchErr, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), existsBatchErr
 	}
 	if err := existsBatch.Close(); err != nil {
 		log.Err(err).Msg("failed while closing existsBatch.")
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	var existingSelectOptions []property_repo.UpdateSelectOptionsBatchParams
@@ -438,8 +438,8 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 		} else {
 			if selOpt.Name == nil {
 				log.Error().Msg("selectOption name has to be set on create")
-				// existsSelectOptions gets modified by a database result. Thats why we are retrying here.
-				return nil, hwutil.PtrTo(esdb.NackActionRetry)
+				// existsSelectOptions gets modified by a database result. That's why we are retrying here.
+				return hwutil.PtrTo(esdb.NackActionRetry), nil
 			}
 			newSelectOptions = append(newSelectOptions, property_repo.InsertSelectOptionsBatchParams{
 				ID:           selOpt.ID,
@@ -461,11 +461,11 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 		}
 	})
 	if batchUpdateErr != nil {
-		return batchUpdateErr, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), batchUpdateErr
 	}
 	if err := batchUpdate.Close(); err != nil {
 		log.Err(err).Msg("failed while closing updateBatch.")
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	// Insert
@@ -478,11 +478,11 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 		}
 	})
 	if batchInsertErr != nil {
-		return batchInsertErr, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), batchInsertErr
 	}
 	if err := batchInsert.Close(); err != nil {
 		log.Err(err).Msg("failed while closing insertBatch.")
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	// update property consistency
@@ -491,11 +491,11 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
@@ -504,11 +504,11 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 func (p *Projection) onFieldTypeDataSelectOptionsRemoved(
 	ctx context.Context,
 	evt hwes.Event,
-) (error, *esdb.NackAction) {
+) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 	defer rollback()
 	propertyRepo := p.propertyRepo.WithTx(tx)
@@ -516,7 +516,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsRemoved(
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsRemovedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	parsedIDs := hwutil.FlatMap(payload.RemovedSelectOptions, func(s string) *uuid.UUID {
@@ -538,12 +538,12 @@ func (p *Projection) onFieldTypeDataSelectOptionsRemoved(
 	})
 	if batchErr != nil {
 		log.Error().Err(batchErr).Msg("batch execution failed.")
-		return batchErr, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), batchErr
 	}
 
 	if err := batch.Close(); err != nil {
 		log.Err(err).Msg("failed while closing batch.")
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	// update property consistency
@@ -552,11 +552,11 @@ func (p *Projection) onFieldTypeDataSelectOptionsRemoved(
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil

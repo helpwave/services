@@ -65,35 +65,35 @@ func parseTaskStatus(status string) (pb.TaskStatus, error) {
 	return (pb.TaskStatus)(value), nil
 }
 
-func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskCreatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	taskID, err := uuid.Parse(payload.ID)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	patientID, err := uuid.Parse(payload.PatientID)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	status, err := parseTaskStatus(payload.Status)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	var committerID uuid.UUID
 	if evt.CommitterUserID != nil {
 		committerID = *evt.CommitterUserID
 	} else {
-		return esErrs.ErrCommitterMissing, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), esErrs.ErrCommitterMissing
 	}
 
 	// Add to db
@@ -107,24 +107,24 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskStatusUpdatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	status, err := parseTaskStatus(payload.Status)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err = p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
@@ -133,19 +133,19 @@ func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (e
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err = hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskNameUpdatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
@@ -154,19 +154,19 @@ func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (err
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err = hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskDescriptionUpdatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
@@ -175,19 +175,19 @@ func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Even
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err = hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskDueAtUpdatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
@@ -196,13 +196,13 @@ func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (er
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err = hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var userIDStr string
@@ -212,21 +212,21 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 		var payload taskEventsV1.TaskAssignedEvent
 		if err := evt.GetJSONData(&payload); err != nil {
 			log.Error().Err(err).Msg("unmarshal failed")
-			return err, hwutil.PtrTo(esdb.NackActionPark)
+			return hwutil.PtrTo(esdb.NackActionPark), err
 		}
 		userIDStr = payload.UserID
 	case taskEventsV1.TaskSelfAssigned:
 		var payload taskEventsV1.TaskSelfAssignedEvent
 		if err := evt.GetJSONData(&payload); err != nil {
 			log.Error().Err(err).Msg("unmarshal failed")
-			return err, hwutil.PtrTo(esdb.NackActionPark)
+			return hwutil.PtrTo(esdb.NackActionPark), err
 		}
 		userIDStr = payload.UserID
 	}
 
 	userID, err := hwutil.ParseNullUUID(&userIDStr)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err = p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{
@@ -235,19 +235,19 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 		Consistency:    int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err = hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.TaskUnassignedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err := p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{
@@ -256,57 +256,57 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 		Consistency:    int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err = hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onTaskPublished(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskPublished(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
 		ID:          evt.AggregateID,
 		Public:      hwutil.PtrTo(true),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err = hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onTaskUnpublished(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskUnpublished(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
 		ID:          evt.AggregateID,
 		Public:      hwutil.PtrTo(false),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskCreatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	var committerID uuid.UUID
 	if evt.CommitterUserID != nil {
 		committerID = *evt.CommitterUserID
 	} else {
-		return esErrs.ErrCommitterMissing, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), esErrs.ErrCommitterMissing
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err = p.taskRepo.CreateSubtask(ctx, task_repo.CreateSubtaskParams{
@@ -318,24 +318,24 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 		Done:        payload.Done,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskCreatedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{
@@ -344,24 +344,24 @@ func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err = hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskCompletedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{
@@ -370,24 +370,24 @@ func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (er
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskUncompletedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{
@@ -396,24 +396,24 @@ func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
 	return nil, nil
 }
 
-func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskDeletedEvent
 	if err := evt.GetJSONData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionPark)
+		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
 	err = p.taskRepo.DeleteSubtask(ctx, task_repo.DeleteSubtaskParams{
@@ -421,26 +421,26 @@ func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (erro
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 	return nil, nil
 }
 
-func (p *Projection) onTaskDueAtRemoved(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskDueAtRemoved(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	err := p.taskRepo.RemoveTaskDueAt(ctx, task_repo.RemoveTaskDueAtParams{
 		ID:          evt.AggregateID,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 	return nil, nil
 }
 
-func (p *Projection) onTaskDeleted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onTaskDeleted(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
 	err := p.taskRepo.DeleteTask(ctx, evt.AggregateID)
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 	return nil, nil
 }

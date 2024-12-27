@@ -46,10 +46,10 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 		ctx,
 		eventStore,
 		func(ctx context.Context, event hwes.Event) (err error) {
-			if err, _ = propertyPostgresProjection.HandleEvent(ctx, event); err != nil {
+			if _, err = propertyPostgresProjection.HandleEvent(ctx, event); err != nil {
 				return
 			}
-			if err, _ = propertyValuePostgresProjection.HandleEvent(ctx, event); err != nil {
+			if _, err = propertyValuePostgresProjection.HandleEvent(ctx, event); err != nil {
 				return
 			}
 			return
