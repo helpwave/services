@@ -22,7 +22,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"tasks-svc/internal/tracking"
-	"tasks-svc/repos/room_repo"
+	"tasks-svc/repos/room-repo"
 
 	pb "gen/services/tasks_svc/v1"
 	zlog "github.com/rs/zerolog/log"
@@ -56,7 +56,7 @@ func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 
 func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) (*pb.CreateRoomResponse, error) {
 	log := zlog.Ctx(ctx)
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := roomrepo.New(hwdb.GetDB())
 
 	// parse input
 	wardID, err := uuid.Parse(req.GetWardId())
@@ -72,7 +72,7 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 	}
 
 	// do query
-	row, err := roomRepo.CreateRoom(ctx, room_repo.CreateRoomParams{
+	row, err := roomRepo.CreateRoom(ctx, roomrepo.CreateRoomParams{
 		Name:   req.GetName(),
 		WardID: wardID,
 	})
@@ -118,7 +118,7 @@ func (s ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest
 }
 
 func (s ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.GetRoomResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := roomrepo.New(hwdb.GetDB())
 
 	// parse inputs
 	id, err := uuid.Parse(req.GetId())
@@ -146,7 +146,7 @@ func (s ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb
 
 	room := rows[0].Room
 
-	beds := hwutil.FlatMap(rows, func(row room_repo.GetRoomWithBedsByIdRow) **pb.GetRoomResponse_Bed {
+	beds := hwutil.FlatMap(rows, func(row roomrepo.GetRoomWithBedsByIdRow) **pb.GetRoomResponse_Bed {
 		if !row.BedID.Valid {
 			return nil
 		}
@@ -169,7 +169,7 @@ func (s ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb
 }
 
 func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) (*pb.UpdateRoomResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := roomrepo.New(hwdb.GetDB())
 
 	// parse inputs
 	roomID, err := uuid.Parse(req.GetId())
@@ -185,7 +185,7 @@ func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest
 	}
 
 	// do query
-	consistency, err := roomRepo.UpdateRoom(ctx, room_repo.UpdateRoomParams{
+	consistency, err := roomRepo.UpdateRoom(ctx, roomrepo.UpdateRoomParams{
 		ID:   roomID,
 		Name: req.Name,
 	})
@@ -212,7 +212,7 @@ func (s ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest
 }
 
 func (s ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := roomrepo.New(hwdb.GetDB())
 
 	// parse inputs
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
@@ -230,13 +230,13 @@ func (s ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*
 	// re-structure rows
 	processedRooms := make(map[uuid.UUID]bool)
 
-	rooms := hwutil.FlatMap(rows, func(roomRow room_repo.GetRoomsWithBedsRow) **pb.GetRoomsResponse_Room {
+	rooms := hwutil.FlatMap(rows, func(roomRow roomrepo.GetRoomsWithBedsRow) **pb.GetRoomsResponse_Room {
 		room := roomRow.Room
 		if _, processed := processedRooms[room.ID]; processed {
 			return nil
 		}
 		processedRooms[room.ID] = true
-		beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsRow) **pb.GetRoomsResponse_Room_Bed {
+		beds := hwutil.FlatMap(rows, func(bedRow roomrepo.GetRoomsWithBedsRow) **pb.GetRoomsResponse_Room_Bed {
 			if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
 				return nil
 			}
@@ -277,7 +277,7 @@ func (s ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*
 }
 
 func (s ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) (*pb.DeleteRoomResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := roomrepo.New(hwdb.GetDB())
 
 	// parse inputs
 	roomID, err := uuid.Parse(req.GetId())
@@ -321,7 +321,7 @@ func (s ServiceServer) GetRoomOverviewsByWard(
 	ctx context.Context,
 	req *pb.GetRoomOverviewsByWardRequest,
 ) (*pb.GetRoomOverviewsByWardResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
+	roomRepo := roomrepo.New(hwdb.GetDB())
 
 	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -339,7 +339,7 @@ func (s ServiceServer) GetRoomOverviewsByWard(
 	}
 
 	rows, err := roomRepo.GetRoomsWithBedsAndPatientsAndTasksCountByWard(ctx,
-		room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardParams{
+		roomrepo.GetRoomsWithBedsAndPatientsAndTasksCountByWardParams{
 			TodoStatus:       int32(pb.TaskStatus_TASK_STATUS_TODO),
 			InProgressStatus: int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
 			DoneStatus:       int32(pb.TaskStatus_TASK_STATUS_DONE),
@@ -352,7 +352,7 @@ func (s ServiceServer) GetRoomOverviewsByWard(
 
 	processedRooms := make(map[uuid.UUID]bool)
 
-	type rowType = room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardRow
+	type rowType = roomrepo.GetRoomsWithBedsAndPatientsAndTasksCountByWardRow
 
 	rooms := hwutil.FlatMap(rows,
 		func(roomRow rowType) **pb.GetRoomOverviewsByWardResponse_Room {

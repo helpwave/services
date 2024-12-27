@@ -14,7 +14,7 @@ import (
 	"github.com/google/uuid"
 
 	"tasks-svc/internal/task/models"
-	"tasks-svc/repos/task_repo"
+	"tasks-svc/repos/task-repo"
 )
 
 type GetTaskWithPatientByIDQueryHandler func(ctx context.Context, taskID uuid.UUID) (*models.TaskWithPatient, error)
@@ -28,7 +28,7 @@ func NewGetTaskWithPatientByIDQueryHandler(authz hwauthz.AuthZ) GetTaskWithPatie
 			return nil, err
 		}
 
-		taskRepo := task_repo.New(hwdb.GetDB())
+		taskRepo := taskrepo.New(hwdb.GetDB())
 
 		rows, err := taskRepo.GetTaskWithPatientById(ctx, taskID)
 		if err := hwdb.Error(ctx, err); err != nil {

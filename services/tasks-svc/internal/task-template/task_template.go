@@ -22,7 +22,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"tasks-svc/repos/task_template_repo"
+	"tasks-svc/repos/task-template-repo"
 
 	pb "gen/services/tasks_svc/v1"
 	zlog "github.com/rs/zerolog/log"
@@ -81,11 +81,11 @@ func (s ServiceServer) CreateTaskTemplate(
 		return nil, err
 	}
 	defer rollback()
-	templateRepo := task_template_repo.New(db).WithTx(tx)
+	templateRepo := tasktemplaterepo.New(db).WithTx(tx)
 
 	userID := auth.MustGetUserID(ctx)
 
-	row, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
+	row, err := templateRepo.CreateTaskTemplate(ctx, tasktemplaterepo.CreateTaskTemplateParams{
 		Name:        req.GetName(),
 		Description: req.GetDescription(),
 		CreatedBy:   userID,
@@ -102,8 +102,8 @@ func (s ServiceServer) CreateTaskTemplate(
 
 	if req.Subtasks != nil {
 		subtaskNames := hwutil.Map(req.GetSubtasks(),
-			func(subtask *pb.CreateTaskTemplateRequest_SubTask) task_template_repo.AppendSubTasksParams {
-				return task_template_repo.AppendSubTasksParams{
+			func(subtask *pb.CreateTaskTemplateRequest_SubTask) tasktemplaterepo.AppendSubTasksParams {
+				return tasktemplaterepo.AppendSubTasksParams{
 					Name:           subtask.GetName(),
 					TaskTemplateID: templateID,
 				}
@@ -163,7 +163,7 @@ func (s ServiceServer) DeleteTaskTemplate(
 	req *pb.DeleteTaskTemplateRequest,
 ) (*pb.DeleteTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := task_template_repo.New(hwdb.GetDB())
+	templateRepo := tasktemplaterepo.New(hwdb.GetDB())
 
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -216,7 +216,7 @@ func (s ServiceServer) DeleteTaskTemplateSubTask(
 	}
 	defer rollback()
 
-	templateRepo := task_template_repo.New(tx)
+	templateRepo := tasktemplaterepo.New(tx)
 
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -237,7 +237,7 @@ func (s ServiceServer) DeleteTaskTemplateSubTask(
 	}
 
 	// increase consistency of taskTemplate
-	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+	consistency, err := templateRepo.UpdateTaskTemplate(ctx, tasktemplaterepo.UpdateTaskTemplateParams{
 		ID: subtask.TaskTemplateID,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
@@ -273,7 +273,7 @@ func (s ServiceServer) UpdateTaskTemplate(
 	ctx context.Context,
 	req *pb.UpdateTaskTemplateRequest,
 ) (*pb.UpdateTaskTemplateResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB())
+	templateRepo := tasktemplaterepo.New(hwdb.GetDB())
 
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -287,7 +287,7 @@ func (s ServiceServer) UpdateTaskTemplate(
 		return nil, err
 	}
 
-	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+	consistency, err := templateRepo.UpdateTaskTemplate(ctx, tasktemplaterepo.UpdateTaskTemplateParams{
 		Name:        req.Name,
 		Description: req.Description,
 		ID:          id,
@@ -324,7 +324,7 @@ func (s ServiceServer) UpdateTaskTemplateSubTask(
 		return nil, err
 	}
 	defer rollback()
-	templateRepo := task_template_repo.New(tx)
+	templateRepo := tasktemplaterepo.New(tx)
 
 	id, err := uuid.Parse(req.GetSubtaskId())
 	if err != nil {
@@ -332,7 +332,7 @@ func (s ServiceServer) UpdateTaskTemplateSubTask(
 	}
 
 	// update subtask and get related taskTemplate
-	taskTemplateID, err := templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
+	taskTemplateID, err := templateRepo.UpdateSubtask(ctx, tasktemplaterepo.UpdateSubtaskParams{
 		Name: req.Name,
 		ID:   id,
 	})
@@ -349,7 +349,7 @@ func (s ServiceServer) UpdateTaskTemplateSubTask(
 	}
 
 	// increase consistency of taskTemplate
-	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+	consistency, err := templateRepo.UpdateTaskTemplate(ctx, tasktemplaterepo.UpdateTaskTemplateParams{
 		ID: taskTemplateID,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
@@ -383,7 +383,7 @@ func (s ServiceServer) CreateTaskTemplateSubTask(
 	req *pb.CreateTaskTemplateSubTaskRequest,
 ) (*pb.CreateTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := task_template_repo.New(hwdb.GetDB())
+	templateRepo := tasktemplaterepo.New(hwdb.GetDB())
 
 	taskTemplateID, err := uuid.Parse(req.GetTaskTemplateId())
 	if err != nil {
@@ -397,7 +397,7 @@ func (s ServiceServer) CreateTaskTemplateSubTask(
 		return nil, err
 	}
 
-	row, err := templateRepo.CreateSubTask(ctx, task_template_repo.CreateSubTaskParams{
+	row, err := templateRepo.CreateSubTask(ctx, tasktemplaterepo.CreateSubTaskParams{
 		TaskTemplateID: taskTemplateID,
 		Name:           req.GetName(),
 	})
@@ -436,7 +436,7 @@ func (s ServiceServer) GetAllTaskTemplates(
 	ctx context.Context,
 	req *pb.GetAllTaskTemplatesRequest,
 ) (*pb.GetAllTaskTemplatesResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB())
+	templateRepo := tasktemplaterepo.New(hwdb.GetDB())
 
 	user := commonperm.UserFromCtx(ctx)
 
@@ -451,7 +451,7 @@ func (s ServiceServer) GetAllTaskTemplates(
 	}
 
 	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx,
-		task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
+		tasktemplaterepo.GetAllTaskTemplatesWithSubTasksParams{
 			CreatorID:   createdBy,
 			PrivateOnly: req.GetPrivateOnly(),
 			WardID:      wardID,
@@ -512,7 +512,7 @@ func (s ServiceServer) GetTaskTemplate(
 	ctx context.Context,
 	req *pb.GetTaskTemplateRequest,
 ) (*pb.GetTaskTemplateResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB())
+	templateRepo := tasktemplaterepo.New(hwdb.GetDB())
 
 	taskTemplateID, err := uuid.Parse(req.Id)
 	if err != nil {
@@ -537,7 +537,7 @@ func (s ServiceServer) GetTaskTemplate(
 	taskTemplate := rows[0].TaskTemplate
 
 	taskTemplateSubtasks := hwutil.FlatMap(rows,
-		func(row task_template_repo.GetTaskTemplateWithSubtasksByIDRow) **pb.GetTaskTemplateResponse_SubTask {
+		func(row tasktemplaterepo.GetTaskTemplateWithSubtasksByIDRow) **pb.GetTaskTemplateResponse_SubTask {
 			if !row.SubTaskID.Valid {
 				return nil
 			}

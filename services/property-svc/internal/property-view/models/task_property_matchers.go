@@ -10,7 +10,7 @@ import (
 
 	"property-svc/internal/property-view/perm"
 
-	"property-svc/repos/task_views_repo"
+	"property-svc/repos/task-views-repo"
 
 	"github.com/google/uuid"
 )
@@ -24,16 +24,16 @@ type TaskPropertyMatchers struct {
 }
 
 func (m TaskPropertyMatchers) FindExactRuleID(ctx context.Context) (*uuid.UUID, error) {
-	taskViews := task_views_repo.New(hwdb.GetDB())
+	taskViews := taskviewsrepo.New(hwdb.GetDB())
 	return hwdb.Optional(taskViews.GetTaskRuleIdUsingExactMatchers)(ctx,
-		task_views_repo.GetTaskRuleIdUsingExactMatchersParams{
+		taskviewsrepo.GetTaskRuleIdUsingExactMatchersParams{
 			WardID: m.WardID,
 			TaskID: m.TaskID,
 		})
 }
 
 type queryTaskPropertiesRow struct {
-	task_views_repo.GetTaskPropertiesUsingMatchersRow
+	taskviewsrepo.GetTaskPropertiesUsingMatchersRow
 }
 
 func (r queryTaskPropertiesRow) GetPropertyID() uuid.UUID {
@@ -53,14 +53,14 @@ func (m TaskPropertyMatchers) GetType() string {
 }
 
 func (m TaskPropertyMatchers) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
-	taskViews := task_views_repo.New(hwdb.GetDB())
+	taskViews := taskviewsrepo.New(hwdb.GetDB())
 
-	rows, err := taskViews.GetTaskPropertiesUsingMatchers(ctx, task_views_repo.GetTaskPropertiesUsingMatchersParams{
+	rows, err := taskViews.GetTaskPropertiesUsingMatchers(ctx, taskviewsrepo.GetTaskPropertiesUsingMatchersParams{
 		WardID: m.WardID,
 		TaskID: m.TaskID,
 	})
 
-	cast := func(row task_views_repo.GetTaskPropertiesUsingMatchersRow) PropertiesQueryRow {
+	cast := func(row taskviewsrepo.GetTaskPropertiesUsingMatchersRow) PropertiesQueryRow {
 		return queryTaskPropertiesRow{row}
 	}
 
@@ -95,9 +95,9 @@ func (m TaskPropertyMatchers) ToMap() map[string]interface{} {
 }
 
 func (m TaskPropertyMatchers) IsPropertyAlwaysIncluded(ctx context.Context, propertyID uuid.UUID) (bool, error) {
-	repo := task_views_repo.New(hwdb.GetDB())
+	repo := taskviewsrepo.New(hwdb.GetDB())
 	query := hwdb.Optional(repo.IsTaskPropertyAlwaysIncluded)
-	alwaysInclude, err := query(ctx, task_views_repo.IsTaskPropertyAlwaysIncludedParams{
+	alwaysInclude, err := query(ctx, taskviewsrepo.IsTaskPropertyAlwaysIncludedParams{
 		PropertyID: propertyID,
 		WardID:     m.WardID,
 		TaskID:     m.TaskID,

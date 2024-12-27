@@ -10,7 +10,7 @@ import (
 
 	"user-svc/internal/user/perm"
 
-	"user-svc/repos/user_repo"
+	"user-svc/repos/user-repo"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/google/uuid"
@@ -41,7 +41,7 @@ func (s ServiceServer) ReadPublicProfile(
 	ctx context.Context,
 	req *pb.ReadPublicProfileRequest,
 ) (*pb.ReadPublicProfileResponse, error) {
-	userRepo := user_repo.New(hwdb.GetDB())
+	userRepo := userrepo.New(hwdb.GetDB())
 
 	userID, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -74,7 +74,7 @@ func (s ServiceServer) ReadPublicProfile(
 
 func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
 	log := zlog.Ctx(ctx)
-	userRepo := user_repo.New(hwdb.GetDB())
+	userRepo := userrepo.New(hwdb.GetDB())
 
 	var payload events.UserUpdatedEvent
 	if err := proto.Unmarshal(evt.RawData, &payload); err != nil {
@@ -88,7 +88,7 @@ func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 		return true, err
 	}
 
-	err = userRepo.UpdateUser(ctx, user_repo.UpdateUserParams{
+	err = userRepo.UpdateUser(ctx, userrepo.UpdateUserParams{
 		ID:       userID,
 		Email:    payload.Email,
 		Name:     payload.Name,

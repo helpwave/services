@@ -15,15 +15,15 @@ import (
 	"property-svc/internal/property-value/aggregate"
 	propertyValueEventsV1 "property-svc/internal/property-value/events/v1"
 	"property-svc/internal/property-value/models"
-	"property-svc/repos/property_repo"
-	"property-svc/repos/property_value_repo"
+	"property-svc/repos/property-repo"
+	"property-svc/repos/property-value-repo"
 )
 
 type Projection struct {
 	*custom.CustomProjection
 	db                hwdb.DBTX
-	propertyRepo      *property_repo.Queries
-	propertyValueRepo *property_value_repo.Queries
+	propertyRepo      *propertyrepo.Queries
+	propertyValueRepo *propertyvaluerepo.Queries
 }
 
 func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projection {
@@ -35,8 +35,8 @@ func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projectio
 			&[]string{aggregate.PropertyValueAggregateType + "-"},
 		),
 		db:                db,
-		propertyRepo:      property_repo.New(db),
-		propertyValueRepo: property_value_repo.New(db),
+		propertyRepo:      propertyrepo.New(db),
+		propertyValueRepo: propertyvaluerepo.New(db),
 	}
 	p.initEventListeners()
 	return p
@@ -95,14 +95,14 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	isMultiSelectChange := change.MultiSelectValues != nil
 
 	if isSingleSelectChange || isMultiSelectChange {
-		var selectsToAdd []property_value_repo.ConnectValueWithSelectOptionsParams
+		var selectsToAdd []propertyvaluerepo.ConnectValueWithSelectOptionsParams
 
 		if isSingleSelectChange {
 			id, err := uuid.Parse(*change.SingleSelectValue)
 			if err != nil {
 				return hwutil.PtrTo(esdb.NackActionSkip), fmt.Errorf("option change is not a uuid: %w", err)
 			}
-			selectsToAdd = []property_value_repo.ConnectValueWithSelectOptionsParams{
+			selectsToAdd = []propertyvaluerepo.ConnectValueWithSelectOptionsParams{
 				{ValueID: evt.AggregateID, SelectOption: id},
 			}
 		} else { // isMultiSelectChange
@@ -112,8 +112,8 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 				return hwutil.PtrTo(esdb.NackActionPark),
 					fmt.Errorf("onPropertyValueCreated: at least one select option uuid could not be parsed: %w", err)
 			}
-			selectsToAdd = hwutil.Map(ids, func(id uuid.UUID) property_value_repo.ConnectValueWithSelectOptionsParams {
-				return property_value_repo.ConnectValueWithSelectOptionsParams{
+			selectsToAdd = hwutil.Map(ids, func(id uuid.UUID) propertyvaluerepo.ConnectValueWithSelectOptionsParams {
+				return propertyvaluerepo.ConnectValueWithSelectOptionsParams{
 					ValueID:      evt.AggregateID,
 					SelectOption: id,
 				}
@@ -138,13 +138,13 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 func createBasicPropertyValue(
 	ctx context.Context,
 	evt hwes.Event,
-	repo *property_value_repo.Queries,
+	repo *propertyvaluerepo.Queries,
 	valueChange models.TypedValueChange,
 	propertyID,
 	aggregateID,
 	subjectID uuid.UUID,
 ) (*esdb.NackAction, error) {
-	createPropertyValueParams := property_value_repo.CreateBasicPropertyValueParams{
+	createPropertyValueParams := propertyvaluerepo.CreateBasicPropertyValueParams{
 		ID:          aggregateID,
 		PropertyID:  propertyID,
 		SubjectID:   subjectID,
@@ -220,7 +220,7 @@ func updateSelectPropertyValue(
 	}
 	defer rollback()
 
-	propertyValueRepo := property_value_repo.New(tx)
+	propertyValueRepo := propertyvaluerepo.New(tx)
 
 	var toAdd []uuid.UUID
 	if valueChange.SingleSelectValue != nil {
@@ -249,12 +249,12 @@ func updateSelectPropertyValue(
 		// delete requested options
 		if len(val.RemoveSelectValues) != 0 {
 			arr, err := hwutil.MapWithErr(val.RemoveSelectValues,
-				func(s string) (property_value_repo.DisconnectValueFromSelectOptionsParams, error) {
+				func(s string) (propertyvaluerepo.DisconnectValueFromSelectOptionsParams, error) {
 					id, err := uuid.Parse(s)
 					if err != nil {
-						return property_value_repo.DisconnectValueFromSelectOptionsParams{}, err
+						return propertyvaluerepo.DisconnectValueFromSelectOptionsParams{}, err
 					}
-					return property_value_repo.DisconnectValueFromSelectOptionsParams{
+					return propertyvaluerepo.DisconnectValueFromSelectOptionsParams{
 						ValueID:      aggregateID,
 						SelectOption: id,
 					}, nil
@@ -271,8 +271,8 @@ func updateSelectPropertyValue(
 	}
 
 	// add new connection
-	args := hwutil.Map(toAdd, func(id uuid.UUID) property_value_repo.ConnectValueWithSelectOptionsParams {
-		return property_value_repo.ConnectValueWithSelectOptionsParams{
+	args := hwutil.Map(toAdd, func(id uuid.UUID) propertyvaluerepo.ConnectValueWithSelectOptionsParams {
+		return propertyvaluerepo.ConnectValueWithSelectOptionsParams{
 			ValueID:      evt.AggregateID,
 			SelectOption: id,
 		}
@@ -283,7 +283,7 @@ func updateSelectPropertyValue(
 	}
 
 	// update consistency
-	err = propertyValueRepo.UpdatePropertyValueByID(ctx, property_value_repo.UpdatePropertyValueByIDParams{
+	err = propertyValueRepo.UpdatePropertyValueByID(ctx, propertyvaluerepo.UpdatePropertyValueByIDParams{
 		ID:          evt.AggregateID,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
@@ -303,12 +303,12 @@ func updateSelectPropertyValue(
 func updateBasicPropertyValue(
 	ctx context.Context,
 	evt hwes.Event,
-	repo *property_value_repo.Queries,
+	repo *propertyvaluerepo.Queries,
 	valueChange models.TypedValueChange,
 ) (*esdb.NackAction, error) {
 	aggregateID := evt.AggregateID
 
-	updatePropertyValueParams := property_value_repo.UpdatePropertyValueByIDParams{
+	updatePropertyValueParams := propertyvaluerepo.UpdatePropertyValueByIDParams{
 		ID:          aggregateID,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	}

@@ -16,12 +16,12 @@ import (
 
 	"tasks-svc/internal/task/aggregate"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
-	"tasks-svc/repos/task_repo"
+	"tasks-svc/repos/task-repo"
 )
 
 type Projection struct {
 	*custom.CustomProjection
-	taskRepo *task_repo.Queries
+	taskRepo *taskrepo.Queries
 }
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
@@ -32,7 +32,7 @@ func NewProjection(es *esdb.Client, serviceName string) *Projection {
 			subscriptionGroupName,
 			&[]string{aggregate.TaskAggregateType + "-"},
 		),
-		taskRepo: task_repo.New(hwdb.GetDB()),
+		taskRepo: taskrepo.New(hwdb.GetDB()),
 	}
 	p.initEventListeners()
 	return p
@@ -97,7 +97,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (*esdb.N
 	}
 
 	// Add to db
-	err = p.taskRepo.CreateTask(ctx, task_repo.CreateTaskParams{
+	err = p.taskRepo.CreateTask(ctx, taskrepo.CreateTaskParams{
 		ID:          taskID,
 		Name:        payload.Name,
 		PatientID:   patientID,
@@ -127,7 +127,7 @@ func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (*
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err = p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	err = p.taskRepo.UpdateTask(ctx, taskrepo.UpdateTaskParams{
 		ID:          evt.AggregateID,
 		Status:      hwutil.PtrTo(int32(status)),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -148,7 +148,7 @@ func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (*es
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	err := p.taskRepo.UpdateTask(ctx, taskrepo.UpdateTaskParams{
 		ID:          evt.AggregateID,
 		Name:        &payload.Name,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -169,7 +169,7 @@ func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Even
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	err := p.taskRepo.UpdateTask(ctx, taskrepo.UpdateTaskParams{
 		ID:          evt.AggregateID,
 		Description: &payload.Description,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -190,7 +190,7 @@ func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (*e
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	err := p.taskRepo.UpdateTask(ctx, taskrepo.UpdateTaskParams{
 		ID:          evt.AggregateID,
 		DueAt:       hwdb.TimeToTimestamp(payload.DueAt),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -229,7 +229,7 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (*esdb.
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err = p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{
+	err = p.taskRepo.UpdateTaskAssignedUser(ctx, taskrepo.UpdateTaskAssignedUserParams{
 		ID:             evt.AggregateID,
 		AssignedUserID: userID,
 		Consistency:    int64(evt.GetVersion()), //nolint:gosec
@@ -250,7 +250,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (*esd
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err := p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{
+	err := p.taskRepo.UpdateTaskAssignedUser(ctx, taskrepo.UpdateTaskAssignedUserParams{
 		ID:             evt.AggregateID,
 		AssignedUserID: uuid.NullUUID{},
 		Consistency:    int64(evt.GetVersion()), //nolint:gosec
@@ -263,7 +263,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (*esd
 }
 
 func (p *Projection) onTaskPublished(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
-	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	err := p.taskRepo.UpdateTask(ctx, taskrepo.UpdateTaskParams{
 		ID:          evt.AggregateID,
 		Public:      hwutil.PtrTo(true),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -276,7 +276,7 @@ func (p *Projection) onTaskPublished(ctx context.Context, evt hwes.Event) (*esdb
 }
 
 func (p *Projection) onTaskUnpublished(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
-	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	err := p.taskRepo.UpdateTask(ctx, taskrepo.UpdateTaskParams{
 		ID:          evt.AggregateID,
 		Public:      hwutil.PtrTo(false),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -309,7 +309,7 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (*esd
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err = p.taskRepo.CreateSubtask(ctx, task_repo.CreateSubtaskParams{
+	err = p.taskRepo.CreateSubtask(ctx, taskrepo.CreateSubtaskParams{
 		ID:          subtaskID,
 		TaskID:      evt.AggregateID,
 		Name:        payload.Name,
@@ -338,7 +338,7 @@ func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{
+	err = p.taskRepo.UpdateSubtask(ctx, taskrepo.UpdateSubtaskParams{
 		ID:          subtaskID,
 		Name:        &payload.Name,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -364,7 +364,7 @@ func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (*e
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{
+	err = p.taskRepo.UpdateSubtask(ctx, taskrepo.UpdateSubtaskParams{
 		ID:          subtaskID,
 		Done:        hwutil.PtrTo(true),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -390,7 +390,7 @@ func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{
+	err = p.taskRepo.UpdateSubtask(ctx, taskrepo.UpdateSubtaskParams{
 		ID:          subtaskID,
 		Done:        hwutil.PtrTo(false),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -416,7 +416,7 @@ func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (*esd
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err = p.taskRepo.DeleteSubtask(ctx, task_repo.DeleteSubtaskParams{
+	err = p.taskRepo.DeleteSubtask(ctx, taskrepo.DeleteSubtaskParams{
 		ID:          subtaskID,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
@@ -427,7 +427,7 @@ func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (*esd
 }
 
 func (p *Projection) onTaskDueAtRemoved(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
-	err := p.taskRepo.RemoveTaskDueAt(ctx, task_repo.RemoveTaskDueAtParams{
+	err := p.taskRepo.RemoveTaskDueAt(ctx, taskrepo.RemoveTaskDueAtParams{
 		ID:          evt.AggregateID,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})

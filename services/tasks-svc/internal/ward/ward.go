@@ -24,7 +24,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"tasks-svc/internal/tracking"
-	"tasks-svc/repos/ward_repo"
+	"tasks-svc/repos/ward-repo"
 
 	pbEventsV1 "gen/libs/events/v1"
 )
@@ -57,7 +57,7 @@ func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 
 func (s *ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) (*pb.CreateWardResponse, error) {
 	log := zlog.Ctx(ctx)
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := wardrepo.New(hwdb.GetDB())
 
 	// check permissions
 	user := commonperm.UserFromCtx(ctx)
@@ -116,7 +116,7 @@ func (s *ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardReques
 }
 
 func (s *ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := wardrepo.New(hwdb.GetDB())
 
 	// parse input
 	id, err := uuid.Parse(req.GetId())
@@ -150,7 +150,7 @@ func (s *ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*p
 }
 
 func (s *ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := wardrepo.New(hwdb.GetDB())
 
 	wards, err := wardRepo.GetWards(ctx)
 	err = hwdb.Error(ctx, err)
@@ -159,7 +159,7 @@ func (s *ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (
 	}
 
 	user := commonperm.UserFromCtx(ctx)
-	checks := hwutil.Map(wards, func(w ward_repo.Ward) hwauthz.PermissionCheck {
+	checks := hwutil.Map(wards, func(w wardrepo.Ward) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.WardCanUserGet, perm.Ward(w.ID))
 	})
 	canGet, err := s.authz.BulkCheck(ctx, checks)
@@ -167,12 +167,12 @@ func (s *ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (
 		return nil, err
 	}
 
-	wards = hwutil.Filter(wards, func(i int, _ ward_repo.Ward) bool {
+	wards = hwutil.Filter(wards, func(i int, _ wardrepo.Ward) bool {
 		return canGet[i]
 	})
 
 	return &pb.GetWardsResponse{
-		Wards: hwutil.Map(wards, func(ward ward_repo.Ward) *pb.GetWardsResponse_Ward {
+		Wards: hwutil.Map(wards, func(ward wardrepo.Ward) *pb.GetWardsResponse_Ward {
 			return &pb.GetWardsResponse_Ward{
 				Id:          ward.ID.String(),
 				Name:        ward.Name,
@@ -186,7 +186,7 @@ func (s *ServiceServer) GetRecentWards(
 	ctx context.Context,
 	_ *pb.GetRecentWardsRequest,
 ) (*pb.GetRecentWardsResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := wardrepo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
 	recentWardIDsStr, err := tracking.GetRecentWardsForUser(ctx)
@@ -205,7 +205,7 @@ func (s *ServiceServer) GetRecentWards(
 	})
 
 	// do query
-	rows, err := wardRepo.GetWardsWithCounts(ctx, ward_repo.GetWardsWithCountsParams{
+	rows, err := wardRepo.GetWardsWithCounts(ctx, wardrepo.GetWardsWithCountsParams{
 		StatusTodo:       int32(pb.TaskStatus_TASK_STATUS_TODO),
 		StatusInProgress: int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
 		StatusDone:       int32(pb.TaskStatus_TASK_STATUS_DONE),
@@ -218,7 +218,7 @@ func (s *ServiceServer) GetRecentWards(
 
 	// check permissions
 	user := commonperm.UserFromCtx(ctx)
-	checks := hwutil.Map(rows, func(w ward_repo.GetWardsWithCountsRow) hwauthz.PermissionCheck {
+	checks := hwutil.Map(rows, func(w wardrepo.GetWardsWithCountsRow) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.WardCanUserGet, perm.Ward(w.Ward.ID))
 	})
 	canGet, err := s.authz.BulkCheck(ctx, checks)
@@ -226,12 +226,12 @@ func (s *ServiceServer) GetRecentWards(
 		return nil, err
 	}
 
-	rows = hwutil.Filter(rows, func(i int, _ ward_repo.GetWardsWithCountsRow) bool {
+	rows = hwutil.Filter(rows, func(i int, _ wardrepo.GetWardsWithCountsRow) bool {
 		return canGet[i]
 	})
 
 	// return
-	response := hwutil.Map(rows, func(row ward_repo.GetWardsWithCountsRow) *pb.GetRecentWardsResponse_Ward {
+	response := hwutil.Map(rows, func(row wardrepo.GetWardsWithCountsRow) *pb.GetRecentWardsResponse_Ward {
 		return &pb.GetRecentWardsResponse_Ward{
 			Id:              row.Ward.ID.String(),
 			Name:            row.Ward.Name,
@@ -247,7 +247,7 @@ func (s *ServiceServer) GetRecentWards(
 }
 
 func (s *ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := wardrepo.New(hwdb.GetDB())
 
 	// parse input
 	id, err := uuid.Parse(req.GetId())
@@ -263,7 +263,7 @@ func (s *ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardReques
 	}
 
 	// do query
-	consistency, err := wardRepo.UpdateWard(ctx, ward_repo.UpdateWardParams{
+	consistency, err := wardRepo.UpdateWard(ctx, wardrepo.UpdateWardParams{
 		ID:   id,
 		Name: req.Name,
 	})
@@ -293,7 +293,7 @@ func (s *ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardReques
 }
 
 func (s *ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := wardrepo.New(hwdb.GetDB())
 
 	// parse input
 	wardID, err := uuid.Parse(req.GetId())
@@ -350,9 +350,9 @@ func (s *ServiceServer) GetWardOverviews(
 	ctx context.Context,
 	_ *pb.GetWardOverviewsRequest,
 ) (*pb.GetWardOverviewsResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := wardrepo.New(hwdb.GetDB())
 
-	rows, err := wardRepo.GetWardsWithCounts(ctx, ward_repo.GetWardsWithCountsParams{
+	rows, err := wardRepo.GetWardsWithCounts(ctx, wardrepo.GetWardsWithCountsParams{
 		StatusTodo:       int32(pb.TaskStatus_TASK_STATUS_TODO),
 		StatusInProgress: int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
 		StatusDone:       int32(pb.TaskStatus_TASK_STATUS_DONE),
@@ -364,7 +364,7 @@ func (s *ServiceServer) GetWardOverviews(
 	}
 
 	user := commonperm.UserFromCtx(ctx)
-	checks := hwutil.Map(rows, func(w ward_repo.GetWardsWithCountsRow) hwauthz.PermissionCheck {
+	checks := hwutil.Map(rows, func(w wardrepo.GetWardsWithCountsRow) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.WardCanUserGet, perm.Ward(w.Ward.ID))
 	})
 	canGet, err := s.authz.BulkCheck(ctx, checks)
@@ -372,11 +372,11 @@ func (s *ServiceServer) GetWardOverviews(
 		return nil, err
 	}
 
-	rows = hwutil.Filter(rows, func(i int, _ ward_repo.GetWardsWithCountsRow) bool {
+	rows = hwutil.Filter(rows, func(i int, _ wardrepo.GetWardsWithCountsRow) bool {
 		return canGet[i]
 	})
 
-	resWards := hwutil.Map(rows, func(row ward_repo.GetWardsWithCountsRow) *pb.GetWardOverviewsResponse_Ward {
+	resWards := hwutil.Map(rows, func(row wardrepo.GetWardsWithCountsRow) *pb.GetWardOverviewsResponse_Ward {
 		return &pb.GetWardOverviewsResponse_Ward{
 			Id:              row.Ward.ID.String(),
 			Name:            row.Ward.Name,
@@ -395,7 +395,7 @@ func (s *ServiceServer) GetWardDetails(
 	ctx context.Context,
 	req *pb.GetWardDetailsRequest,
 ) (*pb.GetWardDetailsResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := wardrepo.New(hwdb.GetDB())
 
 	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {

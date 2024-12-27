@@ -13,7 +13,7 @@ import (
 
 	"property-svc/internal/property/models"
 	"property-svc/internal/property/perm"
-	"property-svc/repos/property_repo"
+	"property-svc/repos/property-repo"
 )
 
 type GetPropertyByIDQueryHandler func(
@@ -31,11 +31,11 @@ func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHan
 			return nil, 0, err
 		}
 
-		propertyRepo := property_repo.New(hwdb.GetDB())
+		propertyRepo := propertyrepo.New(hwdb.GetDB())
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
 			ctx,
-			property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
+			propertyrepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
 				ID: uuid.NullUUID{UUID: propertyID, Valid: true},
 			})
 		if err := hwdb.Error(ctx, err); err != nil {

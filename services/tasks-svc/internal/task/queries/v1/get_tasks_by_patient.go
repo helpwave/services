@@ -15,7 +15,7 @@ import (
 	"tasks-svc/internal/task/perm"
 
 	"tasks-svc/internal/task/models"
-	"tasks-svc/repos/task_repo"
+	"tasks-svc/repos/task-repo"
 )
 
 type GetTasksByPatientIDQueryHandler func(
@@ -32,7 +32,7 @@ func NewGetTasksByPatientIDQueryHandler(authz hwauthz.AuthZ) GetTasksByPatientID
 			return nil, err
 		}
 
-		taskRepo := task_repo.New(hwdb.GetDB())
+		taskRepo := taskrepo.New(hwdb.GetDB())
 
 		tasksWithSubtasks, err := taskRepo.GetTasksWithSubtasksByPatient(ctx, patientID)
 		if err := hwdb.Error(ctx, err); err != nil {

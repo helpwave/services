@@ -14,7 +14,7 @@ import (
 
 	"tasks-svc/internal/patient/models"
 	th "tasks-svc/internal/task/handlers"
-	"tasks-svc/repos/patient_repo"
+	"tasks-svc/repos/patient-repo"
 )
 
 type GetPatientDetailsByIDQueryHandler func(ctx context.Context, patientID uuid.UUID) (*models.PatientDetails, error)
@@ -23,7 +23,7 @@ func NewGetPatientWithDetailsByIDQueryHandler(
 	as hwes.AggregateStore, authz hwauthz.AuthZ,
 ) GetPatientDetailsByIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) (*models.PatientDetails, error) {
-		patientRepo := patient_repo.New(hwdb.GetDB())
+		patientRepo := patientrepo.New(hwdb.GetDB())
 		taskHandlers := th.NewTaskHandlers(as, authz)
 
 		// check permissions

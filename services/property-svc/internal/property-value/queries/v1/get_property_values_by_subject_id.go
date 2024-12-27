@@ -20,7 +20,7 @@ import (
 	"property-svc/internal/property-value/models"
 	vh "property-svc/internal/property-view/handlers"
 	viewModels "property-svc/internal/property-view/models"
-	"property-svc/repos/property_value_repo"
+	"property-svc/repos/property-value-repo"
 )
 
 type GetRelevantPropertyValuesQueryHandler func(
@@ -33,7 +33,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 ) GetRelevantPropertyValuesQueryHandler {
 	return func(ctx context.Context, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error) {
 		viewHandlers := vh.NewPropertyViewHandlers(as, authz)
-		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
+		propertyValueRepo := propertyvaluerepo.New(hwdb.GetDB())
 
 		subjectID, err := matcher.GetSubjectID()
 		if err != nil {
@@ -50,7 +50,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 
 		propertyValuesWithProperties, err := propertyValueRepo.GetRelevantPropertyViews(
 			ctx,
-			property_value_repo.GetRelevantPropertyViewsParams{
+			propertyvaluerepo.GetRelevantPropertyViewsParams{
 				SubjectID:     subjectID,
 				AlwaysInclude: alwaysInclude,
 			})

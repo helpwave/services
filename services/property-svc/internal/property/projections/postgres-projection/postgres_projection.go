@@ -19,13 +19,13 @@ import (
 	"property-svc/internal/property/aggregate"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
-	"property-svc/repos/property_repo"
+	"property-svc/repos/property-repo"
 )
 
 type Projection struct {
 	*custom.CustomProjection
 	db           hwdb.DBTX
-	propertyRepo *property_repo.Queries
+	propertyRepo *propertyrepo.Queries
 }
 
 func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projection {
@@ -37,7 +37,7 @@ func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projectio
 			&[]string{aggregate.PropertyAggregateType + "-"},
 		),
 		db:           db,
-		propertyRepo: property_repo.New(db),
+		propertyRepo: propertyrepo.New(db),
 	}
 	p.initEventListeners()
 
@@ -98,7 +98,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (*es
 	}
 
 	// create query
-	err = p.propertyRepo.CreateProperty(ctx, property_repo.CreatePropertyParams{
+	err = p.propertyRepo.CreateProperty(ctx, propertyrepo.CreatePropertyParams{
 		ID:          propertyID,
 		SubjectType: int32(subjectType),
 		FieldType:   int32(fieldType),
@@ -125,7 +125,7 @@ func (p *Projection) onPropertyDescriptionUpdated(ctx context.Context, evt hwes.
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+	err := p.propertyRepo.UpdateProperty(ctx, propertyrepo.UpdatePropertyParams{
 		ID:          evt.AggregateID,
 		Description: &payload.Description,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -156,7 +156,7 @@ func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event)
 		}
 	}
 
-	err := p.propertyRepo.UpdatePropertySetID(ctx, property_repo.UpdatePropertySetIDParams{
+	err := p.propertyRepo.UpdatePropertySetID(ctx, propertyrepo.UpdatePropertySetIDParams{
 		ID:          evt.AggregateID,
 		SetID:       setID,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -183,7 +183,7 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err = p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+	err = p.propertyRepo.UpdateProperty(ctx, propertyrepo.UpdatePropertyParams{
 		ID:          evt.AggregateID,
 		SubjectType: hwutil.PtrTo(int32(subjectType)),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -205,7 +205,7 @@ func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (*esdb.N
 		return hwutil.PtrTo(esdb.NackActionPark), err
 	}
 
-	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+	err := p.propertyRepo.UpdateProperty(ctx, propertyrepo.UpdatePropertyParams{
 		ID:          evt.AggregateID,
 		Name:        &payload.Name,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -219,7 +219,7 @@ func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (*esdb.N
 }
 
 func (p *Projection) onPropertyArchived(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
-	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+	err := p.propertyRepo.UpdateProperty(ctx, propertyrepo.UpdatePropertyParams{
 		ID:          evt.GetAggregateID(),
 		IsArchived:  hwutil.PtrTo(true),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -232,7 +232,7 @@ func (p *Projection) onPropertyArchived(ctx context.Context, evt hwes.Event) (*e
 }
 
 func (p *Projection) onPropertyRetrieved(ctx context.Context, evt hwes.Event) (*esdb.NackAction, error) {
-	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+	err := p.propertyRepo.UpdateProperty(ctx, propertyrepo.UpdatePropertyParams{
 		ID:          evt.GetAggregateID(),
 		IsArchived:  hwutil.PtrTo(false),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
@@ -265,7 +265,7 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
 		for _, option := range payload.FieldTypeData.SelectData.SelectOptions {
-			err := propertyRepo.CreateSelectOption(ctx, property_repo.CreateSelectOptionParams{
+			err := propertyRepo.CreateSelectOption(ctx, propertyrepo.CreateSelectOptionParams{
 				ID:           option.ID,
 				Name:         option.Name,
 				Description:  option.Description,
@@ -278,7 +278,7 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 		}
 
 		// Update Property SelectDataId
-		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
+		err = propertyRepo.UpdatePropertySelectDataID(ctx, propertyrepo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
 			SelectDataID: uuid.NullUUID{UUID: selectDataID, Valid: true},
 			Consistency:  int64(evt.GetVersion()), //nolint:gosec
@@ -316,7 +316,7 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 	}
 
 	if property.SelectDataID.Valid {
-		err := propertyRepo.UpdateSelectData(ctx, property_repo.UpdateSelectDataParams{
+		err := propertyRepo.UpdateSelectData(ctx, propertyrepo.UpdateSelectDataParams{
 			ID:            property.SelectDataID.UUID,
 			AllowFreetext: payload.NewAllowFreetext,
 			Consistency:   int64(evt.GetVersion()), //nolint:gosec
@@ -331,7 +331,7 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
-		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
+		err = propertyRepo.UpdatePropertySelectDataID(ctx, propertyrepo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
 			SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
 			Consistency:  int64(evt.GetVersion()), //nolint:gosec
@@ -379,7 +379,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 		if err := hwdb.Error(ctx, err); err != nil {
 			return hwutil.PtrTo(esdb.NackActionRetry), err
 		}
-		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
+		err = propertyRepo.UpdatePropertySelectDataID(ctx, propertyrepo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
 			SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
 			Consistency:  int64(evt.GetVersion()), //nolint:gosec
@@ -406,7 +406,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 	// Check for existing SelectOptions
 	var existsBatchErr error
 	existsBatch := propertyRepo.GetSelectOptionsBatch(ctx, selectOptionsID)
-	existsBatch.QueryRow(func(idx int, row property_repo.SelectOption, err error) {
+	existsBatch.QueryRow(func(idx int, row propertyrepo.SelectOption, err error) {
 		if err != nil && !errors.Is(err, pgx.ErrNoRows) {
 			existsBatchErr = err
 			return
@@ -424,12 +424,12 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 		return hwutil.PtrTo(esdb.NackActionRetry), err
 	}
 
-	var existingSelectOptions []property_repo.UpdateSelectOptionsBatchParams
-	var newSelectOptions []property_repo.InsertSelectOptionsBatchParams
+	var existingSelectOptions []propertyrepo.UpdateSelectOptionsBatchParams
+	var newSelectOptions []propertyrepo.InsertSelectOptionsBatchParams
 	for idx, exists := range existsSelectOptions {
 		selOpt := selectOptions[idx]
 		if exists {
-			existingSelectOptions = append(existingSelectOptions, property_repo.UpdateSelectOptionsBatchParams{
+			existingSelectOptions = append(existingSelectOptions, propertyrepo.UpdateSelectOptionsBatchParams{
 				ID:          selOpt.ID,
 				Name:        selOpt.Name,
 				Description: selOpt.Description,
@@ -441,7 +441,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 				// existsSelectOptions gets modified by a database result. That's why we are retrying here.
 				return hwutil.PtrTo(esdb.NackActionRetry), nil
 			}
-			newSelectOptions = append(newSelectOptions, property_repo.InsertSelectOptionsBatchParams{
+			newSelectOptions = append(newSelectOptions, propertyrepo.InsertSelectOptionsBatchParams{
 				ID:           selOpt.ID,
 				Name:         *selOpt.Name,
 				Description:  selOpt.Description,
@@ -486,7 +486,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
 	}
 
 	// update property consistency
-	err = propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+	err = propertyRepo.UpdateProperty(ctx, propertyrepo.UpdatePropertyParams{
 		ID:          evt.AggregateID,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
@@ -547,7 +547,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsRemoved(
 	}
 
 	// update property consistency
-	err = propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+	err = propertyRepo.UpdateProperty(ctx, propertyrepo.UpdatePropertyParams{
 		ID:          evt.AggregateID,
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})

@@ -24,7 +24,7 @@ import (
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
-	"tasks-svc/repos/bed_repo"
+	"tasks-svc/repos/bed-repo"
 )
 
 type PatientGrpcService struct {
@@ -79,7 +79,7 @@ func (s *PatientGrpcService) GetPatient(
 		return nil, err
 	}
 
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bedrepo.New(hwdb.GetDB())
 
 	// check permissions
 	user := commonperm.UserFromCtx(ctx)
@@ -360,7 +360,7 @@ func (s *PatientGrpcService) GetRecentPatients(
 	_ *pb.GetRecentPatientsRequest,
 ) (*pb.GetRecentPatientsResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bedrepo.New(hwdb.GetDB())
 
 	var recentPatientIdsStrs []string
 	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)

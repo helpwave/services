@@ -13,14 +13,14 @@ import (
 	"tasks-svc/internal/patient/perm"
 
 	"tasks-svc/internal/patient/models"
-	"tasks-svc/repos/patient_repo"
+	"tasks-svc/repos/patient-repo"
 )
 
 type GetPatientByBedQueryHandler func(ctx context.Context, bedID uuid.UUID) (*models.PatientWithConsistency, error)
 
 func NewGetPatientByBedQueryHandler(authz hwauthz.AuthZ) GetPatientByBedQueryHandler {
 	return func(ctx context.Context, bedID uuid.UUID) (*models.PatientWithConsistency, error) {
-		patientRepo := patient_repo.New(hwdb.GetDB())
+		patientRepo := patientrepo.New(hwdb.GetDB())
 
 		// check bed permissions
 		user := commonperm.UserFromCtx(ctx)

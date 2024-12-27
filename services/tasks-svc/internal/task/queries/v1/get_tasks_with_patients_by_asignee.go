@@ -15,7 +15,7 @@ import (
 	"github.com/google/uuid"
 
 	"tasks-svc/internal/task/models"
-	"tasks-svc/repos/task_repo"
+	"tasks-svc/repos/task-repo"
 )
 
 type GetTasksWithPatientsByAssigneeQueryHandler func(
@@ -25,7 +25,7 @@ type GetTasksWithPatientsByAssigneeQueryHandler func(
 
 func NewGetTasksWithPatientsByAssigneeQueryHandler(authz hwauthz.AuthZ) GetTasksWithPatientsByAssigneeQueryHandler {
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {
-		taskRepo := task_repo.New(hwdb.GetDB())
+		taskRepo := taskrepo.New(hwdb.GetDB())
 
 		user := commonperm.UserFromCtx(ctx)
 
