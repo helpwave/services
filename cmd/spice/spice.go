@@ -28,9 +28,9 @@ var CLI struct {
 	Schema    struct{} `cmd:"" help:"Print SpiceDB schema"`
 	Test      struct{} `cmd:"" help:"Runs SpiceDB tests using zed"`
 	Directory string   `flag:"" short:"d" type:"path" default:"./spicedb" help:"SpiceDB directory"`
-	Endpoint  string   `flag:"" short:"e" env:"ZED_ENDPOINT" help:"e.g., 'spicedb:50051'"`
-	Token     string   `flag:"" short:"t" env:"ZED_TOKEN" help:"SpiceDB token"`
-	Insecure  bool     `flag:"" default:"false" env:"ZED_INSECURE" help:"connect over plaintext connection"`
+	Endpoint  string   `flag:"" short:"e" env:"ZED_ENDPOINT" help:"e.g., 'spicedb:50051'"`                   //nolint:tagliatelle,lll
+	Token     string   `flag:"" short:"t" env:"ZED_TOKEN" help:"SpiceDB token"`                              //nolint:tagliatelle,lll
+	Insecure  bool     `flag:"" default:"false" env:"ZED_INSECURE" help:"connect over plaintext connection"` //nolint:tagliatelle,lll
 }
 
 func main() {

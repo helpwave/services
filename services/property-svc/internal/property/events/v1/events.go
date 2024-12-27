@@ -153,7 +153,7 @@ func NewFieldTypeDataSelectOptionsRemovedEvent(
 }
 
 type FieldTypeDataSelectOptionsUpsertedEvent struct {
-	UpsertedSelectOptions []models.UpdateSelectOption `json:"UpsertedSelectOptions"`
+	UpsertedSelectOptions []models.UpdateSelectOption `json:"upserted_select_options"`
 }
 
 func NewFieldTypeDataSelectOptionsUpsertedEvent(
