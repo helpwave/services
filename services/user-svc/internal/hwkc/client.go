@@ -17,8 +17,8 @@ import (
 )
 
 type IClient interface {
-	GetUserById(ctx context.Context, userID uuid.UUID) (*User, error)
-	GetOrganizationsOfUserById(ctx context.Context, userID uuid.UUID) ([]*Organization, error)
+	GetUserByID(ctx context.Context, userID uuid.UUID) (*User, error)
+	GetOrganizationsOfUserByID(ctx context.Context, userID uuid.UUID) ([]*Organization, error)
 	CreateOrganization(ctx context.Context, name, displayName string, isPersonal bool) (*Organization, error)
 	UpdateOrganization(ctx context.Context, organizationID uuid.UUID, organization Organization) error
 	DeleteOrganization(ctx context.Context, organizationID uuid.UUID) error
@@ -27,8 +27,8 @@ type IClient interface {
 }
 
 type Client struct {
-	adminApiBaseUrl *url.URL
-	realmBaseUrl    *url.URL
+	adminAPIBaseURL *url.URL
+	realmBaseURL    *url.URL
 	http            *http.Client
 }
 
@@ -38,14 +38,14 @@ func NewClientFromEnv(ctx context.Context) (*Client, error) {
 	return NewClient(ctx, realm, auth.GetOAuthIssuerURL(), auth.GetOAuthClientID(), clientSecret)
 }
 
-func NewClient(ctx context.Context, realm, issuerUrl, clientId, clientSecret string) (*Client, error) {
-	provider, err := oidc.NewProvider(context.Background(), issuerUrl)
+func NewClient(ctx context.Context, realm, issuerURL, clientID, clientSecret string) (*Client, error) {
+	provider, err := oidc.NewProvider(context.Background(), issuerURL)
 	if err != nil {
 		return nil, fmt.Errorf("cannot lookup oidc provider: %w", err)
 	}
 
 	config := clientcredentials.Config{
-		ClientID:     clientId,
+		ClientID:     clientID,
 		ClientSecret: clientSecret,
 		TokenURL:     provider.Endpoint().TokenURL,
 	}
@@ -54,28 +54,28 @@ func NewClient(ctx context.Context, realm, issuerUrl, clientId, clientSecret str
 		return nil, fmt.Errorf("token exchange failed: %w", err)
 	}
 
-	parsedIssuerUrl, err := url.Parse(issuerUrl)
+	parsedIssuerURL, err := url.Parse(issuerURL)
 	if err != nil {
-		return nil, fmt.Errorf("cannot parse issuer url ('%s'): %w", issuerUrl, err)
+		return nil, fmt.Errorf("cannot parse issuer url ('%s'): %w", issuerURL, err)
 	}
 
-	adminApiBaseUrl, err := url.Parse(
-		fmt.Sprintf("%s://%s/admin/realms/%s", parsedIssuerUrl.Scheme, parsedIssuerUrl.Host, realm))
+	adminAPIBaseURL, err := url.Parse(
+		fmt.Sprintf("%s://%s/admin/realms/%s", parsedIssuerURL.Scheme, parsedIssuerURL.Host, realm))
 	if err != nil {
 		return nil, fmt.Errorf(
-			"cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerUrl, err)
+			"cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerURL, err)
 	}
 
-	realmBaseUrl, err := url.Parse(
-		fmt.Sprintf("%s://%s/realms/%s", parsedIssuerUrl.Scheme, parsedIssuerUrl.Host, realm))
+	realmBaseURL, err := url.Parse(
+		fmt.Sprintf("%s://%s/realms/%s", parsedIssuerURL.Scheme, parsedIssuerURL.Host, realm))
 	if err != nil {
 		return nil, fmt.Errorf(
-			"cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerUrl, err)
+			"cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerURL, err)
 	}
 
 	client := &Client{
-		adminApiBaseUrl: adminApiBaseUrl,
-		realmBaseUrl:    realmBaseUrl,
+		adminAPIBaseURL: adminAPIBaseURL,
+		realmBaseURL:    realmBaseURL,
 		http:            config.Client(ctx),
 	}
 
@@ -92,9 +92,9 @@ func (c *Client) ensureSuccessfulResponse(res *http.Response) error {
 	return BadResponseError{Res: res}
 }
 
-func (c *Client) GetUserById(ctx context.Context, userID uuid.UUID) (*User, error) {
+func (c *Client) GetUserByID(ctx context.Context, userID uuid.UUID) (*User, error) {
 	// https://www.keycloak.org/docs-api/26.0.0/rest-api/index.html#_get_adminrealmsrealmusersuser_id
-	u := c.adminApiBaseUrl.JoinPath("users", userID.String())
+	u := c.adminAPIBaseURL.JoinPath("users", userID.String())
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
@@ -119,9 +119,9 @@ func (c *Client) GetUserById(ctx context.Context, userID uuid.UUID) (*User, erro
 	return user, nil
 }
 
-func (c *Client) GetOrganizationsOfUserById(ctx context.Context, userID uuid.UUID) ([]*Organization, error) {
+func (c *Client) GetOrganizationsOfUserByID(ctx context.Context, userID uuid.UUID) ([]*Organization, error) {
 	// Users -> GET /{realm}/users/{userId}/orgs https://t.ly/cgwOO
-	u := c.realmBaseUrl.JoinPath("users", userID.String(), "orgs")
+	u := c.realmBaseURL.JoinPath("users", userID.String(), "orgs")
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
@@ -153,7 +153,7 @@ func (c *Client) CreateOrganization(
 	isPersonal bool,
 ) (*Organization, error) {
 	// Organizations -> POST /{realm}/orgs https://t.ly/cgwOO
-	u := c.realmBaseUrl.JoinPath("orgs")
+	u := c.realmBaseURL.JoinPath("orgs")
 
 	payload := Organization{
 		Name:        hwutil.StrPtr(name),
@@ -209,7 +209,7 @@ func (c *Client) CreateOrganization(
 
 func (c *Client) UpdateOrganization(ctx context.Context, organizationID uuid.UUID, organization Organization) error {
 	// Organizations -> PUT /{realm}/orgs/{orgId} https://t.ly/cgwOO
-	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String())
+	u := c.realmBaseURL.JoinPath("orgs", organizationID.String())
 
 	jsonPayload, err := json.Marshal(organization)
 	if err != nil {
@@ -236,7 +236,7 @@ func (c *Client) UpdateOrganization(ctx context.Context, organizationID uuid.UUI
 
 func (c *Client) DeleteOrganization(ctx context.Context, organizationID uuid.UUID) error {
 	// Organizations -> DELETE /{realm}/orgs/{orgId} https://t.ly/cgwOO
-	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String())
+	u := c.realmBaseURL.JoinPath("orgs", organizationID.String())
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, u.String(), nil)
 	if err != nil {
@@ -258,7 +258,7 @@ func (c *Client) DeleteOrganization(ctx context.Context, organizationID uuid.UUI
 
 func (c *Client) AddUserToOrganization(ctx context.Context, userID, organizationID uuid.UUID) error {
 	// Organization Memberships -> PUT /{realm}/orgs/{orgId}/members/{userId} https://t.ly/cgwOO
-	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String(), "members", userID.String())
+	u := c.realmBaseURL.JoinPath("orgs", organizationID.String(), "members", userID.String())
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPut, u.String(), nil)
 	if err != nil {
@@ -280,7 +280,7 @@ func (c *Client) AddUserToOrganization(ctx context.Context, userID, organization
 
 func (c *Client) RemoveUserFromOrganization(ctx context.Context, userID, organizationID uuid.UUID) error {
 	// Organization Memberships -> DELETE /{realm}/orgs/{orgId}/members/{userId} https://t.ly/R0Suf
-	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String(), "members", userID.String())
+	u := c.realmBaseURL.JoinPath("orgs", organizationID.String(), "members", userID.String())
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, u.String(), nil)
 	if err != nil {

@@ -65,21 +65,21 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// parse inputs
-	roomId, err := uuid.Parse(req.GetRoomId())
+	roomID, err := uuid.Parse(req.GetRoomId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	// check permissions
 	user := commonperm.UserFromCtx(ctx)
-	check := hwauthz.NewPermissionCheck(user, roomPerm.RoomCanUserCreateBed, roomPerm.Room(roomId))
+	check := hwauthz.NewPermissionCheck(user, roomPerm.RoomCanUserCreateBed, roomPerm.Room(roomID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
 	}
 
 	// do query
 	bed, err := bedRepo.CreateBed(ctx, bed_repo.CreateBedParams{
-		RoomID: roomId,
+		RoomID: roomID,
 		Name:   req.GetName(),
 	})
 	err = hwdb.Error(ctx, err,
@@ -87,12 +87,12 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 			return hwerr.NewStatusError(ctx,
 				codes.InvalidArgument,
 				pgErr.Error(),
-				locale.InvalidRoomIdError(ctx),
+				locale.InvalidRoomIDError(ctx),
 				&errdetails.BadRequest{
 					FieldViolations: []*errdetails.BadRequest_FieldViolation{
 						{
 							Field:       "room_id",
-							Description: hwlocale.Localize(ctx, locale.InvalidRoomIdError(ctx)),
+							Description: hwlocale.Localize(ctx, locale.InvalidRoomIDError(ctx)),
 						},
 					},
 				})
@@ -109,7 +109,7 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 
 	// update permission graph
 	relationship := hwauthz.NewRelationship(
-		roomPerm.Room(roomId),
+		roomPerm.Room(roomID),
 		perm.BedRoom,
 		perm.Bed(bed.ID),
 	)
@@ -177,12 +177,12 @@ func (s ServiceServer) GetBedByPatient(
 ) (*pb.GetBedByPatientResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	patientId, err := uuid.Parse(req.GetPatientId())
+	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	result, err := hwdb.Optional(bedRepo.GetBedWithRoomByPatient)(ctx, patientId)
+	result, err := hwdb.Optional(bedRepo.GetBedWithRoomByPatient)(ctx, patientID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
@@ -192,7 +192,7 @@ func (s ServiceServer) GetBedByPatient(
 	user := commonperm.UserFromCtx(ctx)
 	checks := make([]hwauthz.PermissionCheck, 0)
 	checks = append(checks,
-		hwauthz.NewPermissionCheck(user, patientPerm.PatientCanUserGet, patientPerm.Patient(patientId)))
+		hwauthz.NewPermissionCheck(user, patientPerm.PatientCanUserGet, patientPerm.Patient(patientID)))
 
 	if result != nil {
 		checks = append(checks,

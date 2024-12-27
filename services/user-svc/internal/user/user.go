@@ -82,14 +82,14 @@ func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 		return true, err
 	}
 
-	userId, err := uuid.Parse(payload.Id)
+	userID, err := uuid.Parse(payload.Id)
 	if err != nil {
 		log.Error().Err(err).Send()
 		return true, err
 	}
 
 	err = userRepo.UpdateUser(ctx, user_repo.UpdateUserParams{
-		ID:       userId,
+		ID:       userID,
 		Email:    payload.Email,
 		Name:     payload.Name,
 		Nickname: payload.Nickname,

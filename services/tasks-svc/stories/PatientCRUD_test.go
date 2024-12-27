@@ -36,13 +36,13 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 
 	hwtesting.WaitForProjectionsToSettle()
 
-	patientId := createRes.GetId()
+	patientID := createRes.GetId()
 
 	//
 	// get new patient
 	//
 
-	getPatientRes, err := patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientId})
+	getPatientRes, err := patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientID})
 	require.NoError(t, err, "could not get after creation")
 
 	assert.Equal(t, createReq.GetHumanReadableIdentifier(), getPatientRes.GetHumanReadableIdentifier())
@@ -54,7 +54,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	//
 
 	updateReq := &pb.UpdatePatientRequest{
-		Id:                      patientId,
+		Id:                      patientID,
 		HumanReadableIdentifier: hwutil.PtrTo(t.Name() + " patient 1"),
 		Consistency:             &getPatientRes.Consistency,
 	}
@@ -67,7 +67,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// get updated patient
 	//
 
-	getPatientRes, err = patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientId})
+	getPatientRes, err = patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientID})
 	require.NoError(t, err, "could not get after update")
 
 	assert.Equal(t, updateReq.GetHumanReadableIdentifier(), getPatientRes.GetHumanReadableIdentifier())
@@ -77,7 +77,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// discharge patient
 	//
 
-	dischargeRes, err := patientClient.DischargePatient(ctx, &pb.DischargePatientRequest{Id: patientId})
+	dischargeRes, err := patientClient.DischargePatient(ctx, &pb.DischargePatientRequest{Id: patientID})
 	require.NoError(t, err)
 	assert.NotEqual(t, getPatientRes.Consistency, dischargeRes.Consistency)
 
@@ -87,7 +87,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// get discharged patient
 	//
 
-	getPatientDetailsRes, err := patientClient.GetPatientDetails(ctx, &pb.GetPatientDetailsRequest{Id: patientId})
+	getPatientDetailsRes, err := patientClient.GetPatientDetails(ctx, &pb.GetPatientDetailsRequest{Id: patientID})
 	require.NoError(t, err, "could not get after discharge")
 
 	assert.True(t, getPatientDetailsRes.IsDischarged)
@@ -97,7 +97,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// re-admit patient
 	//
 
-	readmitRes, err := patientClient.ReadmitPatient(ctx, &pb.ReadmitPatientRequest{PatientId: patientId})
+	readmitRes, err := patientClient.ReadmitPatient(ctx, &pb.ReadmitPatientRequest{PatientId: patientID})
 	require.NoError(t, err)
 	assert.NotEqual(t, getPatientRes.Consistency, readmitRes.Consistency)
 
@@ -105,7 +105,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// get re-admitted patient
 	//
 
-	getPatientDetailsRes, err = patientClient.GetPatientDetails(ctx, &pb.GetPatientDetailsRequest{Id: patientId})
+	getPatientDetailsRes, err = patientClient.GetPatientDetails(ctx, &pb.GetPatientDetailsRequest{Id: patientID})
 	require.NoError(t, err, "could not get after re-admit")
 
 	assert.False(t, getPatientDetailsRes.IsDischarged)
@@ -116,12 +116,12 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	//
 
 	wardID, _ := prepareWard(t, ctx, "")
-	roomId, _ := prepareRoom(t, ctx, wardID, "")
-	bedId, _ := prepareBed(t, ctx, roomId, "")
+	roomID, _ := prepareRoom(t, ctx, wardID, "")
+	bedID, _ := prepareBed(t, ctx, roomID, "")
 
 	assignRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
-		Id:          patientId,
-		BedId:       bedId,
+		Id:          patientID,
+		BedId:       bedID,
 		Consistency: &getPatientRes.Consistency,
 	})
 	require.NoError(t, err)
@@ -131,16 +131,16 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// get assigned patient
 	//
 
-	getPatientRes, err = patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientId})
+	getPatientRes, err = patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientID})
 	require.NoError(t, err, "could not get after bed assignment")
 
 	zlog.Debug().Interface("patient", getPatientRes).Msg("patient")
 
 	assert.NotNil(t, getPatientRes.Bed)
-	assert.Equal(t, bedId, getPatientRes.Bed.Id)
+	assert.Equal(t, bedID, getPatientRes.Bed.Id)
 
 	assert.NotNil(t, getPatientRes.Room)
-	assert.Equal(t, roomId, getPatientRes.Room.Id)
+	assert.Equal(t, roomID, getPatientRes.Room.Id)
 	assert.Equal(t, wardID, getPatientRes.Room.WardId)
 
 	assert.Equal(t, assignRes.Consistency, getPatientRes.Consistency)
@@ -150,7 +150,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	//
 
 	unassignRes, err := patientClient.UnassignBed(ctx, &pb.UnassignBedRequest{
-		Id:          patientId,
+		Id:          patientID,
 		Consistency: &getPatientRes.Consistency,
 	})
 	require.NoError(t, err)
@@ -160,7 +160,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// get unassigned patient
 	//
 
-	getPatientRes, err = patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientId})
+	getPatientRes, err = patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientID})
 	require.NoError(t, err, "could not get after bed assignment")
 
 	zlog.Debug().Interface("patient", getPatientRes).Msg("patient")
@@ -181,8 +181,8 @@ func TestGetPatientByBed(t *testing.T) {
 	//
 
 	wardID, _ := prepareWard(t, ctx, "")
-	roomId, _ := prepareRoom(t, ctx, wardID, "")
-	bedId, _ := prepareBed(t, ctx, roomId, "")
+	roomID, _ := prepareRoom(t, ctx, wardID, "")
+	bedID, _ := prepareBed(t, ctx, roomID, "")
 
 	createReq := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient",
@@ -191,11 +191,11 @@ func TestGetPatientByBed(t *testing.T) {
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
 	require.NoError(t, err, "could not create patient")
 
-	patientId := createRes.GetId()
+	patientID := createRes.GetId()
 
 	assRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
-		Id:          patientId,
-		BedId:       bedId,
+		Id:          patientID,
+		BedId:       bedID,
 		Consistency: &createRes.Consistency,
 	})
 	require.NoError(t, err)
@@ -205,12 +205,12 @@ func TestGetPatientByBed(t *testing.T) {
 	//
 
 	getRes, err := patientClient.GetPatientByBed(ctx, &pb.GetPatientByBedRequest{
-		BedId: bedId,
+		BedId: bedID,
 	})
 	require.NoError(t, err)
 
 	assert.Equal(t, createRes.Id, getRes.Id)
-	assert.Equal(t, bedId, getRes.BedId)
+	assert.Equal(t, bedID, getRes.BedId)
 	assert.Equal(t, createReq.GetHumanReadableIdentifier(), getRes.GetHumanReadableIdentifier())
 	assert.Equal(t, createReq.GetNotes(), getRes.GetNotes())
 	assert.Equal(t, assRes.GetConsistency(), getRes.GetConsistency())
@@ -226,9 +226,9 @@ func TestGetPatientsByWard(t *testing.T) {
 	//
 
 	wardID, _ := prepareWard(t, ctx, "")
-	roomId, _ := prepareRoom(t, ctx, wardID, "")
-	bedId1, _ := prepareBed(t, ctx, roomId, "1")
-	bedId2, _ := prepareBed(t, ctx, roomId, "2")
+	roomID, _ := prepareRoom(t, ctx, wardID, "")
+	bedID1, _ := prepareBed(t, ctx, roomID, "1")
+	bedID2, _ := prepareBed(t, ctx, roomID, "2")
 
 	createReq1 := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient 1",
@@ -237,12 +237,12 @@ func TestGetPatientsByWard(t *testing.T) {
 	createRes1, err := patientClient.CreatePatient(ctx, createReq1)
 	require.NoError(t, err, "could not create patient")
 
-	patientId1 := createRes1.GetId()
+	patientID1 := createRes1.GetId()
 	hwtesting.WaitForProjectionsToSettle()
 
 	assRes1, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
-		Id:          patientId1,
-		BedId:       bedId1,
+		Id:          patientID1,
+		BedId:       bedID1,
 		Consistency: &createRes1.Consistency,
 	})
 	require.NoError(t, err)
@@ -257,11 +257,11 @@ func TestGetPatientsByWard(t *testing.T) {
 
 	hwtesting.WaitForProjectionsToSettle()
 
-	patientId2 := createRes2.GetId()
+	patientID2 := createRes2.GetId()
 
 	assRes2, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
-		Id:          patientId2,
-		BedId:       bedId2,
+		Id:          patientID2,
+		BedId:       bedID2,
 		Consistency: &createRes2.Consistency,
 	})
 	require.NoError(t, err)
@@ -286,13 +286,13 @@ func TestGetPatientsByWard(t *testing.T) {
 	}
 
 	assert.Equal(t, createRes1.Id, patient1.Id)
-	assert.Equal(t, &bedId1, patient1.BedId)
+	assert.Equal(t, &bedID1, patient1.BedId)
 	assert.Equal(t, createReq1.HumanReadableIdentifier, patient1.HumanReadableIdentifier)
 	assert.Equal(t, *createReq1.Notes, patient1.Notes)
 	assert.Equal(t, assRes1.Consistency, patient1.Consistency)
 
 	assert.Equal(t, createRes2.Id, patient2.Id)
-	assert.Equal(t, &bedId2, patient2.BedId)
+	assert.Equal(t, &bedID2, patient2.BedId)
 	assert.Equal(t, createReq2.HumanReadableIdentifier, patient2.HumanReadableIdentifier)
 	assert.Equal(t, *createReq2.Notes, patient2.Notes)
 	assert.Equal(t, assRes2.Consistency, patient2.Consistency)
@@ -321,24 +321,24 @@ func TestGetPatientAssignmentByWard(t *testing.T) {
 
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, roomConsistency := prepareRoom(t, ctx, wardID, roomSuffix)
-		roomIds = append(roomIds, roomId)
-		roomConsistencies[roomId] = roomConsistency
-		bedsForRoom[roomId] = make([]string, 0)
+		roomID, roomConsistency := prepareRoom(t, ctx, wardID, roomSuffix)
+		roomIds = append(roomIds, roomID)
+		roomConsistencies[roomID] = roomConsistency
+		bedsForRoom[roomID] = make([]string, 0)
 
 		for _, bedSuffix := range bedSfxs {
-			bedId, bedConsistency := prepareBed(t, ctx, roomId, bedSuffix)
-			bedConsistencies[bedId] = bedConsistency
-			bedsForRoom[roomId] = append(bedsForRoom[roomId], bedId)
+			bedID, bedConsistency := prepareBed(t, ctx, roomID, bedSuffix)
+			bedConsistencies[bedID] = bedConsistency
+			bedsForRoom[roomID] = append(bedsForRoom[roomID], bedID)
 
-			patientId := preparePatient(t, ctx, bedSuffix)
+			patientID := preparePatient(t, ctx, bedSuffix)
 			res, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
-				Id:    patientId,
-				BedId: bedId,
+				Id:    patientID,
+				BedId: bedID,
 			})
 			require.NoError(t, err)
-			patientConsistencies[patientId] = res.Consistency
-			patientForBed[bedId] = patientId
+			patientConsistencies[patientID] = res.Consistency
+			patientForBed[bedID] = patientID
 		}
 	}
 
@@ -545,8 +545,8 @@ func TestGetPatientDetails(t *testing.T) {
 	//
 
 	wardID, _ := prepareWard(t, ctx, "")
-	roomId, _ := prepareRoom(t, ctx, wardID, "")
-	bedId, _ := prepareBed(t, ctx, roomId, "")
+	roomID, _ := prepareRoom(t, ctx, wardID, "")
+	bedID, _ := prepareBed(t, ctx, roomID, "")
 
 	createReq := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient",
@@ -557,11 +557,11 @@ func TestGetPatientDetails(t *testing.T) {
 
 	hwtesting.WaitForProjectionsToSettle()
 
-	patientId := createRes.GetId()
+	patientID := createRes.GetId()
 
 	assRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
-		Id:          patientId,
-		BedId:       bedId,
+		Id:          patientID,
+		BedId:       bedID,
 		Consistency: &createRes.Consistency,
 	})
 	require.NoError(t, err)
@@ -591,7 +591,7 @@ func TestGetPatientDetails(t *testing.T) {
 		taskRes, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 			Name:        t.Name() + " task " + taskSuffix,
 			Description: nil,
-			PatientId:   patientId,
+			PatientId:   patientID,
 			Public:      hwutil.PtrTo(true),
 			DueAt:       nil,
 			// behold: peak enginering:
@@ -612,7 +612,7 @@ func TestGetPatientDetails(t *testing.T) {
 	//
 
 	getRes, err := patientClient.GetPatientDetails(ctx, &pb.GetPatientDetailsRequest{
-		Id: patientId,
+		Id: patientID,
 	})
 	require.NoError(t, err)
 
@@ -634,8 +634,8 @@ func TestGetPatientDetails(t *testing.T) {
 		return tsk.Id
 	}))
 
-	assert.Equal(t, roomId, getRes.GetRoom().GetId())
-	assert.Equal(t, bedId, getRes.GetBed().GetId())
+	assert.Equal(t, roomID, getRes.GetRoom().GetId())
+	assert.Equal(t, bedID, getRes.GetBed().GetId())
 	assert.False(t, getRes.GetIsDischarged())
 	assert.Equal(t, assRes.GetConsistency(), getRes.GetConsistency())
 }
@@ -655,9 +655,9 @@ func TestGetRecentPatients(t *testing.T) {
 	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
 
 	wardID, _ := prepareWard(t, ctx, "")
-	roomId, roomConsistency := prepareRoom(t, ctx, wardID, "")
-	bedId, bedConsitency := prepareBed(t, ctx, roomId, "")
-	patientWithBedId := ""
+	roomID, roomConsistency := prepareRoom(t, ctx, wardID, "")
+	bedID, bedConsitency := prepareBed(t, ctx, roomID, "")
+	patientWithBedID := ""
 
 	N := 11 // cap is ten
 
@@ -677,11 +677,11 @@ func TestGetRecentPatients(t *testing.T) {
 		if i == N {
 			assRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
 				Id:          patientRes.Id,
-				BedId:       bedId,
+				BedId:       bedID,
 				Consistency: &patientRes.Consistency,
 			})
 			require.NoError(t, err)
-			patientWithBedId = patientRes.Id
+			patientWithBedID = patientRes.Id
 			consistencies[patientRes.Id] = assRes.Consistency
 		}
 
@@ -698,10 +698,10 @@ func TestGetRecentPatients(t *testing.T) {
 	assert.Len(t, recent.RecentPatients, 10)
 	foundIds := hwutil.Map(recent.RecentPatients, func(p *pb.GetRecentPatientsResponse_Patient) string {
 		id := p.Id
-		if id == patientWithBedId {
-			assert.Equal(t, bedId, p.Bed.Id)
+		if id == patientWithBedID {
+			assert.Equal(t, bedID, p.Bed.Id)
 			assert.Equal(t, bedConsitency, p.Bed.Consistency)
-			assert.Equal(t, roomId, p.Room.Id)
+			assert.Equal(t, roomID, p.Room.Id)
 			assert.Equal(t, roomConsistency, p.Room.Consistency)
 		}
 		assert.Equal(t, consistencies[p.Id], p.Consistency)

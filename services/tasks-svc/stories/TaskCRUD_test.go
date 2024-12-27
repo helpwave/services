@@ -23,7 +23,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	taskClient := taskServiceClient()
 
 	// prepare patient
-	patientId := preparePatient(t, ctx, "")
+	patientID := preparePatient(t, ctx, "")
 
 	dueDate := time.Now().Add(time.Hour).UTC()
 
@@ -37,7 +37,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	createReq := &pb.CreateTaskRequest{
 		Name:           t.Name() + " task",
 		Description:    hwutil.PtrTo("Some Description"),
-		PatientId:      patientId,
+		PatientId:      patientID,
 		Public:         hwutil.PtrTo(true),
 		DueAt:          timestamppb.New(dueDate),
 		InitialStatus:  nil,
@@ -51,13 +51,13 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	require.NoError(t, err, "could not create")
 
-	taskId := createRes.GetId()
+	taskID := createRes.GetId()
 
 	hwtesting.WaitForProjectionsToSettle()
 
 	// get new task
 
-	task, err := taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	task, err := taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskID})
 	require.NoError(t, err)
 
 	assert.Equal(t, createReq.GetName(), task.GetName())
@@ -69,7 +69,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.WithinDuration(t, dueDate, task.GetDueAt().AsTime(), time.Second) // actually we differ by some microseconds
 	assert.Equal(t, "", task.GetAssignedUserId())
 
-	assert.Equal(t, patientId, task.GetPatient().GetId())
+	assert.Equal(t, patientID, task.GetPatient().GetId())
 
 	assert.Len(t, task.GetSubtasks(), 2)
 	found := 0
@@ -94,7 +94,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	//
 
 	updateReq := &pb.UpdateTaskRequest{
-		Id:          taskId,
+		Id:          taskID,
 		Name:        hwutil.PtrTo("New Name"),
 		Description: nil,
 		DueAt:       nil,
@@ -111,7 +111,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	// get updated task
 
-	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskID})
 	require.NoError(t, err)
 
 	assert.Equal(t, updateReq.GetName(), task.GetName())
@@ -123,7 +123,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	//
 
 	createStRes, err := taskClient.CreateSubtask(ctx, &pb.CreateSubtaskRequest{
-		TaskId: taskId,
+		TaskId: taskID,
 		Subtask: &pb.CreateSubtaskRequest_Subtask{
 			Name: "ST 3",
 		},
@@ -135,7 +135,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	// get updated task
 
-	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskID})
 	require.NoError(t, err)
 
 	assert.Len(t, task.GetSubtasks(), 3)
@@ -157,7 +157,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	// update subtask
 
 	updateStRes, err := taskClient.UpdateSubtask(ctx, &pb.UpdateSubtaskRequest{
-		TaskId:    taskId,
+		TaskId:    taskID,
 		SubtaskId: createStRes.GetSubtaskId(),
 		Subtask: &pb.UpdateSubtaskRequest_Subtask{
 			Done: hwutil.PtrTo(true),
@@ -170,7 +170,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	// get updated task
 
-	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskID})
 	require.NoError(t, err)
 
 	assert.Contains(t, hwutil.Map(task.Subtasks, func(st *pb.GetTaskResponse_SubTask) string {
@@ -188,7 +188,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assignedUser := uuid.New()
 
 	assignRes, err := taskClient.AssignTask(ctx, &pb.AssignTaskRequest{
-		TaskId:      taskId,
+		TaskId:      taskID,
 		UserId:      assignedUser.String(),
 		Consistency: &task.Consistency,
 	})
@@ -199,7 +199,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	// get updated task
 
-	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskID})
 	require.NoError(t, err)
 
 	assert.Equal(t, assignedUser.String(), task.GetAssignedUserId())
@@ -210,7 +210,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	//
 
 	unassignRes, err := taskClient.UnassignTask(ctx, &pb.UnassignTaskRequest{
-		TaskId:      taskId,
+		TaskId:      taskID,
 		UserId:      assignedUser.String(),
 		Consistency: &task.Consistency,
 	})
@@ -221,7 +221,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	// get updated task
 
-	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskID})
 	require.NoError(t, err)
 
 	assert.Equal(t, "", task.GetAssignedUserId())
@@ -232,7 +232,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	//
 
 	rmDueRes, err := taskClient.RemoveTaskDueDate(ctx, &pb.RemoveTaskDueDateRequest{
-		TaskId: taskId,
+		TaskId: taskID,
 	})
 	require.NoError(t, err)
 
@@ -241,7 +241,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	// get updated task
 
-	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskID})
 	require.NoError(t, err)
 
 	assert.Nil(t, task.GetDueAt())
@@ -252,7 +252,7 @@ func TestGetTasksByPatient(t *testing.T) {
 	taskClient := taskServiceClient()
 	ctx := context.Background()
 
-	patientId := preparePatient(t, ctx, "")
+	patientID := preparePatient(t, ctx, "")
 
 	suffixMap := [][]string{
 		{"1 A", "1 B", "1 C"}, // Task 1
@@ -276,7 +276,7 @@ func TestGetTasksByPatient(t *testing.T) {
 		taskRes, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 			Name:        t.Name() + " task " + taskSuffix,
 			Description: nil,
-			PatientId:   patientId,
+			PatientId:   patientID,
 			Public:      hwutil.PtrTo(true),
 			DueAt:       nil,
 			// behold: peak enginering:
@@ -292,7 +292,7 @@ func TestGetTasksByPatient(t *testing.T) {
 
 	hwtesting.WaitForProjectionsToSettle()
 
-	res, err := taskClient.GetTasksByPatient(ctx, &pb.GetTasksByPatientRequest{PatientId: patientId})
+	res, err := taskClient.GetTasksByPatient(ctx, &pb.GetTasksByPatientRequest{PatientId: patientID})
 	require.NoError(t, err)
 
 	assert.Len(t, res.Tasks, len(suffixMap))
@@ -313,7 +313,7 @@ func TestGetTasksByPatient(t *testing.T) {
 	// GetTasksByPatientSortedByStatus
 
 	resByStatus, err := taskClient.GetTasksByPatientSortedByStatus(ctx, &pb.GetTasksByPatientSortedByStatusRequest{
-		PatientId: patientId,
+		PatientId: patientID,
 	})
 	require.NoError(t, err)
 
@@ -337,7 +337,7 @@ func TestGetAssignedTasks(t *testing.T) {
 	taskClient := taskServiceClient()
 	ctx := context.Background()
 
-	patientId := preparePatient(t, ctx, "")
+	patientID := preparePatient(t, ctx, "")
 
 	suffixMap := [][]string{
 		{"1 A", "1 B", "1 C"}, // Task 1
@@ -370,7 +370,7 @@ func TestGetAssignedTasks(t *testing.T) {
 		taskRes, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 			Name:        t.Name() + " task " + taskSuffix,
 			Description: nil,
-			PatientId:   patientId,
+			PatientId:   patientID,
 			Public:      hwutil.PtrTo(true),
 			DueAt:       nil,
 			// behold: peak enginering:
