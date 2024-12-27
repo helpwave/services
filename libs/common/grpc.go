@@ -132,12 +132,14 @@ func DefaultServerOptions(ctx context.Context) []grpc.ServerOption {
 
 	// register new metrics collector with prometheus
 	promRegistry := telemetry.PrometheusRegistry(ctx)
-	metrics := prometheusGrpcProvider.NewServerMetrics()
-	promRegistry.MustRegister(metrics)
+	if promRegistry != nil {
+		metrics := prometheusGrpcProvider.NewServerMetrics()
+		promRegistry.MustRegister(metrics)
 
-	// prepend metrics interceptor
-	unaryInterceptors = hwutil.Prepend(metrics.UnaryServerInterceptor(), unaryInterceptors)
-	streamInterceptors = hwutil.Prepend(metrics.StreamServerInterceptor(), streamInterceptors)
+		// prepend metrics interceptor
+		unaryInterceptors = hwutil.Prepend(metrics.UnaryServerInterceptor(), unaryInterceptors)
+		streamInterceptors = hwutil.Prepend(metrics.StreamServerInterceptor(), streamInterceptors)
+	}
 
 	// create chains
 	unaryInterceptorChain := grpc.ChainUnaryInterceptor(unaryInterceptors...)

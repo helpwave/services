@@ -109,10 +109,12 @@ func WithDB(ctx context.Context, pool DBTX) context.Context {
 	return context.WithValue(ctx, dbKey{}, pool)
 }
 
+// GetDB attempts to retrieve the DBTX stored in the context, and returns nil if its missing.
+// Also see MustGetDB.
 func GetDB(ctx context.Context) DBTX {
 	value := ctx.Value(dbKey{})
 	db, ok := value.(DBTX)
-	// TODO: explain
+	// we allow nil (which will not be ok), else panic
 	if db != nil && !ok {
 		panic(errs.NewCastError("DBTX", value))
 	}
@@ -121,6 +123,7 @@ func GetDB(ctx context.Context) DBTX {
 
 var ErrDBMissing = errors.New("MustGetDB() called without set-up database, use hwdb.WithDB()")
 
+// MustGetDB does the same as GetDB, but panics if no DBTX is found in the context.
 func MustGetDB(ctx context.Context) DBTX {
 	if db := GetDB(ctx); db != nil {
 		return db

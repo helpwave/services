@@ -6,7 +6,9 @@ import (
 	"context"
 	"decaying_lru"
 	pb "gen/services/tasks_svc/v1"
+	"github.com/pashagolub/pgxmock/v4"
 	"hwauthz/test"
+	"hwdb"
 	hwes_test "hwes/test"
 	"testing"
 	"time"
@@ -33,6 +35,12 @@ func server() (context.Context, pb.PatientServiceClient, func()) {
 
 	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
+	dbMock, err := pgxmock.NewPool()
+	if err != nil {
+		panic(err)
+	}
+	ctx = hwdb.WithDB(context.Background(), dbMock)
+
 	// Start Server
 	grpcServer := grpc.NewServer(common.DefaultServerOptions(ctx)...)
 	pb.RegisterPatientServiceServer(grpcServer, patientGrpcService)
@@ -40,7 +48,12 @@ func server() (context.Context, pb.PatientServiceClient, func()) {
 
 	client := pb.NewPatientServiceClient(conn)
 
-	return ctx, client, closer
+	teardown := func() {
+		dbMock.Close()
+		closer()
+	}
+
+	return ctx, client, teardown
 }
 
 func setup(t *testing.T) (
