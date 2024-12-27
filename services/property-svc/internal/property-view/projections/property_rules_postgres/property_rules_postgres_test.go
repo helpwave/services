@@ -42,7 +42,7 @@ func setup() (ctx context.Context, projection *Projection, dbMock pgxmock.PgxPoo
 	if err != nil {
 		panic(err)
 	}
-	ctx = hwdb.WithDB(ctx, dbMock)
+	ctx = hwdb.WithDB(context.Background(), dbMock)
 	teardown = dbMock.Close
 
 	projection = NewProjection(ctx, esClientStub{}, "testing")

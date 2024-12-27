@@ -19,7 +19,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func newPanicsRecoveredCounter(ctx context.Context) prometheus.Counter {
+func NewPanicsRecoveredCounter(ctx context.Context) prometheus.Counter {
 	registry := telemetry.PrometheusRegistry(ctx)
 	if registry == nil { // prometheus not set up
 		return nil // TODO: replace with a no-op to prevent nil handling
@@ -49,17 +49,13 @@ func recoveryHandlerFn(panicsRecovered prometheus.Counter) recovery.RecoveryHand
 	}
 }
 
-func UnaryPanicRecoverInterceptor(ctx context.Context) grpc.UnaryServerInterceptor {
-	panicsRecovered := newPanicsRecoveredCounter(ctx)
-
+func UnaryPanicRecoverInterceptor(panicsRecovered prometheus.Counter) grpc.UnaryServerInterceptor {
 	return recovery.UnaryServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn(panicsRecovered)),
 	)
 }
 
-func StreamPanicRecoverInterceptor(ctx context.Context) grpc.StreamServerInterceptor {
-	panicsRecovered := newPanicsRecoveredCounter(ctx)
-
+func StreamPanicRecoverInterceptor(panicsRecovered prometheus.Counter) grpc.StreamServerInterceptor {
 	return recovery.StreamServerInterceptor(
 		recovery.WithRecoveryHandlerContext(recoveryHandlerFn(panicsRecovered)),
 	)

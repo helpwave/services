@@ -7,6 +7,8 @@ import (
 	"net"
 	"telemetry"
 
+	"github.com/prometheus/client_golang/prometheus"
+
 	"common/auth"
 	"common/hwgrpc"
 
@@ -88,9 +90,9 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 // DefaultUnaryInterceptors returns the slice of default interceptors for unary gRPC calls
 //
 //	chain := grpc.ChainUnaryInterceptor(common.DefaultUnaryInterceptors()...)
-func DefaultUnaryInterceptors(ctx context.Context) []grpc.UnaryServerInterceptor {
+func DefaultUnaryInterceptors(ctx context.Context, panicsRecovered prometheus.Counter) []grpc.UnaryServerInterceptor {
 	return []grpc.UnaryServerInterceptor{
-		hwgrpc.UnaryPanicRecoverInterceptor(ctx),
+		hwgrpc.UnaryPanicRecoverInterceptor(panicsRecovered),
 		hwgrpc.UnaryLoggingInterceptor,
 		hwgrpc.UnaryErrorQualityControlInterceptor,
 		hwgrpc.UnaryLocaleInterceptor,
@@ -105,9 +107,9 @@ func DefaultUnaryInterceptors(ctx context.Context) []grpc.UnaryServerInterceptor
 // DefaultStreamInterceptors returns the slice of default interceptors for stream gRPC calls
 //
 //	chain := grpc.ChainStreamInterceptor(common.DefaultStreamInterceptors()...)
-func DefaultStreamInterceptors(ctx context.Context) []grpc.StreamServerInterceptor {
+func DefaultStreamInterceptors(ctx context.Context, panicsRecovered prometheus.Counter) []grpc.StreamServerInterceptor {
 	return []grpc.StreamServerInterceptor{
-		hwgrpc.StreamPanicRecoverInterceptor(ctx),
+		hwgrpc.StreamPanicRecoverInterceptor(panicsRecovered),
 		hwgrpc.StreamLoggingInterceptor,
 		hwgrpc.StreamErrorQualityControlInterceptor,
 		hwgrpc.StreamLocaleInterceptor,
@@ -121,9 +123,12 @@ func DefaultStreamInterceptors(ctx context.Context) []grpc.StreamServerIntercept
 
 // TODO: document expected values in context
 func DefaultServerOptions(ctx context.Context) []grpc.ServerOption {
+	// counters
+	panicsRecovered := hwgrpc.NewPanicsRecoveredCounter(ctx)
+
 	// default interceptors
-	unaryInterceptors := DefaultUnaryInterceptors(ctx)
-	streamInterceptors := DefaultStreamInterceptors(ctx)
+	unaryInterceptors := DefaultUnaryInterceptors(ctx, panicsRecovered)
+	streamInterceptors := DefaultStreamInterceptors(ctx, panicsRecovered)
 
 	// register new metrics collector with prometheus
 	promRegistry := telemetry.PrometheusRegistry(ctx)

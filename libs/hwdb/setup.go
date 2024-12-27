@@ -2,6 +2,7 @@ package hwdb
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"hwutil"
 	"hwutil/errs"
@@ -111,11 +112,21 @@ func WithDB(ctx context.Context, pool DBTX) context.Context {
 func GetDB(ctx context.Context) DBTX {
 	value := ctx.Value(dbKey{})
 	db, ok := value.(DBTX)
-	if db == nil || !ok {
-		log.Error().
-			Msg("GetDB called without set-up database, you will run into nil-pointers. " +
-				"Make sure to call SetupDatabaseFromEnv()!")
+	// TODO: explain
+	if db != nil && !ok {
 		panic(errs.NewCastError("DBTX", value))
 	}
 	return db
+}
+
+var ErrDBMissing = errors.New("MustGetDB() called without set-up database, use hwdb.WithDB()")
+
+func MustGetDB2(ctx context.Context) DBTX {
+	if db := GetDB(ctx); db != nil {
+		return db
+	}
+
+	log.Error().Err(ErrDBMissing).Send()
+	panic(ErrDBMissing)
+
 }
