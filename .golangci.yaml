@@ -59,7 +59,6 @@ linters-settings:
         mapstructure: snake
         env: upperSnake
         envconfig: upperSnake
-      # overrides are a new feature, not yet available via golangci-lint
       overrides:
         - pkg: user-svc/internal/hwkc
           rules:
