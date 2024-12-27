@@ -121,7 +121,8 @@ func DefaultStreamInterceptors(ctx context.Context, panicsRecovered prometheus.C
 	}
 }
 
-// TODO: document expected values in context
+// DefaultServerOptions respects telemetry.WithPrometheusRegistry and hwdb.WithDB context values.
+// These will then be propagated into request contexts, if provided.
 func DefaultServerOptions(ctx context.Context) []grpc.ServerOption {
 	// counters
 	panicsRecovered := hwgrpc.NewPanicsRecoveredCounter(ctx)
