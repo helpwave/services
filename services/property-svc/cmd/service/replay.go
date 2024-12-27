@@ -11,9 +11,9 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 
 	propertyValueAggregate "property-svc/internal/property-value/aggregate"
-	"property-svc/internal/property-value/projections/property_value_postgres_projection"
+	propertyValuePostgresProjection "property-svc/internal/property-value/projections/postgres-projection"
 	propertyAggregate "property-svc/internal/property/aggregate"
-	"property-svc/internal/property/projections/postgres_projection"
+	propertyPostgresProjection "property-svc/internal/property/projections/postgres-projection"
 )
 
 // replay mechanism for projections of the property-svc
@@ -39,8 +39,8 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 
 	log.Info().Msg("starting event replay")
 
-	propertyPostgresProjection := postgres_projection.NewProjection(eventStore, ServiceName, tx)
-	propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName, tx)
+	propertyPostgresProjection := propertyPostgresProjection.NewProjection(eventStore, ServiceName, tx)
+	propertyValuePostgresProjection := propertyValuePostgresProjection.NewProjection(eventStore, ServiceName, tx)
 
 	err = eventstoredb.Replay(
 		ctx,

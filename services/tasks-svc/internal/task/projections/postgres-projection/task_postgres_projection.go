@@ -1,4 +1,4 @@
-package task_postgres_projection
+package postgresprojection
 
 import (
 	"common/hwerr"

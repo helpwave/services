@@ -1,4 +1,4 @@
-package spiceDBProjection
+package spicedbprojection
 
 import (
 	"context"

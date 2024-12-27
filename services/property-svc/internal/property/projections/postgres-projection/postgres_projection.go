@@ -1,4 +1,4 @@
-package postgres_projection
+package postgresprojection
 
 import (
 	"context"

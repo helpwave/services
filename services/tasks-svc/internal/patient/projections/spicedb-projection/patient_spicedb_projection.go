@@ -1,4 +1,4 @@
-package patientSpiceDBProjection
+package spicedbprojection
 
 import (
 	"context"

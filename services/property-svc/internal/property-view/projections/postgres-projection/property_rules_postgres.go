@@ -1,4 +1,4 @@
-package property_rules_postgres
+package postgresprojection
 
 import (
 	"context"

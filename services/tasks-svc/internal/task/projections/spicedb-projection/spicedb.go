@@ -1,4 +1,4 @@
-package task_spicedb
+package spicedbprojection
 
 import (
 	"context"
