@@ -6,12 +6,13 @@ import (
 	"context"
 	"decaying_lru"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/pashagolub/pgxmock/v4"
 	"hwauthz/test"
 	"hwdb"
 	hwes_test "hwes/test"
 	"testing"
 	"time"
+
+	"github.com/pashagolub/pgxmock/v4"
 
 	"github.com/go-redis/redismock/v9"
 	"github.com/google/uuid"
@@ -39,7 +40,7 @@ func server() (context.Context, pb.PatientServiceClient, func()) {
 	if err != nil {
 		panic(err)
 	}
-	ctx = hwdb.WithDB(context.Background(), dbMock)
+	ctx = hwdb.WithDB(ctx, dbMock)
 
 	// Start Server
 	grpcServer := grpc.NewServer(common.DefaultServerOptions(ctx)...)
