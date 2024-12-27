@@ -85,7 +85,7 @@ type SubtaskDeletedEvent struct {
 }
 
 type TaskStatusUpdatedEvent struct {
-	Status string `json:"subtask_id"`
+	Status string `json:"status"`
 }
 
 func NewTaskCreatedEvent(

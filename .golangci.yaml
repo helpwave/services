@@ -39,7 +39,6 @@ linters:
     - protogetter # TODO
     - revive # TODO
     - stylecheck # TODO
-    - tagliatelle # TODO
     - testpackage # TODO
 
 linters-settings:
@@ -47,3 +46,21 @@ linters-settings:
     ignore-tests: true
     min-occurrences: 2
     ignore-strings: '(true|false)' # regex
+  tagliatelle:
+    case:
+      use-field-name: true
+      rules:
+        json: snake
+        yaml: camel
+        xml: snake
+        toml: snake
+        bson: snake
+        avro: snake
+        mapstructure: snake
+        env: upperSnake
+        envconfig: upperSnake
+      # overrides are a new feature, not yet available via golangci-lint
+      overrides:
+        - pkg: user-svc/internal/hwkc
+          rules:
+            json: camel
