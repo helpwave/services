@@ -23,7 +23,7 @@ type PatientPropertyMatchers struct {
 }
 
 func (m PatientPropertyMatchers) FindExactRuleID(ctx context.Context) (*uuid.UUID, error) {
-	patientViews := patient_views_repo.New(hwdb.GetDB(ctx))
+	patientViews := patient_views_repo.New(hwdb.MustGetDB(ctx))
 	return hwdb.Optional(patientViews.GetPatientRuleIdUsingExactMatchers)(ctx,
 		patient_views_repo.GetPatientRuleIdUsingExactMatchersParams{
 			WardID:    m.WardID,
@@ -52,7 +52,7 @@ func (m PatientPropertyMatchers) GetType() string {
 }
 
 func (m PatientPropertyMatchers) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
-	patientViews := patient_views_repo.New(hwdb.GetDB(ctx))
+	patientViews := patient_views_repo.New(hwdb.MustGetDB(ctx))
 
 	rows, err := patientViews.GetPatientPropertiesUsingMatchers(
 		ctx,
@@ -96,7 +96,7 @@ func (m PatientPropertyMatchers) ToMap() map[string]interface{} {
 }
 
 func (m PatientPropertyMatchers) IsPropertyAlwaysIncluded(ctx context.Context, propertyID uuid.UUID) (bool, error) {
-	repo := patient_views_repo.New(hwdb.GetDB(ctx))
+	repo := patient_views_repo.New(hwdb.MustGetDB(ctx))
 	query := hwdb.Optional(repo.IsPatientPropertyAlwaysIncluded)
 	alwaysInclude, err := query(ctx, patient_views_repo.IsPatientPropertyAlwaysIncludedParams{
 		PropertyID: propertyID,

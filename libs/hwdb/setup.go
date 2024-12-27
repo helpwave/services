@@ -121,12 +121,11 @@ func GetDB(ctx context.Context) DBTX {
 
 var ErrDBMissing = errors.New("MustGetDB() called without set-up database, use hwdb.WithDB()")
 
-func MustGetDB2(ctx context.Context) DBTX {
+func MustGetDB(ctx context.Context) DBTX {
 	if db := GetDB(ctx); db != nil {
 		return db
 	}
 
 	log.Error().Err(ErrDBMissing).Send()
 	panic(ErrDBMissing)
-
 }

@@ -56,8 +56,8 @@ func Main(version string, ready func()) {
 		common.Shutdown,
 		propertySpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
 		propertySetSpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
-		propertyPostgresProjection.NewProjection(eventStore, ServiceName, hwdb.GetDB(ctx)),
-		property_value_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.GetDB(ctx)),
+		propertyPostgresProjection.NewProjection(eventStore, ServiceName, hwdb.MustGetDB(ctx)),
+		property_value_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.MustGetDB(ctx)),
 		property_rules_postgres.NewProjection(ctx, eventStore, ServiceName),
 	)
 

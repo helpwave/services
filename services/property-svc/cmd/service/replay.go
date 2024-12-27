@@ -24,7 +24,7 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 
 	log.Info().Msg("starting in replay mode")
 
-	db := hwdb.GetDB(ctx)
+	db := hwdb.MustGetDB(ctx)
 	tx, rollback, err := hwdb.BeginTx(db, ctx)
 	if err != nil {
 		return fmt.Errorf("cannot begin transaction: %w", err)

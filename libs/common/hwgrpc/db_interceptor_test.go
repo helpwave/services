@@ -32,9 +32,12 @@ func TestDBInterceptor(t *testing.T) {
 			handler: func(t *testing.T, ctx context.Context) {
 				t.Helper()
 
-				// GetDB will not work
+				// GetDB will return nil
+				require.Nil(t, hwdb.GetDB(ctx))
+
+				// MustGetDB will not work
 				require.Panics(t, func() {
-					hwdb.GetDB(ctx)
+					hwdb.MustGetDB(ctx)
 				})
 			},
 		},
@@ -43,7 +46,7 @@ func TestDBInterceptor(t *testing.T) {
 			handler: func(t *testing.T, ctx context.Context) {
 				t.Helper()
 
-				require.Equal(t, existingDB, hwdb.GetDB(ctx))
+				require.Equal(t, existingDB, hwdb.MustGetDB(ctx))
 			},
 		},
 	}

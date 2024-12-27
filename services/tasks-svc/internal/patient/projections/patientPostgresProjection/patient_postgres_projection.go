@@ -30,7 +30,7 @@ func NewProjection(ctx context.Context, es *esdb.Client, serviceName string) *Pr
 			subscriptionGroupName,
 			&[]string{aggregate.PatientAggregateType + "-"},
 		),
-		patientRepo: patient_repo.New(hwdb.GetDB(ctx)),
+		patientRepo: patient_repo.New(hwdb.MustGetDB(ctx)),
 	}
 	p.initEventListeners()
 	return p

@@ -24,7 +24,7 @@ type TaskPropertyMatchers struct {
 }
 
 func (m TaskPropertyMatchers) FindExactRuleID(ctx context.Context) (*uuid.UUID, error) {
-	taskViews := task_views_repo.New(hwdb.GetDB(ctx))
+	taskViews := task_views_repo.New(hwdb.MustGetDB(ctx))
 	return hwdb.Optional(taskViews.GetTaskRuleIdUsingExactMatchers)(ctx,
 		task_views_repo.GetTaskRuleIdUsingExactMatchersParams{
 			WardID: m.WardID,
@@ -53,7 +53,7 @@ func (m TaskPropertyMatchers) GetType() string {
 }
 
 func (m TaskPropertyMatchers) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
-	taskViews := task_views_repo.New(hwdb.GetDB(ctx))
+	taskViews := task_views_repo.New(hwdb.MustGetDB(ctx))
 
 	rows, err := taskViews.GetTaskPropertiesUsingMatchers(ctx, task_views_repo.GetTaskPropertiesUsingMatchersParams{
 		WardID: m.WardID,
@@ -95,7 +95,7 @@ func (m TaskPropertyMatchers) ToMap() map[string]interface{} {
 }
 
 func (m TaskPropertyMatchers) IsPropertyAlwaysIncluded(ctx context.Context, propertyID uuid.UUID) (bool, error) {
-	repo := task_views_repo.New(hwdb.GetDB(ctx))
+	repo := task_views_repo.New(hwdb.MustGetDB(ctx))
 	query := hwdb.Optional(repo.IsTaskPropertyAlwaysIncluded)
 	alwaysInclude, err := query(ctx, task_views_repo.IsTaskPropertyAlwaysIncludedParams{
 		PropertyID: propertyID,

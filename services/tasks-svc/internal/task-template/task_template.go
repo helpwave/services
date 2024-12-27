@@ -59,7 +59,7 @@ func (s ServiceServer) CreateTaskTemplate(
 	req *pb.CreateTaskTemplateRequest,
 ) (*pb.CreateTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwdb.GetDB(ctx)
+	db := hwdb.MustGetDB(ctx)
 
 	user := commonPerm.UserFromCtx(ctx)
 
@@ -163,7 +163,7 @@ func (s ServiceServer) DeleteTaskTemplate(
 	req *pb.DeleteTaskTemplateRequest,
 ) (*pb.DeleteTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := task_template_repo.New(hwdb.GetDB(ctx))
+	templateRepo := task_template_repo.New(hwdb.MustGetDB(ctx))
 
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -210,7 +210,7 @@ func (s ServiceServer) DeleteTaskTemplateSubTask(
 ) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 
-	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(ctx), ctx)
+	tx, rollback, err := hwdb.BeginTx(hwdb.MustGetDB(ctx), ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -273,7 +273,7 @@ func (s ServiceServer) UpdateTaskTemplate(
 	ctx context.Context,
 	req *pb.UpdateTaskTemplateRequest,
 ) (*pb.UpdateTaskTemplateResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB(ctx))
+	templateRepo := task_template_repo.New(hwdb.MustGetDB(ctx))
 
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -319,7 +319,7 @@ func (s ServiceServer) UpdateTaskTemplateSubTask(
 	req *pb.UpdateTaskTemplateSubTaskRequest,
 ) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
 	// TX
-	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(ctx), ctx)
+	tx, rollback, err := hwdb.BeginTx(hwdb.MustGetDB(ctx), ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -383,7 +383,7 @@ func (s ServiceServer) CreateTaskTemplateSubTask(
 	req *pb.CreateTaskTemplateSubTaskRequest,
 ) (*pb.CreateTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := task_template_repo.New(hwdb.GetDB(ctx))
+	templateRepo := task_template_repo.New(hwdb.MustGetDB(ctx))
 
 	taskTemplateID, err := uuid.Parse(req.GetTaskTemplateId())
 	if err != nil {
@@ -436,7 +436,7 @@ func (s ServiceServer) GetAllTaskTemplates(
 	ctx context.Context,
 	req *pb.GetAllTaskTemplatesRequest,
 ) (*pb.GetAllTaskTemplatesResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB(ctx))
+	templateRepo := task_template_repo.New(hwdb.MustGetDB(ctx))
 
 	user := commonPerm.UserFromCtx(ctx)
 
@@ -512,7 +512,7 @@ func (s ServiceServer) GetTaskTemplate(
 	ctx context.Context,
 	req *pb.GetTaskTemplateRequest,
 ) (*pb.GetTaskTemplateResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB(ctx))
+	templateRepo := task_template_repo.New(hwdb.MustGetDB(ctx))
 
 	taskTemplateID, err := uuid.Parse(req.Id)
 	if err != nil {

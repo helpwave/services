@@ -21,7 +21,7 @@ type GetPatientsByWardQueryHandler func(ctx context.Context, wardID uuid.UUID) (
 
 func NewGetPatientsByWardQueryHandler(authz hwauthz.AuthZ) GetPatientsByWardQueryHandler {
 	return func(ctx context.Context, wardID uuid.UUID) ([]*models.PatientWithConsistency, error) {
-		patientRepo := patient_repo.New(hwdb.GetDB(ctx))
+		patientRepo := patient_repo.New(hwdb.MustGetDB(ctx))
 
 		// ensure get-access to ward
 		user := commonPerm.UserFromCtx(ctx)

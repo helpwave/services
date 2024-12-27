@@ -23,7 +23,7 @@ func NewGetPatientWithDetailsByIDQueryHandler(
 	as hwes.AggregateStore, authz hwauthz.AuthZ,
 ) GetPatientDetailsByIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) (*models.PatientDetails, error) {
-		patientRepo := patient_repo.New(hwdb.GetDB(ctx))
+		patientRepo := patient_repo.New(hwdb.MustGetDB(ctx))
 		taskHandlers := th.NewTaskHandlers(as, authz)
 
 		// check permissions

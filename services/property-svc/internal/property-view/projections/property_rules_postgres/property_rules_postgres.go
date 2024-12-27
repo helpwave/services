@@ -39,9 +39,9 @@ func NewProjection(ctx context.Context, es custom.EventStoreClient, serviceName 
 			subscriptionGroupName,
 			&[]string{aggregate.PropertyViewRuleAggregateType + "-"},
 		),
-		db:            hwdb.GetDB(ctx),
-		taskViewsRepo: task_views_repo.New(hwdb.GetDB(ctx)),
-		viewsRepo:     views_repo.New(hwdb.GetDB(ctx)),
+		db:            hwdb.MustGetDB(ctx),
+		taskViewsRepo: task_views_repo.New(hwdb.MustGetDB(ctx)),
+		viewsRepo:     views_repo.New(hwdb.MustGetDB(ctx)),
 	}
 	p.initEventListeners()
 	return p
