@@ -4,6 +4,9 @@ set -e
 # Format Code
 gofumpt -l -w .
 
-# Run linter
+# Run workflows linter
+actionlint
+
+# Run go linter
 find -type d -name gen -prune -o -name "go.mod" -exec sh -c 'cd "$(dirname {})" && pwd && golangci-lint run' \;
 
