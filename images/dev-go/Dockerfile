@@ -95,6 +95,12 @@ RUN mkdir "$HOME/dapr" \
 RUN curl -L https://fly.io/install.sh | sh
 ENV PATH="$PATH:$HOME/.fly/bin"
 
+# install actionlint
+#  https://github.com/rhysd/actionlint
+ENV ACTIONLINT_VERSION=1.7.5
+RUN go install github.com/rhysd/actionlint/cmd/actionlint@v${ACTIONLINT_VERSION} \
+	&& go clean -modcache
+
 # install go-migrate
 #  https://github.com/golang-migrate/migrate
 # renovate: datasource=github-releases depName=golang-migrate/migrate
