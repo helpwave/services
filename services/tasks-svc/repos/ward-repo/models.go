@@ -26,8 +26,6 @@ type Patient struct {
 	IsDischarged            bool
 	Consistency             int64
 	OrganizationID          uuid.UUID
-	Gender                  int32
-	DateOfBirth             pgtype.Date
 }
 
 type Room struct {
