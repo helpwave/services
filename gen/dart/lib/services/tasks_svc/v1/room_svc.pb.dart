@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../libs/common/v1/conflict.pb.dart' as $16;
+import '../../../libs/common/v1/conflict.pb.dart' as $6;
 
 class CreateRoomRequest extends $pb.GeneratedMessage {
   factory CreateRoomRequest({
@@ -723,7 +723,7 @@ class UpdateRoomRequest extends $pb.GeneratedMessage {
 
 class UpdateRoomResponse extends $pb.GeneratedMessage {
   factory UpdateRoomResponse({
-    $16.Conflict? conflict,
+    $6.Conflict? conflict,
     $core.String? consistency,
   }) {
     final $result = create();
@@ -740,7 +740,7 @@ class UpdateRoomResponse extends $pb.GeneratedMessage {
   factory UpdateRoomResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateRoomResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOM<$16.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $16.Conflict.create)
+    ..aOM<$6.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $6.Conflict.create)
     ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
@@ -767,15 +767,15 @@ class UpdateRoomResponse extends $pb.GeneratedMessage {
   static UpdateRoomResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $16.Conflict get conflict => $_getN(0);
+  $6.Conflict get conflict => $_getN(0);
   @$pb.TagNumber(1)
-  set conflict($16.Conflict v) { setField(1, v); }
+  set conflict($6.Conflict v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasConflict() => $_has(0);
   @$pb.TagNumber(1)
   void clearConflict() => clearField(1);
   @$pb.TagNumber(1)
-  $16.Conflict ensureConflict() => $_ensure(0);
+  $6.Conflict ensureConflict() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.String get consistency => $_getSZ(1);

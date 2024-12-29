@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../google/protobuf/any.pb.dart' as $14;
+import '../../../google/protobuf/any.pb.dart' as $0;
 
 /// Conflicts are returned, if a request was made with a consistency token, and a conflict to the requested action was caused.
 /// There are three states:
@@ -69,8 +69,8 @@ class Conflict extends $pb.GeneratedMessage {
 
 class AttributeConflict extends $pb.GeneratedMessage {
   factory AttributeConflict({
-    $14.Any? is_1,
-    $14.Any? want,
+    $0.Any? is_1,
+    $0.Any? want,
   }) {
     final $result = create();
     if (is_1 != null) {
@@ -86,8 +86,8 @@ class AttributeConflict extends $pb.GeneratedMessage {
   factory AttributeConflict.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttributeConflict', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
-    ..aOM<$14.Any>(1, _omitFieldNames ? '' : 'is', subBuilder: $14.Any.create)
-    ..aOM<$14.Any>(2, _omitFieldNames ? '' : 'want', subBuilder: $14.Any.create)
+    ..aOM<$0.Any>(1, _omitFieldNames ? '' : 'is', subBuilder: $0.Any.create)
+    ..aOM<$0.Any>(2, _omitFieldNames ? '' : 'want', subBuilder: $0.Any.create)
     ..hasRequiredFields = false
   ;
 
@@ -113,26 +113,26 @@ class AttributeConflict extends $pb.GeneratedMessage {
   static AttributeConflict? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $14.Any get is_1 => $_getN(0);
+  $0.Any get is_1 => $_getN(0);
   @$pb.TagNumber(1)
-  set is_1($14.Any v) { setField(1, v); }
+  set is_1($0.Any v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasIs_1() => $_has(0);
   @$pb.TagNumber(1)
   void clearIs_1() => clearField(1);
   @$pb.TagNumber(1)
-  $14.Any ensureIs_1() => $_ensure(0);
+  $0.Any ensureIs_1() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $14.Any get want => $_getN(1);
+  $0.Any get want => $_getN(1);
   @$pb.TagNumber(2)
-  set want($14.Any v) { setField(2, v); }
+  set want($0.Any v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasWant() => $_has(1);
   @$pb.TagNumber(2)
   void clearWant() => clearField(2);
   @$pb.TagNumber(2)
-  $14.Any ensureWant() => $_ensure(1);
+  $0.Any ensureWant() => $_ensure(1);
 }
 
 
