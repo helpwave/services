@@ -49,7 +49,7 @@ func StreamOrganizationInterceptor(
 	return next(req, stream)
 }
 
-var ErrOrganizationIdMissing = errors.New("organization.id missing in id token")
+var ErrOrganizationIDMissing = errors.New("organization.id missing in id token")
 
 // organizationInterceptor parses and injects the organization id of the OIDC claims into the current context
 // This is a separate function to allow endpoints to not fail when an organization id is not provided
@@ -62,12 +62,12 @@ func organizationInterceptor(ctx context.Context) (context.Context, error) {
 		return nil, err
 	}
 
-	if len(claims.Organization.Id) == 0 {
-		return nil, ErrOrganizationIdMissing
+	if len(claims.Organization.ID) == 0 {
+		return nil, ErrOrganizationIDMissing
 	}
 
 	// parse organizationID
-	organizationID, err := uuid.Parse(claims.Organization.Id)
+	organizationID, err := uuid.Parse(claims.Organization.ID)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "invalid organizationID")
 	}

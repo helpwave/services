@@ -79,7 +79,7 @@ func FromTraceParent(ctx context.Context, traceparent string) context.Context {
 	return propagator.Extract(ctx, carrier)
 }
 
-// zerologTraceHook calls addSpanIdToLogEvent and TODO for log events
+// zerologTraceHook calls addSpanIDToLogEvent and TODO for log events
 func zerologTraceHook() zerolog.HookFunc {
 	return func(event *zerolog.Event, level zerolog.Level, message string) {
 		span := trace.SpanFromContext(event.GetCtx())
@@ -90,16 +90,16 @@ func zerologTraceHook() zerolog.HookFunc {
 			return
 		}
 
-		addSpanIdToLogEvent(span, event)
+		addSpanIDToLogEvent(span, event)
 		addLogEventToSpan(span, event, level, message)
 	}
 }
 
-// addSpanIdToLogEvent adds a span's id and its trace's id to a zerolog.Event
+// addSpanIDToLogEvent adds a span's id and its trace's id to a zerolog.Event
 // this allows us to query a log database for log events, which arose in a span of interest
 // We might have to do this because we don't have access to
 // additional log fields in the span event added by addLogEventToSpan
-func addSpanIdToLogEvent(span trace.Span, event *zerolog.Event) {
+func addSpanIDToLogEvent(span trace.Span, event *zerolog.Event) {
 	ctx := span.SpanContext()
 	if ctx.HasTraceID() {
 		event.Str("traceId", ctx.TraceID().String())

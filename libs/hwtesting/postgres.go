@@ -20,14 +20,14 @@ const ImagePostgres = "postgres:15.6"
 const (
 	PostgresUser     = "postgres"
 	PostgresPassword = "postgres"
-	PostgresDb       = "postgres"
+	PostgresDB       = "postgres"
 )
 
 func startPostgres(ctx context.Context) (endpoint string, teardown func()) {
 	container, err := postgres.Run(ctx,
 		ImagePostgres,
 		testcontainers.WithWaitStrategyAndDeadline(time.Second*10, wait.ForExposedPort()),
-		postgres.WithDatabase(PostgresDb),
+		postgres.WithDatabase(PostgresDB),
 		postgres.WithUsername(PostgresUser),
 		postgres.WithPassword(PostgresPassword),
 	)
@@ -53,7 +53,7 @@ func SetPostgresEnv(endpoint string) string {
 
 	postgresDSN := fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		PostgresUser, PostgresPassword, postgresHost, postgresPort, PostgresDb,
+		PostgresUser, PostgresPassword, postgresHost, postgresPort, PostgresDB,
 	)
 
 	err := os.Setenv("POSTGRES_DSN", postgresDSN)

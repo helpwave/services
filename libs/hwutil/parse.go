@@ -11,8 +11,8 @@ import (
 
 var validate *validator.Validate
 
-// ParseValidJson parses a JSON buffer into a struct and runs verifier on it
-func ParseValidJson(buffer []byte, target any) error {
+// ParseValidJSON parses a JSON buffer into a struct and runs verifier on it
+func ParseValidJSON(buffer []byte, target any) error {
 	if err := json.Unmarshal(buffer, target); err != nil {
 		return err
 	}

@@ -195,7 +195,7 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(
 					v := pnv.Value.MultiSelectValues[0]
 					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
 						SelectValue: &pb.SelectValueOption{
-							Id:          v.Id.String(),
+							Id:          v.ID.String(),
 							Name:        v.Name,
 							Description: v.Description,
 						},
@@ -207,7 +207,7 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(
 								pnv.Value.MultiSelectValues,
 								func(o models.SelectValueOption) *pb.SelectValueOption {
 									return &pb.SelectValueOption{
-										Id:          o.Id.String(),
+										Id:          o.ID.String(),
 										Name:        o.Name,
 										Description: o.Description,
 									}

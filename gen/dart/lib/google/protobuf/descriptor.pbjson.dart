@@ -47,12 +47,15 @@ const FileDescriptorSet$json = {
   '2': [
     {'1': 'file', '3': 1, '4': 3, '5': 11, '6': '.google.protobuf.FileDescriptorProto', '10': 'file'},
   ],
+  '5': [
+    {'1': 536000000, '2': 536000001},
+  ],
 };
 
 /// Descriptor for `FileDescriptorSet`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List fileDescriptorSetDescriptor = $convert.base64Decode(
     'ChFGaWxlRGVzY3JpcHRvclNldBI4CgRmaWxlGAEgAygLMiQuZ29vZ2xlLnByb3RvYnVmLkZpbG'
-    'VEZXNjcmlwdG9yUHJvdG9SBGZpbGU=');
+    'VEZXNjcmlwdG9yUHJvdG9SBGZpbGUqDAiA7Mr/ARCB7Mr/AQ==');
 
 @$core.Deprecated('Use fileDescriptorProtoDescriptor instead')
 const FileDescriptorProto$json = {
@@ -884,20 +887,20 @@ const FeatureSet_JsonFormat$json = {
 /// Descriptor for `FeatureSet`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List featureSetDescriptor = $convert.base64Decode(
     'CgpGZWF0dXJlU2V0EpEBCg5maWVsZF9wcmVzZW5jZRgBIAEoDjIpLmdvb2dsZS5wcm90b2J1Zi'
-    '5GZWF0dXJlU2V0LkZpZWxkUHJlc2VuY2VCP4gBAZgBBJgBAaIBDRIIRVhQTElDSVQY5geiAQ0S'
+    '5GZWF0dXJlU2V0LkZpZWxkUHJlc2VuY2VCP4gBAZgBBJgBAaIBDRIIRVhQTElDSVQYhAeiAQ0S'
     'CElNUExJQ0lUGOcHogENEghFWFBMSUNJVBjoB7IBAwjoB1INZmllbGRQcmVzZW5jZRJsCgllbn'
     'VtX3R5cGUYAiABKA4yJC5nb29nbGUucHJvdG9idWYuRmVhdHVyZVNldC5FbnVtVHlwZUIpiAEB'
-    'mAEGmAEBogELEgZDTE9TRUQY5geiAQkSBE9QRU4Y5weyAQMI6AdSCGVudW1UeXBlEpgBChdyZX'
+    'mAEGmAEBogELEgZDTE9TRUQYhAeiAQkSBE9QRU4Y5weyAQMI6AdSCGVudW1UeXBlEpgBChdyZX'
     'BlYXRlZF9maWVsZF9lbmNvZGluZxgDIAEoDjIxLmdvb2dsZS5wcm90b2J1Zi5GZWF0dXJlU2V0'
-    'LlJlcGVhdGVkRmllbGRFbmNvZGluZ0ItiAEBmAEEmAEBogENEghFWFBBTkRFRBjmB6IBCxIGUE'
+    'LlJlcGVhdGVkRmllbGRFbmNvZGluZ0ItiAEBmAEEmAEBogENEghFWFBBTkRFRBiEB6IBCxIGUE'
     'FDS0VEGOcHsgEDCOgHUhVyZXBlYXRlZEZpZWxkRW5jb2RpbmcSfgoPdXRmOF92YWxpZGF0aW9u'
     'GAQgASgOMiouZ29vZ2xlLnByb3RvYnVmLkZlYXR1cmVTZXQuVXRmOFZhbGlkYXRpb25CKYgBAZ'
-    'gBBJgBAaIBCRIETk9ORRjmB6IBCxIGVkVSSUZZGOcHsgEDCOgHUg51dGY4VmFsaWRhdGlvbhJ+'
+    'gBBJgBAaIBCRIETk9ORRiEB6IBCxIGVkVSSUZZGOcHsgEDCOgHUg51dGY4VmFsaWRhdGlvbhJ+'
     'ChBtZXNzYWdlX2VuY29kaW5nGAUgASgOMisuZ29vZ2xlLnByb3RvYnVmLkZlYXR1cmVTZXQuTW'
-    'Vzc2FnZUVuY29kaW5nQiaIAQGYAQSYAQGiARQSD0xFTkdUSF9QUkVGSVhFRBjmB7IBAwjoB1IP'
+    'Vzc2FnZUVuY29kaW5nQiaIAQGYAQSYAQGiARQSD0xFTkdUSF9QUkVGSVhFRBiEB7IBAwjoB1IP'
     'bWVzc2FnZUVuY29kaW5nEoIBCgtqc29uX2Zvcm1hdBgGIAEoDjImLmdvb2dsZS5wcm90b2J1Zi'
     '5GZWF0dXJlU2V0Lkpzb25Gb3JtYXRCOYgBAZgBA5gBBpgBAaIBFxISTEVHQUNZX0JFU1RfRUZG'
-    'T1JUGOYHogEKEgVBTExPVxjnB7IBAwjoB1IKanNvbkZvcm1hdCJcCg1GaWVsZFByZXNlbmNlEh'
+    'T1JUGIQHogEKEgVBTExPVxjnB7IBAwjoB1IKanNvbkZvcm1hdCJcCg1GaWVsZFByZXNlbmNlEh'
     'oKFkZJRUxEX1BSRVNFTkNFX1VOS05PV04QABIMCghFWFBMSUNJVBABEgwKCElNUExJQ0lUEAIS'
     'EwoPTEVHQUNZX1JFUVVJUkVEEAMiNwoIRW51bVR5cGUSFQoRRU5VTV9UWVBFX1VOS05PV04QAB'
     'IICgRPUEVOEAESCgoGQ0xPU0VEEAIiVgoVUmVwZWF0ZWRGaWVsZEVuY29kaW5nEiMKH1JFUEVB'
@@ -953,6 +956,9 @@ const SourceCodeInfo$json = {
     {'1': 'location', '3': 1, '4': 3, '5': 11, '6': '.google.protobuf.SourceCodeInfo.Location', '10': 'location'},
   ],
   '3': [SourceCodeInfo_Location$json],
+  '5': [
+    {'1': 536000000, '2': 536000001},
+  ],
 };
 
 @$core.Deprecated('Use sourceCodeInfoDescriptor instead')
@@ -988,7 +994,7 @@ final $typed_data.Uint8List sourceCodeInfoDescriptor = $convert.base64Decode(
     'KAVCAhABUgRwYXRoEhYKBHNwYW4YAiADKAVCAhABUgRzcGFuEikKEGxlYWRpbmdfY29tbWVudH'
     'MYAyABKAlSD2xlYWRpbmdDb21tZW50cxIrChF0cmFpbGluZ19jb21tZW50cxgEIAEoCVIQdHJh'
     'aWxpbmdDb21tZW50cxI6ChlsZWFkaW5nX2RldGFjaGVkX2NvbW1lbnRzGAYgAygJUhdsZWFkaW'
-    '5nRGV0YWNoZWRDb21tZW50cw==');
+    '5nRGV0YWNoZWRDb21tZW50cyoMCIDsyv8BEIHsyv8B');
 
 @$core.Deprecated('Use generatedCodeInfoDescriptor instead')
 const GeneratedCodeInfo$json = {

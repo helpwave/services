@@ -21,13 +21,13 @@ func TestCreateUpdateGetBed(t *testing.T) {
 
 	// first, prepare room
 	wardID, _ := prepareWard(t, ctx, "1")
-	roomId, _ := prepareRoom(t, ctx, wardID, "1")
+	roomID, _ := prepareRoom(t, ctx, wardID, "1")
 
 	//
 	// create new bed
 	//
 	createReq := &pb.CreateBedRequest{
-		RoomId: roomId,
+		RoomId: roomID,
 		Name:   t.Name() + " bed",
 	}
 	createRes, err := bedClient.CreateBed(ctx, createReq)
@@ -82,11 +82,11 @@ func TestGetBedByPatient(t *testing.T) {
 
 	// first, prepare room
 	wardID, _ := prepareWard(t, ctx, "1")
-	roomId, roomConsistency := prepareRoom(t, ctx, wardID, "")
+	roomID, roomConsistency := prepareRoom(t, ctx, wardID, "")
 
 	// creating two beds
-	unrelatedBedID, _ := prepareBed(t, ctx, roomId, "unrelated")
-	patientsBedID, bedConsistency := prepareBed(t, ctx, roomId, "patient")
+	unrelatedBedID, _ := prepareBed(t, ctx, roomID, "unrelated")
+	patientsBedID, bedConsistency := prepareBed(t, ctx, roomID, "patient")
 
 	// create a patient
 	patientID := preparePatient(t, ctx, "")
@@ -113,7 +113,7 @@ func TestGetBedByPatient(t *testing.T) {
 	assert.Equal(t, patientsBedID, res.Bed.Id)
 	assert.Equal(t, bedConsistency, res.Bed.Consistency)
 
-	assert.Equal(t, roomId, res.Room.Id)
+	assert.Equal(t, roomID, res.Room.Id)
 	assert.Equal(t, roomConsistency, res.Room.Consistency)
 }
 
@@ -135,13 +135,13 @@ func TestGetBeds(t *testing.T) {
 
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, _ := prepareRoom(t, ctx, wardID, roomSuffix)
-		roomBedsMap[roomId] = make([]string, 0)
+		roomID, _ := prepareRoom(t, ctx, wardID, roomSuffix)
+		roomBedsMap[roomID] = make([]string, 0)
 		for _, bedSuffix := range bedSfxs {
-			bedId, bedConsistency := prepareBed(t, ctx, roomId, bedSuffix)
-			bedRoomMap[bedId] = roomId
-			bedConsistencyMap[bedId] = bedConsistency
-			roomBedsMap[roomId] = append(roomBedsMap[roomId], bedId)
+			bedID, bedConsistency := prepareBed(t, ctx, roomID, bedSuffix)
+			bedRoomMap[bedID] = roomID
+			bedConsistencyMap[bedID] = bedConsistency
+			roomBedsMap[roomID] = append(roomBedsMap[roomID], bedID)
 		}
 	}
 
@@ -165,8 +165,8 @@ func TestGetBeds(t *testing.T) {
 
 	// Part 2: GetBedsByRoom
 
-	for roomId, expectedBedIDs := range roomBedsMap {
-		res, err := bedClient.GetBedsByRoom(ctx, &pb.GetBedsByRoomRequest{RoomId: roomId})
+	for roomID, expectedBedIDs := range roomBedsMap {
+		res, err := bedClient.GetBedsByRoom(ctx, &pb.GetBedsByRoomRequest{RoomId: roomID})
 		require.NoError(t, err, "could not get beds for room 1")
 
 		assert.Len(t, res.Beds, len(expectedBedIDs))
@@ -174,6 +174,6 @@ func TestGetBeds(t *testing.T) {
 		bedIds := hwutil.Map(res.Beds, func(bed *pb.GetBedsByRoomResponse_Bed) string {
 			return bed.Id
 		})
-		assert.Subset(t, expectedBedIDs, bedIds, "actual bedIDs are not a subset of expected for room %s", roomId)
+		assert.Subset(t, expectedBedIDs, bedIds, "actual bedIDs are not a subset of expected for room %s", roomID)
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwes"
 	"hwutil"
@@ -20,7 +20,7 @@ import (
 	"property-svc/internal/property-value/models"
 	vh "property-svc/internal/property-view/handlers"
 	viewModels "property-svc/internal/property-view/models"
-	"property-svc/repos/property_value_repo"
+	"property-svc/repos/property-value-repo"
 )
 
 type GetRelevantPropertyValuesQueryHandler func(
@@ -33,7 +33,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 ) GetRelevantPropertyValuesQueryHandler {
 	return func(ctx context.Context, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error) {
 		viewHandlers := vh.NewPropertyViewHandlers(as, authz)
-		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
+		propertyValueRepo := propertyvaluerepo.New(hwdb.GetDB())
 
 		subjectID, err := matcher.GetSubjectID()
 		if err != nil {
@@ -50,7 +50,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 
 		propertyValuesWithProperties, err := propertyValueRepo.GetRelevantPropertyViews(
 			ctx,
-			property_value_repo.GetRelevantPropertyViewsParams{
+			propertyvaluerepo.GetRelevantPropertyViewsParams{
 				SubjectID:     subjectID,
 				AlwaysInclude: alwaysInclude,
 			})
@@ -105,7 +105,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 				// add multiselectvalue to array
 				properties[row.Property.ID].Value.MultiSelectValues = append(
 					properties[row.Property.ID].Value.MultiSelectValues, models.SelectValueOption{
-						Id:          row.SelectOptionID.UUID,      // known to be valid by if
+						ID:          row.SelectOptionID.UUID,      // known to be valid by if
 						Name:        *row.SelectOptionName,        // known to be set due to NOT NULL and successful LEFT JOIN
 						Description: *row.SelectOptionDescription, // known to be set due to NOT NULL and successful LEFT JOIN
 					})
@@ -132,7 +132,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 		propertySlice := hwutil.MapValuesPtrToSlice(properties)
 
 		// filter out properties where permissions are missing
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		checks := hwutil.Map(propertySlice, func(p models.PropertyAndValue) hwauthz.PermissionCheck {
 			return hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGetValue, perm.Property(p.PropertyID))
 		})

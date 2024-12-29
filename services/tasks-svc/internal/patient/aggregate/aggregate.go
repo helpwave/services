@@ -47,7 +47,7 @@ func (a *PatientAggregate) initEventListeners() {
 // Event handlers
 func (a *PatientAggregate) onPatientCreated(evt hwes.Event) error {
 	var payload patientEventsV1.PatientCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -61,7 +61,7 @@ func (a *PatientAggregate) onPatientCreated(evt hwes.Event) error {
 
 func (a *PatientAggregate) onBedAssigned(evt hwes.Event) error {
 	var payload patientEventsV1.BedAssignedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -90,7 +90,7 @@ func (a *PatientAggregate) onPatientDischarged(evt hwes.Event) error {
 
 func (a *PatientAggregate) onNotesUpdated(evt hwes.Event) error {
 	var payload patientEventsV1.NotesUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -101,7 +101,7 @@ func (a *PatientAggregate) onNotesUpdated(evt hwes.Event) error {
 
 func (a *PatientAggregate) onHumanReadableIdentifierUpdated(evt hwes.Event) error {
 	var payload patientEventsV1.HumanReadableIdentifierUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 

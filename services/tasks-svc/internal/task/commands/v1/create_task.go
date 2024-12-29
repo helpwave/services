@@ -5,7 +5,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 	"hwes/errs"
 
@@ -45,7 +45,7 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) Cr
 		subtasks []*pb.CreateTaskRequest_SubTask,
 	) (common.ConsistencyToken, error) {
 		// check permissions
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserCreateTask, patientPerm.Patient(patientID))
 		if err := authz.Must(ctx, check); err != nil {
 			return 0, err

@@ -4,7 +4,7 @@ import (
 	"common"
 	common_test "common/test"
 	"context"
-	"decaying_lru"
+	"decayinglru"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz/test"
 	hwes_test "hwes/test"
@@ -55,7 +55,7 @@ func setup(t *testing.T) (
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 
 	redisClient, redisMock := redismock.NewClientMock()
-	tracking.SetLRU(decaying_lru.CustomSetup(
+	tracking.SetLRU(decayinglru.CustomSetup(
 		ctx,
 		"tasks-svc-test-"+t.Name(),
 		10,

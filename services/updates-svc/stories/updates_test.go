@@ -45,10 +45,10 @@ func TestReceivingEvents(t *testing.T) {
 
 	updatesClient := updatesServiceClient()
 
-	bedId := uuid.New()
+	bedID := uuid.New()
 	bedType := "bed"
 
-	bedAggregate := hwes.NewAggregateBase(eventstoredb.EntityEventPrefix+"bed", bedId)
+	bedAggregate := hwes.NewAggregateBase(eventstoredb.EntityEventPrefix+"bed", bedID)
 
 	req := &pb.ReceiveUpdatesRequest{}
 	stream, err := updatesClient.ReceiveUpdates(ctx, req)
@@ -62,15 +62,15 @@ func TestReceivingEvents(t *testing.T) {
 		resEntityEvent := res.GetEvent()
 		requireTrue(t, assert.NotNil(t, resEntityEvent))
 		requireTrue(t, assert.Equal(t, bedType, resEntityEvent.GetAggregateType()))
-		requireTrue(t, assert.Equal(t, bedId.String(), resEntityEvent.GetAggregateId()))
+		requireTrue(t, assert.Equal(t, bedID.String(), resEntityEvent.GetAggregateId()))
 		requireTrue(t, assert.Equal(t, "BED_CREATED_v1", resEntityEvent.GetEventType()))
 
-		bedId2 := uuid.New()
-		bed2Aggregate := hwes.NewAggregateBase(eventstoredb.EntityEventPrefix+"bed", bedId2)
+		bedID2 := uuid.New()
+		bed2Aggregate := hwes.NewAggregateBase(eventstoredb.EntityEventPrefix+"bed", bedID2)
 
 		// store event
 		if err := eventstoredb.SaveEntityEventForAggregate(ctx, es, bed2Aggregate,
-			&pbEventsV1.BedCreatedEvent{Id: bedId2.String()},
+			&pbEventsV1.BedCreatedEvent{Id: bedID2.String()},
 		); err != nil {
 			requireTrue(t, assert.NoError(t, err))
 		}
@@ -88,13 +88,13 @@ func TestReceivingEvents(t *testing.T) {
 		res2EntityEvent := res2.GetEvent()
 		requireTrue(t, assert.NotNil(t, res2EntityEvent))
 		requireTrue(t, assert.Equal(t, bedType, res2EntityEvent.GetAggregateType()))
-		requireTrue(t, assert.Equal(t, bedId2.String(), res2EntityEvent.GetAggregateId()))
+		requireTrue(t, assert.Equal(t, bedID2.String(), res2EntityEvent.GetAggregateId()))
 		requireTrue(t, assert.Equal(t, "BED_CREATED_v1", res2EntityEvent.GetEventType()))
 	}()
 
 	// store event
 	if err := eventstoredb.SaveEntityEventForAggregate(ctx, es, bedAggregate,
-		&pbEventsV1.BedCreatedEvent{Id: bedId.String()},
+		&pbEventsV1.BedCreatedEvent{Id: bedID.String()},
 	); err != nil {
 		require.NoError(t, err)
 	}

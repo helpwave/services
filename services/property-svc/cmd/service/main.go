@@ -13,17 +13,17 @@ import (
 	hwspicedb "hwauthz/spicedb"
 	propertySet "property-svc/internal/property-set/api"
 	psh "property-svc/internal/property-set/handlers"
-	propertySetSpiceDBProjection "property-svc/internal/property-set/projections/spiceDBProjection"
+	propertySetSpiceDBProjection "property-svc/internal/property-set/projections/spicedb-projection"
 	propertyValue "property-svc/internal/property-value/api"
 	pvh "property-svc/internal/property-value/handlers"
-	"property-svc/internal/property-value/projections/property_value_postgres_projection"
+	propertyValuePostgresProjection "property-svc/internal/property-value/projections/postgres-projection"
 	propertyViews "property-svc/internal/property-view/api"
 	pvih "property-svc/internal/property-view/handlers"
-	"property-svc/internal/property-view/projections/property_rules_postgres"
+	propertyRulesPostgresProjection "property-svc/internal/property-view/projections/postgres-projection"
 	property "property-svc/internal/property/api"
 	ph "property-svc/internal/property/handlers"
-	propertyPostgresProjection "property-svc/internal/property/projections/postgres_projection"
-	propertySpiceDBProjection "property-svc/internal/property/projections/spiceDBProjection"
+	propertyPostgresProjection "property-svc/internal/property/projections/postgres-projection"
+	propertySpiceDBProjection "property-svc/internal/property/projections/spicedb-projection"
 )
 
 const ServiceName = "property-svc"
@@ -57,8 +57,8 @@ func Main(version string, ready func()) {
 		propertySpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
 		propertySetSpiceDBProjection.NewProjection(eventStore, ServiceName, authz),
 		propertyPostgresProjection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
-		property_value_postgres_projection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
-		property_rules_postgres.NewProjection(eventStore, ServiceName),
+		propertyValuePostgresProjection.NewProjection(eventStore, ServiceName, hwdb.GetDB()),
+		propertyRulesPostgresProjection.NewProjection(eventStore, ServiceName),
 	)
 
 	propertyHandlers := ph.NewPropertyHandlers(aggregateStore, authz)

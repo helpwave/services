@@ -3,7 +3,7 @@ package tracking
 import (
 	"common/auth"
 	"context"
-	"decaying_lru"
+	"decayinglru"
 	"hwutil"
 	"time"
 
@@ -15,10 +15,10 @@ const (
 	WardKey    = "recently-viewed-ward"
 )
 
-var lru decaying_lru.DecayingLRU
+var lru decayinglru.DecayingLRU
 
 func SetupTracking(ctx context.Context, serviceName string, lruSize int64, decay time.Duration, invP int) {
-	redisOptions := decaying_lru.DefaultRedisOptions(serviceName)
+	redisOptions := decayinglru.DefaultRedisOptions(serviceName)
 
 	// Default ENVs not set? try SECRETSTORE_ versions instead
 
@@ -34,7 +34,7 @@ func SetupTracking(ctx context.Context, serviceName string, lruSize int64, decay
 		redisOptions.Password = hwutil.GetEnvOr("SECRETSTORE_REDIS_PASSWORD", "")
 	}
 
-	lru = decaying_lru.CustomSetup(ctx, serviceName, lruSize, decay, invP, redisOptions, nil)
+	lru = decayinglru.CustomSetup(ctx, serviceName, lruSize, decay, invP, redisOptions, nil)
 }
 
 func getUserID(ctx context.Context) string {
@@ -104,6 +104,6 @@ func GetRecentWardsForUser(ctx context.Context) ([]string, error) {
 }
 
 // SetLRU overwrites the lru, to use a custom setup, instead of SetupTracking (e.g., for testing)
-func SetLRU(dlru decaying_lru.DecayingLRU) {
+func SetLRU(dlru decayinglru.DecayingLRU) {
 	lru = dlru
 }

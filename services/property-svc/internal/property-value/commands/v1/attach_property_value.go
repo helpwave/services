@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwes"
 
@@ -15,7 +15,7 @@ import (
 	"github.com/google/uuid"
 
 	"property-svc/internal/property-value/aggregate"
-	"property-svc/repos/property_value_repo"
+	"property-svc/repos/property-value-repo"
 )
 
 type AttachPropertyValueCommandHandler func(
@@ -36,17 +36,17 @@ func NewAttachPropertyValueCommandHandler(
 		valueChange models.TypedValueChange,
 		subjectID uuid.UUID,
 	) (common.ConsistencyToken, error) {
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserUpdateValue, perm.Property(propertyID))
 		if err := authz.Must(ctx, check); err != nil {
 			return 0, err
 		}
 
-		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
+		propertyValueRepo := propertyvaluerepo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 
 		query := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)
-		existingPropertyValueID, err := query(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
+		existingPropertyValueID, err := query(ctx, propertyvaluerepo.GetPropertyValueBySubjectIDAndPropertyIDParams{
 			PropertyID: propertyID,
 			SubjectID:  subjectID,
 		})

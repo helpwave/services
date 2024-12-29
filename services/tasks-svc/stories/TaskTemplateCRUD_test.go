@@ -36,14 +36,14 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	wardRes, err := wardServiceClient.CreateWard(ctx, createWardReq)
 	require.NoError(t, err, "could not create ward")
 
-	// wardId will be used for scoping
-	wardId := wardRes.GetId()
+	// wardID will be used for scoping
+	wardID := wardRes.GetId()
 
 	//
 	// create new template
 	//
 	createReq := &pb.CreateTaskTemplateRequest{
-		WardId:      &wardId,
+		WardId:      &wardID,
 		Description: hwutil.PtrTo("Some Description"),
 		Subtasks:    make([]*pb.CreateTaskTemplateRequest_SubTask, 0),
 		Name:        t.Name() + " tt",
@@ -52,7 +52,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 
 	require.NoError(t, err, "could not create task template")
 
-	templateId := createRes.GetId()
+	templateID := createRes.GetId()
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -60,7 +60,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	// get new template
 	//
 
-	template := getTaskTemplate(t, ctx, templateId)
+	template := getTaskTemplate(t, ctx, templateID)
 
 	assert.Equal(t, createReq.Name, template.Name)
 	assert.Equal(t, *createReq.Description, template.Description)
@@ -73,7 +73,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	//
 
 	updateReq := &pb.UpdateTaskTemplateRequest{
-		Id:          templateId,
+		Id:          templateID,
 		Name:        hwutil.PtrTo("New Name"),
 		Description: nil,
 		Consistency: &createRes.Consistency,
@@ -89,7 +89,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	// get updated template
 	//
 
-	template = getTaskTemplate(t, ctx, templateId)
+	template = getTaskTemplate(t, ctx, templateID)
 
 	assert.Equal(t, *updateReq.Name, template.Name)
 	assert.Equal(t, updateRes.Consistency, template.Consistency)
@@ -99,7 +99,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	//
 
 	createStRes, err := taskTemplateClient.CreateTaskTemplateSubTask(ctx, &pb.CreateTaskTemplateSubTaskRequest{
-		TaskTemplateId: templateId,
+		TaskTemplateId: templateID,
 		Name:           t.Name() + " ST 1",
 	})
 	require.NoError(t, err)
@@ -109,7 +109,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	// get updated template
 	//
 
-	template = getTaskTemplate(t, ctx, templateId)
+	template = getTaskTemplate(t, ctx, templateID)
 
 	assert.Len(t, template.Subtasks, 1)
 	assert.Equal(t, createStRes.Id, template.Subtasks[0].Id)
@@ -130,7 +130,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	// get updated template
 	//
 
-	template = getTaskTemplate(t, ctx, templateId)
+	template = getTaskTemplate(t, ctx, templateID)
 
 	assert.Len(t, template.Subtasks, 1)
 	assert.Equal(t, createStRes.Id, template.Subtasks[0].Id)
@@ -141,7 +141,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	// create another template
 	//
 	createReq = &pb.CreateTaskTemplateRequest{
-		WardId:      &wardId,
+		WardId:      &wardID,
 		Description: hwutil.PtrTo("Some Description"),
 		Subtasks:    make([]*pb.CreateTaskTemplateRequest_SubTask, 0),
 		Name:        t.Name() + " tt",
@@ -155,7 +155,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	//
 
 	templates, err := taskTemplateClient.GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{
-		WardId: &wardId,
+		WardId: &wardID,
 	})
 
 	require.NoError(t, err)

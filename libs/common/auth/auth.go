@@ -19,9 +19,8 @@ import (
 // to avoid ambiguity please read: https://wiki.helpwave.de/doc/keycloak-jedzCcERwF
 
 var (
-	DEFAULT_OAUTH_ISSUER_URL = "https://accounts.helpwave.de/realms/helpwave"
-
-	DEFAULT_OAUTH_CLIENT_ID = "helpwave-services"
+	DefaultOAuthIssuerURL   = "https://accounts.helpwave.de/realms/helpwave"
+	DefaultOAuthClientID    = "helpwave-services"
 	onlyFakeAuthEnabled     bool
 	insecureFakeTokenEnable = false
 	oauthConfig             *oauth2.Config
@@ -40,22 +39,22 @@ type (
 	organizationIDKey struct{}
 )
 
-func GetOAuthIssuerUrl() string {
-	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)
-	if issuerUrl != DEFAULT_OAUTH_ISSUER_URL {
+func GetOAuthIssuerURL() string {
+	issuerURL := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DefaultOAuthIssuerURL)
+	if issuerURL != DefaultOAuthIssuerURL {
 		zlog.Warn().
-			Str("OAUTH_ISSUER_URL", issuerUrl).
+			Str("OAUTH_ISSUER_URL", issuerURL).
 			Msg("using custom OAuth issuer url")
 	}
-	return issuerUrl
+	return issuerURL
 }
 
-func GetOAuthClientId() string {
-	clientId := hwutil.GetEnvOr("OAUTH_CLIENT_ID", DEFAULT_OAUTH_CLIENT_ID)
-	if clientId != DEFAULT_OAUTH_CLIENT_ID {
-		zlog.Warn().Str("OAUTH_CLIENT_ID", clientId).Msg("using custom OAuth client id")
+func GetOAuthClientID() string {
+	clientID := hwutil.GetEnvOr("OAUTH_CLIENT_ID", DefaultOAuthClientID)
+	if clientID != DefaultOAuthClientID {
+		zlog.Warn().Str("OAUTH_CLIENT_ID", clientID).Msg("using custom OAuth client id")
 	}
-	return clientId
+	return clientID
 }
 
 func IsOnlyFakeAuthEnabled() bool {
@@ -109,7 +108,7 @@ type IDTokenClaims struct {
 }
 
 type OrganizationTokenClaim struct {
-	Id   string `json:"id" validate:"required,uuid"`
+	ID   string `json:"id" validate:"required,uuid"`
 	Name string `json:"name" validate:"required"`
 }
 
@@ -156,7 +155,7 @@ func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, *time.T
 	}
 
 	claims := IDTokenClaims{}
-	if err := hwutil.ParseValidJson(plainToken, &claims); err != nil {
+	if err := hwutil.ParseValidJSON(plainToken, &claims); err != nil {
 		return nil, nil, fmt.Errorf("VerifyFakeToken: cant parse json: %w", err)
 	}
 
@@ -267,13 +266,13 @@ func SetupAuth(ctx context.Context, fakeOnly bool, passedInsecureFakeTokenEnable
 
 	insecureFakeTokenEnable = passedInsecureFakeTokenEnable
 
-	provider, err := oidc.NewProvider(context.Background(), GetOAuthIssuerUrl())
+	provider, err := oidc.NewProvider(context.Background(), GetOAuthIssuerURL())
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
 
 	oauthConfig = &oauth2.Config{
-		ClientID: GetOAuthClientId(),
+		ClientID: GetOAuthClientID(),
 		Endpoint: provider.Endpoint(),
 	}
 

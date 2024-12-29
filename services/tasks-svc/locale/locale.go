@@ -12,9 +12,9 @@ import (
 var localeFS embed.FS
 var lazy = hwlocale.NewLazyLocaleBundle(&localeFS)
 
-func InvalidRoomIdError(ctx context.Context) hwlocale.Locale {
+func InvalidRoomIDError(ctx context.Context) hwlocale.Locale {
 	return hwlocale.Locale{
 		Bundle: lazy.Bundle(ctx),
-		Config: &i18n.LocalizeConfig{MessageID: "InvalidRoomIdError"},
+		Config: &i18n.LocalizeConfig{MessageID: "InvalidRoomIDError"},
 	}
 }

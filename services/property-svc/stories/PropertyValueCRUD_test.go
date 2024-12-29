@@ -48,7 +48,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	require.NoError(t, err, "could not get property after it was created")
 
 	response := map[string]interface{}{
-		"Id":                         propertyResponse.Id,
+		"ID":                         propertyResponse.Id,
 		"SubjectType":                propertyResponse.SubjectType.String(),
 		"FieldType":                  propertyResponse.FieldType.String(),
 		"Name":                       propertyResponse.Name,
@@ -61,7 +61,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	}
 
 	expectedResponse := map[string]interface{}{
-		"Id":                         propertyID.String(),
+		"ID":                         propertyID.String(),
 		"SubjectType":                createPropertyRequest.SubjectType.String(),
 		"FieldType":                  createPropertyRequest.FieldType.String(),
 		"Name":                       createPropertyRequest.Name,
@@ -210,7 +210,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	require.NoError(t, err, "could not get property after it was created")
 
 	response := map[string]interface{}{
-		"Id":          propertyResponse.Id,
+		"ID":          propertyResponse.Id,
 		"SubjectType": propertyResponse.SubjectType.String(),
 		"FieldType":   propertyResponse.FieldType.String(),
 		"Name":        propertyResponse.Name,
@@ -223,7 +223,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	}
 
 	expectedResponse := map[string]interface{}{
-		"Id":          propertyID.String(),
+		"ID":          propertyID.String(),
 		"SubjectType": createPropertyRequest.SubjectType.String(),
 		"FieldType":   createPropertyRequest.FieldType.String(),
 		"Name":        createPropertyRequest.Name,
@@ -382,7 +382,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	require.NoError(t, err, "could not get property after it was created")
 
 	response := map[string]interface{}{
-		"Id":          propertyResponse.Id,
+		"ID":          propertyResponse.Id,
 		"SubjectType": propertyResponse.SubjectType.String(),
 		"FieldType":   propertyResponse.FieldType.String(),
 		"Name":        propertyResponse.Name,
@@ -395,7 +395,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	}
 
 	expectedResponse := map[string]interface{}{
-		"Id":          propertyID.String(),
+		"ID":          propertyID.String(),
 		"SubjectType": createPropertyRequest.SubjectType.String(),
 		"FieldType":   createPropertyRequest.FieldType.String(),
 		"Name":        createPropertyRequest.Name,

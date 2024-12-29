@@ -23,7 +23,7 @@ import (
 
 const (
 	migrationResourceType = "spice_schema_migrations/migration"
-	migrationResourceId   = "current"
+	migrationResourceID   = "current"
 	migrationRelation     = "version"
 	migrationSubjectType  = "spice_schema_migrations/version"
 )
@@ -34,7 +34,7 @@ func GetCurrentVersion(ctx context.Context, client *authzed.Client) int {
 	stream, err := client.ReadRelationships(ctx, &v1.ReadRelationshipsRequest{
 		RelationshipFilter: &v1.RelationshipFilter{
 			ResourceType:       migrationResourceType,
-			OptionalResourceId: migrationResourceId,
+			OptionalResourceId: migrationResourceID,
 			OptionalRelation:   migrationRelation,
 		},
 		OptionalLimit: 0,
@@ -113,7 +113,7 @@ func relationshipOfVersion(version int) *v1.Relationship {
 	return &v1.Relationship{
 		Resource: &v1.ObjectReference{
 			ObjectType: migrationResourceType,
-			ObjectId:   migrationResourceId,
+			ObjectId:   migrationResourceID,
 		},
 		Relation: migrationRelation,
 		Subject: &v1.SubjectReference{

@@ -7,8 +7,8 @@ sql:
     gen:
       go:
         &repo-go
-        package: "property_repo"
-        out: "repos/property_repo"
+        package: "propertyrepo"
+        out: "repos/property-repo"
         sql_package: "pgx/v5"
         emit_empty_slices: true
         emit_pointers_for_null_types: true
@@ -23,26 +23,26 @@ sql:
     gen:
       go:
         <<: *repo-go
-        package: "views_repo"
-        out: "repos/views_repo"
+        package: "viewsrepo"
+        out: "repos/views-repo"
   - <<: *repo
     queries: "./repos/task_views_repo.sql"
     gen:
       go:
         <<: *repo-go
-        package: "task_views_repo"
-        out: "repos/task_views_repo"
+        package: "taskviewsrepo"
+        out: "repos/task-views-repo"
   - <<: *repo
     queries: "./repos/property_value_repo.sql"
     gen:
       go:
         <<: *repo-go
-        package: "property_value_repo"
-        out: "repos/property_value_repo"
+        package: "propertyvaluerepo"
+        out: "repos/property-value-repo"
   - <<: *repo
     queries: "./repos/patient_views_repo.sql"
     gen:
       go:
         <<: *repo-go
-        package: "patient_views_repo"
-        out: "repos/patient_views_repo"
+        package: "patientviewsrepo"
+        out: "repos/patient-views-repo"

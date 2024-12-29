@@ -4,7 +4,7 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwutil"
 
 	"github.com/google/uuid"
@@ -33,7 +33,7 @@ func NewIsPropertyAlwaysIncludedForViewSourceHandler(authz hwauthz.AuthZ) IsProp
 		subjectType pb.SubjectType,
 		propertyID uuid.UUID,
 	) (bool, error) {
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 
 		// Is user allowed to see this property?
 		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))

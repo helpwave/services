@@ -5,7 +5,7 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwes/errs"
 
@@ -13,7 +13,7 @@ import (
 
 	"property-svc/internal/property/models"
 	"property-svc/internal/property/perm"
-	"property-svc/repos/property_repo"
+	"property-svc/repos/property-repo"
 )
 
 type GetPropertyByIDQueryHandler func(
@@ -23,7 +23,7 @@ type GetPropertyByIDQueryHandler func(
 
 func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHandler {
 	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error) {
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 
 		// Verify user is allowed to see this property
 		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserGet, perm.Property(propertyID))
@@ -31,11 +31,11 @@ func NewGetPropertyByIDQueryHandler(authz hwauthz.AuthZ) GetPropertyByIDQueryHan
 			return nil, 0, err
 		}
 
-		propertyRepo := property_repo.New(hwdb.GetDB())
+		propertyRepo := propertyrepo.New(hwdb.GetDB())
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
 			ctx,
-			property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
+			propertyrepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
 				ID: uuid.NullUUID{UUID: propertyID, Valid: true},
 			})
 		if err := hwdb.Error(ctx, err); err != nil {

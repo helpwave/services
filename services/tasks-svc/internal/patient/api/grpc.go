@@ -6,7 +6,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwdb/locale"
 	"hwes"
@@ -24,7 +24,7 @@ import (
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
-	"tasks-svc/repos/bed_repo"
+	"tasks-svc/repos/bed-repo"
 )
 
 type PatientGrpcService struct {
@@ -79,10 +79,10 @@ func (s *PatientGrpcService) GetPatient(
 		return nil, err
 	}
 
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bedrepo.New(hwdb.GetDB())
 
 	// check permissions
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
 	if err := s.authz.Must(ctx, check); err != nil {
 		return nil, err
@@ -360,14 +360,14 @@ func (s *PatientGrpcService) GetRecentPatients(
 	_ *pb.GetRecentPatientsRequest,
 ) (*pb.GetRecentPatientsResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bedrepo.New(hwdb.GetDB())
 
 	var recentPatientIdsStrs []string
 	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
 	if err != nil {
 		return nil, hwerr.NewStatusError(ctx,
 			codes.Internal,
-			"decaying_lru error: "+err.Error(),
+			"decayinglru error: "+err.Error(),
 			locale.GenericError(ctx),
 		)
 	}
@@ -393,7 +393,7 @@ func (s *PatientGrpcService) GetRecentPatients(
 		return &parsedUUID
 	})
 
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 	checks := hwutil.Map(recentPatientIds, func(patientID uuid.UUID) hwauthz.PermissionCheck {
 		return hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patientID))
 	})

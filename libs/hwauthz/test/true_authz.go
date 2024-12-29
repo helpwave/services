@@ -45,16 +45,16 @@ func (a *TrueAuthZ) BulkCheck(_ context.Context, checks []hwauthz.PermissionChec
 	return bs, nil
 }
 
-func (s *TrueAuthZ) BulkMust(_ context.Context, _ ...hwauthz.PermissionCheck) error {
+func (a *TrueAuthZ) BulkMust(_ context.Context, _ ...hwauthz.PermissionCheck) error {
 	return nil
 }
 
-func (s *TrueAuthZ) LookupResources(
+func (a *TrueAuthZ) LookupResources(
 	_ context.Context, _ hwauthz.Object, _ hwauthz.Relation, _ hwauthz.ObjectType,
 ) ([]string, error) {
 	return []string{}, nil
 }
 
-func (s *TrueAuthZ) DeleteObject(_ context.Context, _ hwauthz.Object) error {
+func (a *TrueAuthZ) DeleteObject(_ context.Context, _ hwauthz.Object) error {
 	return nil
 }

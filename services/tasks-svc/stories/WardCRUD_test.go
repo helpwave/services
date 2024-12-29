@@ -4,7 +4,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
@@ -98,9 +98,9 @@ func TestGetRecentWards(t *testing.T) {
 	authz := spicedb.NewSpiceDBAuthZ()
 	_, err := authz.Create(
 		hwauthz.NewRelationship(
-			commonPerm.User(userID),
+			commonperm.User(userID),
 			"member",
-			commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization)),
+			commonperm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization)),
 		),
 	).Commit(ctx)
 	require.NoError(t, err)
@@ -121,13 +121,13 @@ func TestGetRecentWards(t *testing.T) {
 	}
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, _ := prepareRoom(t, ctx, taskCountWardID, roomSuffix)
+		roomID, _ := prepareRoom(t, ctx, taskCountWardID, roomSuffix)
 		for j, bedSuffix := range bedSfxs {
-			bedId, _ := prepareBed(t, ctx, roomId, bedSuffix)
+			bedID, _ := prepareBed(t, ctx, roomID, bedSuffix)
 			patientID := preparePatient(t, ctx, bedSuffix)
 			_, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
 				Id:    patientID,
-				BedId: bedId,
+				BedId: bedID,
 			})
 			require.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
@@ -229,13 +229,13 @@ func TestGetWardOverviews(t *testing.T) {
 
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, _ := prepareRoom(t, ctx, wardID, roomSuffix)
+		roomID, _ := prepareRoom(t, ctx, wardID, roomSuffix)
 		for j, bedSuffix := range bedSfxs {
-			bedId, _ := prepareBed(t, ctx, roomId, bedSuffix)
+			bedID, _ := prepareBed(t, ctx, roomID, bedSuffix)
 			patientID := preparePatient(t, ctx, bedSuffix)
 			_, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
 				Id:    patientID,
-				BedId: bedId,
+				BedId: bedID,
 			})
 			require.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
@@ -336,17 +336,17 @@ func TestGetWardDetails(t *testing.T) {
 	rooms := make([]map[string]interface{}, 0)
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, roomConsistency := prepareRoom(t, ctx, wardID, roomSuffix)
+		roomID, roomConsistency := prepareRoom(t, ctx, wardID, roomSuffix)
 		expectedRoom := map[string]interface{}{
-			"id":          roomId,
+			"id":          roomID,
 			"name":        t.Name() + " room " + roomSuffix,
 			"consistency": roomConsistency,
 		}
 		beds := make([]map[string]interface{}, 0)
 		for _, bedSuffix := range bedSfxs {
-			bedId, bedConsistency := prepareBed(t, ctx, roomId, bedSuffix)
+			bedID, bedConsistency := prepareBed(t, ctx, roomID, bedSuffix)
 			beds = append(beds, map[string]interface{}{
-				"id":          bedId,
+				"id":          bedID,
 				"name":        t.Name() + " bed " + bedSuffix,
 				"consistency": bedConsistency,
 			})

@@ -48,7 +48,7 @@ func (a *PropertyViewRuleAggregate) initEventListeners() {
 
 func (a *PropertyViewRuleAggregate) onPropertyRuleCreated(event hwes.Event) error {
 	var payload propertyViewEventsV1.PropertyRuleCreatedEvent
-	if err := event.GetJsonData(&payload); err != nil {
+	if err := event.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -69,7 +69,7 @@ func (a *PropertyViewRuleAggregate) onPropertyRuleCreated(event hwes.Event) erro
 
 func (a *PropertyViewRuleAggregate) onPropertyRuleListsUpdated(event hwes.Event) error {
 	var payload propertyViewEventsV1.PropertyRuleListsUpdatedEvent
-	if err := event.GetJsonData(&payload); err != nil {
+	if err := event.GetJSONData(&payload); err != nil {
 		return err
 	}
 

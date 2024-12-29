@@ -7,8 +7,8 @@ sql:
     gen:
       go:
         &repo-go
-        package: "bed_repo"
-        out: "repos/bed_repo"
+        package: "bedrepo"
+        out: "repos/bed-repo"
         sql_package: "pgx/v5"
         emit_empty_slices: true
         emit_pointers_for_null_types: true
@@ -24,38 +24,38 @@ sql:
     gen:
       go:
         <<: *repo-go
-        package: "task_repo"
-        out: "repos/task_repo"
+        package: "taskrepo"
+        out: "repos/task-repo"
 
   - <<: *repo
     queries: "./repos/patient_repo.sql"
     gen:
       go:
         <<: *repo-go
-        package: "patient_repo"
-        out: "repos/patient_repo"
+        package: "patientrepo"
+        out: "repos/patient-repo"
 
   - <<: *repo
     queries: "./repos/room_repo.sql"
     gen:
       go:
         <<: *repo-go
-        package: "room_repo"
-        out: "repos/room_repo"
+        package: "roomrepo"
+        out: "repos/room-repo"
 
   - <<: *repo
     queries: "./repos/ward_repo.sql"
     gen:
       go:
         <<: *repo-go
-        package: "ward_repo"
-        out: "repos/ward_repo"
+        package: "wardrepo"
+        out: "repos/ward-repo"
 
   - <<: *repo
     queries: "./repos/task_template_repo.sql"
     gen:
       go:
         <<: *repo-go
-        package: "task_template_repo"
-        out: "repos/task_template_repo"
+        package: "tasktemplaterepo"
+        out: "repos/task-template-repo"
 

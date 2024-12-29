@@ -93,10 +93,10 @@ func TestGetRooms(t *testing.T) {
 		wardID, _ := prepareWard(t, ctx, wardSuffix)
 		wardRoomsMap[wardID] = make([]string, 0)
 		for _, bedSuffix := range roomSfxs {
-			roomId, roomConsistency := prepareRoom(t, ctx, wardID, bedSuffix)
-			roomWardMap[roomId] = wardID
-			roomConsistencyMap[roomId] = roomConsistency
-			wardRoomsMap[wardID] = append(wardRoomsMap[wardID], roomId)
+			roomID, roomConsistency := prepareRoom(t, ctx, wardID, bedSuffix)
+			roomWardMap[roomID] = wardID
+			roomConsistencyMap[roomID] = roomConsistency
+			wardRoomsMap[wardID] = append(wardRoomsMap[wardID], roomID)
 		}
 	}
 

@@ -78,19 +78,19 @@ func AuthenticatedUserClaim(userID string) map[string]interface{} {
 // AuthenticatedUserMetadata gives you a ready-to use grpc metadata object
 func AuthenticatedUserMetadata(userID string) metadata.MD {
 	claims := AuthenticatedUserClaim(userID)
-	claimsJson, err := json.Marshal(claims)
+	claimsJSON, err := json.Marshal(claims)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fakeToken := base64.StdEncoding.EncodeToString(claimsJson)
+	fakeToken := base64.StdEncoding.EncodeToString(claimsJSON)
 
 	return metadata.New(map[string]string{
 		"Authorization": "Bearer " + fakeToken,
 	})
 }
 
-func AuthenticatedUserContext(ctx context.Context, userId string) context.Context {
-	md := AuthenticatedUserMetadata(userId)
+func AuthenticatedUserContext(ctx context.Context, userID string) context.Context {
+	md := AuthenticatedUserMetadata(userID)
 	if existing, existed := metadata.FromOutgoingContext(ctx); existed {
 		md = metadata.Join(md, existing)
 	}

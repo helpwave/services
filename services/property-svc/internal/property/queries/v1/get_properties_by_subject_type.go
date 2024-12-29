@@ -5,7 +5,7 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -13,7 +13,7 @@ import (
 
 	"property-svc/internal/property/models"
 	"property-svc/internal/property/perm"
-	"property-svc/repos/property_repo"
+	"property-svc/repos/property-repo"
 )
 
 type GetPropertiesQueryHandler func(
@@ -23,9 +23,9 @@ type GetPropertiesQueryHandler func(
 
 func NewGetPropertiesQueryHandler(authz hwauthz.AuthZ) GetPropertiesQueryHandler {
 	return func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 
-		propertyRepo := property_repo.New(hwdb.GetDB())
+		propertyRepo := propertyrepo.New(hwdb.GetDB())
 
 		var subjectTypeID *int32
 		if subjectType != nil {
@@ -34,7 +34,7 @@ func NewGetPropertiesQueryHandler(authz hwauthz.AuthZ) GetPropertiesQueryHandler
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
 			ctx,
-			property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
+			propertyrepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
 				SubjectType: subjectTypeID,
 			})
 		if err := hwdb.Error(ctx, err); err != nil {

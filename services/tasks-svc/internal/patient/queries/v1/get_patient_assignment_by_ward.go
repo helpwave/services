@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 
 	"tasks-svc/internal/patient/models"
-	"tasks-svc/repos/room_repo"
+	"tasks-svc/repos/room-repo"
 )
 
 type GetPatientAssignmentByWardQueryHandler func(
@@ -23,7 +23,7 @@ type GetPatientAssignmentByWardQueryHandler func(
 
 func NewGetPatientAssignmentByWardQueryHandler(authz hwauthz.AuthZ) GetPatientAssignmentByWardQueryHandler {
 	return func(ctx context.Context, wardID uuid.UUID) ([]*models.RoomWithBedsWithPatient, error) {
-		roomRepo := room_repo.New(hwdb.GetDB())
+		roomRepo := roomrepo.New(hwdb.GetDB())
 
 		// check permissions
 		//
@@ -33,7 +33,7 @@ func NewGetPatientAssignmentByWardQueryHandler(authz hwauthz.AuthZ) GetPatientAs
 		// THAT'S WE DO NOT DO ANY FURTHER FILTERING (E.G. ROOMS, BEDS, TASKS) HERE
 		// THIS NEEDS A SECOND LOOK ONCE PERMISSIONS BECOME MORE FLEXIBLE!
 
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		taskCheck := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserGet, wardPerm.Ward(wardID))
 		if err := authz.Must(ctx, taskCheck); err != nil {
 			return nil, err
@@ -46,13 +46,13 @@ func NewGetPatientAssignmentByWardQueryHandler(authz hwauthz.AuthZ) GetPatientAs
 
 		processedRooms := make(map[uuid.UUID]bool)
 		return hwutil.FlatMap(rows,
-			func(roomRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) **models.RoomWithBedsWithPatient {
+			func(roomRow roomrepo.GetRoomsWithBedsWithPatientsByWardRow) **models.RoomWithBedsWithPatient {
 				if _, processed := processedRooms[roomRow.RoomID]; processed {
 					return nil
 				}
 				processedRooms[roomRow.RoomID] = true
 				beds := hwutil.FlatMap(rows,
-					func(bedRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) **models.BedWithPatient {
+					func(bedRow roomrepo.GetRoomsWithBedsWithPatientsByWardRow) **models.BedWithPatient {
 						if bedRow.RoomID != roomRow.RoomID || !bedRow.BedID.Valid {
 							return nil
 						}

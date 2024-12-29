@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 
 	"github.com/google/uuid"
@@ -25,7 +25,7 @@ func NewUnassignBedCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) U
 		}
 
 		// check permissions
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		checks := make([]hwauthz.PermissionCheck, 0, 2)
 		checks = append(checks,
 			hwauthz.NewPermissionCheck(user, perm.PatientCanUserAssignBed, perm.Patient(patientID)))
