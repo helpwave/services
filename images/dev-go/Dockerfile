@@ -6,7 +6,7 @@
 # dart's protoc plugin does not publish pre-builds,
 # so we have to build it ourselves
 # This builder will produce the statically linked binary
-#  /build/protoc_plugin/bin/protoc_plugin
+#  /protoc-gen-dart
 
 # based on debian 12 (bookworm-slim)
 FROM dart:3.6.0-sdk AS dart-builder
@@ -20,7 +20,10 @@ RUN curl -fsSL https://github.com/google/protobuf.dart/archive/refs/tags/protoc_
 	&& cd protoc_plugin \
 	&& dart pub get \
 	&& dart compile exe bin/protoc_plugin.dart \
-	&& rm /build/* -rf
+	&& mv bin/protoc_plugin.exe /protoc-gen-dart \
+	&& cd /build \
+	&& rm /build/* -rf \
+	&& dart pub cache clean
 
 
 # based on the debian 12 ("bookworm") go image
@@ -77,7 +80,7 @@ RUN wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${
 # install javascript proto plugin and grpc-web codegen
 #  https://github.com/protocolbuffers/protobuf-javascript/
 # TODO: renovate
-ENV PROTOC_JS_VERSION=3.21.4
+ENV PROTOC_JS_VERSION=3.21.2
 RUN wget -qO- https://github.com/protocolbuffers/protobuf-javascript/releases/download/v${PROTOC_JS_VERSION}/protobuf-javascript-${PROTOC_JS_VERSION}-linux-x86_64.tar.gz \
 	| tar -xz --strip-components=1 -C /usr/local/bin bin/protoc-gen-js
 
@@ -88,7 +91,7 @@ RUN wget -q https://github.com/grpc/grpc-web/releases/download/${PROTOC_WEB_VERS
 	&& chmod +x /usr/local/bin/protoc-gen-grpc-web
 
 # install dart protoc plugin
-COPY --from=dart-builder /build/protoc_plugin/bin/protoc_plugin.exe /usr/local/bin/protoc-gen-dart
+COPY --from=dart-builder /protoc-gen-dart /usr/local/bin/protoc-gen-dart
 
 
 # clean up apt artifacts,
@@ -165,8 +168,10 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} 
 # install go proto plugin and grpc codegen
 #  https://protobuf.dev/getting-started/gotutorial/
 # TODO: renovate
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.1
-RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.4.0
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.1 \
+	&& go clean -modcache
+RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.4.0 \
+	&& go clean -modcache
 ENV PATH="$PATH:$(go env GOPATH)/bin"
 
 # install gofumpt, a stricter gofmt
