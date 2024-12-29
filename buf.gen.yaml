@@ -18,6 +18,6 @@ plugins:
   - local: protoc-gen-js
     out: gen/ts
     opt: import_style=commonjs,binary
-  - remote: buf.build/protocolbuffers/dart:v21.1.2
+  - local: protoc-gen-dart
     out: gen/dart/lib
     opt: grpc
