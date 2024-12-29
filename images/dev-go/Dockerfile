@@ -3,6 +3,26 @@
 #  THE TAG IN update-dev-tag.sh AND RUN IT  #
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#
 
+# dart's protoc plugin does not publish pre-builds,
+# so we have to build it ourselves
+# This builder will produce the statically linked binary
+#  /build/protoc_plugin/bin/protoc_plugin
+
+# based on debian 12 (bookworm-slim)
+FROM dart:3.6.0-sdk AS dart-builder
+
+WORKDIR /build
+
+# TODO: renovate
+ENV DART_PROTOC_PLUGIN_VERSION=21.1.2
+RUN curl -fsSL https://github.com/google/protobuf.dart/archive/refs/tags/protoc_plugin-v${DART_PROTOC_PLUGIN_VERSION}.tar.gz | \
+	tar -xz --strip-components=1 \
+	&& cd protoc_plugin \
+	&& dart pub get \
+	&& dart compile exe bin/protoc_plugin.dart \
+	&& rm /build/* -rf
+
+
 # based on the debian 12 ("bookworm") go image
 # for now this only builds x86_64 images (TODO)
 FROM golang:1.23-bookworm
@@ -52,6 +72,24 @@ ENV ZED_VERSION=0.23.0
 RUN wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${ZED_VERSION}_linux_amd64.deb -O zed.deb \
     && apt install -y ./zed.deb \
     && rm zed.deb
+
+
+# install javascript proto plugin and grpc-web codegen
+#  https://github.com/protocolbuffers/protobuf-javascript/
+# TODO: renovate
+ENV PROTOC_JS_VERSION=3.21.4
+RUN wget -qO- https://github.com/protocolbuffers/protobuf-javascript/releases/download/v${PROTOC_JS_VERSION}/protobuf-javascript-${PROTOC_JS_VERSION}-linux-x86_64.tar.gz \
+	| tar -xz --strip-components=1 -C /usr/local/bin bin/protoc-gen-js
+
+# TODO: renovate
+ENV PROTOC_WEB_VERSION=1.5.0
+RUN wget -q https://github.com/grpc/grpc-web/releases/download/${PROTOC_WEB_VERSION}/protoc-gen-grpc-web-${PROTOC_WEB_VERSION}-linux-x86_64 \
+	-O /usr/local/bin/protoc-gen-grpc-web \
+	&& chmod +x /usr/local/bin/protoc-gen-grpc-web
+
+# install dart protoc plugin
+COPY --from=dart-builder /build/protoc_plugin/bin/protoc_plugin.exe /usr/local/bin/protoc-gen-dart
+
 
 # clean up apt artifacts,
 # dont use apt after this line
@@ -124,20 +162,12 @@ ENV GO_INJECT_TAG_VERSION=1.4.0
 RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} \
 	&& go clean -modcache
 
-
+# install go proto plugin and grpc codegen
+#  https://protobuf.dev/getting-started/gotutorial/
 # TODO: renovate
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.1
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.4.0
 ENV PATH="$PATH:$(go env GOPATH)/bin"
-
-# TODO: renovate
-ENV PROTOC_JS_VERSION=3.21.4
-RUN wget -qO- https://github.com/protocolbuffers/protobuf-javascript/releases/download/v${PROTOC_JS_VERSION}/protobuf-javascript-${PROTOC_JS_VERSION}-linux-x86_64.tar.gz \
-	| tar -xz --strip-components=1 -C /usr/local/bin bin/protoc-gen-js
-
-ENV PROTOC_WEB_VERSION=1.5.0
-RUN wget -q https://github.com/grpc/grpc-web/releases/download/${PROTOC_WEB_VERSION}/protoc-gen-grpc-web-${PROTOC_WEB_VERSION}-linux-x86_64 \
-	-O /usr/local/bin/protoc-gen-grpc-web
 
 # install gofumpt, a stricter gofmt
 #  https://github.com/mvdan/gofumpt
