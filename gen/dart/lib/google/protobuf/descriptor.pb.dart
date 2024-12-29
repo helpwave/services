@@ -36,6 +36,7 @@ class FileDescriptorSet extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FileDescriptorSet', package: const $pb.PackageName(_omitMessageNames ? '' : 'google.protobuf'), createEmptyInstance: create)
     ..pc<FileDescriptorProto>(1, _omitFieldNames ? '' : 'file', $pb.PbFieldType.PM, subBuilder: FileDescriptorProto.create)
+    ..hasExtensions = true
   ;
 
   @$core.Deprecated(
@@ -2351,12 +2352,13 @@ class FieldOptions extends $pb.GeneratedMessage {
   static FieldOptions getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FieldOptions>(create);
   static FieldOptions? _defaultInstance;
 
+  /// NOTE: ctype is deprecated. Use `features.(pb.cpp).string_type` instead.
   /// The ctype option instructs the C++ code generator to use a different
   /// representation of the field than it normally would.  See the specific
   /// options below.  This option is only implemented to support use of
   /// [ctype=CORD] and [ctype=STRING] (the default) on non-repeated fields of
-  /// type "bytes" in the open source release -- sorry, we'll try to include
-  /// other types in a future version!
+  /// type "bytes" in the open source release.
+  /// TODO: make ctype actually deprecated.
   @$pb.TagNumber(1)
   FieldOptions_CType get ctype => $_getN(0);
   @$pb.TagNumber(1)
@@ -3670,7 +3672,7 @@ class SourceCodeInfo extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SourceCodeInfo', package: const $pb.PackageName(_omitMessageNames ? '' : 'google.protobuf'), createEmptyInstance: create)
     ..pc<SourceCodeInfo_Location>(1, _omitFieldNames ? '' : 'location', $pb.PbFieldType.PM, subBuilder: SourceCodeInfo_Location.create)
-    ..hasRequiredFields = false
+    ..hasExtensions = true
   ;
 
   @$core.Deprecated(
