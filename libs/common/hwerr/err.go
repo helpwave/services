@@ -2,10 +2,12 @@ package hwerr
 
 import (
 	"context"
+	"fmt"
 	"hwlocale"
 
 	zlog "github.com/rs/zerolog"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	genstatus "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/protoadapt"
@@ -52,5 +54,29 @@ func LocalizedMessage(ctx context.Context, locale hwlocale.Locale) *errdetails.L
 	return &errdetails.LocalizedMessage{
 		Locale:  tag.String(),
 		Message: str,
+	}
+}
+
+type InvalidEnumError struct {
+	Enum  string
+	Value string
+}
+
+func (e InvalidEnumError) Error() string {
+	return fmt.Sprintf("invalid enum: %q is not a valid %q", e.Value, e.Enum)
+}
+
+// ProtoStatusError implements the Error interface on *genstatus.Status
+type ProtoStatusError struct {
+	status *genstatus.Status
+}
+
+func (e ProtoStatusError) Error() string {
+	return e.status.GetMessage()
+}
+
+func NewProtoStatusError(status *genstatus.Status) ProtoStatusError {
+	return ProtoStatusError{
+		status: status,
 	}
 }

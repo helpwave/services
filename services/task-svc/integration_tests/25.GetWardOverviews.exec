@@ -1,9 +1,0 @@
-#!/bin/bash
-
-echo "Exists"
-grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
-	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
-	-d '{}' \
-	localhost:3001 \
-	services.task_svc.v1.WardService/GetWardOverviews
-

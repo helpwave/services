@@ -28,11 +28,9 @@ linters:
     # TODOs: #865
     - cyclop # TODO
     - dupl # TODO
-    - err113 # TODO
     - exhaustruct # TODO
     - gci # TODO
     - gocognit # TODO
-    - goconst # TODO
     - gocyclo # TODO
     - godox # TODO
     - nestif # TODO
@@ -43,3 +41,9 @@ linters:
     - stylecheck # TODO
     - tagliatelle # TODO
     - testpackage # TODO
+
+linters-settings:
+  goconst:
+    ignore-tests: true
+    min-occurrences: 2
+    ignore-strings: '(true|false)' # regex

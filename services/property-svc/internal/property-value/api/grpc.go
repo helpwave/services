@@ -8,6 +8,9 @@ import (
 	"hwes"
 	"hwutil"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -70,40 +73,69 @@ func NewPropertyValueService(as hwes.AggregateStore, handlers *handlers.Handlers
 	return &PropertyValueGrpcService{as: as, handlers: handlers}
 }
 
+func toTypedValueChange(value pb.IsAttachPropertyValueRequest_Value) (typedValue *models.TypedValueChange) {
+	if value == nil {
+		return &models.TypedValueChange{
+			ValueRemoved: true,
+		}
+	}
+	switch value := value.(type) {
+	case *pb.AttachPropertyValueRequest_TextValue:
+		return &models.TypedValueChange{
+			TextValue: &value.TextValue,
+		}
+	case *pb.AttachPropertyValueRequest_NumberValue:
+		return &models.TypedValueChange{
+			NumberValue: &value.NumberValue,
+		}
+	case *pb.AttachPropertyValueRequest_BoolValue:
+		return &models.TypedValueChange{
+			BoolValue: &value.BoolValue,
+		}
+	case *pb.AttachPropertyValueRequest_DateValue:
+		return &models.TypedValueChange{
+			DateValue: hwutil.PtrTo(value.DateValue.Date.AsTime()),
+		}
+	case *pb.AttachPropertyValueRequest_DateTimeValue:
+		return &models.TypedValueChange{
+			DateTimeValue: hwutil.PtrTo(value.DateTimeValue.AsTime()),
+		}
+	case *pb.AttachPropertyValueRequest_SelectValue:
+		return &models.TypedValueChange{
+			SingleSelectValue: &value.SelectValue,
+		}
+	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
+		msv := value.MultiSelectValue
+		return &models.TypedValueChange{
+			MultiSelectValues: &models.MultiSelectChange{
+				SelectValues:       msv.GetSelectValues(),
+				RemoveSelectValues: msv.RemoveSelectValues,
+			},
+		}
+	default:
+		return nil
+	}
+}
+
 func (s *PropertyValueGrpcService) AttachPropertyValue(
 	ctx context.Context,
 	req *pb.AttachPropertyValueRequest,
 ) (*pb.AttachPropertyValueResponse, error) {
+	log := zlog.Ctx(ctx)
+
 	propertyValueID := uuid.New()
 
 	propertyID := uuid.MustParse(req.GetPropertyId()) // guarded by validate
 	subjectID := uuid.MustParse(req.GetSubjectId())   // guarded by validate
 
-	var value interface{}
-	switch req.Value.(type) {
-	case *pb.AttachPropertyValueRequest_TextValue:
-		value = req.GetTextValue()
-	case *pb.AttachPropertyValueRequest_NumberValue:
-		value = req.GetNumberValue()
-	case *pb.AttachPropertyValueRequest_BoolValue:
-		value = req.GetBoolValue()
-	case *pb.AttachPropertyValueRequest_DateValue:
-		value = req.GetDateValue().GetDate()
-	case *pb.AttachPropertyValueRequest_DateTimeValue:
-		value = req.GetDateTimeValue()
-	case *pb.AttachPropertyValueRequest_SelectValue:
-		value = req.GetSelectValue()
-	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
-		msv := req.GetMultiSelectValue()
-		value = models.MultiSelectChange{
-			SelectValues:       msv.SelectValues,
-			RemoveSelectValues: msv.RemoveSelectValues,
-		}
-	default:
-		value = nil
+	valueChange := toTypedValueChange(req.GetValue())
+	if valueChange == nil {
+		log.Error().Type("valueType", req.Value).Msg("req.ValueChange type is not known")
+		return nil, status.Error(codes.Internal, "failed to parse value")
 	}
 
-	consistency, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID)
+	consistency, err := s.handlers.Commands.V1.AttachPropertyValue(
+		ctx, propertyValueID, propertyID, *valueChange, subjectID)
 	if err != nil {
 		return nil, err
 	}
@@ -163,19 +195,19 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(
 				case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
 					v := pnv.Value.MultiSelectValues[0]
 					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
-						SelectValue: &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+						SelectValue: &pb.SelectValueOption{
 							Id:          v.Id.String(),
 							Name:        v.Name,
 							Description: v.Description,
 						},
 					}
 				case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue_{
-						MultiSelectValue: &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
+						MultiSelectValue: &pb.MultiSelectValue{
 							SelectValues: hwutil.Map(
 								pnv.Value.MultiSelectValues,
-								func(o models.SelectValueOption) *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption {
-									return &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+								func(o models.SelectValueOption) *pb.SelectValueOption {
+									return &pb.SelectValueOption{
 										Id:          o.Id.String(),
 										Name:        o.Name,
 										Description: o.Description,

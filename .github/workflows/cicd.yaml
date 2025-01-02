@@ -12,7 +12,7 @@ permissions:
 
 env:
   # renovate: dev-tag
-  DEV_TAG: '17'
+  DEV_TAG: '18'
 
 jobs:
 

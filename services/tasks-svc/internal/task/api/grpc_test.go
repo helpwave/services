@@ -46,7 +46,7 @@ func TestTaskGrpcService_CreateTask_Validation(t *testing.T) {
 	ctx, client, teardown := setup()
 	defer teardown()
 
-	taskName := "Test task"
+	taskName := t.Name()
 
 	// patientID empty -> Error
 	_, err := client.CreateTask(ctx, &pb.CreateTaskRequest{

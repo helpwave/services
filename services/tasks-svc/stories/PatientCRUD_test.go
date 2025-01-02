@@ -4,7 +4,6 @@ import (
 	"context"
 	v1 "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwauthz/spicedb"
@@ -13,6 +12,8 @@ import (
 	"strconv"
 	"testing"
 	"time"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -53,7 +54,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	assert.Equal(t, createReq.GetNotes(), getPatientRes.GetNotes())
 	assert.Equal(t, createRes.GetConsistency(), getPatientRes.GetConsistency())
 	assert.Equal(t, v1.Gender_GENDER_UNSPECIFIED, getPatientRes.GetGender())
-	assert.Equal(t, nil, getPatientRes.DateOfBirth)
+	assert.Nil(t, getPatientRes.DateOfBirth)
 
 	//
 	// update patient
@@ -431,17 +432,20 @@ func TestGetPatientList(t *testing.T) {
 	// Create tasks
 	//
 
+	ST1 := "ST 1"
+	ST2 := "ST 2"
+
 	task1Res, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:      t.Name() + " task 1",
 		PatientId: patient1Id,
 		Public:    hwutil.PtrTo(true),
 		Subtasks: []*pb.CreateTaskRequest_SubTask{
 			{
-				Name: "ST 1",
+				Name: ST1,
 				Done: hwutil.PtrTo(true),
 			},
 			{
-				Name: "ST 2",
+				Name: ST2,
 			},
 		},
 	})
@@ -494,11 +498,11 @@ func TestGetPatientList(t *testing.T) {
 			assert.Len(t, patient.Tasks[0].Subtasks, 2)
 			f := 0
 			for _, st := range patient.Tasks[0].Subtasks {
-				if st.Name == "ST 1" {
+				if st.Name == ST1 {
 					f++
 					assert.True(t, st.Done)
 				}
-				if st.Name == "ST 2" {
+				if st.Name == ST2 {
 					f++
 					assert.False(t, st.Done)
 				}

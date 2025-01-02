@@ -19,7 +19,6 @@
   },
   "rangeStrategy": "pin",
   "ignorePaths": [
-    "infrastructure/**",
     "gen/**"
   ],
   "packageRules": [
@@ -41,7 +40,7 @@
       "extractVersion": "^v?(?<version>.*)$"
     }
   ],
-  "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwlocale", "telemetry", "gen", "postgres"],
+  "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwlocale", "telemetry", "gen", "hooks", "hwtesting", "postgres"],
   "customDatasources": {
      "buf": {
         "defaultRegistryUrlTemplate": "https://buf-resource-proxy.fly.dev/{{packageName}}",

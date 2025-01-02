@@ -9,6 +9,16 @@ import "libs/common/v1/types.proto";
 
 option go_package = "gen/services/property-svc/v1";
 
+message SelectValueOption {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message MultiSelectValue {
+  repeated SelectValueOption select_values = 1;
+}
+
 //
 // AttachPropertyValueRequest
 //
@@ -93,16 +103,6 @@ message GetAttachedPropertyValuesResponse {
 
     string property_consistency = 13;
     optional string value_consistency = 14; // missing, if no value available
-
-    message SelectValueOption {
-      string id = 1;
-      string name = 2;
-      string description = 3;
-    }
-
-    message MultiSelectValue {
-      repeated SelectValueOption select_values = 1;
-    }
   }
 
   repeated Value values = 1;

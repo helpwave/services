@@ -4,10 +4,13 @@ import (
 	"common/hwerr"
 	"context"
 	"errors"
+	"fmt"
 	"hwlocale"
 	"reflect"
 	"strings"
 	"telemetry"
+
+	"github.com/google/uuid"
 
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -260,4 +263,10 @@ func pgConnErr(ctx context.Context, connErr *pgconn.ConnectError) error {
 		Err(connErr).
 		Msg("connection issue")
 	return genericStatusError(ctx, "database connection issue")
+}
+
+type RecordNotFoundError uuid.UUID
+
+func (e RecordNotFoundError) Error() string {
+	return fmt.Sprintf("could not find record with id %q", uuid.UUID(e).String())
 }

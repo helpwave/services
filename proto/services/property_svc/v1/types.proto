@@ -4,6 +4,13 @@ package services.property_svc.v1;
 
 option go_package = "gen/services/property-svc/v1";
 
+import "google/protobuf/timestamp.proto";
+
+message Date {
+  // information more precise than date information shall be disregarded by clients
+  google.protobuf.Timestamp date = 1; // @gotags: validate:"required"
+}
+
 enum SubjectType {
   SUBJECT_TYPE_UNSPECIFIED = 0;
   SUBJECT_TYPE_PATIENT = 1;

@@ -2,9 +2,9 @@ package patientPostgresProjection
 
 import (
 	"context"
-	"errors"
 	"hwdb"
 	"hwes"
+	"hwes/errs"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 
@@ -65,7 +65,7 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 	}
 
 	if evt.OrganizationID == nil {
-		return errors.New("onPatientCreated: organizationID missing"), hwutil.PtrTo(esdb.NackActionSkip)
+		return errs.ErrOrganizationMissing, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 	organizationID := *evt.OrganizationID
 

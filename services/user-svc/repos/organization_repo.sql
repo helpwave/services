@@ -47,19 +47,19 @@ DELETE FROM organizations WHERE id=$1;
 INSERT INTO memberships (user_id, organization_id)
 VALUES (@user_id, @organization_id);
 
--- name: ChangeMembershipAdminStatus :exec
-UPDATE memberships
-SET
-	is_admin=TRUE
-WHERE user_id = $1 AND organization_id = $2;
-
 -- name: RemoveMember :exec
 DELETE FROM memberships WHERE user_id=$1 AND organization_id=$2;
 
 -- name: InviteMember :one
-INSERT INTO invitations (email, organization_id, state)
-VALUES (@email, @organization_id, @state)
-RETURNING *;
+WITH inserted_invitation AS (
+	INSERT INTO invitations (email, organization_id, state)
+	VALUES (@email, @organization_id, @state) RETURNING id
+)
+SELECT
+	inserted_invitation.id AS invitation_id,
+	users.id AS user_id
+FROM inserted_invitation
+LEFT JOIN users ON users.email = @email;
 
 -- name: GetInvitations :many
 SELECT *
@@ -130,10 +130,3 @@ UPDATE invitations
 SET
 	state = @state
 WHERE id = @id;
-
--- name: IsAdminInOrganization :one
-SELECT EXISTS (
-	SELECT 1
-	FROM memberships
-	WHERE user_id = @user_id AND organization_id = @organization_id AND is_admin = TRUE
-);

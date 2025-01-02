@@ -13,6 +13,34 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use selectValueOptionDescriptor instead')
+const SelectValueOption$json = {
+  '1': 'SelectValueOption',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+  ],
+};
+
+/// Descriptor for `SelectValueOption`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List selectValueOptionDescriptor = $convert.base64Decode(
+    'ChFTZWxlY3RWYWx1ZU9wdGlvbhIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZR'
+    'IgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRpb24=');
+
+@$core.Deprecated('Use multiSelectValueDescriptor instead')
+const MultiSelectValue$json = {
+  '1': 'MultiSelectValue',
+  '2': [
+    {'1': 'select_values', '3': 1, '4': 3, '5': 11, '6': '.services.property_svc.v1.SelectValueOption', '10': 'selectValues'},
+  ],
+};
+
+/// Descriptor for `MultiSelectValue`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List multiSelectValueDescriptor = $convert.base64Decode(
+    'ChBNdWx0aVNlbGVjdFZhbHVlElAKDXNlbGVjdF92YWx1ZXMYASADKAsyKy5zZXJ2aWNlcy5wcm'
+    '9wZXJ0eV9zdmMudjEuU2VsZWN0VmFsdWVPcHRpb25SDHNlbGVjdFZhbHVlcw==');
+
 @$core.Deprecated('Use attachPropertyValueRequestDescriptor instead')
 const AttachPropertyValueRequest$json = {
   '1': 'AttachPropertyValueRequest',
@@ -158,12 +186,11 @@ const GetAttachedPropertyValuesResponse_Value$json = {
     {'1': 'bool_value', '3': 8, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
     {'1': 'date_value', '3': 9, '4': 1, '5': 11, '6': '.libs.common.v1.Date', '9': 0, '10': 'dateValue'},
     {'1': 'date_time_value', '3': 10, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'dateTimeValue'},
-    {'1': 'select_value', '3': 11, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.SelectValueOption', '9': 0, '10': 'selectValue'},
-    {'1': 'multi_select_value', '3': 12, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue', '9': 0, '10': 'multiSelectValue'},
+    {'1': 'select_value', '3': 11, '4': 1, '5': 11, '6': '.services.property_svc.v1.SelectValueOption', '9': 0, '10': 'selectValue'},
+    {'1': 'multi_select_value', '3': 12, '4': 1, '5': 11, '6': '.services.property_svc.v1.MultiSelectValue', '9': 0, '10': 'multiSelectValue'},
     {'1': 'property_consistency', '3': 13, '4': 1, '5': 9, '10': 'propertyConsistency'},
     {'1': 'value_consistency', '3': 14, '4': 1, '5': 9, '9': 2, '10': 'valueConsistency', '17': true},
   ],
-  '3': [GetAttachedPropertyValuesResponse_Value_SelectValueOption$json, GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json],
   '8': [
     {'1': 'value'},
     {'1': '_description'},
@@ -171,29 +198,11 @@ const GetAttachedPropertyValuesResponse_Value$json = {
   ],
 };
 
-@$core.Deprecated('Use getAttachedPropertyValuesResponseDescriptor instead')
-const GetAttachedPropertyValuesResponse_Value_SelectValueOption$json = {
-  '1': 'SelectValueOption',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
-  ],
-};
-
-@$core.Deprecated('Use getAttachedPropertyValuesResponseDescriptor instead')
-const GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json = {
-  '1': 'MultiSelectValue',
-  '2': [
-    {'1': 'select_values', '3': 1, '4': 3, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.SelectValueOption', '10': 'selectValues'},
-  ],
-};
-
 /// Descriptor for `GetAttachedPropertyValuesResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2USWQoGdmFsdWVzGAEgAygLMkEuc2'
     'VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNwb25z'
-    'ZS5WYWx1ZVIGdmFsdWVzGqkICgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcGVydH'
+    'ZS5WYWx1ZVIGdmFsdWVzGu4FCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcGVydH'
     'lJZBJCCgpmaWVsZF90eXBlGAIgASgOMiMuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkZpZWxk'
     'VHlwZVIJZmllbGRUeXBlEhIKBG5hbWUYAyABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb24YBCABKA'
     'lIAVILZGVzY3JpcHRpb26IAQESHwoLaXNfYXJjaGl2ZWQYBSABKAhSCmlzQXJjaGl2ZWQSHwoK'
@@ -201,16 +210,10 @@ final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $conve
     '51bWJlclZhbHVlEh8KCmJvb2xfdmFsdWUYCCABKAhIAFIJYm9vbFZhbHVlEjUKCmRhdGVfdmFs'
     'dWUYCSABKAsyFC5saWJzLmNvbW1vbi52MS5EYXRlSABSCWRhdGVWYWx1ZRJECg9kYXRlX3RpbW'
     'VfdmFsdWUYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSABSDWRhdGVUaW1lVmFs'
-    'dWUSeAoMc2VsZWN0X3ZhbHVlGAsgASgLMlMuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldE'
-    'F0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNwb25zZS5WYWx1ZS5TZWxlY3RWYWx1ZU9wdGlvbkgA'
-    'UgtzZWxlY3RWYWx1ZRKCAQoSbXVsdGlfc2VsZWN0X3ZhbHVlGAwgASgLMlIuc2VydmljZXMucH'
-    'JvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNwb25zZS5WYWx1ZS5N'
-    'dWx0aVNlbGVjdFZhbHVlSABSEG11bHRpU2VsZWN0VmFsdWUSMQoUcHJvcGVydHlfY29uc2lzdG'
-    'VuY3kYDSABKAlSE3Byb3BlcnR5Q29uc2lzdGVuY3kSMAoRdmFsdWVfY29uc2lzdGVuY3kYDiAB'
-    'KAlIAlIQdmFsdWVDb25zaXN0ZW5jeYgBARpZChFTZWxlY3RWYWx1ZU9wdGlvbhIOCgJpZBgBIA'
-    'EoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3Jp'
-    'cHRpb24ajAEKEE11bHRpU2VsZWN0VmFsdWUSeAoNc2VsZWN0X3ZhbHVlcxgBIAMoCzJTLnNlcn'
-    'ZpY2VzLnByb3BlcnR5X3N2Yy52MS5HZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2Uu'
-    'VmFsdWUuU2VsZWN0VmFsdWVPcHRpb25SDHNlbGVjdFZhbHVlc0IHCgV2YWx1ZUIOCgxfZGVzY3'
-    'JpcHRpb25CFAoSX3ZhbHVlX2NvbnNpc3RlbmN5');
+    'dWUSUAoMc2VsZWN0X3ZhbHVlGAsgASgLMisuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLlNlbG'
+    'VjdFZhbHVlT3B0aW9uSABSC3NlbGVjdFZhbHVlEloKEm11bHRpX3NlbGVjdF92YWx1ZRgMIAEo'
+    'CzIqLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5NdWx0aVNlbGVjdFZhbHVlSABSEG11bHRpU2'
+    'VsZWN0VmFsdWUSMQoUcHJvcGVydHlfY29uc2lzdGVuY3kYDSABKAlSE3Byb3BlcnR5Q29uc2lz'
+    'dGVuY3kSMAoRdmFsdWVfY29uc2lzdGVuY3kYDiABKAlIAlIQdmFsdWVDb25zaXN0ZW5jeYgBAU'
+    'IHCgV2YWx1ZUIOCgxfZGVzY3JpcHRpb25CFAoSX3ZhbHVlX2NvbnNpc3RlbmN5');
 

@@ -2,11 +2,11 @@ package spiceDBProjection
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
+	"hwes/errs"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 
@@ -59,7 +59,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	}
 
 	if evt.OrganizationID == nil {
-		return errors.New("organization is missing from event"), hwutil.PtrTo(esdb.NackActionPark)
+		return errs.ErrOrganizationMissing, hwutil.PtrTo(esdb.NackActionPark)
 	}
 	organizationID := *evt.OrganizationID
 
