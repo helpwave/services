@@ -36,7 +36,7 @@ message GetPatientResponse {
   string id = 1;
   string human_readable_identifier = 2;
   string notes = 3;
-  optional libs.common.v1.Gender gender = 10;
+  libs.common.v1.Gender gender = 10;
   optional libs.common.v1.Date date_of_birth = 11;
 
 
@@ -71,7 +71,7 @@ message GetPatientByBedResponse {
   string id = 1;
   string human_readable_identifier = 2;
   string notes = 3;
-  optional libs.common.v1.Gender gender = 6;
+  libs.common.v1.Gender gender = 6;
   optional libs.common.v1.Date date_of_birth = 7;
 
   string bed_id = 4;
@@ -93,7 +93,7 @@ message GetPatientsByWardResponse {
     string id = 1;
     string human_readable_identifier = 2;
     string notes = 3;
-    optional libs.common.v1.Gender gender = 6;
+    libs.common.v1.Gender gender = 6;
     optional libs.common.v1.Date date_of_birth = 7;
     optional string bed_id = 4;
 
@@ -146,7 +146,7 @@ message GetPatientDetailsResponse {
   string id = 1;
   string human_readable_identifier = 2;
   string notes = 3;
-  optional libs.common.v1.Gender gender = 9;
+  libs.common.v1.Gender gender = 9;
   optional libs.common.v1.Date date_of_birth = 10;
 
   repeated Task tasks = 4;
@@ -218,7 +218,7 @@ message GetPatientListResponse {
     string human_readable_identifier = 2;
 
     string notes = 5;
-    optional libs.common.v1.Gender gender = 8;
+    libs.common.v1.Gender gender = 8;
     optional libs.common.v1.Date date_of_birth = 9;
 
     Room room = 3;

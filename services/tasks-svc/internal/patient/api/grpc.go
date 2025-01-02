@@ -4,7 +4,9 @@ import (
 	"common"
 	"common/hwerr"
 	"context"
+	v1 "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
@@ -133,9 +135,13 @@ func (s *PatientGrpcService) GetPatient(
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
-		Room:                    roomRes,
-		Bed:                     bedRes,
-		Consistency:             patient.Consistency,
+		Gender:                  patient.Gender,
+		DateOfBirth: hwutil.MapNillable(patient.DateOfBirth, func(dob time.Time) v1.Date {
+			return v1.Date{Date: timestamppb.New(hwutil.TruncateTimeToDay(dob))}
+		}),
+		Room:        roomRes,
+		Bed:         bedRes,
+		Consistency: patient.Consistency,
 	}, nil
 }
 
@@ -186,8 +192,12 @@ func (s *PatientGrpcService) GetPatientsByWard(
 					Id:                      patient.ID.String(),
 					HumanReadableIdentifier: patient.HumanReadableIdentifier,
 					Notes:                   patient.Notes,
-					BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
-					Consistency:             patient.Consistency,
+					Gender:                  patient.Gender,
+					DateOfBirth: hwutil.MapNillable(patient.DateOfBirth, func(dob time.Time) v1.Date {
+						return v1.Date{Date: timestamppb.New(hwutil.TruncateTimeToDay(dob))}
+					}),
+					BedId:       hwutil.NullUUIDToStringPtr(patient.BedID),
+					Consistency: patient.Consistency,
 				}
 			}),
 	}, nil
@@ -259,11 +269,15 @@ func (s *PatientGrpcService) GetPatientDetails(
 		Id:                      patientWithDetails.ID.String(),
 		HumanReadableIdentifier: patientWithDetails.HumanReadableIdentifier,
 		Notes:                   patientWithDetails.Notes,
-		Tasks:                   taskResponse,
-		IsDischarged:            patientWithDetails.IsDischarged,
-		Room:                    roomResponse,
-		Bed:                     bedResponse,
-		Consistency:             patientWithDetails.Consistency,
+		Gender:                  patientWithDetails.Gender,
+		DateOfBirth: hwutil.MapNillable(patientWithDetails.DateOfBirth, func(dob time.Time) v1.Date {
+			return v1.Date{Date: timestamppb.New(hwutil.TruncateTimeToDay(dob))}
+		}),
+		Tasks:        taskResponse,
+		Room:         roomResponse,
+		Bed:          bedResponse,
+		IsDischarged: patientWithDetails.IsDischarged,
+		Consistency:  patientWithDetails.Consistency,
 	}, nil
 }
 
@@ -344,11 +358,15 @@ func (s *PatientGrpcService) GetPatientList(
 			res = append(res, &pb.GetPatientListResponse_Patient{
 				Id:                      patientDetails.ID.String(),
 				HumanReadableIdentifier: patientDetails.HumanReadableIdentifier,
-				Room:                    roomResponse,
-				Bed:                     bedResponse,
 				Notes:                   patientDetails.Notes,
-				Tasks:                   taskResponse,
-				Consistency:             patientDetails.Consistency,
+				Gender:                  patientDetails.Gender,
+				DateOfBirth: hwutil.MapNillable(patientDetails.DateOfBirth, func(dob time.Time) v1.Date {
+					return v1.Date{Date: timestamppb.New(hwutil.TruncateTimeToDay(dob))}
+				}),
+				Room:        roomResponse,
+				Bed:         bedResponse,
+				Tasks:       taskResponse,
+				Consistency: patientDetails.Consistency,
 			})
 		}
 

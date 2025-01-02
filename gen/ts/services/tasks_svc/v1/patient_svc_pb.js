@@ -1767,8 +1767,8 @@ proto.services.tasks_svc.v1.GetPatientResponse.serializeBinaryToWriter = functio
       f
     );
   }
-  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 10));
-  if (f != null) {
+  f = message.getGender();
+  if (f !== 0.0) {
     writer.writeEnum(
       10,
       f
@@ -2286,25 +2286,7 @@ proto.services.tasks_svc.v1.GetPatientResponse.prototype.getGender = function() 
  * @return {!proto.services.tasks_svc.v1.GetPatientResponse} returns this
  */
 proto.services.tasks_svc.v1.GetPatientResponse.prototype.setGender = function(value) {
-  return jspb.Message.setField(this, 10, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.services.tasks_svc.v1.GetPatientResponse} returns this
- */
-proto.services.tasks_svc.v1.GetPatientResponse.prototype.clearGender = function() {
-  return jspb.Message.setField(this, 10, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.services.tasks_svc.v1.GetPatientResponse.prototype.hasGender = function() {
-  return jspb.Message.getField(this, 10) != null;
+  return jspb.Message.setProto3EnumField(this, 10, value);
 };
 
 
@@ -2721,8 +2703,8 @@ proto.services.tasks_svc.v1.GetPatientByBedResponse.serializeBinaryToWriter = fu
       f
     );
   }
-  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 6));
-  if (f != null) {
+  f = message.getGender();
+  if (f !== 0.0) {
     writer.writeEnum(
       6,
       f
@@ -2821,25 +2803,7 @@ proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.getGender = functi
  * @return {!proto.services.tasks_svc.v1.GetPatientByBedResponse} returns this
  */
 proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.setGender = function(value) {
-  return jspb.Message.setField(this, 6, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.services.tasks_svc.v1.GetPatientByBedResponse} returns this
- */
-proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.clearGender = function() {
-  return jspb.Message.setField(this, 6, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.hasGender = function() {
-  return jspb.Message.getField(this, 6) != null;
+  return jspb.Message.setProto3EnumField(this, 6, value);
 };
 
 
@@ -3322,8 +3286,8 @@ proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.serializeBinaryToW
       f
     );
   }
-  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 6));
-  if (f != null) {
+  f = message.getGender();
+  if (f !== 0.0) {
     writer.writeEnum(
       6,
       f
@@ -3422,25 +3386,7 @@ proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.getGende
  * @return {!proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient} returns this
  */
 proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.setGender = function(value) {
-  return jspb.Message.setField(this, 6, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient} returns this
- */
-proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.clearGender = function() {
-  return jspb.Message.setField(this, 6, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient.prototype.hasGender = function() {
-  return jspb.Message.getField(this, 6) != null;
+  return jspb.Message.setProto3EnumField(this, 6, value);
 };
 
 
@@ -4854,8 +4800,8 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.serializeBinaryToWriter = 
       f
     );
   }
-  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 9));
-  if (f != null) {
+  f = message.getGender();
+  if (f !== 0.0) {
     writer.writeEnum(
       9,
       f
@@ -5996,25 +5942,7 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.getGender = func
  * @return {!proto.services.tasks_svc.v1.GetPatientDetailsResponse} returns this
  */
 proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.setGender = function(value) {
-  return jspb.Message.setField(this, 9, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.services.tasks_svc.v1.GetPatientDetailsResponse} returns this
- */
-proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.clearGender = function() {
-  return jspb.Message.setField(this, 9, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.services.tasks_svc.v1.GetPatientDetailsResponse.prototype.hasGender = function() {
-  return jspb.Message.getField(this, 9) != null;
+  return jspb.Message.setProto3EnumField(this, 9, value);
 };
 
 
@@ -7088,8 +7016,8 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Patient.serializeBinaryToWrit
       f
     );
   }
-  f = /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getField(message, 8));
-  if (f != null) {
+  f = message.getGender();
+  if (f !== 0.0) {
     writer.writeEnum(
       8,
       f
@@ -7205,25 +7133,7 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.getGender =
  * @return {!proto.services.tasks_svc.v1.GetPatientListResponse.Patient} returns this
  */
 proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.setGender = function(value) {
-  return jspb.Message.setField(this, 8, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.services.tasks_svc.v1.GetPatientListResponse.Patient} returns this
- */
-proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.clearGender = function() {
-  return jspb.Message.setField(this, 8, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.services.tasks_svc.v1.GetPatientListResponse.Patient.prototype.hasGender = function() {
-  return jspb.Message.getField(this, 8) != null;
+  return jspb.Message.setProto3EnumField(this, 8, value);
 };
 
 

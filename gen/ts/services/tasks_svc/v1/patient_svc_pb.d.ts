@@ -108,8 +108,6 @@ export class GetPatientResponse extends jspb.Message {
 
   getGender(): libs_common_v1_types_pb.Gender;
   setGender(value: libs_common_v1_types_pb.Gender): GetPatientResponse;
-  hasGender(): boolean;
-  clearGender(): GetPatientResponse;
 
   getDateOfBirth(): libs_common_v1_types_pb.Date | undefined;
   setDateOfBirth(value?: libs_common_v1_types_pb.Date): GetPatientResponse;
@@ -142,7 +140,7 @@ export namespace GetPatientResponse {
     id: string,
     humanReadableIdentifier: string,
     notes: string,
-    gender?: libs_common_v1_types_pb.Gender,
+    gender: libs_common_v1_types_pb.Gender,
     dateOfBirth?: libs_common_v1_types_pb.Date.AsObject,
     room?: GetPatientResponse.Room.AsObject,
     bed?: GetPatientResponse.Bed.AsObject,
@@ -207,11 +205,6 @@ export namespace GetPatientResponse {
   }
 
 
-  export enum GenderCase { 
-    _GENDER_NOT_SET = 0,
-    GENDER = 10,
-  }
-
   export enum DateOfBirthCase { 
     _DATE_OF_BIRTH_NOT_SET = 0,
     DATE_OF_BIRTH = 11,
@@ -258,8 +251,6 @@ export class GetPatientByBedResponse extends jspb.Message {
 
   getGender(): libs_common_v1_types_pb.Gender;
   setGender(value: libs_common_v1_types_pb.Gender): GetPatientByBedResponse;
-  hasGender(): boolean;
-  clearGender(): GetPatientByBedResponse;
 
   getDateOfBirth(): libs_common_v1_types_pb.Date | undefined;
   setDateOfBirth(value?: libs_common_v1_types_pb.Date): GetPatientByBedResponse;
@@ -285,15 +276,10 @@ export namespace GetPatientByBedResponse {
     id: string,
     humanReadableIdentifier: string,
     notes: string,
-    gender?: libs_common_v1_types_pb.Gender,
+    gender: libs_common_v1_types_pb.Gender,
     dateOfBirth?: libs_common_v1_types_pb.Date.AsObject,
     bedId: string,
     consistency: string,
-  }
-
-  export enum GenderCase { 
-    _GENDER_NOT_SET = 0,
-    GENDER = 6,
   }
 
   export enum DateOfBirthCase { 
@@ -351,8 +337,6 @@ export namespace GetPatientsByWardResponse {
 
     getGender(): libs_common_v1_types_pb.Gender;
     setGender(value: libs_common_v1_types_pb.Gender): Patient;
-    hasGender(): boolean;
-    clearGender(): Patient;
 
     getDateOfBirth(): libs_common_v1_types_pb.Date | undefined;
     setDateOfBirth(value?: libs_common_v1_types_pb.Date): Patient;
@@ -380,15 +364,10 @@ export namespace GetPatientsByWardResponse {
       id: string,
       humanReadableIdentifier: string,
       notes: string,
-      gender?: libs_common_v1_types_pb.Gender,
+      gender: libs_common_v1_types_pb.Gender,
       dateOfBirth?: libs_common_v1_types_pb.Date.AsObject,
       bedId?: string,
       consistency: string,
-    }
-
-    export enum GenderCase { 
-      _GENDER_NOT_SET = 0,
-      GENDER = 6,
     }
 
     export enum DateOfBirthCase { 
@@ -570,8 +549,6 @@ export class GetPatientDetailsResponse extends jspb.Message {
 
   getGender(): libs_common_v1_types_pb.Gender;
   setGender(value: libs_common_v1_types_pb.Gender): GetPatientDetailsResponse;
-  hasGender(): boolean;
-  clearGender(): GetPatientDetailsResponse;
 
   getDateOfBirth(): libs_common_v1_types_pb.Date | undefined;
   setDateOfBirth(value?: libs_common_v1_types_pb.Date): GetPatientDetailsResponse;
@@ -612,7 +589,7 @@ export namespace GetPatientDetailsResponse {
     id: string,
     humanReadableIdentifier: string,
     notes: string,
-    gender?: libs_common_v1_types_pb.Gender,
+    gender: libs_common_v1_types_pb.Gender,
     dateOfBirth?: libs_common_v1_types_pb.Date.AsObject,
     tasksList: Array<GetPatientDetailsResponse.Task.AsObject>,
     room?: GetPatientDetailsResponse.Room.AsObject,
@@ -766,11 +743,6 @@ export namespace GetPatientDetailsResponse {
   }
 
 
-  export enum GenderCase { 
-    _GENDER_NOT_SET = 0,
-    GENDER = 9,
-  }
-
   export enum DateOfBirthCase { 
     _DATE_OF_BIRTH_NOT_SET = 0,
     DATE_OF_BIRTH = 10,
@@ -913,8 +885,6 @@ export namespace GetPatientListResponse {
 
     getGender(): libs_common_v1_types_pb.Gender;
     setGender(value: libs_common_v1_types_pb.Gender): Patient;
-    hasGender(): boolean;
-    clearGender(): Patient;
 
     getDateOfBirth(): libs_common_v1_types_pb.Date | undefined;
     setDateOfBirth(value?: libs_common_v1_types_pb.Date): Patient;
@@ -952,17 +922,12 @@ export namespace GetPatientListResponse {
       id: string,
       humanReadableIdentifier: string,
       notes: string,
-      gender?: libs_common_v1_types_pb.Gender,
+      gender: libs_common_v1_types_pb.Gender,
       dateOfBirth?: libs_common_v1_types_pb.Date.AsObject,
       room?: GetPatientListResponse.Room.AsObject,
       bed?: GetPatientListResponse.Bed.AsObject,
       tasksList: Array<GetPatientListResponse.Task.AsObject>,
       consistency: string,
-    }
-
-    export enum GenderCase { 
-      _GENDER_NOT_SET = 0,
-      GENDER = 8,
     }
 
     export enum DateOfBirthCase { 
