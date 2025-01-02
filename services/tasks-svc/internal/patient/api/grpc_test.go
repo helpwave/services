@@ -7,9 +7,12 @@ import (
 	"decaying_lru"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz/test"
+	"hwdb"
 	hwes_test "hwes/test"
 	"testing"
 	"time"
+
+	"github.com/pashagolub/pgxmock/v4"
 
 	"github.com/go-redis/redismock/v9"
 	"github.com/google/uuid"
@@ -33,14 +36,25 @@ func server() (context.Context, pb.PatientServiceClient, func()) {
 
 	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
+	dbMock, err := pgxmock.NewPool()
+	if err != nil {
+		panic(err)
+	}
+	ctx = hwdb.WithDB(ctx, dbMock)
+
 	// Start Server
-	grpcServer := grpc.NewServer(common.DefaultServerOptions()...)
+	grpcServer := grpc.NewServer(common.DefaultServerOptions(ctx)...)
 	pb.RegisterPatientServiceServer(grpcServer, patientGrpcService)
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
 	client := pb.NewPatientServiceClient(conn)
 
-	return ctx, client, closer
+	teardown := func() {
+		dbMock.Close()
+		closer()
+	}
+
+	return ctx, client, teardown
 }
 
 func setup(t *testing.T) (
@@ -69,6 +83,8 @@ func setup(t *testing.T) (
 }
 
 func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
@@ -86,6 +102,8 @@ func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
 }
 
 func TestPatientGrpcService_CreatePatient(t *testing.T) {
+	t.Parallel()
+
 	// Setup
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
@@ -112,6 +130,8 @@ func TestPatientGrpcService_CreatePatient(t *testing.T) {
 }
 
 func TestPatientGrpcService_UpdatePatient(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
@@ -145,6 +165,8 @@ func TestPatientGrpcService_UpdatePatient(t *testing.T) {
 }
 
 func TestPatientGrpcService_AssignBed_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
@@ -162,6 +184,8 @@ func TestPatientGrpcService_AssignBed_Validation(t *testing.T) {
 }
 
 func TestPatientGrpcService_UnassignBed_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
@@ -179,6 +203,8 @@ func TestPatientGrpcService_UnassignBed_Validation(t *testing.T) {
 }
 
 func TestPatientGrpcService_DischargePatient_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
@@ -196,6 +222,8 @@ func TestPatientGrpcService_DischargePatient_Validation(t *testing.T) {
 }
 
 func TestPatientGrpcService_ReadmitPatient_Validation(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
@@ -213,6 +241,8 @@ func TestPatientGrpcService_ReadmitPatient_Validation(t *testing.T) {
 }
 
 func TestPatientGrpcService_DeletePatient(t *testing.T) {
+	t.Parallel()
+
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
 

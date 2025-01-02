@@ -33,7 +33,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 ) GetRelevantPropertyValuesQueryHandler {
 	return func(ctx context.Context, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error) {
 		viewHandlers := vh.NewPropertyViewHandlers(as, authz)
-		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
+		propertyValueRepo := property_value_repo.New(hwdb.MustGetDB(ctx))
 
 		subjectID, err := matcher.GetSubjectID()
 		if err != nil {

@@ -8,15 +8,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/prometheus/client_golang/prometheus/promauto"
-
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
-
-var prometheusRegistry *prometheus.Registry
 
 func SetupLogging(mode, rawLevel, service, version string) {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
@@ -49,12 +45,12 @@ func SetupLogging(mode, rawLevel, service, version string) {
 	log.Info().Msg("Logging is set up")
 }
 
-func startMetricsServer(ctx context.Context, addr string, shutdown func(error)) {
+func startMetricsServer(ctx context.Context, reg *prometheus.Registry, addr string, shutdown func(error)) {
 	server := &http.Server{
 		Addr: addr,
 		Handler: promhttp.InstrumentMetricHandler(
-			PrometheusRegistry(),
-			promhttp.HandlerFor(PrometheusRegistry(), promhttp.HandlerOpts{}),
+			reg,
+			promhttp.HandlerFor(reg, promhttp.HandlerOpts{}),
 		),
 		ReadHeaderTimeout: time.Second * 30, // prevent potential slowloris attack
 	}
@@ -86,10 +82,11 @@ func startMetricsServer(ctx context.Context, addr string, shutdown func(error)) 
 }
 
 // SetupMetrics will start a new http server for prometheus to scrape from
-func SetupMetrics(ctx context.Context, shutdown func(error)) {
+func SetupMetrics(ctx context.Context, shutdown func(error)) context.Context {
 	// create new prometheus registry, we do not use the global default one,
 	// as it causes problems with tests
-	prometheusRegistry = prometheus.NewRegistry()
+	prometheusRegistry := prometheus.NewRegistry()
+	ctx = WithPrometheusRegistry(ctx, prometheusRegistry)
 
 	l := log.Ctx(ctx)
 
@@ -97,40 +94,30 @@ func SetupMetrics(ctx context.Context, shutdown func(error)) {
 
 	if addr == "" {
 		l.Warn().Msg("METRICS_ADDR not set, will not export metrics")
-		return
+		return ctx
 	}
 
 	l.Info().Str("addr", addr).Msg("starting metrics server")
 
-	go startMetricsServer(ctx, addr, shutdown)
+	go startMetricsServer(ctx, prometheusRegistry, addr, shutdown)
+	return ctx
 }
 
-func PrometheusRegistry() *prometheus.Registry {
-	return prometheusRegistry
+type promRegKey struct{}
+
+func WithPrometheusRegistry(ctx context.Context, registry *prometheus.Registry) context.Context {
+	return context.WithValue(ctx, promRegKey{}, registry)
 }
 
-// LazyCounter prevents access to PrometheusRegistry, before it is initialized
-// by creating the counter only when it is needed
-type LazyCounter struct {
-	opts    prometheus.CounterOpts
-	counter *prometheus.Counter
-}
+var ErrPrometheusRegistryMissing = errors.New("PrometheusRegistry called, but no (valid) registry in context")
 
-func NewLazyCounter(opts prometheus.CounterOpts) LazyCounter {
-	return LazyCounter{
-		opts:    opts,
-		counter: nil,
+func PrometheusRegistry(ctx context.Context) *prometheus.Registry {
+	value := ctx.Value(promRegKey{})
+	asReg, ok := value.(*prometheus.Registry)
+
+	// we allow nil (which will not be ok), else panic
+	if value != nil && !ok {
+		panic(ErrPrometheusRegistryMissing)
 	}
-}
-
-func (lc *LazyCounter) Counter() prometheus.Counter {
-	if lc.counter != nil {
-		return *lc.counter
-	}
-	lc.counter = hwutil.PtrTo(promauto.With(prometheusRegistry).NewCounter(lc.opts))
-	return *lc.counter
-}
-
-func (lc *LazyCounter) Ensure() {
-	lc.Counter()
+	return asReg
 }

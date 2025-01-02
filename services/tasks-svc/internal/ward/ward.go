@@ -57,7 +57,7 @@ func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 
 func (s *ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) (*pb.CreateWardResponse, error) {
 	log := zlog.Ctx(ctx)
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := ward_repo.New(hwdb.MustGetDB(ctx))
 
 	// check permissions
 	user := commonPerm.UserFromCtx(ctx)
@@ -116,7 +116,7 @@ func (s *ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardReques
 }
 
 func (s *ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := ward_repo.New(hwdb.MustGetDB(ctx))
 
 	// parse input
 	id, err := uuid.Parse(req.GetId())
@@ -150,7 +150,7 @@ func (s *ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*p
 }
 
 func (s *ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := ward_repo.New(hwdb.MustGetDB(ctx))
 
 	wards, err := wardRepo.GetWards(ctx)
 	err = hwdb.Error(ctx, err)
@@ -186,7 +186,7 @@ func (s *ServiceServer) GetRecentWards(
 	ctx context.Context,
 	_ *pb.GetRecentWardsRequest,
 ) (*pb.GetRecentWardsResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := ward_repo.New(hwdb.MustGetDB(ctx))
 	log := zlog.Ctx(ctx)
 
 	recentWardIDsStr, err := tracking.GetRecentWardsForUser(ctx)
@@ -247,7 +247,7 @@ func (s *ServiceServer) GetRecentWards(
 }
 
 func (s *ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := ward_repo.New(hwdb.MustGetDB(ctx))
 
 	// parse input
 	id, err := uuid.Parse(req.GetId())
@@ -293,7 +293,7 @@ func (s *ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardReques
 }
 
 func (s *ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := ward_repo.New(hwdb.MustGetDB(ctx))
 
 	// parse input
 	wardID, err := uuid.Parse(req.GetId())
@@ -350,7 +350,7 @@ func (s *ServiceServer) GetWardOverviews(
 	ctx context.Context,
 	_ *pb.GetWardOverviewsRequest,
 ) (*pb.GetWardOverviewsResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := ward_repo.New(hwdb.MustGetDB(ctx))
 
 	rows, err := wardRepo.GetWardsWithCounts(ctx, ward_repo.GetWardsWithCountsParams{
 		StatusTodo:       int32(pb.TaskStatus_TASK_STATUS_TODO),
@@ -395,7 +395,7 @@ func (s *ServiceServer) GetWardDetails(
 	ctx context.Context,
 	req *pb.GetWardDetailsRequest,
 ) (*pb.GetWardDetailsResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
+	wardRepo := ward_repo.New(hwdb.MustGetDB(ctx))
 
 	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {

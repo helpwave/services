@@ -42,10 +42,10 @@ func setup() (ctx context.Context, projection *Projection, dbMock pgxmock.PgxPoo
 	if err != nil {
 		panic(err)
 	}
-	hwdb.TestingSetDB(dbMock)
+	ctx = hwdb.WithDB(context.Background(), dbMock)
 	teardown = dbMock.Close
 
-	projection = NewProjection(esClientStub{}, "testing")
+	projection = NewProjection(ctx, esClientStub{}, "testing")
 
 	ctx = context.Background()
 
@@ -53,6 +53,8 @@ func setup() (ctx context.Context, projection *Projection, dbMock pgxmock.PgxPoo
 }
 
 func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPath(t *testing.T) {
+	t.Parallel()
+
 	ctx, projection, dbMock, teardown := setup()
 	defer teardown()
 
@@ -105,6 +107,8 @@ func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPat
 }
 
 func TestPropertyViewPropertyRulesProjection_Update_GreenPath(t *testing.T) {
+	t.Parallel()
+
 	ctx, projection, dbMock, teardown := setup()
 	defer teardown()
 
@@ -171,6 +175,8 @@ func TestPropertyViewPropertyRulesProjection_Update_GreenPath(t *testing.T) {
 }
 
 func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_GreenPath(t *testing.T) {
+	t.Parallel()
+
 	ctx, projection, dbMock, teardown := setup()
 	defer teardown()
 
@@ -223,6 +229,8 @@ func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_Green
 }
 
 func TestPropertyViewPropertyRulesProjection_Create_InvalidPropertyMatcher(t *testing.T) {
+	t.Parallel()
+
 	ctx, projection, _, teardown := setup()
 	defer teardown()
 

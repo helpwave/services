@@ -28,7 +28,7 @@ func NewGetTaskWithPatientByIDQueryHandler(authz hwauthz.AuthZ) GetTaskWithPatie
 			return nil, err
 		}
 
-		taskRepo := task_repo.New(hwdb.GetDB())
+		taskRepo := task_repo.New(hwdb.MustGetDB(ctx))
 
 		rows, err := taskRepo.GetTaskWithPatientById(ctx, taskID)
 		if err := hwdb.Error(ctx, err); err != nil {

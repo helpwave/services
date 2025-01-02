@@ -103,6 +103,8 @@ func NewUsernameUpdatedEvent(a hwes.Aggregate, previousUsername, username string
 }
 
 func TestIntegration(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	aggregateStore := test.NewAggregateStore()
 
@@ -154,6 +156,8 @@ func TestIntegration(t *testing.T) {
 var ErrTest = errors.New("test error")
 
 func TestAggregateBase_RegisterEventListener_HandleEvent(t *testing.T) {
+	t.Parallel()
+
 	aggregate := NewUserAggregate(uuid.New())
 
 	userInvalidEvent, err := NewUserInvalidEvent(aggregate)

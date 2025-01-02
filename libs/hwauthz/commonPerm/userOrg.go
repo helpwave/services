@@ -28,3 +28,9 @@ func OrganizationFromCtx(ctx context.Context) Organization {
 	organizationID := auth.MustGetOrganizationID(ctx)
 	return Organization(organizationID)
 }
+
+const (
+	OrganizationMember = "member"
+	OrganizationLeader = "leader"
+	UserOrganization   = "organization"
+)

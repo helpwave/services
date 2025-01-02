@@ -11,6 +11,8 @@ import (
 )
 
 func TestEventWithUserID(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	u := uuid.New()
 	e := hwes.Event{}
@@ -25,6 +27,8 @@ func TestEventWithUserID(t *testing.T) {
 }
 
 func TestEventWithOrganizationID(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	u := uuid.New()
 	e := hwes.Event{}

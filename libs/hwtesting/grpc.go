@@ -39,21 +39,27 @@ const (
 	FakeTokenOrganization = "3b25c6f5-4705-4074-9fc6-a50c28eba406" //nolint:gosec
 )
 
-func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
+func GetFakeTokenCredentials(subOverride, orgOverride string) InsecureBearerToken {
+	sub := FakeTokenUser
+	if subOverride != "" {
+		sub = subOverride
+	}
+
+	org := FakeTokenOrganization
+	if orgOverride != "" {
+		org = orgOverride
+	}
+
 	// README's fake token
 	m := map[string]interface{}{
-		"sub":                FakeTokenUser,
+		"sub":                sub,
 		"email":              "testine.test@helpwave.de",
 		"name":               "Testine Test",
 		"preferred_username": "testine.test",
 		"organization": map[string]interface{}{
-			"id":   FakeTokenOrganization,
+			"id":   org,
 			"name": "helpwave test",
 		},
-	}
-
-	if subOverride != "" {
-		m["sub"] = subOverride
 	}
 
 	bytes, err := json.Marshal(m)
@@ -65,10 +71,10 @@ func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
 	return InsecureBearerToken(dist)
 }
 
-func GetGrpcConn(subOverride string) *grpc.ClientConn {
+func GetGrpcConn(subOverride, orgOverride string) *grpc.ClientConn {
 	conn, err := grpc.NewClient(
 		common.ResolveAddrFromEnv(),
-		grpc.WithPerRPCCredentials(GetFakeTokenCredentials(subOverride)),
+		grpc.WithPerRPCCredentials(GetFakeTokenCredentials(subOverride, orgOverride)),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {

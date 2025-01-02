@@ -35,7 +35,6 @@ linters:
     - godox # TODO
     - nestif # TODO
     - nlreturn # TODO
-    - paralleltest # TODO
     - protogetter # TODO
     - revive # TODO
     - stylecheck # TODO
