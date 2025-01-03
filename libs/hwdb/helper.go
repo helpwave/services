@@ -44,6 +44,20 @@ func TimeToDate(src time.Time) pgtype.Date {
 	return pgtype.Date{Time: src.UTC(), Valid: true}
 }
 
+func DateToTime(date pgtype.Date) *time.Time {
+	if date.Valid {
+		return &date.Time
+	}
+	return nil
+}
+
+func TimePtrToDate(src *time.Time) pgtype.Date {
+	if src == nil {
+		return pgtype.Date{}
+	}
+	return TimeToDate(*src)
+}
+
 func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 	if src == nil {
 		return pgtype.Timestamp{Valid: false}

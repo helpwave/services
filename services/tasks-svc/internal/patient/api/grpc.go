@@ -4,6 +4,7 @@ import (
 	"common"
 	"common/hwerr"
 	"context"
+	v1 "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
@@ -11,6 +12,9 @@ import (
 	"hwdb/locale"
 	"hwes"
 	"hwutil"
+	"time"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -54,8 +58,14 @@ func (s *PatientGrpcService) CreatePatient(
 	log := zlog.Ctx(ctx)
 	patientID := uuid.New()
 
+	var dateOfBirth *time.Time
+	if dob := req.GetDateOfBirth(); dob != nil {
+		asTime := dob.GetDate().AsTime()
+		dateOfBirth = &asTime
+	}
+
 	consistency, err := s.handlers.Commands.V1.CreatePatient(
-		ctx, patientID, req.GetHumanReadableIdentifier(), req.Notes)
+		ctx, patientID, req.GetHumanReadableIdentifier(), req.Notes, req.GetGender(), dateOfBirth)
 	if err != nil {
 		return nil, err
 	}
@@ -68,6 +78,16 @@ func (s *PatientGrpcService) CreatePatient(
 		Id:          patientID.String(),
 		Consistency: consistency.String(),
 	}, nil
+}
+
+// formatDateOfBirth takes a dob column values and yields a suitable proto message
+func formatDateOfBirth(dob *time.Time) *v1.Date {
+	if dob == nil {
+		return nil
+	}
+	return &v1.Date{
+		Date: timestamppb.New(hwutil.TruncateTimeToDay(*dob)),
+	}
 }
 
 func (s *PatientGrpcService) GetPatient(
@@ -126,6 +146,8 @@ func (s *PatientGrpcService) GetPatient(
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
+		Gender:                  patient.Gender,
+		DateOfBirth:             formatDateOfBirth(patient.DateOfBirth),
 		Room:                    roomRes,
 		Bed:                     bedRes,
 		Consistency:             patient.Consistency,
@@ -153,6 +175,8 @@ func (s *PatientGrpcService) GetPatientByBed(
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
+		Gender:                  patient.Gender,
+		DateOfBirth:             formatDateOfBirth(patient.DateOfBirth),
 		BedId:                   req.GetBedId(),
 		Consistency:             patient.Consistency,
 	}, nil
@@ -179,6 +203,8 @@ func (s *PatientGrpcService) GetPatientsByWard(
 					Id:                      patient.ID.String(),
 					HumanReadableIdentifier: patient.HumanReadableIdentifier,
 					Notes:                   patient.Notes,
+					Gender:                  patient.Gender,
+					DateOfBirth:             formatDateOfBirth(patient.DateOfBirth),
 					BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
 					Consistency:             patient.Consistency,
 				}
@@ -252,10 +278,12 @@ func (s *PatientGrpcService) GetPatientDetails(
 		Id:                      patientWithDetails.ID.String(),
 		HumanReadableIdentifier: patientWithDetails.HumanReadableIdentifier,
 		Notes:                   patientWithDetails.Notes,
+		Gender:                  patientWithDetails.Gender,
+		DateOfBirth:             formatDateOfBirth(patientWithDetails.DateOfBirth),
 		Tasks:                   taskResponse,
-		IsDischarged:            patientWithDetails.IsDischarged,
 		Room:                    roomResponse,
 		Bed:                     bedResponse,
+		IsDischarged:            patientWithDetails.IsDischarged,
 		Consistency:             patientWithDetails.Consistency,
 	}, nil
 }
@@ -337,9 +365,11 @@ func (s *PatientGrpcService) GetPatientList(
 			res = append(res, &pb.GetPatientListResponse_Patient{
 				Id:                      patientDetails.ID.String(),
 				HumanReadableIdentifier: patientDetails.HumanReadableIdentifier,
+				Notes:                   patientDetails.Notes,
+				Gender:                  patientDetails.Gender,
+				DateOfBirth:             formatDateOfBirth(patientDetails.DateOfBirth),
 				Room:                    roomResponse,
 				Bed:                     bedResponse,
-				Notes:                   patientDetails.Notes,
 				Tasks:                   taskResponse,
 				Consistency:             patientDetails.Consistency,
 			})
@@ -437,6 +467,7 @@ func (s *PatientGrpcService) GetRecentPatients(
 		return &pb.GetRecentPatientsResponse_Patient{
 			Id:                      patient.ID.String(),
 			HumanReadableIdentifier: patient.HumanReadableIdentifier,
+			Gender:                  patient.Gender,
 			Room:                    roomRes,
 			Bed:                     bedRes,
 			Consistency:             patient.Consistency,
@@ -455,7 +486,14 @@ func (s *PatientGrpcService) UpdatePatient(
 		return nil, err
 	}
 
-	consistency, err := s.handlers.Commands.V1.UpdatePatient(ctx, patientID, req.HumanReadableIdentifier, req.Notes)
+	consistency, err := s.handlers.Commands.V1.UpdatePatient(
+		ctx,
+		patientID,
+		req.HumanReadableIdentifier,
+		req.Notes,
+		req.Gender,
+		req.DateOfBirth,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -599,10 +637,11 @@ func (s *PatientGrpcService) GetPatientAssignmentByWard(
 								Patient: hwutil.MapIf(
 									bedWithPatient.Patient != nil,
 									bedWithPatient.Patient,
-									func(row *models.PatientWithConsistency) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
+									func(row *models.PatientBaseWithConsistency) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
 										return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
 											Id:          bedWithPatient.Patient.ID.String(),
 											Name:        bedWithPatient.Patient.HumanReadableIdentifier,
+											Gender:      bedWithPatient.Patient.Gender,
 											Consistency: bedWithPatient.Patient.Consistency,
 										}
 									}),

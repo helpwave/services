@@ -2,6 +2,7 @@ package stories
 
 import (
 	"context"
+	v1 "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
@@ -12,11 +13,62 @@ import (
 	"testing"
 	"time"
 
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+// nowTuple yields time.Now() wrapped in a v1.Date, and a rounded-to-date copy as Timestamp
+func nowTuple() (*v1.Date, *timestamppb.Timestamp) {
+	now := time.Now()
+	y, m, d := now.Date()
+	exact := &v1.Date{Date: timestamppb.New(now)}
+	trunc := timestamppb.New(time.Date(y, m, d, 0, 0, 0, 0, time.UTC))
+	return exact, trunc
+}
+
+func TestCreatePatient(t *testing.T) {
+	ctx := context.Background()
+	patientClient := patientServiceClient()
+
+	//
+	// create new patient
+	//
+
+	hrI := t.Name() + " patient"
+	notes := "A " + t.Name() + " patient"
+	gender := v1.Gender_GENDER_DIVERSE
+
+	dob, expDob := nowTuple()
+
+	createRes, err := patientClient.CreatePatient(ctx, &pb.CreatePatientRequest{
+		HumanReadableIdentifier: hrI,
+		Notes:                   &notes,
+		Gender:                  &gender,
+		DateOfBirth:             dob,
+	})
+	require.NoError(t, err, "could not create patient")
+
+	hwtesting.WaitForProjectionsToSettle()
+
+	patientId := createRes.GetId()
+
+	//
+	// get new patient
+	//
+
+	getPatientRes, err := patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientId})
+	require.NoError(t, err, "could not get after creation")
+
+	assert.Equal(t, hrI, getPatientRes.GetHumanReadableIdentifier())
+	assert.Equal(t, notes, getPatientRes.GetNotes())
+	assert.Equal(t, createRes.GetConsistency(), getPatientRes.GetConsistency())
+	assert.Equal(t, gender, getPatientRes.GetGender())
+	assert.Equal(t, expDob, getPatientRes.DateOfBirth.Date)
+}
 
 func TestCreateUpdateGetPatient(t *testing.T) {
 	ctx := context.Background()
@@ -30,6 +82,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	createReq := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient",
 		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
+		Gender:                  nil,
+		DateOfBirth:             nil,
 	}
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
 	require.NoError(t, err, "could not create patient")
@@ -48,14 +102,20 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	assert.Equal(t, createReq.GetHumanReadableIdentifier(), getPatientRes.GetHumanReadableIdentifier())
 	assert.Equal(t, createReq.GetNotes(), getPatientRes.GetNotes())
 	assert.Equal(t, createRes.GetConsistency(), getPatientRes.GetConsistency())
+	assert.Equal(t, v1.Gender_GENDER_UNSPECIFIED, getPatientRes.GetGender())
+	assert.Nil(t, getPatientRes.DateOfBirth)
 
 	//
 	// update patient
 	//
 
+	dateOfBirth := time.Now().UTC().Round(time.Hour * 24)
 	updateReq := &pb.UpdatePatientRequest{
 		Id:                      patientId,
 		HumanReadableIdentifier: hwutil.PtrTo(t.Name() + " patient 1"),
+		Notes:                   hwutil.PtrTo(t.Name() + " Notes"),
+		Gender:                  hwutil.PtrTo(v1.Gender_GENDER_DIVERSE),
+		DateOfBirth:             &v1.Date{Date: timestamppb.New(dateOfBirth)},
 		Consistency:             &getPatientRes.Consistency,
 	}
 	updateRes, err := patientClient.UpdatePatient(ctx, updateReq)
@@ -72,6 +132,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 
 	assert.Equal(t, updateReq.GetHumanReadableIdentifier(), getPatientRes.GetHumanReadableIdentifier())
 	assert.Equal(t, updateRes.GetConsistency(), getPatientRes.GetConsistency())
+	assert.Equal(t, updateReq.GetGender(), getPatientRes.GetGender())
+	assert.Equal(t, updateReq.GetDateOfBirth().Date.AsTime(), getPatientRes.GetDateOfBirth().Date.AsTime())
 
 	//
 	// discharge patient
@@ -184,9 +246,13 @@ func TestGetPatientByBed(t *testing.T) {
 	roomId, _ := prepareRoom(t, ctx, wardID, "")
 	bedId, _ := prepareBed(t, ctx, roomId, "")
 
+	dob, expDob := nowTuple()
+
 	createReq := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient",
 		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
+		Gender:                  hwutil.PtrTo(v1.Gender_GENDER_DIVERSE),
+		DateOfBirth:             dob,
 	}
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
 	require.NoError(t, err, "could not create patient")
@@ -214,6 +280,8 @@ func TestGetPatientByBed(t *testing.T) {
 	assert.Equal(t, createReq.GetHumanReadableIdentifier(), getRes.GetHumanReadableIdentifier())
 	assert.Equal(t, createReq.GetNotes(), getRes.GetNotes())
 	assert.Equal(t, assRes.GetConsistency(), getRes.GetConsistency())
+	assert.Equal(t, *createReq.Gender, getRes.GetGender())
+	assert.Equal(t, expDob, getRes.DateOfBirth.Date)
 }
 
 func TestGetPatientsByWard(t *testing.T) {
@@ -230,9 +298,13 @@ func TestGetPatientsByWard(t *testing.T) {
 	bedId1, _ := prepareBed(t, ctx, roomId, "1")
 	bedId2, _ := prepareBed(t, ctx, roomId, "2")
 
+	dob, expDob := nowTuple()
+
 	createReq1 := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient 1",
 		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
+		Gender:                  hwutil.PtrTo(v1.Gender_GENDER_DIVERSE),
+		DateOfBirth:             dob,
 	}
 	createRes1, err := patientClient.CreatePatient(ctx, createReq1)
 	require.NoError(t, err, "could not create patient")
@@ -290,12 +362,16 @@ func TestGetPatientsByWard(t *testing.T) {
 	assert.Equal(t, createReq1.HumanReadableIdentifier, patient1.HumanReadableIdentifier)
 	assert.Equal(t, *createReq1.Notes, patient1.Notes)
 	assert.Equal(t, assRes1.Consistency, patient1.Consistency)
+	assert.Equal(t, *createReq1.Gender, patient1.GetGender())
+	assert.Equal(t, expDob, patient1.DateOfBirth.Date)
 
 	assert.Equal(t, createRes2.Id, patient2.Id)
 	assert.Equal(t, &bedId2, patient2.BedId)
 	assert.Equal(t, createReq2.HumanReadableIdentifier, patient2.HumanReadableIdentifier)
 	assert.Equal(t, *createReq2.Notes, patient2.Notes)
 	assert.Equal(t, assRes2.Consistency, patient2.Consistency)
+	assert.Equal(t, v1.Gender_GENDER_UNSPECIFIED, patient2.GetGender())
+	assert.Nil(t, patient2.DateOfBirth)
 }
 
 func TestGetPatientAssignmentByWard(t *testing.T) {
@@ -548,9 +624,13 @@ func TestGetPatientDetails(t *testing.T) {
 	roomId, _ := prepareRoom(t, ctx, wardID, "")
 	bedId, _ := prepareBed(t, ctx, roomId, "")
 
+	dob, expDob := nowTuple()
+
 	createReq := &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " patient",
 		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
+		Gender:                  hwutil.PtrTo(v1.Gender_GENDER_DIVERSE),
+		DateOfBirth:             dob,
 	}
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
 	require.NoError(t, err, "could not create patient")
@@ -619,6 +699,8 @@ func TestGetPatientDetails(t *testing.T) {
 	assert.Equal(t, createRes.Id, getRes.Id)
 	assert.Equal(t, createReq.GetHumanReadableIdentifier(), getRes.GetHumanReadableIdentifier())
 	assert.Equal(t, createReq.GetNotes(), getRes.GetNotes())
+	assert.Equal(t, *createReq.Gender, getRes.Gender)
+	assert.Equal(t, expDob, getRes.DateOfBirth.Date)
 	assert.Len(t, getRes.GetTasks(), len(suffixMap))
 
 	assert.Subset(t, taskIds, hwutil.Map(getRes.GetTasks(), func(tsk *pb.GetPatientDetailsResponse_Task) string {

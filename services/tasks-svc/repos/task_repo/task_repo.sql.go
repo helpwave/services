@@ -108,7 +108,7 @@ func (q *Queries) DeleteTask(ctx context.Context, id uuid.UUID) error {
 const getTaskWithPatientById = `-- name: GetTaskWithPatientById :many
 SELECT
 	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.created_by, tasks.due_at, tasks.created_at, tasks.consistency,
-	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id,
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id, patients.gender, patients.date_of_birth,
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
@@ -158,6 +158,8 @@ func (q *Queries) GetTaskWithPatientById(ctx context.Context, id uuid.UUID) ([]G
 			&i.Patient.IsDischarged,
 			&i.Patient.Consistency,
 			&i.Patient.OrganizationID,
+			&i.Patient.Gender,
+			&i.Patient.DateOfBirth,
 			&i.SubtaskID,
 			&i.SubtaskName,
 			&i.SubtaskDone,
@@ -176,7 +178,7 @@ func (q *Queries) GetTaskWithPatientById(ctx context.Context, id uuid.UUID) ([]G
 const getTasksWithPatientByAssignee = `-- name: GetTasksWithPatientByAssignee :many
 SELECT
 	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.created_by, tasks.due_at, tasks.created_at, tasks.consistency,
-	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id,
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id, patients.gender, patients.date_of_birth,
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
@@ -226,6 +228,8 @@ func (q *Queries) GetTasksWithPatientByAssignee(ctx context.Context, assignedUse
 			&i.Patient.IsDischarged,
 			&i.Patient.Consistency,
 			&i.Patient.OrganizationID,
+			&i.Patient.Gender,
+			&i.Patient.DateOfBirth,
 			&i.SubtaskID,
 			&i.SubtaskName,
 			&i.SubtaskDone,

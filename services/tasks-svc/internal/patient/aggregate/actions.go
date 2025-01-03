@@ -2,17 +2,25 @@ package aggregate
 
 import (
 	"context"
+	v1 "gen/libs/common/v1"
+	"time"
 
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 
 	"github.com/google/uuid"
 )
 
-func (a *PatientAggregate) CreatePatient(ctx context.Context, humanReadableIdentifier string, notes string) error {
+func (a *PatientAggregate) CreatePatient(
+	ctx context.Context,
+	humanReadableIdentifier string,
+	notes string,
+	gender v1.Gender,
+	dateOfBirth *time.Time,
+) error {
 	// The "Patient" entity is our main entity in this aggregate.
 	// Therefore, we are using the same ID
 	id := a.GetID()
-	event, err := patientEventsV1.NewPatientCreatedEvent(ctx, a, id, humanReadableIdentifier, notes)
+	event, err := patientEventsV1.NewPatientCreatedEvent(ctx, a, id, humanReadableIdentifier, notes, gender, dateOfBirth)
 	if err != nil {
 		return err
 	}
@@ -53,6 +61,22 @@ func (a *PatientAggregate) UpdateHumanReadableIdentifier(ctx context.Context, ne
 
 func (a *PatientAggregate) UpdateNotes(ctx context.Context, newNotes string) error {
 	event, err := patientEventsV1.NewNotesUpdatedEvent(ctx, a, newNotes)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PatientAggregate) UpdateGender(ctx context.Context, gender v1.Gender) error {
+	event, err := patientEventsV1.NewGenderUpdatedEvent(ctx, a, gender)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PatientAggregate) UpdateDateOfBirth(ctx context.Context, dateOfBirth time.Time) error {
+	event, err := patientEventsV1.NewDateOfBirthUpdatedEvent(ctx, a, dateOfBirth)
 	if err != nil {
 		return err
 	}

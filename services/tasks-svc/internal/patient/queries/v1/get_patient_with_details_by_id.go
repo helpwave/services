@@ -3,6 +3,7 @@ package v1
 import (
 	"common"
 	"context"
+	v1 "gen/libs/common/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
@@ -69,13 +70,17 @@ func NewGetPatientWithDetailsByIDQueryHandler(
 		return &models.PatientDetails{
 			PatientWithConsistency: models.PatientWithConsistency{
 				Patient: models.Patient{
-					ID:                      patientRes.ID,
-					HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
-					Notes:                   patientRes.Notes,
-					BedID:                   patientRes.BedID,
-					IsDischarged:            patientRes.IsDischarged,
-					CreatedAt:               patientRes.CreatedAt.Time,
-					UpdatedAt:               patientRes.UpdatedAt.Time,
+					PatientBase: models.PatientBase{
+						ID:                      patientRes.ID,
+						HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
+						Gender:                  v1.Gender(patientRes.Gender),
+					},
+					Notes:        patientRes.Notes,
+					BedID:        patientRes.BedID,
+					IsDischarged: patientRes.IsDischarged,
+					CreatedAt:    patientRes.CreatedAt.Time,
+					UpdatedAt:    patientRes.UpdatedAt.Time,
+					DateOfBirth:  hwdb.DateToTime(patientRes.DateOfBirth),
 				},
 				Consistency: common.ConsistencyToken(patientRes.Consistency).String(), //nolint:gosec
 			},

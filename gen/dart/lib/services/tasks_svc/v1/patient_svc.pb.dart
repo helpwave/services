@@ -14,12 +14,16 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import '../../../libs/common/v1/conflict.pb.dart' as $16;
-import 'types.pbenum.dart' as $18;
+import '../../../libs/common/v1/types.pb.dart' as $18;
+import '../../../libs/common/v1/types.pbenum.dart' as $18;
+import 'types.pbenum.dart' as $19;
 
 class CreatePatientRequest extends $pb.GeneratedMessage {
   factory CreatePatientRequest({
     $core.String? humanReadableIdentifier,
     $core.String? notes,
+    $18.Gender? gender,
+    $18.Date? dateOfBirth,
   }) {
     final $result = create();
     if (humanReadableIdentifier != null) {
@@ -27,6 +31,12 @@ class CreatePatientRequest extends $pb.GeneratedMessage {
     }
     if (notes != null) {
       $result.notes = notes;
+    }
+    if (gender != null) {
+      $result.gender = gender;
+    }
+    if (dateOfBirth != null) {
+      $result.dateOfBirth = dateOfBirth;
     }
     return $result;
   }
@@ -37,6 +47,8 @@ class CreatePatientRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'humanReadableIdentifier')
     ..aOS(2, _omitFieldNames ? '' : 'notes')
+    ..e<$18.Gender>(3, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: $18.Gender.GENDER_UNSPECIFIED, valueOf: $18.Gender.valueOf, enumValues: $18.Gender.values)
+    ..aOM<$18.Date>(4, _omitFieldNames ? '' : 'dateOfBirth', subBuilder: $18.Date.create)
     ..hasRequiredFields = false
   ;
 
@@ -78,6 +90,26 @@ class CreatePatientRequest extends $pb.GeneratedMessage {
   $core.bool hasNotes() => $_has(1);
   @$pb.TagNumber(2)
   void clearNotes() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $18.Gender get gender => $_getN(2);
+  @$pb.TagNumber(3)
+  set gender($18.Gender v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasGender() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearGender() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $18.Date get dateOfBirth => $_getN(3);
+  @$pb.TagNumber(4)
+  set dateOfBirth($18.Date v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasDateOfBirth() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearDateOfBirth() => clearField(4);
+  @$pb.TagNumber(4)
+  $18.Date ensureDateOfBirth() => $_ensure(3);
 }
 
 class CreatePatientResponse extends $pb.GeneratedMessage {
@@ -372,6 +404,8 @@ class GetPatientResponse extends $pb.GeneratedMessage {
     GetPatientResponse_Room? room,
     GetPatientResponse_Bed? bed,
     $core.String? consistency,
+    $18.Gender? gender,
+    $18.Date? dateOfBirth,
   }) {
     final $result = create();
     if (id != null) {
@@ -392,6 +426,12 @@ class GetPatientResponse extends $pb.GeneratedMessage {
     if (consistency != null) {
       $result.consistency = consistency;
     }
+    if (gender != null) {
+      $result.gender = gender;
+    }
+    if (dateOfBirth != null) {
+      $result.dateOfBirth = dateOfBirth;
+    }
     return $result;
   }
   GetPatientResponse._() : super();
@@ -405,6 +445,8 @@ class GetPatientResponse extends $pb.GeneratedMessage {
     ..aOM<GetPatientResponse_Room>(7, _omitFieldNames ? '' : 'room', subBuilder: GetPatientResponse_Room.create)
     ..aOM<GetPatientResponse_Bed>(8, _omitFieldNames ? '' : 'bed', subBuilder: GetPatientResponse_Bed.create)
     ..aOS(9, _omitFieldNames ? '' : 'consistency')
+    ..e<$18.Gender>(10, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: $18.Gender.GENDER_UNSPECIFIED, valueOf: $18.Gender.valueOf, enumValues: $18.Gender.values)
+    ..aOM<$18.Date>(11, _omitFieldNames ? '' : 'dateOfBirth', subBuilder: $18.Date.create)
     ..hasRequiredFields = false
   ;
 
@@ -486,6 +528,26 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   $core.bool hasConsistency() => $_has(5);
   @$pb.TagNumber(9)
   void clearConsistency() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $18.Gender get gender => $_getN(6);
+  @$pb.TagNumber(10)
+  set gender($18.Gender v) { setField(10, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasGender() => $_has(6);
+  @$pb.TagNumber(10)
+  void clearGender() => clearField(10);
+
+  @$pb.TagNumber(11)
+  $18.Date get dateOfBirth => $_getN(7);
+  @$pb.TagNumber(11)
+  set dateOfBirth($18.Date v) { setField(11, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasDateOfBirth() => $_has(7);
+  @$pb.TagNumber(11)
+  void clearDateOfBirth() => clearField(11);
+  @$pb.TagNumber(11)
+  $18.Date ensureDateOfBirth() => $_ensure(7);
 }
 
 class GetPatientByBedRequest extends $pb.GeneratedMessage {
@@ -545,6 +607,8 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
     $core.String? notes,
     $core.String? bedId,
     $core.String? consistency,
+    $18.Gender? gender,
+    $18.Date? dateOfBirth,
   }) {
     final $result = create();
     if (id != null) {
@@ -562,6 +626,12 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
     if (consistency != null) {
       $result.consistency = consistency;
     }
+    if (gender != null) {
+      $result.gender = gender;
+    }
+    if (dateOfBirth != null) {
+      $result.dateOfBirth = dateOfBirth;
+    }
     return $result;
   }
   GetPatientByBedResponse._() : super();
@@ -574,6 +644,8 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'notes')
     ..aOS(4, _omitFieldNames ? '' : 'bedId')
     ..aOS(5, _omitFieldNames ? '' : 'consistency')
+    ..e<$18.Gender>(6, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: $18.Gender.GENDER_UNSPECIFIED, valueOf: $18.Gender.valueOf, enumValues: $18.Gender.values)
+    ..aOM<$18.Date>(7, _omitFieldNames ? '' : 'dateOfBirth', subBuilder: $18.Date.create)
     ..hasRequiredFields = false
   ;
 
@@ -642,6 +714,26 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
   $core.bool hasConsistency() => $_has(4);
   @$pb.TagNumber(5)
   void clearConsistency() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $18.Gender get gender => $_getN(5);
+  @$pb.TagNumber(6)
+  set gender($18.Gender v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasGender() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearGender() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $18.Date get dateOfBirth => $_getN(6);
+  @$pb.TagNumber(7)
+  set dateOfBirth($18.Date v) { setField(7, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasDateOfBirth() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearDateOfBirth() => clearField(7);
+  @$pb.TagNumber(7)
+  $18.Date ensureDateOfBirth() => $_ensure(6);
 }
 
 class GetPatientsByWardRequest extends $pb.GeneratedMessage {
@@ -701,6 +793,8 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
     $core.String? notes,
     $core.String? bedId,
     $core.String? consistency,
+    $18.Gender? gender,
+    $18.Date? dateOfBirth,
   }) {
     final $result = create();
     if (id != null) {
@@ -718,6 +812,12 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
     if (consistency != null) {
       $result.consistency = consistency;
     }
+    if (gender != null) {
+      $result.gender = gender;
+    }
+    if (dateOfBirth != null) {
+      $result.dateOfBirth = dateOfBirth;
+    }
     return $result;
   }
   GetPatientsByWardResponse_Patient._() : super();
@@ -730,6 +830,8 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'notes')
     ..aOS(4, _omitFieldNames ? '' : 'bedId')
     ..aOS(5, _omitFieldNames ? '' : 'consistency')
+    ..e<$18.Gender>(6, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: $18.Gender.GENDER_UNSPECIFIED, valueOf: $18.Gender.valueOf, enumValues: $18.Gender.values)
+    ..aOM<$18.Date>(7, _omitFieldNames ? '' : 'dateOfBirth', subBuilder: $18.Date.create)
     ..hasRequiredFields = false
   ;
 
@@ -798,6 +900,26 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
   $core.bool hasConsistency() => $_has(4);
   @$pb.TagNumber(5)
   void clearConsistency() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $18.Gender get gender => $_getN(5);
+  @$pb.TagNumber(6)
+  set gender($18.Gender v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasGender() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearGender() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $18.Date get dateOfBirth => $_getN(6);
+  @$pb.TagNumber(7)
+  set dateOfBirth($18.Date v) { setField(7, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasDateOfBirth() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearDateOfBirth() => clearField(7);
+  @$pb.TagNumber(7)
+  $18.Date ensureDateOfBirth() => $_ensure(6);
 }
 
 class GetPatientsByWardResponse extends $pb.GeneratedMessage {
@@ -899,6 +1021,7 @@ class GetPatientAssignmentByWardResponse_Room_Bed_Patient extends $pb.GeneratedM
     $core.String? id,
     $core.String? name,
     $core.String? consistency,
+    $18.Gender? gender,
   }) {
     final $result = create();
     if (id != null) {
@@ -910,6 +1033,9 @@ class GetPatientAssignmentByWardResponse_Room_Bed_Patient extends $pb.GeneratedM
     if (consistency != null) {
       $result.consistency = consistency;
     }
+    if (gender != null) {
+      $result.gender = gender;
+    }
     return $result;
   }
   GetPatientAssignmentByWardResponse_Room_Bed_Patient._() : super();
@@ -920,6 +1046,7 @@ class GetPatientAssignmentByWardResponse_Room_Bed_Patient extends $pb.GeneratedM
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'consistency')
+    ..e<$18.Gender>(4, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: $18.Gender.GENDER_UNSPECIFIED, valueOf: $18.Gender.valueOf, enumValues: $18.Gender.values)
     ..hasRequiredFields = false
   ;
 
@@ -970,6 +1097,15 @@ class GetPatientAssignmentByWardResponse_Room_Bed_Patient extends $pb.GeneratedM
   $core.bool hasConsistency() => $_has(2);
   @$pb.TagNumber(3)
   void clearConsistency() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $18.Gender get gender => $_getN(3);
+  @$pb.TagNumber(4)
+  set gender($18.Gender v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasGender() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearGender() => clearField(4);
 }
 
 class GetPatientAssignmentByWardResponse_Room_Bed extends $pb.GeneratedMessage {
@@ -1499,7 +1635,7 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $18.TaskStatus? status,
+    $19.TaskStatus? status,
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
@@ -1544,7 +1680,7 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<$18.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $18.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $18.TaskStatus.valueOf, enumValues: $18.TaskStatus.values)
+    ..e<$19.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $19.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $19.TaskStatus.valueOf, enumValues: $19.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
@@ -1602,9 +1738,9 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $18.TaskStatus get status => $_getN(3);
+  $19.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status($18.TaskStatus v) { setField(4, v); }
+  set status($19.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
@@ -1660,6 +1796,8 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     GetPatientDetailsResponse_Bed? bed,
     $core.bool? isDischarged,
     $core.String? consistency,
+    $18.Gender? gender,
+    $18.Date? dateOfBirth,
   }) {
     final $result = create();
     if (id != null) {
@@ -1686,6 +1824,12 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     if (consistency != null) {
       $result.consistency = consistency;
     }
+    if (gender != null) {
+      $result.gender = gender;
+    }
+    if (dateOfBirth != null) {
+      $result.dateOfBirth = dateOfBirth;
+    }
     return $result;
   }
   GetPatientDetailsResponse._() : super();
@@ -1701,6 +1845,8 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     ..aOM<GetPatientDetailsResponse_Bed>(6, _omitFieldNames ? '' : 'bed', subBuilder: GetPatientDetailsResponse_Bed.create)
     ..aOB(7, _omitFieldNames ? '' : 'isDischarged')
     ..aOS(8, _omitFieldNames ? '' : 'consistency')
+    ..e<$18.Gender>(9, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: $18.Gender.GENDER_UNSPECIFIED, valueOf: $18.Gender.valueOf, enumValues: $18.Gender.values)
+    ..aOM<$18.Date>(10, _omitFieldNames ? '' : 'dateOfBirth', subBuilder: $18.Date.create)
     ..hasRequiredFields = false
   ;
 
@@ -1794,6 +1940,26 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
   $core.bool hasConsistency() => $_has(7);
   @$pb.TagNumber(8)
   void clearConsistency() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $18.Gender get gender => $_getN(8);
+  @$pb.TagNumber(9)
+  set gender($18.Gender v) { setField(9, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasGender() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearGender() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $18.Date get dateOfBirth => $_getN(9);
+  @$pb.TagNumber(10)
+  set dateOfBirth($18.Date v) { setField(10, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasDateOfBirth() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearDateOfBirth() => clearField(10);
+  @$pb.TagNumber(10)
+  $18.Date ensureDateOfBirth() => $_ensure(9);
 }
 
 class GetPatientListRequest extends $pb.GeneratedMessage {
@@ -2025,6 +2191,8 @@ class GetPatientListResponse_Patient extends $pb.GeneratedMessage {
     $core.String? notes,
     $core.Iterable<GetPatientListResponse_Task>? tasks,
     $core.String? consistency,
+    $18.Gender? gender,
+    $18.Date? dateOfBirth,
   }) {
     final $result = create();
     if (id != null) {
@@ -2048,6 +2216,12 @@ class GetPatientListResponse_Patient extends $pb.GeneratedMessage {
     if (consistency != null) {
       $result.consistency = consistency;
     }
+    if (gender != null) {
+      $result.gender = gender;
+    }
+    if (dateOfBirth != null) {
+      $result.dateOfBirth = dateOfBirth;
+    }
     return $result;
   }
   GetPatientListResponse_Patient._() : super();
@@ -2062,6 +2236,8 @@ class GetPatientListResponse_Patient extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'notes')
     ..pc<GetPatientListResponse_Task>(6, _omitFieldNames ? '' : 'tasks', $pb.PbFieldType.PM, subBuilder: GetPatientListResponse_Task.create)
     ..aOS(7, _omitFieldNames ? '' : 'consistency')
+    ..e<$18.Gender>(8, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: $18.Gender.GENDER_UNSPECIFIED, valueOf: $18.Gender.valueOf, enumValues: $18.Gender.values)
+    ..aOM<$18.Date>(9, _omitFieldNames ? '' : 'dateOfBirth', subBuilder: $18.Date.create)
     ..hasRequiredFields = false
   ;
 
@@ -2146,6 +2322,26 @@ class GetPatientListResponse_Patient extends $pb.GeneratedMessage {
   $core.bool hasConsistency() => $_has(6);
   @$pb.TagNumber(7)
   void clearConsistency() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $18.Gender get gender => $_getN(7);
+  @$pb.TagNumber(8)
+  set gender($18.Gender v) { setField(8, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasGender() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearGender() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $18.Date get dateOfBirth => $_getN(8);
+  @$pb.TagNumber(9)
+  set dateOfBirth($18.Date v) { setField(9, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasDateOfBirth() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearDateOfBirth() => clearField(9);
+  @$pb.TagNumber(9)
+  $18.Date ensureDateOfBirth() => $_ensure(8);
 }
 
 class GetPatientListResponse_Task_SubTask extends $pb.GeneratedMessage {
@@ -2231,7 +2427,7 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $18.TaskStatus? status,
+    $19.TaskStatus? status,
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
@@ -2276,7 +2472,7 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<$18.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $18.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $18.TaskStatus.valueOf, enumValues: $18.TaskStatus.values)
+    ..e<$19.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $19.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $19.TaskStatus.valueOf, enumValues: $19.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
@@ -2334,9 +2530,9 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $18.TaskStatus get status => $_getN(3);
+  $19.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status($18.TaskStatus v) { setField(4, v); }
+  set status($19.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
@@ -2651,6 +2847,7 @@ class GetRecentPatientsResponse_Patient extends $pb.GeneratedMessage {
     GetRecentPatientsResponse_Room? room,
     GetRecentPatientsResponse_Bed? bed,
     $core.String? consistency,
+    $18.Gender? gender,
   }) {
     final $result = create();
     if (id != null) {
@@ -2668,6 +2865,9 @@ class GetRecentPatientsResponse_Patient extends $pb.GeneratedMessage {
     if (consistency != null) {
       $result.consistency = consistency;
     }
+    if (gender != null) {
+      $result.gender = gender;
+    }
     return $result;
   }
   GetRecentPatientsResponse_Patient._() : super();
@@ -2680,6 +2880,7 @@ class GetRecentPatientsResponse_Patient extends $pb.GeneratedMessage {
     ..aOM<GetRecentPatientsResponse_Room>(3, _omitFieldNames ? '' : 'room', subBuilder: GetRecentPatientsResponse_Room.create)
     ..aOM<GetRecentPatientsResponse_Bed>(4, _omitFieldNames ? '' : 'bed', subBuilder: GetRecentPatientsResponse_Bed.create)
     ..aOS(5, _omitFieldNames ? '' : 'consistency')
+    ..e<$18.Gender>(6, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: $18.Gender.GENDER_UNSPECIFIED, valueOf: $18.Gender.valueOf, enumValues: $18.Gender.values)
     ..hasRequiredFields = false
   ;
 
@@ -2752,6 +2953,15 @@ class GetRecentPatientsResponse_Patient extends $pb.GeneratedMessage {
   $core.bool hasConsistency() => $_has(4);
   @$pb.TagNumber(5)
   void clearConsistency() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $18.Gender get gender => $_getN(5);
+  @$pb.TagNumber(6)
+  set gender($18.Gender v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasGender() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearGender() => clearField(6);
 }
 
 class GetRecentPatientsResponse extends $pb.GeneratedMessage {
@@ -2804,6 +3014,8 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
     $core.String? humanReadableIdentifier,
     $core.String? notes,
     $core.String? consistency,
+    $18.Gender? gender,
+    $18.Date? dateOfBirth,
   }) {
     final $result = create();
     if (id != null) {
@@ -2818,6 +3030,12 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
     if (consistency != null) {
       $result.consistency = consistency;
     }
+    if (gender != null) {
+      $result.gender = gender;
+    }
+    if (dateOfBirth != null) {
+      $result.dateOfBirth = dateOfBirth;
+    }
     return $result;
   }
   UpdatePatientRequest._() : super();
@@ -2829,6 +3047,8 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
     ..aOS(3, _omitFieldNames ? '' : 'notes')
     ..aOS(4, _omitFieldNames ? '' : 'consistency')
+    ..e<$18.Gender>(5, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: $18.Gender.GENDER_UNSPECIFIED, valueOf: $18.Gender.valueOf, enumValues: $18.Gender.values)
+    ..aOM<$18.Date>(6, _omitFieldNames ? '' : 'dateOfBirth', subBuilder: $18.Date.create)
     ..hasRequiredFields = false
   ;
 
@@ -2888,6 +3108,26 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
   $core.bool hasConsistency() => $_has(3);
   @$pb.TagNumber(4)
   void clearConsistency() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $18.Gender get gender => $_getN(4);
+  @$pb.TagNumber(5)
+  set gender($18.Gender v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasGender() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearGender() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $18.Date get dateOfBirth => $_getN(5);
+  @$pb.TagNumber(6)
+  set dateOfBirth($18.Date v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasDateOfBirth() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearDateOfBirth() => clearField(6);
+  @$pb.TagNumber(6)
+  $18.Date ensureDateOfBirth() => $_ensure(5);
 }
 
 class UpdatePatientResponse extends $pb.GeneratedMessage {

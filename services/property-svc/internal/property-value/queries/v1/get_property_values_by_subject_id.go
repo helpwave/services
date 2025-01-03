@@ -123,9 +123,7 @@ func NewGetRelevantPropertyValuesQueryHandler(
 						func(dtV pgtype.Timestamp) time.Time {
 							return dtV.Time
 						}),
-					DateValue: hwutil.MapIf(row.DateValue.Valid, row.DateValue, func(dV pgtype.Date) time.Time {
-						return dV.Time
-					}),
+					DateValue: hwdb.DateToTime(row.DateValue),
 				}
 			}
 		}

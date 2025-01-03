@@ -25,6 +25,8 @@ var services_property_svc_v1_types_pb = require('../../../services/property_svc/
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js')
 
 var libs_common_v1_conflict_pb = require('../../../libs/common/v1/conflict_pb.js')
+
+var libs_common_v1_types_pb = require('../../../libs/common/v1/types_pb.js')
 const proto = {};
 proto.services = {};
 proto.services.property_svc = {};

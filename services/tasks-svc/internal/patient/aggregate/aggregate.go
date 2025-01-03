@@ -39,6 +39,8 @@ func (a *PatientAggregate) initEventListeners() {
 	a.RegisterEventListener(patientEventsV1.BedUnsassigned, a.onBedUnassigned)
 	a.RegisterEventListener(patientEventsV1.PatientDischarged, a.onPatientDischarged)
 	a.RegisterEventListener(patientEventsV1.NotesUpdated, a.onNotesUpdated)
+	a.RegisterEventListener(patientEventsV1.GenderUpdated, a.onGenderUpdated)
+	a.RegisterEventListener(patientEventsV1.DateOfBirthUpdated, a.onDateOfBirthUpdated)
 	a.RegisterEventListener(patientEventsV1.HumanReadableIdentifierUpdated, a.onHumanReadableIdentifierUpdated)
 	a.RegisterEventListener(patientEventsV1.PatientReadmitted, a.onPatientReadmitted)
 	a.RegisterEventListener(patientEventsV1.PatientDeleted, a.onPatientDeleted)
@@ -55,6 +57,8 @@ func (a *PatientAggregate) onPatientCreated(evt hwes.Event) error {
 	a.Patient.HumanReadableIdentifier = payload.HumanReadableIdentifier
 	a.Patient.CreatedAt = evt.Timestamp
 	a.Patient.UpdatedAt = evt.Timestamp
+	a.Patient.Gender = payload.Gender
+	a.Patient.DateOfBirth = payload.DateOfBirth
 
 	return nil
 }
@@ -96,6 +100,26 @@ func (a *PatientAggregate) onNotesUpdated(evt hwes.Event) error {
 
 	a.Patient.Notes = payload.Notes
 	a.Patient.UpdatedAt = evt.Timestamp
+	return nil
+}
+
+func (a *PatientAggregate) onGenderUpdated(evt hwes.Event) error {
+	var payload patientEventsV1.GenderUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Patient.Gender = payload.Gender
+	return nil
+}
+
+func (a *PatientAggregate) onDateOfBirthUpdated(evt hwes.Event) error {
+	var payload patientEventsV1.DateOfBirthUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Patient.DateOfBirth = &payload.DateOfBirth
 	return nil
 }
 

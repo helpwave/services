@@ -4,6 +4,7 @@ import (
 	"common"
 	"common/auth"
 	"context"
+	v1 "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
@@ -67,13 +68,17 @@ func NewGetAllPatientsWithDetailsQueryHandler(authz hwauthz.AuthZ) GetAllPatient
 				patientDetail = &models.PatientDetails{
 					PatientWithConsistency: models.PatientWithConsistency{
 						Patient: models.Patient{
-							ID:                      row.Patient.ID,
-							HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
-							Notes:                   row.Patient.Notes,
-							BedID:                   row.Patient.BedID,
-							IsDischarged:            row.Patient.IsDischarged,
-							CreatedAt:               row.Patient.CreatedAt.Time,
-							UpdatedAt:               row.Patient.UpdatedAt.Time,
+							PatientBase: models.PatientBase{
+								ID:                      row.Patient.ID,
+								HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
+								Gender:                  v1.Gender(row.Patient.Gender),
+							},
+							Notes:        row.Patient.Notes,
+							BedID:        row.Patient.BedID,
+							IsDischarged: row.Patient.IsDischarged,
+							CreatedAt:    row.Patient.CreatedAt.Time,
+							UpdatedAt:    row.Patient.UpdatedAt.Time,
+							DateOfBirth:  hwdb.DateToTime(row.Patient.DateOfBirth),
 						},
 						Consistency: common.ConsistencyToken(row.Patient.Consistency).String(), //nolint:gosec
 					},

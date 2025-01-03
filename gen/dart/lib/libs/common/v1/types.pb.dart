@@ -13,24 +13,26 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../google/protobuf/wrappers.pb.dart' as $21;
+import '../../../google/protobuf/timestamp.pb.dart' as $15;
 
-class StringArray extends $pb.GeneratedMessage {
-  factory StringArray({
-    $core.Iterable<$21.StringValue>? strings,
+export 'types.pbenum.dart';
+
+class Date extends $pb.GeneratedMessage {
+  factory Date({
+    $15.Timestamp? date,
   }) {
     final $result = create();
-    if (strings != null) {
-      $result.strings.addAll(strings);
+    if (date != null) {
+      $result.date = date;
     }
     return $result;
   }
-  StringArray._() : super();
-  factory StringArray.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory StringArray.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  Date._() : super();
+  factory Date.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Date.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StringArray', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
-    ..pc<$21.StringValue>(1, _omitFieldNames ? '' : 'strings', $pb.PbFieldType.PM, subBuilder: $21.StringValue.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Date', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
+    ..aOM<$15.Timestamp>(1, _omitFieldNames ? '' : 'date', subBuilder: $15.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -38,25 +40,34 @@ class StringArray extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  StringArray clone() => StringArray()..mergeFromMessage(this);
+  Date clone() => Date()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  StringArray copyWith(void Function(StringArray) updates) => super.copyWith((message) => updates(message as StringArray)) as StringArray;
+  Date copyWith(void Function(Date) updates) => super.copyWith((message) => updates(message as Date)) as Date;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static StringArray create() => StringArray._();
-  StringArray createEmptyInstance() => create();
-  static $pb.PbList<StringArray> createRepeated() => $pb.PbList<StringArray>();
+  static Date create() => Date._();
+  Date createEmptyInstance() => create();
+  static $pb.PbList<Date> createRepeated() => $pb.PbList<Date>();
   @$core.pragma('dart2js:noInline')
-  static StringArray getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StringArray>(create);
-  static StringArray? _defaultInstance;
+  static Date getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Date>(create);
+  static Date? _defaultInstance;
 
+  /// information more precise than date information shall be disregarded by clients
   @$pb.TagNumber(1)
-  $core.List<$21.StringValue> get strings => $_getList(0);
+  $15.Timestamp get date => $_getN(0);
+  @$pb.TagNumber(1)
+  set date($15.Timestamp v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasDate() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDate() => clearField(1);
+  @$pb.TagNumber(1)
+  $15.Timestamp ensureDate() => $_ensure(0);
 }
 
 
