@@ -51,15 +51,17 @@ func NewGetPatientByBedQueryHandler(authz hwauthz.AuthZ) GetPatientByBedQueryHan
 		// return
 		return &models.PatientWithConsistency{
 			Patient: models.Patient{
-				ID:                      patient.ID,
-				HumanReadableIdentifier: patient.HumanReadableIdentifier,
-				Notes:                   patient.Notes,
-				BedID:                   patient.BedID,
-				IsDischarged:            patient.IsDischarged,
-				CreatedAt:               patient.CreatedAt.Time,
-				UpdatedAt:               patient.UpdatedAt.Time,
-				Gender:                  v1.Gender(patient.Gender),
-				DateOfBirth:             hwdb.DateToTime(patient.DateOfBirth),
+				PatientBase: models.PatientBase{
+					ID:                      patient.ID,
+					HumanReadableIdentifier: patient.HumanReadableIdentifier,
+					Gender:                  v1.Gender(patient.Gender),
+				},
+				Notes:        patient.Notes,
+				BedID:        patient.BedID,
+				IsDischarged: patient.IsDischarged,
+				CreatedAt:    patient.CreatedAt.Time,
+				UpdatedAt:    patient.UpdatedAt.Time,
+				DateOfBirth:  hwdb.DateToTime(patient.DateOfBirth),
 			},
 			Consistency: common.ConsistencyToken(patient.Consistency).String(), //nolint:gosec
 		}, nil

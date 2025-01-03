@@ -8,20 +8,29 @@ import (
 	"tasks-svc/internal/task/models"
 )
 
-type Patient struct {
+type PatientBase struct {
 	ID                      uuid.UUID
 	HumanReadableIdentifier string
-	Notes                   string
-	BedID                   uuid.NullUUID
-	IsDischarged            bool
-	CreatedAt               time.Time
-	UpdatedAt               time.Time
 	Gender                  v1.Gender
-	DateOfBirth             *time.Time
+}
+
+type Patient struct {
+	PatientBase
+	Notes        string
+	BedID        uuid.NullUUID
+	IsDischarged bool
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	DateOfBirth  *time.Time
 }
 
 type PatientWithConsistency struct {
 	Patient
+	Consistency string
+}
+
+type PatientBaseWithConsistency struct {
+	PatientBase
 	Consistency string
 }
 
@@ -47,7 +56,7 @@ type Room struct {
 
 type BedWithPatient struct {
 	Bed
-	Patient *PatientWithConsistency
+	Patient *PatientBaseWithConsistency
 }
 
 type RoomWithBedsWithPatient struct {

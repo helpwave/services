@@ -2007,9 +2007,10 @@ type GetPatientAssignmentByWardResponse_Room_Bed_Patient struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Consistency string `protobuf:"bytes,3,opt,name=consistency,proto3" json:"consistency,omitempty"`
+	Id          string    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name        string    `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Gender      v1.Gender `protobuf:"varint,4,opt,name=gender,proto3,enum=libs.common.v1.Gender" json:"gender,omitempty"`
+	Consistency string    `protobuf:"bytes,3,opt,name=consistency,proto3" json:"consistency,omitempty"`
 }
 
 func (x *GetPatientAssignmentByWardResponse_Room_Bed_Patient) Reset() {
@@ -2056,6 +2057,13 @@ func (x *GetPatientAssignmentByWardResponse_Room_Bed_Patient) GetName() string {
 		return x.Name
 	}
 	return ""
+}
+
+func (x *GetPatientAssignmentByWardResponse_Room_Bed_Patient) GetGender() v1.Gender {
+	if x != nil {
+		return x.Gender
+	}
+	return v1.Gender(0)
 }
 
 func (x *GetPatientAssignmentByWardResponse_Room_Bed_Patient) GetConsistency() string {
@@ -2933,6 +2941,7 @@ type GetRecentPatientsResponse_Patient struct {
 
 	Id                      string                          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	HumanReadableIdentifier string                          `protobuf:"bytes,2,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty"`
+	Gender                  v1.Gender                       `protobuf:"varint,6,opt,name=gender,proto3,enum=libs.common.v1.Gender" json:"gender,omitempty"`
 	Room                    *GetRecentPatientsResponse_Room `protobuf:"bytes,3,opt,name=room,proto3,oneof" json:"room,omitempty"`
 	Bed                     *GetRecentPatientsResponse_Bed  `protobuf:"bytes,4,opt,name=bed,proto3,oneof" json:"bed,omitempty"`
 	Consistency             string                          `protobuf:"bytes,5,opt,name=consistency,proto3" json:"consistency,omitempty"`
@@ -2982,6 +2991,13 @@ func (x *GetRecentPatientsResponse_Patient) GetHumanReadableIdentifier() string 
 		return x.HumanReadableIdentifier
 	}
 	return ""
+}
+
+func (x *GetRecentPatientsResponse_Patient) GetGender() v1.Gender {
+	if x != nil {
+		return x.Gender
+	}
+	return v1.Gender(0)
 }
 
 func (x *GetRecentPatientsResponse_Patient) GetRoom() *GetRecentPatientsResponse_Room {
@@ -3137,14 +3153,14 @@ var file_services_tasks_svc_v1_patient_svc_proto_rawDesc = []byte{
 	0x74, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x6d, 0x65, 0x6e, 0x74, 0x42, 0x79, 0x57, 0x61, 0x72,
 	0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x77, 0x61, 0x72, 0x64,
 	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x77, 0x61, 0x72, 0x64, 0x49,
-	0x64, 0x22, 0xb7, 0x04, 0x0a, 0x22, 0x47, 0x65, 0x74, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74,
+	0x64, 0x22, 0xe7, 0x04, 0x0a, 0x22, 0x47, 0x65, 0x74, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74,
 	0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x6d, 0x65, 0x6e, 0x74, 0x42, 0x79, 0x57, 0x61, 0x72, 0x64,
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x05, 0x72, 0x6f, 0x6f, 0x6d,
 	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x3e, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
 	0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x73, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e,
 	0x47, 0x65, 0x74, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e,
 	0x6d, 0x65, 0x6e, 0x74, 0x42, 0x79, 0x57, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x2e, 0x52, 0x6f, 0x6f, 0x6d, 0x52, 0x05, 0x72, 0x6f, 0x6f, 0x6d, 0x73, 0x1a, 0xba,
+	0x73, 0x65, 0x2e, 0x52, 0x6f, 0x6f, 0x6d, 0x52, 0x05, 0x72, 0x6f, 0x6f, 0x6d, 0x73, 0x1a, 0xea,
 	0x03, 0x0a, 0x04, 0x52, 0x6f, 0x6f, 0x6d, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
 	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x56, 0x0a, 0x04, 0x62,
@@ -3155,7 +3171,7 @@ var file_services_tasks_svc_v1_patient_svc_proto_rawDesc = []byte{
 	0x6f, 0x6e, 0x73, 0x65, 0x2e, 0x52, 0x6f, 0x6f, 0x6d, 0x2e, 0x42, 0x65, 0x64, 0x52, 0x04, 0x62,
 	0x65, 0x64, 0x73, 0x12, 0x20, 0x0a, 0x0b, 0x63, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e,
 	0x63, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x63, 0x6f, 0x6e, 0x73, 0x69, 0x73,
-	0x74, 0x65, 0x6e, 0x63, 0x79, 0x1a, 0x93, 0x02, 0x0a, 0x03, 0x42, 0x65, 0x64, 0x12, 0x0e, 0x0a,
+	0x74, 0x65, 0x6e, 0x63, 0x79, 0x1a, 0xc3, 0x02, 0x0a, 0x03, 0x42, 0x65, 0x64, 0x12, 0x0e, 0x0a,
 	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a,
 	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d,
 	0x65, 0x12, 0x69, 0x0a, 0x07, 0x70, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01,
@@ -3166,10 +3182,13 @@ var file_services_tasks_svc_v1_patient_svc_proto_rawDesc = []byte{
 	0x6f, 0x6d, 0x2e, 0x42, 0x65, 0x64, 0x2e, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x48, 0x00,
 	0x52, 0x07, 0x70, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x88, 0x01, 0x01, 0x12, 0x20, 0x0a, 0x0b,
 	0x63, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x0b, 0x63, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x1a, 0x4f,
+	0x09, 0x52, 0x0b, 0x63, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x1a, 0x7f,
 	0x0a, 0x07, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
-	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a,
+	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x2e, 0x0a,
+	0x06, 0x67, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x16, 0x2e,
+	0x6c, 0x69, 0x62, 0x73, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x47,
+	0x65, 0x6e, 0x64, 0x65, 0x72, 0x52, 0x06, 0x67, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x20, 0x0a,
 	0x0b, 0x63, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x18, 0x03, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x0b, 0x63, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x42,
 	0x0a, 0x0a, 0x08, 0x5f, 0x70, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x22, 0x2a, 0x0a, 0x18, 0x47,
@@ -3346,7 +3365,7 @@ var file_services_tasks_svc_v1_patient_svc_proto_rawDesc = []byte{
 	0x01, 0x28, 0x08, 0x52, 0x04, 0x64, 0x6f, 0x6e, 0x65, 0x42, 0x13, 0x0a, 0x11, 0x5f, 0x61, 0x73,
 	0x73, 0x69, 0x67, 0x6e, 0x65, 0x64, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x22, 0x1a,
 	0x0a, 0x18, 0x47, 0x65, 0x74, 0x52, 0x65, 0x63, 0x65, 0x6e, 0x74, 0x50, 0x61, 0x74, 0x69, 0x65,
-	0x6e, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0xda, 0x04, 0x0a, 0x19, 0x47,
+	0x6e, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x8a, 0x05, 0x0a, 0x19, 0x47,
 	0x65, 0x74, 0x52, 0x65, 0x63, 0x65, 0x6e, 0x74, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x73,
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x61, 0x0a, 0x0f, 0x72, 0x65, 0x63, 0x65,
 	0x6e, 0x74, 0x5f, 0x70, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
@@ -3366,12 +3385,15 @@ var file_services_tasks_svc_v1_patient_svc_proto_rawDesc = []byte{
 	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x77, 0x61, 0x72, 0x64, 0x49, 0x64, 0x12, 0x20, 0x0a,
 	0x0b, 0x63, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x18, 0x04, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x0b, 0x63, 0x6f, 0x6e, 0x73, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x1a,
-	0xa5, 0x02, 0x0a, 0x07, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69,
+	0xd5, 0x02, 0x0a, 0x07, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x3a, 0x0a, 0x19, 0x68,
 	0x75, 0x6d, 0x61, 0x6e, 0x5f, 0x72, 0x65, 0x61, 0x64, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x69, 0x64,
 	0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x17,
 	0x68, 0x75, 0x6d, 0x61, 0x6e, 0x52, 0x65, 0x61, 0x64, 0x61, 0x62, 0x6c, 0x65, 0x49, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x12, 0x4e, 0x0a, 0x04, 0x72, 0x6f, 0x6f, 0x6d, 0x18,
+	0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x12, 0x2e, 0x0a, 0x06, 0x67, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x16, 0x2e, 0x6c, 0x69, 0x62, 0x73, 0x2e, 0x63,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x52,
+	0x06, 0x67, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x4e, 0x0a, 0x04, 0x72, 0x6f, 0x6f, 0x6d, 0x18,
 	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x35, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
 	0x2e, 0x74, 0x61, 0x73, 0x6b, 0x73, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65,
 	0x74, 0x52, 0x65, 0x63, 0x65, 0x6e, 0x74, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x52,
@@ -3673,50 +3695,52 @@ var file_services_tasks_svc_v1_patient_svc_proto_depIdxs = []int32{
 	47, // 25: services.tasks_svc.v1.GetPatientsByWardResponse.Patient.date_of_birth:type_name -> libs.common.v1.Date
 	32, // 26: services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.beds:type_name -> services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed
 	33, // 27: services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.patient:type_name -> services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient
-	49, // 28: services.tasks_svc.v1.GetPatientDetailsResponse.Task.status:type_name -> services.tasks_svc.v1.TaskStatus
-	37, // 29: services.tasks_svc.v1.GetPatientDetailsResponse.Task.subtasks:type_name -> services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask
-	46, // 30: services.tasks_svc.v1.GetPatientListResponse.Patient.gender:type_name -> libs.common.v1.Gender
-	47, // 31: services.tasks_svc.v1.GetPatientListResponse.Patient.date_of_birth:type_name -> libs.common.v1.Date
-	39, // 32: services.tasks_svc.v1.GetPatientListResponse.Patient.room:type_name -> services.tasks_svc.v1.GetPatientListResponse.Room
-	38, // 33: services.tasks_svc.v1.GetPatientListResponse.Patient.bed:type_name -> services.tasks_svc.v1.GetPatientListResponse.Bed
-	41, // 34: services.tasks_svc.v1.GetPatientListResponse.Patient.tasks:type_name -> services.tasks_svc.v1.GetPatientListResponse.Task
-	49, // 35: services.tasks_svc.v1.GetPatientListResponse.Task.status:type_name -> services.tasks_svc.v1.TaskStatus
-	42, // 36: services.tasks_svc.v1.GetPatientListResponse.Task.subtasks:type_name -> services.tasks_svc.v1.GetPatientListResponse.Task.SubTask
-	44, // 37: services.tasks_svc.v1.GetRecentPatientsResponse.Patient.room:type_name -> services.tasks_svc.v1.GetRecentPatientsResponse.Room
-	43, // 38: services.tasks_svc.v1.GetRecentPatientsResponse.Patient.bed:type_name -> services.tasks_svc.v1.GetRecentPatientsResponse.Bed
-	0,  // 39: services.tasks_svc.v1.PatientService.CreatePatient:input_type -> services.tasks_svc.v1.CreatePatientRequest
-	2,  // 40: services.tasks_svc.v1.PatientService.GetPatient:input_type -> services.tasks_svc.v1.GetPatientRequest
-	4,  // 41: services.tasks_svc.v1.PatientService.GetPatientByBed:input_type -> services.tasks_svc.v1.GetPatientByBedRequest
-	6,  // 42: services.tasks_svc.v1.PatientService.GetPatientsByWard:input_type -> services.tasks_svc.v1.GetPatientsByWardRequest
-	8,  // 43: services.tasks_svc.v1.PatientService.GetPatientAssignmentByWard:input_type -> services.tasks_svc.v1.GetPatientAssignmentByWardRequest
-	10, // 44: services.tasks_svc.v1.PatientService.GetPatientDetails:input_type -> services.tasks_svc.v1.GetPatientDetailsRequest
-	12, // 45: services.tasks_svc.v1.PatientService.GetPatientList:input_type -> services.tasks_svc.v1.GetPatientListRequest
-	14, // 46: services.tasks_svc.v1.PatientService.GetRecentPatients:input_type -> services.tasks_svc.v1.GetRecentPatientsRequest
-	16, // 47: services.tasks_svc.v1.PatientService.UpdatePatient:input_type -> services.tasks_svc.v1.UpdatePatientRequest
-	18, // 48: services.tasks_svc.v1.PatientService.AssignBed:input_type -> services.tasks_svc.v1.AssignBedRequest
-	20, // 49: services.tasks_svc.v1.PatientService.UnassignBed:input_type -> services.tasks_svc.v1.UnassignBedRequest
-	22, // 50: services.tasks_svc.v1.PatientService.DischargePatient:input_type -> services.tasks_svc.v1.DischargePatientRequest
-	24, // 51: services.tasks_svc.v1.PatientService.ReadmitPatient:input_type -> services.tasks_svc.v1.ReadmitPatientRequest
-	26, // 52: services.tasks_svc.v1.PatientService.DeletePatient:input_type -> services.tasks_svc.v1.DeletePatientRequest
-	1,  // 53: services.tasks_svc.v1.PatientService.CreatePatient:output_type -> services.tasks_svc.v1.CreatePatientResponse
-	3,  // 54: services.tasks_svc.v1.PatientService.GetPatient:output_type -> services.tasks_svc.v1.GetPatientResponse
-	5,  // 55: services.tasks_svc.v1.PatientService.GetPatientByBed:output_type -> services.tasks_svc.v1.GetPatientByBedResponse
-	7,  // 56: services.tasks_svc.v1.PatientService.GetPatientsByWard:output_type -> services.tasks_svc.v1.GetPatientsByWardResponse
-	9,  // 57: services.tasks_svc.v1.PatientService.GetPatientAssignmentByWard:output_type -> services.tasks_svc.v1.GetPatientAssignmentByWardResponse
-	11, // 58: services.tasks_svc.v1.PatientService.GetPatientDetails:output_type -> services.tasks_svc.v1.GetPatientDetailsResponse
-	13, // 59: services.tasks_svc.v1.PatientService.GetPatientList:output_type -> services.tasks_svc.v1.GetPatientListResponse
-	15, // 60: services.tasks_svc.v1.PatientService.GetRecentPatients:output_type -> services.tasks_svc.v1.GetRecentPatientsResponse
-	17, // 61: services.tasks_svc.v1.PatientService.UpdatePatient:output_type -> services.tasks_svc.v1.UpdatePatientResponse
-	19, // 62: services.tasks_svc.v1.PatientService.AssignBed:output_type -> services.tasks_svc.v1.AssignBedResponse
-	21, // 63: services.tasks_svc.v1.PatientService.UnassignBed:output_type -> services.tasks_svc.v1.UnassignBedResponse
-	23, // 64: services.tasks_svc.v1.PatientService.DischargePatient:output_type -> services.tasks_svc.v1.DischargePatientResponse
-	25, // 65: services.tasks_svc.v1.PatientService.ReadmitPatient:output_type -> services.tasks_svc.v1.ReadmitPatientResponse
-	27, // 66: services.tasks_svc.v1.PatientService.DeletePatient:output_type -> services.tasks_svc.v1.DeletePatientResponse
-	53, // [53:67] is the sub-list for method output_type
-	39, // [39:53] is the sub-list for method input_type
-	39, // [39:39] is the sub-list for extension type_name
-	39, // [39:39] is the sub-list for extension extendee
-	0,  // [0:39] is the sub-list for field type_name
+	46, // 28: services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient.gender:type_name -> libs.common.v1.Gender
+	49, // 29: services.tasks_svc.v1.GetPatientDetailsResponse.Task.status:type_name -> services.tasks_svc.v1.TaskStatus
+	37, // 30: services.tasks_svc.v1.GetPatientDetailsResponse.Task.subtasks:type_name -> services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask
+	46, // 31: services.tasks_svc.v1.GetPatientListResponse.Patient.gender:type_name -> libs.common.v1.Gender
+	47, // 32: services.tasks_svc.v1.GetPatientListResponse.Patient.date_of_birth:type_name -> libs.common.v1.Date
+	39, // 33: services.tasks_svc.v1.GetPatientListResponse.Patient.room:type_name -> services.tasks_svc.v1.GetPatientListResponse.Room
+	38, // 34: services.tasks_svc.v1.GetPatientListResponse.Patient.bed:type_name -> services.tasks_svc.v1.GetPatientListResponse.Bed
+	41, // 35: services.tasks_svc.v1.GetPatientListResponse.Patient.tasks:type_name -> services.tasks_svc.v1.GetPatientListResponse.Task
+	49, // 36: services.tasks_svc.v1.GetPatientListResponse.Task.status:type_name -> services.tasks_svc.v1.TaskStatus
+	42, // 37: services.tasks_svc.v1.GetPatientListResponse.Task.subtasks:type_name -> services.tasks_svc.v1.GetPatientListResponse.Task.SubTask
+	46, // 38: services.tasks_svc.v1.GetRecentPatientsResponse.Patient.gender:type_name -> libs.common.v1.Gender
+	44, // 39: services.tasks_svc.v1.GetRecentPatientsResponse.Patient.room:type_name -> services.tasks_svc.v1.GetRecentPatientsResponse.Room
+	43, // 40: services.tasks_svc.v1.GetRecentPatientsResponse.Patient.bed:type_name -> services.tasks_svc.v1.GetRecentPatientsResponse.Bed
+	0,  // 41: services.tasks_svc.v1.PatientService.CreatePatient:input_type -> services.tasks_svc.v1.CreatePatientRequest
+	2,  // 42: services.tasks_svc.v1.PatientService.GetPatient:input_type -> services.tasks_svc.v1.GetPatientRequest
+	4,  // 43: services.tasks_svc.v1.PatientService.GetPatientByBed:input_type -> services.tasks_svc.v1.GetPatientByBedRequest
+	6,  // 44: services.tasks_svc.v1.PatientService.GetPatientsByWard:input_type -> services.tasks_svc.v1.GetPatientsByWardRequest
+	8,  // 45: services.tasks_svc.v1.PatientService.GetPatientAssignmentByWard:input_type -> services.tasks_svc.v1.GetPatientAssignmentByWardRequest
+	10, // 46: services.tasks_svc.v1.PatientService.GetPatientDetails:input_type -> services.tasks_svc.v1.GetPatientDetailsRequest
+	12, // 47: services.tasks_svc.v1.PatientService.GetPatientList:input_type -> services.tasks_svc.v1.GetPatientListRequest
+	14, // 48: services.tasks_svc.v1.PatientService.GetRecentPatients:input_type -> services.tasks_svc.v1.GetRecentPatientsRequest
+	16, // 49: services.tasks_svc.v1.PatientService.UpdatePatient:input_type -> services.tasks_svc.v1.UpdatePatientRequest
+	18, // 50: services.tasks_svc.v1.PatientService.AssignBed:input_type -> services.tasks_svc.v1.AssignBedRequest
+	20, // 51: services.tasks_svc.v1.PatientService.UnassignBed:input_type -> services.tasks_svc.v1.UnassignBedRequest
+	22, // 52: services.tasks_svc.v1.PatientService.DischargePatient:input_type -> services.tasks_svc.v1.DischargePatientRequest
+	24, // 53: services.tasks_svc.v1.PatientService.ReadmitPatient:input_type -> services.tasks_svc.v1.ReadmitPatientRequest
+	26, // 54: services.tasks_svc.v1.PatientService.DeletePatient:input_type -> services.tasks_svc.v1.DeletePatientRequest
+	1,  // 55: services.tasks_svc.v1.PatientService.CreatePatient:output_type -> services.tasks_svc.v1.CreatePatientResponse
+	3,  // 56: services.tasks_svc.v1.PatientService.GetPatient:output_type -> services.tasks_svc.v1.GetPatientResponse
+	5,  // 57: services.tasks_svc.v1.PatientService.GetPatientByBed:output_type -> services.tasks_svc.v1.GetPatientByBedResponse
+	7,  // 58: services.tasks_svc.v1.PatientService.GetPatientsByWard:output_type -> services.tasks_svc.v1.GetPatientsByWardResponse
+	9,  // 59: services.tasks_svc.v1.PatientService.GetPatientAssignmentByWard:output_type -> services.tasks_svc.v1.GetPatientAssignmentByWardResponse
+	11, // 60: services.tasks_svc.v1.PatientService.GetPatientDetails:output_type -> services.tasks_svc.v1.GetPatientDetailsResponse
+	13, // 61: services.tasks_svc.v1.PatientService.GetPatientList:output_type -> services.tasks_svc.v1.GetPatientListResponse
+	15, // 62: services.tasks_svc.v1.PatientService.GetRecentPatients:output_type -> services.tasks_svc.v1.GetRecentPatientsResponse
+	17, // 63: services.tasks_svc.v1.PatientService.UpdatePatient:output_type -> services.tasks_svc.v1.UpdatePatientResponse
+	19, // 64: services.tasks_svc.v1.PatientService.AssignBed:output_type -> services.tasks_svc.v1.AssignBedResponse
+	21, // 65: services.tasks_svc.v1.PatientService.UnassignBed:output_type -> services.tasks_svc.v1.UnassignBedResponse
+	23, // 66: services.tasks_svc.v1.PatientService.DischargePatient:output_type -> services.tasks_svc.v1.DischargePatientResponse
+	25, // 67: services.tasks_svc.v1.PatientService.ReadmitPatient:output_type -> services.tasks_svc.v1.ReadmitPatientResponse
+	27, // 68: services.tasks_svc.v1.PatientService.DeletePatient:output_type -> services.tasks_svc.v1.DeletePatientResponse
+	55, // [55:69] is the sub-list for method output_type
+	41, // [41:55] is the sub-list for method input_type
+	41, // [41:41] is the sub-list for extension type_name
+	41, // [41:41] is the sub-list for extension extendee
+	0,  // [0:41] is the sub-list for field type_name
 }
 
 func init() { file_services_tasks_svc_v1_patient_svc_proto_init() }

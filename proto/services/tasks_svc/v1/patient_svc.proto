@@ -128,6 +128,7 @@ message GetPatientAssignmentByWardResponse {
       message Patient {
         string id = 1;
         string name = 2;
+        libs.common.v1.Gender gender = 4;
         string consistency = 3;
       }
     }
@@ -273,6 +274,7 @@ message GetRecentPatientsResponse {
   message Patient {
     string id = 1;
     string human_readable_identifier = 2;
+    libs.common.v1.Gender gender = 6;
     optional Room room = 3;
     optional Bed bed = 4;
     string consistency = 5;

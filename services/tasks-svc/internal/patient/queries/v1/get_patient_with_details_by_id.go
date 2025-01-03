@@ -70,15 +70,17 @@ func NewGetPatientWithDetailsByIDQueryHandler(
 		return &models.PatientDetails{
 			PatientWithConsistency: models.PatientWithConsistency{
 				Patient: models.Patient{
-					ID:                      patientRes.ID,
-					HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
-					Notes:                   patientRes.Notes,
-					BedID:                   patientRes.BedID,
-					IsDischarged:            patientRes.IsDischarged,
-					CreatedAt:               patientRes.CreatedAt.Time,
-					UpdatedAt:               patientRes.UpdatedAt.Time,
-					Gender:                  v1.Gender(patientRes.Gender),
-					DateOfBirth:             hwdb.DateToTime(patientRes.DateOfBirth),
+					PatientBase: models.PatientBase{
+						ID:                      patientRes.ID,
+						HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
+						Gender:                  v1.Gender(patientRes.Gender),
+					},
+					Notes:        patientRes.Notes,
+					BedID:        patientRes.BedID,
+					IsDischarged: patientRes.IsDischarged,
+					CreatedAt:    patientRes.CreatedAt.Time,
+					UpdatedAt:    patientRes.UpdatedAt.Time,
+					DateOfBirth:  hwdb.DateToTime(patientRes.DateOfBirth),
 				},
 				Consistency: common.ConsistencyToken(patientRes.Consistency).String(), //nolint:gosec
 			},

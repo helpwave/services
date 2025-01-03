@@ -68,15 +68,17 @@ func NewGetAllPatientsWithDetailsQueryHandler(authz hwauthz.AuthZ) GetAllPatient
 				patientDetail = &models.PatientDetails{
 					PatientWithConsistency: models.PatientWithConsistency{
 						Patient: models.Patient{
-							ID:                      row.Patient.ID,
-							HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
-							Notes:                   row.Patient.Notes,
-							BedID:                   row.Patient.BedID,
-							IsDischarged:            row.Patient.IsDischarged,
-							CreatedAt:               row.Patient.CreatedAt.Time,
-							UpdatedAt:               row.Patient.UpdatedAt.Time,
-							Gender:                  v1.Gender(row.Patient.Gender),
-							DateOfBirth:             hwdb.DateToTime(row.Patient.DateOfBirth),
+							PatientBase: models.PatientBase{
+								ID:                      row.Patient.ID,
+								HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
+								Gender:                  v1.Gender(row.Patient.Gender),
+							},
+							Notes:        row.Patient.Notes,
+							BedID:        row.Patient.BedID,
+							IsDischarged: row.Patient.IsDischarged,
+							CreatedAt:    row.Patient.CreatedAt.Time,
+							UpdatedAt:    row.Patient.UpdatedAt.Time,
+							DateOfBirth:  hwdb.DateToTime(row.Patient.DateOfBirth),
 						},
 						Consistency: common.ConsistencyToken(row.Patient.Consistency).String(), //nolint:gosec
 					},

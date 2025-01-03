@@ -6,7 +6,6 @@ import (
 	"context"
 	v1 "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwdb"
@@ -14,6 +13,8 @@ import (
 	"hwes"
 	"hwutil"
 	"time"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -174,6 +175,8 @@ func (s *PatientGrpcService) GetPatientByBed(
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
+		Gender:                  patient.Gender,
+		DateOfBirth:             formatDateOfBirth(patient.DateOfBirth),
 		BedId:                   req.GetBedId(),
 		Consistency:             patient.Consistency,
 	}, nil
@@ -464,6 +467,7 @@ func (s *PatientGrpcService) GetRecentPatients(
 		return &pb.GetRecentPatientsResponse_Patient{
 			Id:                      patient.ID.String(),
 			HumanReadableIdentifier: patient.HumanReadableIdentifier,
+			Gender:                  patient.Gender,
 			Room:                    roomRes,
 			Bed:                     bedRes,
 			Consistency:             patient.Consistency,
@@ -633,10 +637,11 @@ func (s *PatientGrpcService) GetPatientAssignmentByWard(
 								Patient: hwutil.MapIf(
 									bedWithPatient.Patient != nil,
 									bedWithPatient.Patient,
-									func(row *models.PatientWithConsistency) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
+									func(row *models.PatientBaseWithConsistency) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
 										return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
 											Id:          bedWithPatient.Patient.ID.String(),
 											Name:        bedWithPatient.Patient.HumanReadableIdentifier,
+											Gender:      bedWithPatient.Patient.Gender,
 											Consistency: bedWithPatient.Patient.Consistency,
 										}
 									}),

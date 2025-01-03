@@ -4113,6 +4113,7 @@ proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient.
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 4, 0),
     consistency: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
@@ -4157,6 +4158,10 @@ proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient.
     case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
+      break;
+    case 4:
+      var value = /** @type {!proto.libs.common.v1.Gender} */ (reader.readEnum());
+      msg.setGender(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
@@ -4205,6 +4210,13 @@ proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient.
       f
     );
   }
+  f = message.getGender();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      4,
+      f
+    );
+  }
   f = message.getConsistency();
   if (f.length > 0) {
     writer.writeString(
@@ -4248,6 +4260,24 @@ proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient.
  */
 proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional libs.common.v1.Gender gender = 4;
+ * @return {!proto.libs.common.v1.Gender}
+ */
+proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient.prototype.getGender = function() {
+  return /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {!proto.libs.common.v1.Gender} value
+ * @return {!proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient.prototype.setGender = function(value) {
+  return jspb.Message.setProto3EnumField(this, 4, value);
 };
 
 
@@ -8693,6 +8723,7 @@ proto.services.tasks_svc.v1.GetRecentPatientsResponse.Patient.toObject = functio
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 6, 0),
     room: (f = msg.getRoom()) && proto.services.tasks_svc.v1.GetRecentPatientsResponse.Room.toObject(includeInstance, f),
     bed: (f = msg.getBed()) && proto.services.tasks_svc.v1.GetRecentPatientsResponse.Bed.toObject(includeInstance, f),
     consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
@@ -8739,6 +8770,10 @@ proto.services.tasks_svc.v1.GetRecentPatientsResponse.Patient.deserializeBinaryF
     case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setHumanReadableIdentifier(value);
+      break;
+    case 6:
+      var value = /** @type {!proto.libs.common.v1.Gender} */ (reader.readEnum());
+      msg.setGender(value);
       break;
     case 3:
       var value = new proto.services.tasks_svc.v1.GetRecentPatientsResponse.Room;
@@ -8794,6 +8829,13 @@ proto.services.tasks_svc.v1.GetRecentPatientsResponse.Patient.serializeBinaryToW
   if (f.length > 0) {
     writer.writeString(
       2,
+      f
+    );
+  }
+  f = message.getGender();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      6,
       f
     );
   }
@@ -8856,6 +8898,24 @@ proto.services.tasks_svc.v1.GetRecentPatientsResponse.Patient.prototype.getHuman
  */
 proto.services.tasks_svc.v1.GetRecentPatientsResponse.Patient.prototype.setHumanReadableIdentifier = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional libs.common.v1.Gender gender = 6;
+ * @return {!proto.libs.common.v1.Gender}
+ */
+proto.services.tasks_svc.v1.GetRecentPatientsResponse.Patient.prototype.getGender = function() {
+  return /** @type {!proto.libs.common.v1.Gender} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {!proto.libs.common.v1.Gender} value
+ * @return {!proto.services.tasks_svc.v1.GetRecentPatientsResponse.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetRecentPatientsResponse.Patient.prototype.setGender = function(value) {
+  return jspb.Message.setProto3EnumField(this, 6, value);
 };
 
 

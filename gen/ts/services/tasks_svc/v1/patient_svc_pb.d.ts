@@ -489,6 +489,9 @@ export namespace GetPatientAssignmentByWardResponse {
         getName(): string;
         setName(value: string): Patient;
 
+        getGender(): libs_common_v1_types_pb.Gender;
+        setGender(value: libs_common_v1_types_pb.Gender): Patient;
+
         getConsistency(): string;
         setConsistency(value: string): Patient;
 
@@ -504,6 +507,7 @@ export namespace GetPatientAssignmentByWardResponse {
         export type AsObject = {
           id: string,
           name: string,
+          gender: libs_common_v1_types_pb.Gender,
           consistency: string,
         }
       }
@@ -1123,6 +1127,9 @@ export namespace GetRecentPatientsResponse {
     getHumanReadableIdentifier(): string;
     setHumanReadableIdentifier(value: string): Patient;
 
+    getGender(): libs_common_v1_types_pb.Gender;
+    setGender(value: libs_common_v1_types_pb.Gender): Patient;
+
     getRoom(): GetRecentPatientsResponse.Room | undefined;
     setRoom(value?: GetRecentPatientsResponse.Room): Patient;
     hasRoom(): boolean;
@@ -1148,6 +1155,7 @@ export namespace GetRecentPatientsResponse {
     export type AsObject = {
       id: string,
       humanReadableIdentifier: string,
+      gender: libs_common_v1_types_pb.Gender,
       room?: GetRecentPatientsResponse.Room.AsObject,
       bed?: GetRecentPatientsResponse.Bed.AsObject,
       consistency: string,
