@@ -24,12 +24,14 @@ import (
 //   - Add to always include list for ward and subjectid (matcher too precise)
 //     After each step: GetProperty and check AlwaysIncludedForViewSource for wardid
 func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	wardID := uuid.New()
 	patientID := uuid.New()
 	taskID := uuid.New()
 
-	// give new user appropriate permissions
+	// give appropriate permissions
 	authz := spicedb.NewSpiceDBAuthZ()
 	patient := commonPerm.GenericObject{Id: patientID.String(), Typ: "patient"}
 	task := commonPerm.GenericObject{Id: taskID.String(), Typ: "task"}
@@ -42,7 +44,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		Commit(ctx)
 	require.NoError(t, err)
 
-	propertyClient := propertyServiceClient()
+	propertyClient := propertyServiceClient("", "")
 	propertyViewClient := propertyViewServiceClient()
 
 	//
@@ -189,7 +191,9 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 //   - Update name
 //   - TODO: conflict detection
 func TestTaskGetPropertyConsistency(t *testing.T) {
-	propertyClient := propertyServiceClient()
+	t.Parallel()
+
+	propertyClient := propertyServiceClient("", "")
 
 	ctx := context.Background()
 

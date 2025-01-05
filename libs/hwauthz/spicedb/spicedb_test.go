@@ -52,6 +52,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestBulkCheck(t *testing.T) {
+	t.Parallel()
 	ctx := context.Background()
 	client := NewSpiceDBAuthZ()
 
@@ -102,6 +103,8 @@ func TestBulkCheck(t *testing.T) {
 }
 
 func TestLookupResources(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	client := NewSpiceDBAuthZ()
 
@@ -134,6 +137,8 @@ func TestLookupResources(t *testing.T) {
 }
 
 func TestDeleteObject(t *testing.T) {
+	t.Parallel()
+
 	// client
 	ctx := context.Background()
 	client := NewSpiceDBAuthZ()

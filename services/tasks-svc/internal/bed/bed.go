@@ -62,7 +62,7 @@ func NewServiceServer(authz hwauthz.AuthZ, es *esdb.Client) *ServiceServer {
 
 func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.MustGetDB(ctx))
 
 	// parse inputs
 	roomId, err := uuid.Parse(req.GetRoomId())
@@ -137,7 +137,7 @@ func (s ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) 
 }
 
 func (s ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.GetBedResponse, error) {
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.MustGetDB(ctx))
 
 	// parse inputs
 	id, err := uuid.Parse(req.GetId())
@@ -175,7 +175,7 @@ func (s ServiceServer) GetBedByPatient(
 	ctx context.Context,
 	req *pb.GetBedByPatientRequest,
 ) (*pb.GetBedByPatientResponse, error) {
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.MustGetDB(ctx))
 
 	patientId, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
@@ -229,7 +229,7 @@ func (s ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.MustGetDB(ctx))
 
 	beds, err := bedRepo.GetBeds(ctx, roomID)
 	if err != nil {
@@ -270,7 +270,7 @@ func (s ServiceServer) GetBedsByRoom(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.MustGetDB(ctx))
 
 	beds, err := bedRepo.GetBeds(ctx,
 		uuid.NullUUID{
@@ -312,7 +312,7 @@ func (s ServiceServer) GetBedsByRoom(
 }
 
 func (s ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.MustGetDB(ctx))
 
 	// parse inputs
 	bedID, err := uuid.Parse(req.GetId())
@@ -363,7 +363,7 @@ func (s ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) 
 
 func (s ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*pb.DeleteBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := bed_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.MustGetDB(ctx))
 
 	// parse inputs
 	bedID, err := uuid.Parse(req.GetId())

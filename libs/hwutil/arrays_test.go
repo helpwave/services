@@ -7,6 +7,8 @@ import (
 )
 
 func TestWithout(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name           string
 		original       []int
@@ -59,6 +61,8 @@ func TestWithout(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			result := Without(tt.original, tt.itemsToRemove)
 			require.Equal(t, tt.expectedResult, result)
 		})
@@ -66,6 +70,8 @@ func TestWithout(t *testing.T) {
 }
 
 func TestSameItems(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name           string
 		a, b           []int
@@ -117,6 +123,8 @@ func TestSameItems(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			result := SameItems(tt.a, tt.b)
 			require.Equal(t, tt.expectedResult, result)
 		})

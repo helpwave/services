@@ -26,6 +26,8 @@ func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwe
 }
 
 func TestPatientAggregate_CreatePatient(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -58,6 +60,8 @@ func TestPatientAggregate_CreatePatient(t *testing.T) {
 }
 
 func TestPatientAggregate_UpdateNotes(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -94,6 +98,8 @@ func TestPatientAggregate_UpdateNotes(t *testing.T) {
 }
 
 func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -135,6 +141,8 @@ func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
 }
 
 func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -176,6 +184,8 @@ func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
 }
 
 func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	ctx = auth.ContextWithUserID(ctx, uuid.New())
 	ctx = auth.ContextWithOrganizationID(ctx, uuid.New())
@@ -221,6 +231,8 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 }
 
 func TestPatientAggregate_DeletePatient(t *testing.T) {
+	t.Parallel()
+
 	ctx := auth.ContextWithUserID(context.Background(), uuid.New())
 
 	patientID := uuid.New()

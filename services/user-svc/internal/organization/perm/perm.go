@@ -30,11 +30,6 @@ const (
 	InviteOrganization = "organization"
 )
 
-const (
-	OrganizationMember = "member"
-	OrganizationLeader = "leader"
-)
-
 // Permissions
 
 const (

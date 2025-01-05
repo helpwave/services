@@ -23,7 +23,7 @@ type GetPatientAssignmentByWardQueryHandler func(
 
 func NewGetPatientAssignmentByWardQueryHandler(authz hwauthz.AuthZ) GetPatientAssignmentByWardQueryHandler {
 	return func(ctx context.Context, wardID uuid.UUID) ([]*models.RoomWithBedsWithPatient, error) {
-		roomRepo := room_repo.New(hwdb.GetDB())
+		roomRepo := room_repo.New(hwdb.MustGetDB(ctx))
 
 		// check permissions
 		//

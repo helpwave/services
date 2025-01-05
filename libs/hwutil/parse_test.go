@@ -13,6 +13,8 @@ import (
 func runPtrToTest[T comparable](t *testing.T, v T) {
 	t.Helper()
 	t.Run(fmt.Sprintf("test value %v as %T", v, v), func(t *testing.T) {
+		t.Parallel()
+
 		vPtr := hwutil.PtrTo(v)
 		if v != *vPtr {
 			t.Errorf("expected %v, got %v", v, *vPtr)
@@ -21,6 +23,8 @@ func runPtrToTest[T comparable](t *testing.T, v T) {
 }
 
 func TestPtrTo(t *testing.T) {
+	t.Parallel()
+
 	runPtrToTest(t, true)
 	runPtrToTest(t, "Hello world")
 	runPtrToTest(t, 123)
@@ -34,7 +38,11 @@ func TestPtrTo(t *testing.T) {
 }
 
 func TestStringsToUUIDs(t *testing.T) {
+	t.Parallel()
+
 	t.Run("valid uuids", func(t *testing.T) {
+		t.Parallel()
+
 		uuidStrings := []string{
 			"48441b57-a92a-4022-bfd9-9ded5acdb693",
 			"370472cf-0e4f-449f-a6a4-817d7e025552",
@@ -62,6 +70,8 @@ func TestStringsToUUIDs(t *testing.T) {
 	})
 
 	t.Run("invalid uuids", func(t *testing.T) {
+		t.Parallel()
+
 		uuidStrings := []string{
 			"48441b57-a92a-4022-bfd9-9ded5acdb693",
 			"asdasdasdsadsadadadsa",
@@ -75,6 +85,8 @@ func TestStringsToUUIDs(t *testing.T) {
 	})
 
 	t.Run("empty", func(t *testing.T) {
+		t.Parallel()
+
 		uuidStrings := []string{}
 		actual, err := hwutil.StringsToUUIDs(uuidStrings)
 		if err != nil {
@@ -87,7 +99,11 @@ func TestStringsToUUIDs(t *testing.T) {
 }
 
 func TestInterfacesToStrings(t *testing.T) {
+	t.Parallel()
+
 	t.Run("ok path", func(t *testing.T) {
+		t.Parallel()
+
 		expected := []string{
 			"48441b57-a92a-4022-bfd9-9ded5acdb693",
 			"Unit Test",
@@ -104,6 +120,8 @@ func TestInterfacesToStrings(t *testing.T) {
 	})
 
 	t.Run("not ok path", func(t *testing.T) {
+		t.Parallel()
+
 		interfaces := []interface{}{
 			"48441b57-a92a-4022-bfd9-9ded5acdb693",
 			123,

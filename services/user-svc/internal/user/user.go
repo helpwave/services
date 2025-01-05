@@ -41,7 +41,7 @@ func (s ServiceServer) ReadPublicProfile(
 	ctx context.Context,
 	req *pb.ReadPublicProfileRequest,
 ) (*pb.ReadPublicProfileResponse, error) {
-	userRepo := user_repo.New(hwdb.GetDB())
+	userRepo := user_repo.New(hwdb.MustGetDB(ctx))
 
 	userID, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -74,7 +74,7 @@ func (s ServiceServer) ReadPublicProfile(
 
 func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
 	log := zlog.Ctx(ctx)
-	userRepo := user_repo.New(hwdb.GetDB())
+	userRepo := user_repo.New(hwdb.MustGetDB(ctx))
 
 	var payload events.UserUpdatedEvent
 	if err := proto.Unmarshal(evt.RawData, &payload); err != nil {

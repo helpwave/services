@@ -23,6 +23,8 @@ func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetTaskTe
 }
 
 func TestCreateUpdateGetTaskTemplate(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	taskTemplateClient := taskTemplateServiceClient()
 	wardServiceClient := wardServiceClient()

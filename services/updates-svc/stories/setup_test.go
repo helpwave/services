@@ -54,5 +54,5 @@ func TestMain(m *testing.M) {
 }
 
 func updatesServiceClient() pb.UpdatesServiceClient {
-	return pb.NewUpdatesServiceClient(hwtesting.GetGrpcConn(""))
+	return pb.NewUpdatesServiceClient(hwtesting.GetGrpcConn("", ""))
 }

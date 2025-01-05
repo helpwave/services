@@ -37,13 +37,15 @@ type RecoverySuite struct {
 }
 
 func TestPanicRecoverInterceptor(t *testing.T) {
-	telemetry.SetupMetrics(context.Background(), nil)
+	t.Parallel()
+	ctx := telemetry.SetupMetrics(context.Background(), nil)
+	counter := NewPanicsRecoveredCounter(ctx)
 	s := &RecoverySuite{
 		InterceptorTestSuite: &testpb.InterceptorTestSuite{
 			TestService: &recoveryAssertService{TestServiceServer: &testpb.TestPingService{}},
 			ServerOpts: []grpc.ServerOption{
-				grpc.StreamInterceptor(StreamPanicRecoverInterceptor()),
-				grpc.UnaryInterceptor(UnaryPanicRecoverInterceptor()),
+				grpc.StreamInterceptor(StreamPanicRecoverInterceptor(counter)),
+				grpc.UnaryInterceptor(UnaryPanicRecoverInterceptor(counter)),
 			},
 		},
 	}

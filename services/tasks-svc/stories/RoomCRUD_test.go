@@ -17,6 +17,8 @@ import (
 //   - Create a new room
 //   - Update it
 func TestCreateUpdateGetRoom(t *testing.T) {
+	t.Parallel()
+
 	ctx := context.Background()
 	roomClient := roomServiceClient()
 
@@ -75,6 +77,8 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 }
 
 func TestGetRooms(t *testing.T) {
+	t.Parallel()
+
 	roomClient := roomServiceClient()
 	ctx := context.Background()
 
@@ -134,6 +138,8 @@ func TestGetRooms(t *testing.T) {
 }
 
 func TestGetRoomOverviewsByWard(t *testing.T) {
+	t.Parallel()
+
 	patientClient := patientServiceClient()
 	taskClient := taskServiceClient()
 	ctx := context.Background()

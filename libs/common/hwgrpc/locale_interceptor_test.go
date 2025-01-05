@@ -12,6 +12,8 @@ import (
 )
 
 func TestLocaleInterceptor(t *testing.T) {
+	t.Parallel()
+
 	testCases := map[string][]string{
 		"de":     {"de"},
 		"en":     {"en"},
@@ -24,6 +26,8 @@ func TestLocaleInterceptor(t *testing.T) {
 	for acceptLanguageHeader, expectedLocalesStrings := range testCases {
 		t.Run(fmt.Sprintf("Test localeInterceptor with accept-language header of '%s'", acceptLanguageHeader),
 			func(t *testing.T) {
+				t.Parallel()
+
 				ctx := context.Background()
 
 				md := metadata.New(map[string]string{

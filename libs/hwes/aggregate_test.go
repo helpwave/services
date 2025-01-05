@@ -8,6 +8,8 @@ import (
 )
 
 func TestResolveAggregateIDAndTypeFromStreamID(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		streamID              string
 		expectedError         bool
