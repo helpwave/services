@@ -182,8 +182,6 @@ class FieldOptions_JSType extends $pb.ProtobufEnum {
 }
 
 /// If set to RETENTION_SOURCE, the option will be omitted from the binary.
-/// Note: as of January 2023, support for this is in progress and does not yet
-/// have an effect (b/264593489).
 class FieldOptions_OptionRetention extends $pb.ProtobufEnum {
   static const FieldOptions_OptionRetention RETENTION_UNKNOWN = FieldOptions_OptionRetention._(0, _omitEnumNames ? '' : 'RETENTION_UNKNOWN');
   static const FieldOptions_OptionRetention RETENTION_RUNTIME = FieldOptions_OptionRetention._(1, _omitEnumNames ? '' : 'RETENTION_RUNTIME');
@@ -203,8 +201,7 @@ class FieldOptions_OptionRetention extends $pb.ProtobufEnum {
 
 /// This indicates the types of entities that the field may apply to when used
 /// as an option. If it is unset, then the field may be freely used as an
-/// option on any kind of entity. Note: as of January 2023, support for this is
-/// in progress and does not yet have an effect (b/264593489).
+/// option on any kind of entity.
 class FieldOptions_OptionTargetType extends $pb.ProtobufEnum {
   static const FieldOptions_OptionTargetType TARGET_TYPE_UNKNOWN = FieldOptions_OptionTargetType._(0, _omitEnumNames ? '' : 'TARGET_TYPE_UNKNOWN');
   static const FieldOptions_OptionTargetType TARGET_TYPE_FILE = FieldOptions_OptionTargetType._(1, _omitEnumNames ? '' : 'TARGET_TYPE_FILE');
