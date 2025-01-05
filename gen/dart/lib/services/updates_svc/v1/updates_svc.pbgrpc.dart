@@ -15,16 +15,16 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'updates_svc.pb.dart' as $11;
+import 'updates_svc.pb.dart' as $0;
 
 export 'updates_svc.pb.dart';
 
 @$pb.GrpcServiceName('services.updates_svc.v1.UpdatesService')
 class UpdatesServiceClient extends $grpc.Client {
-  static final _$receiveUpdates = $grpc.ClientMethod<$11.ReceiveUpdatesRequest, $11.ReceiveUpdatesResponse>(
+  static final _$receiveUpdates = $grpc.ClientMethod<$0.ReceiveUpdatesRequest, $0.ReceiveUpdatesResponse>(
       '/services.updates_svc.v1.UpdatesService/ReceiveUpdates',
-      ($11.ReceiveUpdatesRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $11.ReceiveUpdatesResponse.fromBuffer(value));
+      ($0.ReceiveUpdatesRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.ReceiveUpdatesResponse.fromBuffer(value));
 
   UpdatesServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -32,7 +32,7 @@ class UpdatesServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseStream<$11.ReceiveUpdatesResponse> receiveUpdates($11.ReceiveUpdatesRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseStream<$0.ReceiveUpdatesResponse> receiveUpdates($0.ReceiveUpdatesRequest request, {$grpc.CallOptions? options}) {
     return $createStreamingCall(_$receiveUpdates, $async.Stream.fromIterable([request]), options: options);
   }
 }
@@ -42,18 +42,18 @@ abstract class UpdatesServiceBase extends $grpc.Service {
   $core.String get $name => 'services.updates_svc.v1.UpdatesService';
 
   UpdatesServiceBase() {
-    $addMethod($grpc.ServiceMethod<$11.ReceiveUpdatesRequest, $11.ReceiveUpdatesResponse>(
+    $addMethod($grpc.ServiceMethod<$0.ReceiveUpdatesRequest, $0.ReceiveUpdatesResponse>(
         'ReceiveUpdates',
         receiveUpdates_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $11.ReceiveUpdatesRequest.fromBuffer(value),
-        ($11.ReceiveUpdatesResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $0.ReceiveUpdatesRequest.fromBuffer(value),
+        ($0.ReceiveUpdatesResponse value) => value.writeToBuffer()));
   }
 
-  $async.Stream<$11.ReceiveUpdatesResponse> receiveUpdates_Pre($grpc.ServiceCall call, $async.Future<$11.ReceiveUpdatesRequest> request) async* {
+  $async.Stream<$0.ReceiveUpdatesResponse> receiveUpdates_Pre($grpc.ServiceCall call, $async.Future<$0.ReceiveUpdatesRequest> request) async* {
     yield* receiveUpdates(call, await request);
   }
 
-  $async.Stream<$11.ReceiveUpdatesResponse> receiveUpdates($grpc.ServiceCall call, $11.ReceiveUpdatesRequest request);
+  $async.Stream<$0.ReceiveUpdatesResponse> receiveUpdates($grpc.ServiceCall call, $0.ReceiveUpdatesRequest request);
 }
