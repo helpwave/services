@@ -14,7 +14,7 @@ ENV PATH="$PATH:$GOROOT/bin"
 # update debian package list and packages, also install some
 RUN apt update \
     && apt upgrade -y \
-    && apt install sudo vim nano jq dnsutils postgresql-client lsb-release gpg redis-tools \
+    && apt install sudo vim nano jq dnsutils postgresql-client lsb-release gpg redis-tools shellcheck \
     	apt-transport-https ca-certificates curl gnupg2 software-properties-common \
 		-y \
     && apt-get clean autoclean -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
@@ -94,6 +94,12 @@ RUN mkdir "$HOME/dapr" \
 #  https://fly.io/docs/
 RUN curl -L https://fly.io/install.sh | sh
 ENV PATH="$PATH:$HOME/.fly/bin"
+
+# install actionlint
+#  https://github.com/rhysd/actionlint
+ENV ACTIONLINT_VERSION=1.7.5
+RUN go install github.com/rhysd/actionlint/cmd/actionlint@v${ACTIONLINT_VERSION} \
+	&& go clean -modcache
 
 # install go-migrate
 #  https://github.com/golang-migrate/migrate

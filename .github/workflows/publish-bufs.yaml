@@ -44,22 +44,22 @@ jobs:
       id: breaking
       # We previously checked if any illegal breakage occurred, now check if we have breakage _at all_
       # If so, we publish this as a _major_ release
-      run: buf breaking --against '.git#ref=HEAD^' && echo "breaking=false" >> $GITHUB_OUTPUT || echo "breaking=true" >> $GITHUB_OUTPUT
+      run: buf breaking --against '.git#ref=HEAD^' && echo "breaking=false" >> "$GITHUB_OUTPUT" || echo "breaking=true" >> "$GITHUB_OUTPUT"
     - name: Has new package?
       id: new-package
       run: |
         last_tree=$(git ls-tree -d -r --name-only HEAD^ proto | sort) # directory tree of proto in old commit
         current_tree=$(find proto -type d | sort) # directory tree of proto right now
         new_dirs=$(comm -13 <(echo "$last_tree") <(echo "$current_tree")) # filter out lines, which are "-3": common (i.e. unchanged) or "-1": only in the last tree (i.e. removed)
-        echo $new_dirs
+        echo "$new_dirs"
         if [ -z "$new_dirs" ]; then
-          echo "new-package=false" >> $GITHUB_OUTPUT
+          echo "new-package=false" >> "$GITHUB_OUTPUT"
         else
-          echo "new-package=true" >> $GITHUB_OUTPUT
+          echo "new-package=true" >> "$GITHUB_OUTPUT"
         fi
     - name: Get SHA
       id: commit
-      run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      run: echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
     - name: Get Bump
       id: bump
       run: |
@@ -72,7 +72,7 @@ jobs:
         else
           BUMP="patch"
         fi
-        echo "bump=$BUMP" >> $GITHUB_OUTPUT
+        echo "bump=$BUMP" >> "$GITHUB_OUTPUT"
       env:
         BREAKING: ${{ steps.breaking.outputs.breaking }}
         NEW_PKG: ${{ steps.new-package.outputs.new-package }}
@@ -91,10 +91,10 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
     - name: Fetch latest version from registry
       working-directory: gen/ts
-      run: npm version $(npm view . version)
+      run: npm version "$(npm view . version)"
     - name: Bump version
       working-directory: gen/ts
-      run: npm version pre$BUMP --preid $SHA
+      run: npm version "pre$BUMP" --preid "$SHA"
       env:
         BUMP: ${{ needs.check-preconditions.outputs.bump }}
         SHA: ${{ needs.check-preconditions.outputs.commit }}
@@ -137,9 +137,9 @@ jobs:
         BUMP: ${{ needs.check-preconditions.outputs.bump }}
         SHA: ${{ needs.check-preconditions.outputs.commit }}
       run: |
-        VERSION=$(curl https://pub.dev/api/packages/helpwave_proto_dart -H "Accept: application/vnd.pub.v2+json" | jq ".latest.version" -r)
-        NEW_VERSION=$(semver bump $BUMP $VERSION)
-        NEW_VERSION=$(semver bump prerel $SHA $NEW_VERSION)
+        VERSION=$(curl "https://pub.dev/api/packages/helpwave_proto_dart" -H "Accept: application/vnd.pub.v2+json" | jq ".latest.version" -r)
+        NEW_VERSION=$(semver bump "$BUMP" "$VERSION")
+        NEW_VERSION=$(semver bump prerel "$SHA" "$NEW_VERSION")
         sed "s/version:.*/version: $NEW_VERSION/" pubspec.yaml -i
     - name: Publish to pub.dev
       working-directory: gen/dart
