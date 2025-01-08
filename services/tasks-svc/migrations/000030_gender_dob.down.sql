@@ -1,0 +1,2 @@
+ALTER TABLE patients DROP COLUMN IF EXISTS date_of_birth;
+ALTER TABLE patients DROP COLUMN IF EXISTS gender;

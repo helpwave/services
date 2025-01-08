@@ -3,6 +3,7 @@ package v1
 import (
 	"common"
 	"context"
+	v1 "gen/libs/common/v1"
 	"hwauthz"
 	"hwauthz/commonPerm"
 	"hwes"
@@ -19,6 +20,8 @@ type UpdatePatientCommandHandler func(
 	patientID uuid.UUID,
 	humanReadableIdentifier *string,
 	notes *string,
+	gender *v1.Gender,
+	dateOfBirth *v1.Date,
 ) (common.ConsistencyToken, error)
 
 func NewUpdatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) UpdatePatientCommandHandler {
@@ -27,6 +30,8 @@ func NewUpdatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 		patientID uuid.UUID,
 		humanReadableIdentifier *string,
 		notes *string,
+		gender *v1.Gender,
+		dateOfBirth *v1.Date,
 	) (common.ConsistencyToken, error) {
 		user := commonPerm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserUpdate, perm.Patient(patientID))
@@ -47,6 +52,18 @@ func NewUpdatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 
 		if notes != nil {
 			if err := a.UpdateNotes(ctx, *notes); err != nil {
+				return 0, err
+			}
+		}
+
+		if gender != nil {
+			if err := a.UpdateGender(ctx, *gender); err != nil {
+				return 0, err
+			}
+		}
+
+		if dateOfBirth != nil {
+			if err := a.UpdateDateOfBirth(ctx, dateOfBirth.Date.AsTime()); err != nil {
 				return 0, err
 			}
 		}

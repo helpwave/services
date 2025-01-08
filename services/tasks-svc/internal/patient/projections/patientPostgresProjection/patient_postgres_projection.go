@@ -42,6 +42,8 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(patientEventsV1.BedUnsassigned, p.onBedUnassigned)
 	p.RegisterEventListener(patientEventsV1.PatientDischarged, p.onPatientDischarged)
 	p.RegisterEventListener(patientEventsV1.NotesUpdated, p.onNotesUpdated)
+	p.RegisterEventListener(patientEventsV1.GenderUpdated, p.onGenderUpdated)
+	p.RegisterEventListener(patientEventsV1.DateOfBirthUpdated, p.onDateOfBirthUpdated)
 	p.RegisterEventListener(patientEventsV1.HumanReadableIdentifierUpdated, p.onHumanReadableIdentifierUpdated)
 	p.RegisterEventListener(patientEventsV1.PatientReadmitted, p.onPatientReadmitted)
 	p.RegisterEventListener(patientEventsV1.PatientDeleted, p.onPatientDeleted)
@@ -71,6 +73,8 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 		ID:                      patientID,
 		HumanReadableIdentifier: payload.HumanReadableIdentifier,
 		Notes:                   payload.Notes,
+		Gender:                  int32(payload.Gender),
+		DateOfBirth:             hwdb.TimePtrToDate(payload.DateOfBirth),
 		CreatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
 		UpdatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
 		Consistency:             int64(evt.GetVersion()), //nolint:gosec
@@ -150,6 +154,50 @@ func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error,
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:          evt.AggregateID,
 		Notes:       &payload.Notes,
+		UpdatedAt:   hwdb.TimeToTimestamp(evt.Timestamp),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
+
+	return nil, nil
+}
+
+func (a *Projection) onGenderUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload patientEventsV1.GenderUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, hwutil.PtrTo(esdb.NackActionPark)
+	}
+
+	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+		ID:          evt.AggregateID,
+		Gender:      hwutil.PtrTo(int32(payload.Gender)),
+		UpdatedAt:   hwdb.TimeToTimestamp(evt.Timestamp),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
+
+	return nil, nil
+}
+
+func (a *Projection) onDateOfBirthUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload patientEventsV1.DateOfBirthUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, hwutil.PtrTo(esdb.NackActionPark)
+	}
+
+	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+		ID:          evt.AggregateID,
+		DateOfBirth: hwdb.TimeToDate(payload.DateOfBirth),
 		UpdatedAt:   hwdb.TimeToTimestamp(evt.Timestamp),
 		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})

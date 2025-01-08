@@ -14,14 +14,16 @@ import (
 
 const createPatient = `-- name: CreatePatient :exec
 INSERT INTO patients
-	(id, human_readable_identifier, notes, created_at, updated_at, consistency, organization_id)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+	(id, human_readable_identifier, notes, gender, date_of_birth, created_at, updated_at, consistency, organization_id)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 `
 
 type CreatePatientParams struct {
 	ID                      uuid.UUID
 	HumanReadableIdentifier string
 	Notes                   string
+	Gender                  int32
+	DateOfBirth             pgtype.Date
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
 	Consistency             int64
@@ -33,6 +35,8 @@ func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) er
 		arg.ID,
 		arg.HumanReadableIdentifier,
 		arg.Notes,
+		arg.Gender,
+		arg.DateOfBirth,
 		arg.CreatedAt,
 		arg.UpdatedAt,
 		arg.Consistency,
@@ -52,7 +56,7 @@ func (q *Queries) DeletePatient(ctx context.Context, id uuid.UUID) error {
 
 const getAllPatientsWithTasksBedAndRoom = `-- name: GetAllPatientsWithTasksBedAndRoom :many
 SELECT
-	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id,
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id, patients.gender, patients.date_of_birth,
 	tasks.id as task_id,
 	tasks.name as task_name,
 	tasks.description as task_description,
@@ -118,6 +122,8 @@ func (q *Queries) GetAllPatientsWithTasksBedAndRoom(ctx context.Context, organiz
 			&i.Patient.IsDischarged,
 			&i.Patient.Consistency,
 			&i.Patient.OrganizationID,
+			&i.Patient.Gender,
+			&i.Patient.DateOfBirth,
 			&i.TaskID,
 			&i.TaskName,
 			&i.TaskDescription,
@@ -147,7 +153,7 @@ func (q *Queries) GetAllPatientsWithTasksBedAndRoom(ctx context.Context, organiz
 }
 
 const getPatientByBed = `-- name: GetPatientByBed :one
-SELECT patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id
+SELECT patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id, patients.gender, patients.date_of_birth
 FROM patients
 WHERE bed_id = $1
 	LIMIT 1
@@ -166,13 +172,15 @@ func (q *Queries) GetPatientByBed(ctx context.Context, bedID uuid.NullUUID) (Pat
 		&i.IsDischarged,
 		&i.Consistency,
 		&i.OrganizationID,
+		&i.Gender,
+		&i.DateOfBirth,
 	)
 	return i, err
 }
 
 const getPatientWithBedAndRoom = `-- name: GetPatientWithBedAndRoom :one
 SELECT
-	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id,
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id, patients.gender, patients.date_of_birth,
 	beds.name as bed_name,
 	beds.consistency as bed_consistency,
 	rooms.id as room_id,
@@ -196,6 +204,8 @@ type GetPatientWithBedAndRoomRow struct {
 	IsDischarged            bool
 	Consistency             int64
 	OrganizationID          uuid.UUID
+	Gender                  int32
+	DateOfBirth             pgtype.Date
 	BedName                 *string
 	BedConsistency          *int64
 	RoomID                  uuid.NullUUID
@@ -217,6 +227,8 @@ func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.U
 		&i.IsDischarged,
 		&i.Consistency,
 		&i.OrganizationID,
+		&i.Gender,
+		&i.DateOfBirth,
 		&i.BedName,
 		&i.BedConsistency,
 		&i.RoomID,
@@ -229,7 +241,7 @@ func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.U
 
 const getPatientsByWard = `-- name: GetPatientsByWard :many
 SELECT
-	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency, patients.organization_id, patients.gender, patients.date_of_birth
 FROM patients
 		 JOIN beds ON patients.bed_id = beds.id
 		 JOIN rooms ON beds.room_id = rooms.id
@@ -255,6 +267,8 @@ func (q *Queries) GetPatientsByWard(ctx context.Context, wardID uuid.UUID) ([]Pa
 			&i.IsDischarged,
 			&i.Consistency,
 			&i.OrganizationID,
+			&i.Gender,
+			&i.DateOfBirth,
 		); err != nil {
 			return nil, err
 		}
@@ -272,7 +286,9 @@ SET human_readable_identifier = coalesce($2, human_readable_identifier),
     notes = coalesce($3, notes),
     updated_at = coalesce($4, updated_at),
     is_discharged = coalesce($5, is_discharged),
-	consistency = $6
+	gender = coalesce($6, gender),
+	date_of_birth = coalesce($7, date_of_birth),
+	consistency = $8
 WHERE id = $1
 `
 
@@ -282,6 +298,8 @@ type UpdatePatientParams struct {
 	Notes                  *string
 	UpdatedAt              pgtype.Timestamp
 	IsDischarged           *bool
+	Gender                 *int32
+	DateOfBirth            pgtype.Date
 	Consistency            int64
 }
 
@@ -292,6 +310,8 @@ func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) er
 		arg.Notes,
 		arg.UpdatedAt,
 		arg.IsDischarged,
+		arg.Gender,
+		arg.DateOfBirth,
 		arg.Consistency,
 	)
 	return err

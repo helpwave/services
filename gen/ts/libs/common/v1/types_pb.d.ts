@@ -1,25 +1,31 @@
 import * as jspb from 'google-protobuf'
 
-import * as google_protobuf_wrappers_pb from 'google-protobuf/google/protobuf/wrappers_pb'; // proto import: "google/protobuf/wrappers.proto"
+import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
 
 
-export class StringArray extends jspb.Message {
-  getStringsList(): Array<google_protobuf_wrappers_pb.StringValue>;
-  setStringsList(value: Array<google_protobuf_wrappers_pb.StringValue>): StringArray;
-  clearStringsList(): StringArray;
-  addStrings(value?: google_protobuf_wrappers_pb.StringValue, index?: number): google_protobuf_wrappers_pb.StringValue;
+export class Date extends jspb.Message {
+  getDate(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setDate(value?: google_protobuf_timestamp_pb.Timestamp): Date;
+  hasDate(): boolean;
+  clearDate(): Date;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): StringArray.AsObject;
-  static toObject(includeInstance: boolean, msg: StringArray): StringArray.AsObject;
-  static serializeBinaryToWriter(message: StringArray, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): StringArray;
-  static deserializeBinaryFromReader(message: StringArray, reader: jspb.BinaryReader): StringArray;
+  toObject(includeInstance?: boolean): Date.AsObject;
+  static toObject(includeInstance: boolean, msg: Date): Date.AsObject;
+  static serializeBinaryToWriter(message: Date, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Date;
+  static deserializeBinaryFromReader(message: Date, reader: jspb.BinaryReader): Date;
 }
 
-export namespace StringArray {
+export namespace Date {
   export type AsObject = {
-    stringsList: Array<google_protobuf_wrappers_pb.StringValue.AsObject>,
+    date?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 }
 
+export enum Gender { 
+  GENDER_UNSPECIFIED = 0,
+  GENDER_FEMALE = 1,
+  GENDER_MALE = 2,
+  GENDER_DIVERSE = 3,
+}

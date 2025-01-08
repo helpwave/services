@@ -56,12 +56,13 @@ func NewGetPatientAssignmentByWardQueryHandler(authz hwauthz.AuthZ) GetPatientAs
 						if bedRow.RoomID != roomRow.RoomID || !bedRow.BedID.Valid {
 							return nil
 						}
-						var patient *models.PatientWithConsistency
+						var patient *models.PatientBaseWithConsistency
 						if bedRow.PatientID.Valid {
-							patient = &models.PatientWithConsistency{
-								Patient: models.Patient{
+							patient = &models.PatientBaseWithConsistency{
+								PatientBase: models.PatientBase{
 									ID:                      bedRow.PatientID.UUID,
 									HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier,
+									Gender:                  0,
 								},
 								Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(), //nolint:gosec
 							}
