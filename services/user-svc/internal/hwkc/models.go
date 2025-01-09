@@ -9,12 +9,12 @@ type User struct {
 type Organization struct {
 	ID          *string                `json:"id,omitempty"`
 	Name        *string                `json:"name,omitempty"`
-	DisplayName *string                `json:"displayName,omitempty"`
+	DisplayName *string                `json:"display_name,omitempty"`
 	Attributes  OrganizationAttributes `json:"attributes,omitempty"`
 }
 
 type OrganizationAttributes struct {
-	IsPersonal []string `json:"isPersonal"`
+	IsPersonal []string `json:"is_personal"`
 }
 
 func (o *Organization) IsPersonal() bool {

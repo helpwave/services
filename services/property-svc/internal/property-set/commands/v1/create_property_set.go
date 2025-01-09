@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 	"hwes/errs"
 
@@ -24,8 +24,8 @@ type CreatePropertySetCommandHandler func(
 
 func NewCreatePropertySetCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreatePropertySetCommandHandler {
 	return func(ctx context.Context, propertySetID uuid.UUID, name string) (common.ConsistencyToken, error) {
-		user := commonPerm.UserFromCtx(ctx)
-		org := commonPerm.OrganizationFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
+		org := commonperm.OrganizationFromCtx(ctx)
 
 		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreatePropertySet, org)
 		if err := authz.Must(ctx, check); err != nil {

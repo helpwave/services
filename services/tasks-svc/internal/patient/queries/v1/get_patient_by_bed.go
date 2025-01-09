@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 
 	"github.com/google/uuid"
@@ -13,17 +13,17 @@ import (
 	"tasks-svc/internal/patient/perm"
 
 	"tasks-svc/internal/patient/models"
-	"tasks-svc/repos/patient_repo"
+	"tasks-svc/repos/patient-repo"
 )
 
 type GetPatientByBedQueryHandler func(ctx context.Context, bedID uuid.UUID) (*models.PatientWithConsistency, error)
 
 func NewGetPatientByBedQueryHandler(authz hwauthz.AuthZ) GetPatientByBedQueryHandler {
 	return func(ctx context.Context, bedID uuid.UUID) (*models.PatientWithConsistency, error) {
-		patientRepo := patient_repo.New(hwdb.GetDB())
+		patientRepo := patientrepo.New(hwdb.GetDB())
 
 		// check bed permissions
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, bedPerm.BedCanUserGet, bedPerm.Bed(bedID))
 		if err := authz.Must(ctx, check); err != nil {
 			return nil, err

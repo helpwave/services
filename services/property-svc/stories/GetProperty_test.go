@@ -4,7 +4,7 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwauthz/spicedb"
 	"hwtesting"
 	"hwutil"
@@ -31,9 +31,9 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 
 	// give new user appropriate permissions
 	authz := spicedb.NewSpiceDBAuthZ()
-	patient := commonPerm.GenericObject{Id: patientID.String(), Typ: "patient"}
-	task := commonPerm.GenericObject{Id: taskID.String(), Typ: "task"}
-	org := commonPerm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
+	patient := commonperm.GenericObject{ID_: patientID.String(), Typ: "patient"}
+	task := commonperm.GenericObject{ID_: taskID.String(), Typ: "task"}
+	org := commonperm.Organization(uuid.MustParse(hwtesting.FakeTokenOrganization))
 
 	_, err := authz.
 		Create(hwauthz.NewRelationship(org, "organization", perm.Ward(wardID))).

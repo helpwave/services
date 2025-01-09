@@ -9,9 +9,9 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog/log"
-	"hwdb/pgx_zerolog"
 
 	pgxUUID "github.com/vgarvardt/pgx-google-uuid/v5"
+	pgxzerolog "hwdb/pgx-zerolog"
 )
 
 type DBTX interface {
@@ -95,7 +95,7 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 	}
 
 	// logging
-	pgxConfig.ConnConfig.Tracer = pgx_zerolog.NewTracer()
+	pgxConfig.ConnConfig.Tracer = pgxzerolog.NewTracer()
 
 	// open pool
 	dbpool, err := pgxpool.NewWithConfig(ctx, pgxConfig)

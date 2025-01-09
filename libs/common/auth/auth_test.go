@@ -20,7 +20,7 @@ func TestIDTokenClaims_AsExpected(t *testing.T) {
 				Name:              "Test User",
 				PreferredUsername: "testuser",
 				Organization: &OrganizationTokenClaim{
-					Id:   "6759b6d7-a864-800c-a2e9-a780a83ec767",
+					ID:   "6759b6d7-a864-800c-a2e9-a780a83ec767",
 					Name: "Example Org",
 				},
 			},
@@ -33,7 +33,7 @@ func TestIDTokenClaims_AsExpected(t *testing.T) {
 				Name:              "Test User",
 				PreferredUsername: "testuser",
 				Organization: &OrganizationTokenClaim{
-					Id:   "6759b6d7-a864-800c-a2e9-a780a83ec767",
+					ID:   "6759b6d7-a864-800c-a2e9-a780a83ec767",
 					Name: "Example Org",
 				},
 			},
@@ -47,7 +47,7 @@ func TestIDTokenClaims_AsExpected(t *testing.T) {
 				Name:              "Test User",
 				PreferredUsername: "testuser",
 				Organization: &OrganizationTokenClaim{
-					Id:   "6759b6d7-a864-800c-a2e9-a780a83ec767",
+					ID:   "6759b6d7-a864-800c-a2e9-a780a83ec767",
 					Name: "Example Org",
 				},
 			},
@@ -71,7 +71,7 @@ func TestIDTokenClaims_AsExpected(t *testing.T) {
 				Name:              "Test User",
 				PreferredUsername: "testuser",
 				Organization: &OrganizationTokenClaim{
-					Id:   "asdasd",
+					ID:   "asdasd",
 					Name: "Example Org",
 				},
 			},
@@ -85,7 +85,7 @@ func TestIDTokenClaims_AsExpected(t *testing.T) {
 				Name:              "Test User",
 				PreferredUsername: "testuser",
 				Organization: &OrganizationTokenClaim{
-					Id:   "",
+					ID:   "",
 					Name: "",
 				},
 			},

@@ -10,13 +10,12 @@ import (
 	"hwes/eventstoredb/projections"
 	"time"
 
-	"tasks-svc/internal/patient/projections/patientSpiceDBProjection"
-
 	ph "tasks-svc/internal/patient/handlers"
-	"tasks-svc/internal/patient/projections/patientPostgresProjection"
+	patientPostgresProjection "tasks-svc/internal/patient/projections/postgres-projection"
+	patientSpiceDBProjection "tasks-svc/internal/patient/projections/spicedb-projection"
 	th "tasks-svc/internal/task/handlers"
-	"tasks-svc/internal/task/projections/task_postgres_projection"
-	"tasks-svc/internal/task/projections/task_spicedb"
+	taskPostgresProjection "tasks-svc/internal/task/projections/postgres-projection"
+	taskSpiceDBProjection "tasks-svc/internal/task/projections/spicedb-projection"
 	"tasks-svc/internal/tracking"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
@@ -49,8 +48,8 @@ func Main(version string, ready func()) {
 	go projections.StartProjections(
 		ctx,
 		common.Shutdown,
-		task_spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
-		task_postgres_projection.NewProjection(eventStore, ServiceName),
+		taskSpiceDBProjection.NewSpiceDBProjection(eventStore, authz, ServiceName),
+		taskPostgresProjection.NewProjection(eventStore, ServiceName),
 		patientPostgresProjection.NewProjection(eventStore, ServiceName),
 		patientSpiceDBProjection.NewProjection(eventStore, authz, ServiceName),
 	)
@@ -63,7 +62,7 @@ func Main(version string, ready func()) {
 		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer(authz, eventStore))
 		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer(authz, eventStore))
 		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer(authz, eventStore))
-		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer(authz, eventStore))
+		pb.RegisterTaskTemplateServiceServer(grpcServer, tasktemplate.NewServiceServer(authz, eventStore))
 
 		if ready != nil {
 			ready()

@@ -45,7 +45,7 @@ func (a *PropertyValueAggregate) initEventListeners() {
 
 func (a *PropertyValueAggregate) onPropertyValueCreated(evt hwes.Event) error {
 	var payload propertyEventsV1.PropertyValueCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return fmt.Errorf("PropertyValueAggregate.onPropertyValueCreated: invalid payload: %w", err)
 	}
 
@@ -71,7 +71,7 @@ func (a *PropertyValueAggregate) onPropertyValueCreated(evt hwes.Event) error {
 
 func (a *PropertyValueAggregate) onPropertyValueUpdated(evt hwes.Event) error {
 	var payload propertyEventsV1.PropertyValueUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 

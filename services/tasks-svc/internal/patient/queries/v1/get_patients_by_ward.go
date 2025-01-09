@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -14,17 +14,17 @@ import (
 	"github.com/google/uuid"
 
 	"tasks-svc/internal/patient/models"
-	"tasks-svc/repos/patient_repo"
+	"tasks-svc/repos/patient-repo"
 )
 
 type GetPatientsByWardQueryHandler func(ctx context.Context, wardID uuid.UUID) ([]*models.PatientWithConsistency, error)
 
 func NewGetPatientsByWardQueryHandler(authz hwauthz.AuthZ) GetPatientsByWardQueryHandler {
 	return func(ctx context.Context, wardID uuid.UUID) ([]*models.PatientWithConsistency, error) {
-		patientRepo := patient_repo.New(hwdb.GetDB())
+		patientRepo := patientrepo.New(hwdb.GetDB())
 
 		// ensure get-access to ward
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, wardPerm.WardCanUserGet, wardPerm.Ward(wardID))
 		if err := authz.Must(ctx, check); err != nil {
 			return nil, err
@@ -35,7 +35,7 @@ func NewGetPatientsByWardQueryHandler(authz hwauthz.AuthZ) GetPatientsByWardQuer
 			return nil, err
 		}
 
-		checks := hwutil.Map(patients, func(patient patient_repo.Patient) hwauthz.PermissionCheck {
+		checks := hwutil.Map(patients, func(patient patientrepo.Patient) hwauthz.PermissionCheck {
 			return hwauthz.NewPermissionCheck(user, perm.PatientCanUserGet, perm.Patient(patient.ID))
 		})
 		allowed, err := authz.BulkCheck(ctx, checks)
@@ -43,7 +43,7 @@ func NewGetPatientsByWardQueryHandler(authz hwauthz.AuthZ) GetPatientsByWardQuer
 			return nil, err
 		}
 
-		return hwutil.FlatMapI(patients, func(i int, patient patient_repo.Patient) **models.PatientWithConsistency {
+		return hwutil.FlatMapI(patients, func(i int, patient patientrepo.Patient) **models.PatientWithConsistency {
 			if !allowed[i] {
 				return nil
 			}

@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -12,7 +12,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"property-svc/repos/patient_views_repo"
+	"property-svc/repos/patient-views-repo"
 )
 
 const PatientPropertyMatcherType = "patient_property_matcher"
@@ -23,16 +23,16 @@ type PatientPropertyMatchers struct {
 }
 
 func (m PatientPropertyMatchers) FindExactRuleID(ctx context.Context) (*uuid.UUID, error) {
-	patientViews := patient_views_repo.New(hwdb.GetDB())
+	patientViews := patientviewsrepo.New(hwdb.GetDB())
 	return hwdb.Optional(patientViews.GetPatientRuleIdUsingExactMatchers)(ctx,
-		patient_views_repo.GetPatientRuleIdUsingExactMatchersParams{
+		patientviewsrepo.GetPatientRuleIdUsingExactMatchersParams{
 			WardID:    m.WardID,
 			PatientID: m.PatientID,
 		})
 }
 
 type queryPatientPropertiesRow struct {
-	patient_views_repo.GetPatientPropertiesUsingMatchersRow
+	patientviewsrepo.GetPatientPropertiesUsingMatchersRow
 }
 
 func (r queryPatientPropertiesRow) GetPropertyID() uuid.UUID {
@@ -52,16 +52,16 @@ func (m PatientPropertyMatchers) GetType() string {
 }
 
 func (m PatientPropertyMatchers) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
-	patientViews := patient_views_repo.New(hwdb.GetDB())
+	patientViews := patientviewsrepo.New(hwdb.GetDB())
 
 	rows, err := patientViews.GetPatientPropertiesUsingMatchers(
 		ctx,
-		patient_views_repo.GetPatientPropertiesUsingMatchersParams{
+		patientviewsrepo.GetPatientPropertiesUsingMatchersParams{
 			WardID:    m.WardID,
 			PatientID: m.PatientID,
 		})
 
-	cast := func(row patient_views_repo.GetPatientPropertiesUsingMatchersRow) PropertiesQueryRow {
+	cast := func(row patientviewsrepo.GetPatientPropertiesUsingMatchersRow) PropertiesQueryRow {
 		return queryPatientPropertiesRow{row}
 	}
 
@@ -96,9 +96,9 @@ func (m PatientPropertyMatchers) ToMap() map[string]interface{} {
 }
 
 func (m PatientPropertyMatchers) IsPropertyAlwaysIncluded(ctx context.Context, propertyID uuid.UUID) (bool, error) {
-	repo := patient_views_repo.New(hwdb.GetDB())
+	repo := patientviewsrepo.New(hwdb.GetDB())
 	query := hwdb.Optional(repo.IsPatientPropertyAlwaysIncluded)
-	alwaysInclude, err := query(ctx, patient_views_repo.IsPatientPropertyAlwaysIncludedParams{
+	alwaysInclude, err := query(ctx, patientviewsrepo.IsPatientPropertyAlwaysIncludedParams{
 		PropertyID: propertyID,
 		WardID:     m.WardID,
 		PatientID:  m.PatientID,
@@ -141,7 +141,7 @@ func PatientPropertyMatchersFromMap(m map[string]interface{}) (PatientPropertyMa
 }
 
 func (m PatientPropertyMatchers) UserMustBeAllowedToUpdateRule(ctx context.Context, authz hwauthz.AuthZ) error {
-	user := commonPerm.UserFromCtx(ctx)
+	user := commonperm.UserFromCtx(ctx)
 
 	checks := make([]hwauthz.PermissionCheck, 0)
 
@@ -156,7 +156,7 @@ func (m PatientPropertyMatchers) UserMustBeAllowedToUpdateRule(ctx context.Conte
 	}
 
 	if len(checks) == 0 {
-		org := commonPerm.OrganizationFromCtx(ctx)
+		org := commonperm.OrganizationFromCtx(ctx)
 		checks = append(checks,
 			hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserAlterRootPropertyRules, org))
 	}

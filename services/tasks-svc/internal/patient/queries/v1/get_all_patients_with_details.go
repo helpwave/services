@@ -6,7 +6,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwdb"
 	"hwutil"
 
@@ -16,18 +16,18 @@ import (
 
 	"tasks-svc/internal/patient/models"
 	tasksModels "tasks-svc/internal/task/models"
-	"tasks-svc/repos/patient_repo"
+	"tasks-svc/repos/patient-repo"
 )
 
 type GetAllPatientsWithDetailsQueryHandler func(ctx context.Context) ([]*models.PatientDetails, error)
 
 func NewGetAllPatientsWithDetailsQueryHandler(authz hwauthz.AuthZ) GetAllPatientsWithDetailsQueryHandler {
 	return func(ctx context.Context) ([]*models.PatientDetails, error) {
-		patientRepo := patient_repo.New(hwdb.GetDB())
+		patientRepo := patientrepo.New(hwdb.GetDB())
 
 		// gather inputs
 		organizationID := auth.MustGetOrganizationID(ctx)
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 
 		// do query
 		rows, err := patientRepo.GetAllPatientsWithTasksBedAndRoom(ctx, organizationID)

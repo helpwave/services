@@ -63,7 +63,7 @@ func MustNewDaprGRPCClient() *daprc.GRPCClient {
 }
 
 // PrepCtxForSvcToSvcCall returns a context that can be used with Dapr specific service to service gRPC calls
-func PrepCtxForSvcToSvcCall(ctx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc, error) {
+func PrepCtxForSvcToSvcCall(ctx context.Context, targetDaprAppID string) (context.Context, context.CancelFunc, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, nil, status.Errorf(codes.Internal, "No incoming metadata in context")
@@ -72,7 +72,7 @@ func PrepCtxForSvcToSvcCall(ctx context.Context, targetDaprAppId string) (contex
 
 	timeout := time.Second * 3
 	ctx, cancel := context.WithTimeout(outgoingCtx, timeout)
-	ctx = metadata.AppendToOutgoingContext(ctx, "dapr-app-id", targetDaprAppId)
+	ctx = metadata.AppendToOutgoingContext(ctx, "dapr-app-id", targetDaprAppID)
 
 	return ctx, cancel, nil
 }

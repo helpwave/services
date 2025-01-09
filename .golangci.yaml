@@ -8,11 +8,9 @@ linters:
     - depguard # no need
     - ireturn # no need
     - funlen # we tend to have long funlens, who cares?
-    - execinquery # deprecated
     - goimports # unused
     - gochecknoglobals # we currently make use of globals
     - godot # petty linter
-    - gomnd # deprecated
     - gomoddirectives # not needed
     - gofumpt # false positives
     - mnd # too many false-positives
@@ -38,7 +36,6 @@ linters:
     - paralleltest # TODO
     - protogetter # TODO
     - revive # TODO
-    - stylecheck # TODO
     - testpackage # TODO
 
 linters-settings:

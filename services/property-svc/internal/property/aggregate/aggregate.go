@@ -70,7 +70,7 @@ func (a *PropertyAggregate) initEventListeners() {
 // Event handlers
 func (a *PropertyAggregate) onPropertyCreated(evt hwes.Event) error {
 	var payload propertyEventsV1.PropertyCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -93,7 +93,7 @@ func (a *PropertyAggregate) onPropertyCreated(evt hwes.Event) error {
 
 func (a *PropertyAggregate) onFieldTypeDataCreated(evt hwes.Event) error {
 	var payload propertyEventsV1.FieldTypeDataCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -104,7 +104,7 @@ func (a *PropertyAggregate) onFieldTypeDataCreated(evt hwes.Event) error {
 
 func (a *PropertyAggregate) onDescriptionUpdated(evt hwes.Event) error {
 	var payload propertyEventsV1.PropertyDescriptionUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -115,7 +115,7 @@ func (a *PropertyAggregate) onDescriptionUpdated(evt hwes.Event) error {
 
 func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 	var payload propertyEventsV1.PropertySetIDUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -134,7 +134,7 @@ func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 
 func (a *PropertyAggregate) onSubjectTypeUpdated(evt hwes.Event) error {
 	var payload propertyEventsV1.PropertySubjectTypeUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -149,7 +149,7 @@ func (a *PropertyAggregate) onSubjectTypeUpdated(evt hwes.Event) error {
 
 func (a *PropertyAggregate) onNameUpdated(evt hwes.Event) error {
 	var payload propertyEventsV1.PropertyNameUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -159,7 +159,7 @@ func (a *PropertyAggregate) onNameUpdated(evt hwes.Event) error {
 
 func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -183,7 +183,7 @@ func (e SelectOptionNameMissingError) Error() string {
 
 func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event) error {
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 
@@ -242,7 +242,7 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 
 func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) error {
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsRemovedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 

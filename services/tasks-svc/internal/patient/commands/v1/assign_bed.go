@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 
 	bedPerm "tasks-svc/internal/bed/perm"
@@ -23,7 +23,7 @@ type AssignBedCommandHandler func(
 
 func NewAssignBedCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) AssignBedCommandHandler {
 	return func(ctx context.Context, patientID uuid.UUID, bedID uuid.UUID) (common.ConsistencyToken, error) {
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		checkPatient := hwauthz.NewPermissionCheck(user, perm.PatientCanUserAssignBed, perm.Patient(patientID))
 		checkBed := hwauthz.NewPermissionCheck(user, bedPerm.BedCanUserUpdate, bedPerm.Bed(bedID))
 		if err := authz.BulkMust(ctx, checkPatient, checkBed); err != nil {

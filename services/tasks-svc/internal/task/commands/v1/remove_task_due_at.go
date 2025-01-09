@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 
 	"tasks-svc/internal/task/perm"
@@ -19,7 +19,7 @@ type RemoveTaskDueAtCommandHandler func(ctx context.Context, taskID uuid.UUID) (
 func NewRemoveTaskDueAtCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) RemoveTaskDueAtCommandHandler {
 	return func(ctx context.Context, taskID uuid.UUID) (common.ConsistencyToken, error) {
 		// check permissions
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, perm.TaskCanUserUpdate, perm.Task(taskID))
 		if err := authz.Must(ctx, check); err != nil {
 			return 0, err

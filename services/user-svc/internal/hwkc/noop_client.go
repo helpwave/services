@@ -19,13 +19,13 @@ func NewNoOpClient() *NoOpClient {
 	return &NoOpClient{}
 }
 
-func (c *NoOpClient) GetUserById(_ context.Context, userID uuid.UUID) (*User, error) {
+func (c *NoOpClient) GetUserByID(_ context.Context, userID uuid.UUID) (*User, error) {
 	return &User{
 		ID: hwutil.PtrTo(userID.String()),
 	}, nil
 }
 
-func (c *NoOpClient) GetOrganizationsOfUserById(_ context.Context, userID uuid.UUID) ([]*Organization, error) {
+func (c *NoOpClient) GetOrganizationsOfUserByID(_ context.Context, _ uuid.UUID) ([]*Organization, error) {
 	return []*Organization{
 		{
 			ID:          hwutil.PtrTo(uuid.NewString()),

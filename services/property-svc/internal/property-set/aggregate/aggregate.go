@@ -46,7 +46,7 @@ func (a *PropertySetAggregate) initEventListeners() {
 // Event handlers
 func (a *PropertySetAggregate) onPropertySetCreated(evt hwes.Event) error {
 	var payload propertySetEventsV1.PropertySetCreatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	if err := evt.GetJSONData(&payload); err != nil {
 		return err
 	}
 

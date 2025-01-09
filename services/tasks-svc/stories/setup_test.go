@@ -115,11 +115,11 @@ func prepareRoom(t *testing.T, ctx context.Context, wardID, suffix string) (room
 	return roomRes.Id, roomRes.Consistency
 }
 
-func prepareBed(t *testing.T, ctx context.Context, roomId, suffix string) (bedID, consistency string) {
+func prepareBed(t *testing.T, ctx context.Context, roomID, suffix string) (bedID, consistency string) {
 	t.Helper()
 
 	createRes, err := bedServiceClient().CreateBed(ctx, &pb.CreateBedRequest{
-		RoomId: roomId,
+		RoomId: roomID,
 		Name:   t.Name() + " bed " + suffix,
 	})
 	require.NoError(t, err, "prepareBed: could not create bed", suffix)

@@ -5,8 +5,8 @@ sql:
     schema: "schema.sql"
     gen:
       go:
-        package: "user_repo"
-        out: "repos/user_repo"
+        package: "userrepo"
+        out: "repos/user-repo"
         sql_package: "pgx/v5"
         emit_pointers_for_null_types: true
         overrides:
@@ -20,8 +20,8 @@ sql:
     schema: "schema.sql"
     gen:
       go:
-        package: "organization_repo"
-        out: "repos/organization_repo"
+        package: "organizationrepo"
+        out: "repos/organization-repo"
         sql_package: "pgx/v5"
         emit_empty_slices: true
         emit_pointers_for_null_types: true

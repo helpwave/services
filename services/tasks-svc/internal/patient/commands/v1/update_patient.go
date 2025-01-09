@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"hwauthz"
-	"hwauthz/commonPerm"
+	"hwauthz/commonperm"
 	"hwes"
 
 	"tasks-svc/internal/patient/perm"
@@ -28,7 +28,7 @@ func NewUpdatePatientCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 		humanReadableIdentifier *string,
 		notes *string,
 	) (common.ConsistencyToken, error) {
-		user := commonPerm.UserFromCtx(ctx)
+		user := commonperm.UserFromCtx(ctx)
 		check := hwauthz.NewPermissionCheck(user, perm.PatientCanUserUpdate, perm.Patient(patientID))
 		if err := authz.Must(ctx, check); err != nil {
 			return 0, err
