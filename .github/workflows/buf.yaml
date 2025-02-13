@@ -12,9 +12,9 @@ permissions:
 
 env:
   # renovate: datasource=docker depName=golang versioning=docker
-  GO_VERSION: '1.23'
+  GO_VERSION: '1.24'
   # renovate: datasource=github-releases depName=bufbuild/buf
-  BUF_CLI_VERSION: '1.48.0'
+  BUF_CLI_VERSION: '1.50.0'
   # renovate: datasource=github-releases depName=favadi/protoc-go-inject-tag
   PROTOC_GO_INJECT_TAG_VERSION: '1.4.0'
 
