@@ -1,6 +1,6 @@
 module hooks
 
-go 1.23
+go 1.24
 
 require github.com/authzed/authzed-go v1.2.0
 

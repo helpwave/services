@@ -9,10 +9,10 @@ on:
 
 env:
   # renovate: datasource=github-releases depName=bufbuild/buf
-  BUF_CLI_VERSION: '1.48.0'
+  BUF_CLI_VERSION: '1.50.0'
   NODE_VERSION: '18.x'
   # renovate: datasource=dart-version depName=dart
-  DART_VERSION: '3.6.0'
+  DART_VERSION: '3.7.0'
 
 jobs:
   check-preconditions:
