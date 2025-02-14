@@ -16,7 +16,7 @@ services:
       retries: 5
 
   eventstore:
-    image: eventstore/eventstore:23.10.2-jammy
+    image: eventstore/eventstore:23.10.5-jammy
     restart: unless-stopped
     environment:
       EVENTSTORE_TELEMETRY_OPTOUT: "true"
@@ -28,7 +28,7 @@ services:
       - "2113:2113"
 
   spicedb:
-    image: authzed/spicedb:v1.31.0
+    image: authzed/spicedb:v1.40.1
     ports:
       - "50051:50051"
     command: [
@@ -79,7 +79,7 @@ services:
 
   # dapr sidecar for apisix
   apisix-dapr:
-    image: "daprio/daprd:1.14.1"
+    image: "daprio/daprd:1.14.4"
     restart: unless-stopped
     depends_on:
       - apisix
