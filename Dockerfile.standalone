@@ -47,7 +47,7 @@ FROM debian:12.8 AS deps
 # renovate: datasource=github-releases depName=DarthSim/hivemind
 ARG HIVEMIND_VERSION=1.1.0
 # renovate: datasource=github-releases depName=golang-migrate/migrate
-ARG MIGRATE_VERSION=4.18.1
+ARG MIGRATE_VERSION=4.18.2
 # renovate: datasource=github-releases depName=dapr/dapr
 ARG DAPR_VERSION=1.14.4
 
